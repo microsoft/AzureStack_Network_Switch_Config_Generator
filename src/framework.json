@@ -1,0 +1,352 @@
+{
+    "Device": {
+        "Name": "TOR1",
+        "Make": "Cisco",
+        "Model": "93180YC-FX"
+    },
+    "InBandPort": [
+        {
+            "ID": 1,
+            "Port": "1/1",
+            "Speed": 10000,
+            "Type": [
+                {
+                    "Speed": 10000,
+                    "Name": "TenGigEthernet"
+                },
+                {
+                    "Speed": 25000,
+                    "Name": "TwentyFiveGigEthernet"
+                }
+            ],
+            "Description": "Host Port",
+            "MTU": "",
+            "PortMode": "Trunk",
+            "InterfaceAttributes": [
+                "ComputeAttrib",
+                "ManagementAttrib"
+            ]
+        },
+        {
+            "Port": "1/16",
+            "ID": 15,
+            "Speed": 10000,
+            "Type": [
+                {
+                    "Speed": 10000,
+                    "Name": "TenGigEthernet"
+                },
+                {
+                    "Speed": 25000,
+                    "Name": "TwentyFiveGigEthernet"
+                }
+            ],
+            "Description": "Storage Port",
+            "MTU": "",
+            "PortMode": "Trunk",
+            "InterfaceAttributes": [
+                "Storage"
+            ]
+        },
+        {
+            "Port": "1/46",
+            "ID": 46,
+            "Speed": 10000,
+            "Type": [
+                {
+                    "Speed": 10000,
+                    "Name": "TenGigEthernet"
+                },
+                {
+                    "Speed": 25000,
+                    "Name": "TwentyFiveGigEthernet"
+                }
+            ],
+            "Description": "BMC",
+            "MTU": "",
+            "PortMode": "Access",
+            "InterfaceAttributes": [
+                "BMCMgmt"
+            ]
+        },
+        {
+            "Port": "1/48",
+            "ID": 48,
+            "Speed": 10000,
+            "Type": [
+                {
+                    "Speed": 10000,
+                    "Name": "TenGigEthernet"
+                },
+                {
+                    "Speed": 25000,
+                    "Name": "TwentyFiveGigEthernet"
+                }
+            ],
+            "Description": "Uplink",
+            "MTU": 9000,
+            "PortMode": "IP",
+            "InterfaceAttributes": [
+                "Uplink"
+            ]
+        }
+    ],
+    "OutOfBandPort": [
+        {
+            "ID": 0,
+            "Name": "management",
+            "Description": "Host Port",
+            "MTU": "",
+            "Type": "mgmt",
+            "Network": "BMCMgmt",
+            "MgmtAssignment": "TOR1-Mgmt0",
+            "NextHop": "Gateway",
+            "DHCP": false
+        }
+    ],
+    "InterfaceAttributes": [
+        {
+            "Name": "ComputeAttrib",
+            "Settings": [
+                {
+                    "Type": "VLAN",
+                    "Name": "Compute"
+                }
+            ]
+        },
+        {
+            "Name": "ManagementAttrib",
+            "Settings": [
+                {
+                    "Type": "VLAN",
+                    "Name": "Management"
+                }
+            ]
+        },
+        {
+            "Name": "BMCMgmt",
+            "Settings": [
+                {
+                    "Type": "PortChannel",
+                    "Name": "BMC_Mgmt_PC"
+                }
+            ]
+        },
+        {
+            "Name": "Uplink",
+            "Settings": [
+                {
+                    "Type": "IP",
+                    "Name": "P2P_Border1_To_TOR1"
+                }
+            ]
+        }
+    ],
+    "IP": [
+        {
+            "Type": "IP",
+            "Name": "P2P_Border1_To_TOR1",
+            "Assignment": "P2P_TOR1"
+        }
+    ],
+    "VLAN": [
+        {
+            "Type": "VLAN",
+            "Name": "Compute",
+            "Shutdown": false,
+            "Assignment": "Ipv4_TOR1",
+            "MTU": 9000,
+            "ID": 12,
+            "Native": false,
+            "VirtualAssignment": {
+                "PriorityId": 150,
+                "Assignment": "Gateway"
+            },
+            "IPHelperAssignment": [
+                "DVM"
+            ],
+            "ACL": []
+        },
+        {
+            "Type": "VLAN",
+            "Name": "Management",
+            "Shutdown": false,
+            "Assignment": "Ipv4_TOR1",
+            "MTU": 9000,
+            "ID": 20,
+            "Native": true,
+            "VirtualAssignment": {
+                "ID": 20,
+                "PriorityId": 150,
+                "Assignment": "Gateway"
+            },
+            "IPHelper": [],
+            "ACL": [
+                {
+                    "Name": "ACLName",
+                    "Direction": "IN"
+                },
+                {
+                    "Name": "ACLName",
+                    "Direction": "OUT"
+                }
+            ]
+        },
+        {
+            "Type": "VLAN",
+            "Name": "Storage",
+            "Shutdown": false,
+            "Assignment": "",
+            "MTU": 9000,
+            "ID": 711,
+            "Native": false,
+            "VirtualAssignment": {
+                "PriorityId": null,
+                "Assignment": ""
+            },
+            "IPHelper": [],
+            "ACL": []
+        },
+        {
+            "Type": "VLAN",
+            "Name": "UnusedPorts",
+            "Shutdown": true,
+            "Assignment": "",
+            "MTU": "",
+            "ID": 2,
+            "Native": true,
+            "VirtualAssignment": {
+                "PriorityId": null,
+                "Assignment": ""
+            },
+            "IPHelper": [],
+            "ACL": []
+        }
+    ],
+    "Router": {
+        "BGP": {
+            "IPv4NetworkName": [
+                "IPv4_TOR1_Loopback0",
+                "IPv4_Compute",
+                "IPv4_Management"
+            ],
+            "Password": {
+                "GeneratePassword": true,
+                "Password": ""
+            },
+            "EnableDefaultOriginate": false,
+            "RoutePrefix": {
+                "MaxiPrefix": 12000,
+                "ErrorAction": "warning-only"
+            },
+            "RouterIDAssignment": "TOR1_Loopback0",
+            "IPv4Neighbor": {
+                "Description": "",
+                "EnablePassword": false,
+                "NeighborAsn": "Border1Asn",
+                "NetworkName": "P2P_Border1_To_TOR1",
+                "NetworkAssignment": "P2P_Border1",
+                "PrefixList": [
+                    {
+                        "Name": "EXTERNAL",
+                        "Direction": "in"
+                    }
+                ],
+                "RouteMap": [
+                    {
+                        "Name": "",
+                        "Direction": ""
+                    }
+                ],
+                "UpdateSource": {
+                    "Interface": "",
+                    "Name": ""
+                },
+                "Shutdown": false
+            }
+        },
+        "Static": [
+            {
+                "Name": "P2P_Border1_To_TOR1",
+                "NetworkName": "P2P_Border1_To_TOR1",
+                "NetworkAssignment": "P2P_Border1"
+            }
+        ]
+    },
+    "PortChannel": [
+        {
+            "Name": "BMC_Mgmt_PC",
+            "ID": 102,
+            "PortMode": "Trunk",
+            "Settings": []
+        }
+    ],
+    "PrefixList": [
+        {
+            "Index": 5,
+            "Name": "ExternalPrefix",
+            "Permit": false,
+            "Network": "PrivateNetworkSupernet",
+            "Operation": "le",
+            "Prefix": 32
+        }
+    ],
+    "RouteMap": [
+        {
+            "Index": 0,
+            "Name": "p1",
+            "Permit": true,
+            "Network": "BMCMgmt",
+            "Operation": "le",
+            "Prefix": 32
+        }
+    ],
+    "QOS": [
+        {
+            "Name": "RDMA",
+            "Queue": 3,
+            "BandwidthPercent": 50
+        },
+        {
+            "Name": "Cluster",
+            "Queue": 5,
+            "BandwidthPercent": 2
+        },
+        {
+            "Name": "Default",
+            "Queue": 0,
+            "BandwidthPercent": 48
+        }
+    ],
+    "SpanningTree": [
+        {
+            "Name": "AzureStackSTP",
+            "Type": "mst",
+            "bpduguard": true,
+            "Instance": [
+                {
+                    "Id": 1,
+                    "VlanIDStart": 1,
+                    "VlanIdEnd": 1999
+                }
+            ]
+        }
+    ],
+    "Logging": {
+        "LogType": [
+            {
+                "Name": "vpc",
+                "DebugLevel": 7
+            }
+        ],
+        "Server": [
+            {
+                "Level": 7,
+                "Facility": "debug",
+                "Server": "SyslogServer1",
+                "Port": 512,
+                "vrf": "default"
+            }
+        ]
+    }
+}
