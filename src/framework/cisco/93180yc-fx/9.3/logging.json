@@ -1,0 +1,19 @@
+{
+    "Name": "Logging",
+    "Enabled": true,
+    "LogType": [
+        {
+            "Name": "bgp",
+            "DebugLevel": 7
+        }
+    ],
+    "Server": [
+        {
+            "Level": 7,
+            "Facility": "debug",
+            "Server": "SyslogServer1",
+            "Port": 512,
+            "vrf": "default"
+        }
+    ]
+}
