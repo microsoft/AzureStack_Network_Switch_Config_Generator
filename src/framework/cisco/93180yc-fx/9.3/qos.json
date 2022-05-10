@@ -18,7 +18,7 @@
             "BandwidthPercent": 48
         }
     ],
-    "PolicyNames": [
+    "PolicyName": [
         {
             "Name": "AzureStackFlowControl"
         }

@@ -1,39 +1,63 @@
 [TOC]
 
+# Application
+
 To Do List:
 
+### Framework
+
+ ```mermaid
+ graph TD;
+ Router-->Prefix
+ Router-->RouteMap
+ Inband-->InterfaceAttributes
+ InterfaceAttributes-->VLAN
+ InterfaceAttributes-->PortChannel
+ InterfaceAttributes-->IP
+ Device
+ OutOfBand
+ QOS
+ SpanningTree
+ Logging
+ ```
+
+
+
 - [x] Separate [framework.json](framework.json) based on the diagram.
-![Framework Diagram](../img/frameworkSeparation.png)
-- [ ] Define reference input JSON template.
+- [x] Define reference input JSON template.
 - [x] Define Vendor/Firmware/Template hierarchy.
 
 ## Template Paths
 
 The Template files will match the device make, model and firmware.
+```mermaid
+graph TD;
 
+baseCommon.txt-->ntp.txt
+baseCommon.txt-->snmp.txt
+baseCommon.txt-->bgp.txt
+
+```
+
+#### Directory Structure
 ```text
 template/cisco/93180yc-fx/9.3/
-   - index.json
-   - ntp.tpl
-   - snmp.tpl
-   - bgp.tpl
+   - baseCommon.txt
+   - ntp.txt
+   - snmp.txt
+   - bgp.txt
    ...
 ```
 
-The index file will determine what files are called and in what order.  Once all the templates are processed, the index will be used to combine the data into a single file.  The exported file name will be based on the Hostname in the Input details.
+The baseCommon file will determine what files are called and in what order.  Base common file contains boilerplate default device settings.  Inside the baseCommon it will reference more specific template files like ntp, nsmp, bgp, etc.   Once all the templates are processed, the index will be used to combine the data into a single file.  The exported file name will be based on the Hostname in the Input details.
 
-### index.json
+### baseCommon.txt
 
-```JSON
-{
-    "Index": [
-        "username.tpl",
-        "snmp.tpl",
-        "interfaces.tpl",
-        "bgp.tpl",
-        "ntp.tpl"
-    ]
-}
+```go
+hostname {{ .Device.Hostname }}
+{{ template "header" .Device }}
+{{ tempalte "ntp" .External }}
+
 ```
 
 ## Input Details
@@ -55,18 +79,64 @@ The initial set of inputs will remain as simple as possible.  This will consist 
 
 ### Questions
 
-1. 16 total nodes in a rack.  Should we outline this in the input?
-2. Port utilization is not outlined. Ports 1-x for Compute, x-x for Storage
-3. If BGP is being used, the AS numbers should be included in the input file. 
-4. Using the existing input file below, how do we know what the Software AS number is and the uplink BGP AS numbers is?  I think more devices need to be listed....
-5. In NTP, we need to know the IP address of the NTP server.  This needs to become an input.
-6. logging, if a syslog server is used, this needs to become a standard input value.
+1. ~~16 total nodes in a rack.  Should we outline this in the input?~~, This is supported in a framework file.
+2. ~~Port utilization is not outlined. Ports 1-x for Compute, x-x for Storage.~~ This is supported in a framework file
+3. ~~If BGP is being used, the AS numbers should be included in the input file.~~ The Input file has been updated with a AS number
+4. ~~Using the existing input file below, how do we know what the Software AS number is and the uplink BGP AS numbers is?  I think more devices need to be listed....~~, The input file has been updated with a MUX device. this will be used to service all software BGP configurations.
+5. ~~In NTP, we need to know the IP address of the NTP server.  This needs to become an input.,~~ Input added to support values like NTP
+6. ~~logging, if a syslog server is used, this needs to become a standard input value.~~ Input data was updated.
 7. How are IP assignments determined if we don't have a IP spreadsheet to start from?  Do we need a IP framework to determine individual IP assignments, this way any subnetting that is preformed is standardized. 
+
+## JSON
+
+```mermaid
+classDiagram
+    class input {
+    	array External[]
+        array Device[]
+        array Vlan[]
+        string()FrameworkPath("/path/to/framework/files")
+        string()TemplatePath("/path/to/template/files")
+    }
+
+    class Device {
+        string() make("cisco")
+        string() model("test")
+        int() ASN ("64000")
+        string() hostname("S35R01-TOR1")
+        string() type("TOR")
+        string() firmware("9.3(8)")
+        boolean() GenerateDeviceConfig("true")
+    }
+    class Vlan {
+        int() id("7")
+        string() type("management")
+        string() name("Management")
+        string() subnet("10.10.0.0/24")
+        boolean() shutdown("false")
+    }
+    class External {
+    string() type("NTP")
+    array() IP("10.10.10.10")
+    }
+  input<|--Device
+  input<|--Vlan
+  input<|--External
+
+```
 
 ```JSON
 {
     "Framework": "path/to/framework/root",
     "Template": "path/to/template/root",
+    "External": [
+        {
+            "Type": "NTP",
+            "IP": [
+                "10.10.10.10"
+            ]
+        }
+    ],
     "Device": [
         {
             "Make": "Cisco",

@@ -14,7 +14,7 @@
             },
             "EnableDefaultOriginate": false,
             "RoutePrefix": {
-                "MaxiPrefix": 12000,
+                "MaxPrefix": 12000,
                 "ErrorAction": "warning-only"
             },
             "RouterIDAssignment": "TOR1_Loopback0",
@@ -24,13 +24,13 @@
                 "NeighborAsn": "Border1Asn",
                 "NetworkName": "P2P_Border1_To_TOR1",
                 "NetworkAssignment": "P2P_Border1",
-                "PrefixList": [
+                "AssignPrefixList": [
                     {
                         "Name": "EXTERNAL",
                         "Direction": "in"
                     }
                 ],
-                "RouteMap": [
+                "AssignRouteMap": [
                     {
                         "Name": "",
                         "Direction": ""
