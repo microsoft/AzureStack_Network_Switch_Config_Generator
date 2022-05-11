@@ -1,0 +1,242 @@
+{
+    "Framework": "path/to/framework/root",
+    "Template": "path/to/template/root",
+    "External": [
+        {
+            "Type": "NTP",
+            "IP": [
+                "10.10.10.10"
+            ]
+        }
+    ],
+    "Device": [
+        {
+            "Make": "Cisco",
+            "Type": "TOR1",
+            "ASN": 65000,
+            "Hostname": "S31R28-TOR1",
+            "Model": "93180YC-FX",
+            "Firmware": 9.3,
+            "GenerateDeviceConfig": true
+        },
+        {
+            "Make": "Cisco",
+            "Type": "TOR2",
+            "ASN": 65000,
+            "Hostname": "S31R28-TOR1",
+            "Model": "93180YC-FX",
+            "Firmware": 9.3,
+            "GenerateDeviceConfig": true
+        },
+        {
+            "Make": "Dell",
+            "Type": "BMC",
+            "ASN": "",
+            "Hostname": "S31R28-BMC",
+            "Model": "S3048",
+            "Firmware": 9.2,
+            "GenerateDeviceConfig": true
+        },
+        {
+            "Make": "",
+            "Type": "Router",
+            "ASN": "63000",
+            "Hostname": "S31R28-BMC",
+            "Model": "router",
+            "Firmware": null,
+            "GenerateDeviceConfig": false
+        },
+        {
+            "Make": "",
+            "Type": "Uplink",
+            "ASN": "62000",
+            "Hostname": "S31R28-Uplink1",
+            "Model": "",
+            "Firmware": null,
+            "GenerateDeviceConfig": false
+        }
+    ],
+    "SwitchVlan": [
+        {
+            "ID": 2,
+            "Type": "Unused",
+            "Name": "UnusedPort",
+            "Subnet": "",
+            "Shutdown": true,
+            "Assignment": []
+        },
+        {
+            "ID": 7,
+            "Type": "Compute",
+            "Name": "HNVPANetwork",
+            "Subnet": "10.10.100.0/24",
+            "Shutdown": false,
+            "Assignment": [
+                {
+                    "Name": "Gateway",
+                    "Size": 32,
+                    "Position": 1
+                }
+            ]
+        },
+        {
+            "ID": 8,
+            "Type": "Management",
+            "Name": "Management",
+            "Subnet": "10.10.101.0/24",
+            "Shutdown": false,
+            "Assignment": [
+                {
+                    "Name": "Gateway",
+                    "Size": 32,
+                    "Position": 1
+                }
+            ]
+        },
+        {
+            "ID": 25,
+            "Type": "OOB",
+            "Name": "BMC",
+            "Subnet": "192.168.0.0/26",
+            "Shutdown": false,
+            "Assignment": [
+                {
+                    "Name": "Gateway",
+                    "Size": 32,
+                    "Position": 1
+                }
+            ]
+        },
+        {
+            "ID": 15,
+            "Type": "Compute",
+            "Name": "Tenant1",
+            "Subnet": "10.100.0.0/24",
+            "Shutdown": false,
+            "Assignment": [
+                {
+                    "Name": "Gateway",
+                    "Size": 32,
+                    "Position": 1
+                }
+            ]
+        },
+        {
+            "ID": 711,
+            "Type": "Storage",
+            "Name": "Storage1",
+            "Subnet": "",
+            "Shutdown": false,
+            "Assignment": []
+        },
+        {
+            "ID": 712,
+            "Type": "Storage",
+            "Name": "Storage2",
+            "Subnet": "",
+            "Shutdown": false,
+            "Assignment": []
+        },
+        {
+            "ID": null,
+            "Type": "Other",
+            "Name": "SwitchManagement",
+            "Subnet": "192.168.1.0/28",
+            "Shutdown": false,
+            "Assignment": [
+                {
+                    "Name": "P2P_TOR1_To_Border1",
+                    "Size": 31,
+                    "Position": 0
+                },
+                {
+                    "Name": "P2P_TOR1_To_Border2",
+                    "Size": 31,
+                    "Position": 1
+                },
+                {
+                    "Name": "P2P_TOR2_To_Border1",
+                    "Size": 31,
+                    "Position": 2
+                },
+                {
+                    "Name": "P2P_TOR2_To_Border2",
+                    "Size": 31,
+                    "Position": 3
+                },
+                {
+                    "Name": "Loopback_TOR1",
+                    "Size": 32,
+                    "Position": 8
+                },
+                {
+                    "Name": "Loopback_TOR2",
+                    "Size": 32,
+                    "Position": 9
+                }
+            ]
+        }
+    ],
+    "Subnet": [
+        {
+            "Section": "SwitchVlan",
+            "ParentName": "SwitchManagement",
+            "Subnet": "P2P_TOR1_To_Border1",
+            "Assignment": [
+                {
+                    "Name": "P2P_TOR1",
+                    "Position": 0
+                },
+                {
+                    "Name": "P2P_Border2",
+                    "Position": 1
+                }
+            ]
+        },
+        {
+            "Section": "SwitchVlan",
+            "ParentName": "SwitchManagement",
+            "Subnet": "P2P_TOR1_To_Border2",
+            "Assignment": [
+                {
+                    "Name": "P2P_TOR2",
+                    "Position": 0
+                },
+                {
+                    "Name": "P2P_Border2",
+                    "Position": 1
+                }
+            ]
+        },
+        {
+            "Section": "SwitchVlan",
+            "ParentName": "SwitchManagement",
+            "Subnet": "P2P_TOR2_To_Border1",
+            "Assignment": [
+                {
+                    "Name": "P2P_TOR1",
+                    "Position": 0
+                },
+                {
+                    "Name": "P2P_Border2",
+                    "Position": 1
+                }
+            ]
+        },
+        {
+            "Section": "SwitchVlan",
+            "ParentName": "SwitchManagement",
+            "Subnet": "P2P_TOR2_To_Border2",
+            "Assignment": [
+                {
+                    "Name": "P2P_TOR2",
+                    "Position": 0
+                },
+                {
+                    "Name": "P2P_Border2",
+                    "Position": 1
+                }
+            ]
+        }
+    ]
+}
