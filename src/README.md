@@ -190,49 +190,117 @@ classDiagram
             "Type": "Unused",
             "Name": "UnusedPort",
             "Subnet": "",
-            "Shutdown": true
+            "Shutdown": true,
+            "Assignment":[]
         },
         {
             "ID": 7,
             "Type": "Compute",
             "Name": "HNVPANetwork",
             "Subnet": "10.10.100.0/24",
-            "Shutdown": false
+            "Shutdown": false,
+            "Assignment":[]
         },
         {
             "ID": 8,
             "Type": "Compute",
             "Name": "Management",
             "Subnet": "10.10.101.0/24",
-            "Shutdown": false
+            "Shutdown": false,
+            "Assignment":[]
         },
         {
             "ID": 25,
             "Type": "OOB",
             "Name": "BMC",
             "Subnet": "192.168.0.0/26",
-            "Shutdown": false
+            "Shutdown": false,
+            "Assignment":[]
         },
         {
             "ID": 15,
             "Type": "Compute",
             "Name": "Tenant1",
             "Subnet": "10.100.0.0/24",
-            "Shutdown": false
+            "Shutdown": false,
+            "Assignment":[]
         },
         {
             "ID": 711,
             "Type": "Storage",
             "Name": "Storage1",
             "Subnet": "",
-            "Shutdown": false
+            "Shutdown": false,
+            "Assignment":[]
         },
         {
             "ID": 712,
             "Type": "Storage",
             "Name": "Storage2",
             "Subnet": "",
-            "Shutdown": false
+            "Shutdown": false,
+            "Assignment":[]
+        },
+        {
+            "ID": null,
+            "Type": "Other",
+            "Name": "SwitchManagement",
+            "Subnet": "192.168.1.0/29",
+            "Shutdown": false,
+            "Assignment":[
+                {
+                    "Name": "P2P_Link",
+                    "Size": 28,
+                    "Position": 0
+                },
+                {
+                    "Name": "Loopback",
+                    "Size": 28,
+                    "Position": 1
+                }
+            ]
+        }
+    ],
+    "Subnet": [
+        {
+            "Section": "SwitchVlan",
+            "ParentName": "SwitchManagement",
+            "Subnet": "P2P_Link",
+            "CIDR": 31,
+            "Networks": [
+                {
+                    "Name": "P2P_TOR1_To_Border1",
+                    "Position": 0
+                },
+                {
+                    "Name": "P2P_TOR1_To_Border2",
+                    "Position": 1
+                },
+                {
+                    "Name": "P2P_TOR2_To_Border1",
+                    "Position": 2
+                },
+                {
+                    "Name": "P2P_TOR2_To_Border2",
+                    "Position": 3
+                }
+            ]
+        },
+        {
+            "Section": "SwitchVlan",
+            "ParentName": "SwitchManagement",
+            "Subnet": "Loopback",
+            "CIDR": 32,
+            "Networks": [
+                {
+                    "Name": "Loopback_TOR1",
+                    "Position": 0
+                },
+                {
+                    "Name": "Loopback_TOR2",
+                    "Position": 1
+                }
+            ]
         }
     ]
 }
