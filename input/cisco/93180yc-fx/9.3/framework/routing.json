@@ -1,0 +1,73 @@
+{
+    "Router": {
+        "BGP": {
+            "BGPAsn": 65000,
+            "RouterID": "TORX_Loopback0",
+            "IPv4Network": [
+                "Tenant1",
+                "Compute",
+                "Management",
+                "SwitchMgmt",
+                "BMCMgmt"
+            ],
+            "EnableDefaultOriginate": false,
+            "RoutePrefix": {
+                "MaxiPrefix": 12000,
+                "ErrorAction": "warning-only"
+            },
+            "IPv4Neighbor": [
+                {
+                    "Description": "P2P_TORX_To_Border1/Border1",
+                    "EnablePassword": false,
+                    "NeighborAsn": "Border1",
+                    "NeighborIPAddress": "P2P_TORX_To_Border1/Border1",
+                    "PrefixList": [
+                        {
+                            "Name": "ExternalPrefix",
+                            "Direction": "in"
+                        },
+                        {
+                            "Name": "ExternalPrefix",
+                            "Direction": "out"
+                        }
+                    ],
+                    "RouteMap": [
+                        {
+                            "Name": "",
+                            "Direction": ""
+                        }
+                    ],
+                    "UpdateSource": "TORX_Loopback0",
+                    "Shutdown": false
+                }
+            ]
+        },
+        "Static": [
+            {
+                "Name": "P2P_Border1_To_TORX",
+                "NetworkName": "P2P_Border1_To_TORX",
+                "NetworkAssignment": "P2P_Border1"
+            }
+        ]
+    },
+    "PrefixList": [
+        {
+            "Index": 5,
+            "Name": "ExternalPrefix",
+            "Permit": false,
+            "Network": "PrivateNetworkSupernet",
+            "Operation": "le",
+            "Prefix": 32
+        }
+    ],
+    "RouteMap": [
+        {
+            "Index": 0,
+            "Name": "p1",
+            "Permit": true,
+            "Network": "BMCMgmt",
+            "Operation": "le",
+            "Prefix": 32
+        }
+    ]
+}

@@ -1,0 +1,127 @@
+[
+  {
+    "VlanID": 2,
+    "Type": "Unused",
+    "Name": "UnusedPort",
+    "Subnet": "",
+    "Shutdown": true,
+    "IPAssignment": []
+  },
+  {
+    "VlanID": 7,
+    "Type": "Compute",
+    "Name": "HNVPANetwork",
+    "Subnet": "10.10.100.0/24",
+    "Shutdown": false,
+    "IPAssignment": [
+      {
+        "Name": "Gateway/Gateway",
+        "Network": "10.10.100.1/24"
+      }
+    ]
+  },
+  {
+    "VlanID": 8,
+    "Type": "Management",
+    "Name": "Management",
+    "Subnet": "10.10.101.0/24",
+    "Shutdown": false,
+    "IPAssignment": [
+      {
+        "Name": "Gateway/Gateway",
+        "Network": "10.10.101.1/24"
+      }
+    ]
+  },
+  {
+    "VlanID": 25,
+    "Type": "OOB",
+    "Name": "BMC",
+    "Subnet": "192.168.0.0/26",
+    "Shutdown": false,
+    "IPAssignment": [
+      {
+        "Name": "Gateway/Gateway",
+        "Network": "192.168.0.1/26"
+      }
+    ]
+  },
+  {
+    "VlanID": 15,
+    "Type": "Compute",
+    "Name": "Tenant1",
+    "Subnet": "10.100.0.0/24",
+    "Shutdown": false,
+    "IPAssignment": [
+      {
+        "Name": "Gateway/Gateway",
+        "Network": "10.100.0.1/24"
+      }
+    ]
+  },
+  {
+    "VlanID": 711,
+    "Type": "Storage",
+    "Name": "Storage1",
+    "Subnet": "",
+    "Shutdown": false,
+    "IPAssignment": []
+  },
+  {
+    "VlanID": 712,
+    "Type": "Storage",
+    "Name": "Storage2",
+    "Subnet": "",
+    "Shutdown": false,
+    "IPAssignment": []
+  },
+  {
+    "VlanID": 0,
+    "Type": "Other",
+    "Name": "SwitchManagement",
+    "Subnet": "192.168.1.0/28",
+    "Shutdown": false,
+    "IPAssignment": [
+      {
+        "Name": "P2P_TOR1_To_Border1/P2P_TOR1",
+        "Network": "192.168.1.0/31"
+      },
+      {
+        "Name": "P2P_TOR1_To_Border1/P2P_Border2",
+        "Network": "192.168.1.1/31"
+      },
+      {
+        "Name": "P2P_TOR1_To_Border2/P2P_TOR2",
+        "Network": "192.168.1.2/31"
+      },
+      {
+        "Name": "P2P_TOR1_To_Border2/P2P_Border2",
+        "Network": "192.168.1.3/31"
+      },
+      {
+        "Name": "P2P_TOR2_To_Border1/P2P_TOR1",
+        "Network": "192.168.1.4/31"
+      },
+      {
+        "Name": "P2P_TOR2_To_Border1/P2P_Border2",
+        "Network": "192.168.1.5/31"
+      },
+      {
+        "Name": "P2P_TOR2_To_Border2/P2P_TOR2",
+        "Network": "192.168.1.6/31"
+      },
+      {
+        "Name": "P2P_TOR2_To_Border2/P2P_Border2",
+        "Network": "192.168.1.7/31"
+      },
+      {
+        "Name": "Loopback_TOR1/Loopback_TOR1",
+        "Network": "192.168.1.8/32"
+      },
+      {
+        "Name": "Loopback_TOR2/Loopback_TOR2",
+        "Network": "192.168.1.9/32"
+      }
+    ]
+  }
+]
