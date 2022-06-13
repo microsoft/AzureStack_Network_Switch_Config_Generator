@@ -9,13 +9,25 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+func createFolder(folderPath string) {
+	_, err := os.Stat(folderPath)
+
+	if os.IsNotExist(err) {
+		errDir := os.MkdirAll(folderPath, 0755)
+		if errDir != nil {
+			log.Fatal(err)
+		}
+
+	}
+}
+
 func writeToYaml(yamlFile string, outputResult interface{}) {
 	b, err := yaml.Marshal(outputResult)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	f, err := os.OpenFile(yamlFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+	f, err := os.OpenFile(yamlFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -33,7 +45,7 @@ func writeToJson(jsonFile string, outputResult interface{}) {
 		log.Fatalln(err)
 	}
 
-	f, err := os.OpenFile(jsonFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+	f, err := os.OpenFile(jsonFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -45,7 +57,7 @@ func writeToJson(jsonFile string, outputResult interface{}) {
 	f.Close()
 }
 
-func (o *OutputJsonType) parseTemplate(templatePath, outputConfigName string) {
+func (o *OutputType) parseTemplate(templatePath, outputConfigName string) {
 	t, err := template.ParseFiles(
 		templatePath+"/allConfig.go.tmpl",
 		templatePath+"/header.go.tmpl",

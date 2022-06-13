@@ -1,6 +1,6 @@
 package main
 
-type InputJsonType struct {
+type InputType struct {
 	External []struct {
 		Type string   `json:"Type"`
 		IP   []string `json:"IP"`
@@ -107,7 +107,7 @@ type InterfaceFrameworkType struct {
 	} `json:"PortChannel"`
 }
 
-type OutputJsonType struct {
+type OutputType struct {
 	Device  DeviceType           `json:"Device"`
 	Port    []PortType           `json:"Port"`
 	Vlan    []VlanType           `json:"Vlan"`

@@ -12,7 +12,7 @@ func newRoutingObj() *RoutingType {
 	return &RoutingType{}
 }
 
-func (o *OutputJsonType) parseBGPFramework(frameworkPath string, inputJsonObj *InputJsonType) {
+func (o *OutputType) parseBGPFramework(frameworkPath string, inputJsonObj *InputType) {
 	routingFrameJson := fmt.Sprintf("%s/routing.json", frameworkPath)
 	routingFrameworkObj := parseRoutingJSON(routingFrameJson)
 	// Set unused section to null
@@ -40,8 +40,8 @@ func parseRoutingJSON(routingFrameJson string) *RoutingType {
 	return routingFrameworkObj
 }
 
-func (r *RoutingType) updateBgpNetwork(outputJsonObj *OutputJsonType) {
-	for _, segment := range *outputJsonObj.Network {
+func (r *RoutingType) updateBgpNetwork(outputObj *OutputType) {
+	for _, segment := range *outputObj.Network {
 		for index, netname := range r.Router.Bgp.IPv4Network {
 			if segment.Name == netname {
 				// fmt.Println(netname, segment.Subnet)
@@ -51,24 +51,24 @@ func (r *RoutingType) updateBgpNetwork(outputJsonObj *OutputJsonType) {
 	}
 }
 
-func (r *RoutingType) updateBgpNeighbor(outputJsonObj *OutputJsonType, inputJsonObj *InputJsonType) {
+func (r *RoutingType) updateBgpNeighbor(outputObj *OutputType, inputJsonObj *InputType) {
 	for k, v := range r.Router.Bgp.IPv4Neighbor {
 		nbrAsn, err := inputJsonObj.getBgpASN(v.NeighborAsn)
 		if err != nil {
 			log.Fatalln(err)
 		}
 		r.Router.Bgp.IPv4Neighbor[k].NeighborAsn = nbrAsn
-		nbrIPAddressName := strings.Replace(v.NeighborIPAddress, "TORX", outputJsonObj.Device.Type, -1)
-		r.Router.Bgp.IPv4Neighbor[k].NeighborIPAddress = outputJsonObj.searchSwitchMgmtIP(nbrIPAddressName)
+		nbrIPAddressName := strings.Replace(v.NeighborIPAddress, "TORX", outputObj.Device.Type, -1)
+		r.Router.Bgp.IPv4Neighbor[k].NeighborIPAddress = outputObj.searchSwitchMgmtIP(nbrIPAddressName)
 		r.Router.Bgp.IPv4Neighbor[k].Description = nbrIPAddressName
 
-		updateSourceName := strings.Replace(v.UpdateSource, "TORX", outputJsonObj.Device.Type, -1)
-		r.Router.Bgp.IPv4Neighbor[k].UpdateSource = outputJsonObj.searchSwitchMgmtIP(updateSourceName)
+		updateSourceName := strings.Replace(v.UpdateSource, "TORX", outputObj.Device.Type, -1)
+		r.Router.Bgp.IPv4Neighbor[k].UpdateSource = outputObj.searchSwitchMgmtIP(updateSourceName)
 	}
 
 }
 
-func (i *InputJsonType) getBgpASN(deviceName string) (string, error) {
+func (i *InputType) getBgpASN(deviceName string) (string, error) {
 	for _, v := range i.Device {
 		if v.Hostname == deviceName {
 			return fmt.Sprint(v.Asn), nil

@@ -2,17 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"strings"
-)
-
-var (
-	inputFolder   = "../input"
-	inputJsonFile = inputFolder + "/input.json"
-	outputFolder  = "../output"
 )
 
 const (
@@ -24,59 +19,57 @@ const (
 
 func main() {
 
-	inputJsonObj := parseInputJSON(inputJsonFile)
+	// Input Variables
+	inputJsonFile := flag.String("inputJsonFile", "../input/input.json", "File path of switch deploy input.json")
+	switchFolder := flag.String("switchFolder", "../input/switchfolder", "Folder path of switch frameworks and templates")
+	outputFolder := flag.String("outputFolder", "../output", "Folder path of switch configurations")
 
-	// Pass network content to Interface function
-	NetworkBytes, err := json.Marshal(inputJsonObj.Network)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	subnetIPList := parseInterfaceSection(NetworkBytes)
+	// Covert input.json to Go Object
+	inputObj := parseInputJSON(*inputJsonFile)
 
-	for _, deviceItem := range inputJsonObj.Device {
-		// fmt.Println(deviceItem)
+	// Decode Network section. (Pass the raw bytes instead of Obj, because trying to detach the ipcaculator function for future open source.)
+	outputNetwork := inputObj.outputNetwork()
+
+	// Decode the Device section
+	for _, deviceItem := range inputObj.Device {
+		// Key GenerateDeviceConfig for further processing, otherwise will skip.
 		if deviceItem.GenerateDeviceConfig {
-			outputJsonObj := NewOutputJsonObj()
-			frameworkPath, templatePath := deviceItem.validateInputFolder()
-			// fmt.Println(frameworkPath, templatePath)
-			outputJsonObj.Network = subnetIPList
-			outputJsonObj.Device = deviceItem
-			outputJsonObj.parseInterfaceObj(frameworkPath)
-			if inputJsonObj.isRoutingBGP() {
-				outputJsonObj.parseBGPFramework(frameworkPath, inputJsonObj)
-			}
-			// Generate Output Object Json for Template to Consume
-			outputJsonName := outputFolder + "/" + outputJsonObj.Device.Hostname + ".json"
-			writeToJson(outputJsonName, outputJsonObj)
-			// Parse Switch Template to Config
-			outputConfigName := outputFolder + "/" + outputJsonObj.Device.Hostname + ".config"
-			outputJsonObj.parseTemplate(templatePath, outputConfigName)
+			outputObj := NewOutputObj()
+			// Determine the switch category based on Device info.
+			frameworkPath, templatePath := deviceItem.validateSwitchFolder(*switchFolder)
+			log.Println(deviceItem.Hostname, frameworkPath, templatePath)
+			outputObj.Network = outputNetwork
+			outputObj.Device = deviceItem
+
+			// Dynamic updating output object based on switch framework.
+			outputObj.updateOutputObj(frameworkPath, templatePath, inputObj)
+
+			// Generate JSON Output for Debug
+			createFolder(*outputFolder)
+			outputJsonName := *outputFolder + "/" + outputObj.Device.Hostname + ".json"
+			writeToJson(outputJsonName, outputObj)
+
+			// Generate Configuration Output for Deployment
+			outputConfigName := *outputFolder + "/" + outputObj.Device.Hostname + ".config"
+			outputObj.parseTemplate(templatePath, outputConfigName)
 		}
 	}
 }
 
-func NewInputJsonObj() *InputJsonType {
-	return &InputJsonType{}
+func NewInputObj() *InputType {
+	return &InputType{}
 }
 
-func NewOutputJsonObj() *OutputJsonType {
-	return &OutputJsonType{}
+func NewOutputObj() *OutputType {
+	return &OutputType{}
 }
 
 func newInterfaceFrameworkObj() *InterfaceFrameworkType {
 	return &InterfaceFrameworkType{}
 }
 
-func (o *OutputJsonType) parseInterfaceObj(frameworkPath string) {
-	// interfaceFrameJson := fmt.Sprintf("%s/interface_%s.json", frameworkPath, strings.ToLower(o.Device.Type))
-	interfaceFrameJson := fmt.Sprintf("%s/interface.json", frameworkPath)
-	InterfaceFrameworkObj := parseInterfaceJSON(interfaceFrameJson)
-	o.parseInBandPortFramework(InterfaceFrameworkObj)
-	o.parseVlanFramework(InterfaceFrameworkObj)
-}
-
-func parseInputJSON(inputJsonFile string) *InputJsonType {
-	inputJsonObj := NewInputJsonObj()
+func parseInputJSON(inputJsonFile string) *InputType {
+	inputJsonObj := NewInputObj()
 	bytes, err := ioutil.ReadFile(inputJsonFile)
 	if err != nil {
 		log.Fatalln(err)
@@ -88,14 +81,27 @@ func parseInputJSON(inputJsonFile string) *InputJsonType {
 	return inputJsonObj
 }
 
-func (d *DeviceType) validateInputFolder() (frameworkPath, templatePath string) {
-	frameworkPath = fmt.Sprintf("%s/%s/%s/%s/%s", inputFolder, d.Make, d.Model, d.Firmware, FRAMEWORK)
+func parseOutputJSON(outputJsonFile string) *OutputType {
+	outputObj := NewOutputObj()
+	bytes, err := ioutil.ReadFile(outputJsonFile)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	err = json.Unmarshal(bytes, outputObj)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return outputObj
+}
+
+func (d *DeviceType) validateSwitchFolder(switchFolder string) (frameworkPath, templatePath string) {
+	frameworkPath = fmt.Sprintf("%s/%s/%s/%s/%s", switchFolder, d.Make, d.Model, d.Firmware, FRAMEWORK)
 	frameworkPath = strings.ToLower(frameworkPath)
 	_, err := os.Stat(frameworkPath)
 	if err != nil {
 		log.Println(err)
 	}
-	templatePath = fmt.Sprintf("%s/%s/%s/%s/%s", inputFolder, d.Make, d.Model, d.Firmware, TEMPLATE)
+	templatePath = fmt.Sprintf("%s/%s/%s/%s/%s", switchFolder, d.Make, d.Model, d.Firmware, TEMPLATE)
 	templatePath = strings.ToLower(templatePath)
 
 	_, err = os.Stat(templatePath)
@@ -103,6 +109,13 @@ func (d *DeviceType) validateInputFolder() (frameworkPath, templatePath string) 
 		log.Println(err)
 	}
 	return frameworkPath, templatePath
+}
+
+func (o *OutputType) parseInterfaceObj(frameworkPath string) {
+	interfaceFrameJson := fmt.Sprintf("%s/interface.json", frameworkPath)
+	InterfaceFrameworkObj := parseInterfaceJSON(interfaceFrameJson)
+	o.parseInBandPortFramework(InterfaceFrameworkObj)
+	o.parseVlanFramework(InterfaceFrameworkObj)
 }
 
 func parseInterfaceJSON(interfaceFrameJson string) *InterfaceFrameworkType {
@@ -118,11 +131,26 @@ func parseInterfaceJSON(interfaceFrameJson string) *InterfaceFrameworkType {
 	return InterfaceFrameworkObj
 }
 
-func (i *InputJsonType) isRoutingBGP() bool {
+func (i *InputType) isRoutingBGP() bool {
 	for _, v := range i.Device {
 		if v.Asn <= 0 {
 			return false
 		}
 	}
 	return true
+}
+
+func (i *InputType) outputNetwork() *[]NetworkOutputType {
+	NetworkBytes, err := json.Marshal(i.Network)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return parseNetworkSection(NetworkBytes)
+}
+
+func (o *OutputType) updateOutputObj(frameworkPath, templatePath string, inputObj *InputType) {
+	o.parseInterfaceObj(frameworkPath)
+	if inputObj.isRoutingBGP() {
+		o.parseBGPFramework(frameworkPath, inputObj)
+	}
 }

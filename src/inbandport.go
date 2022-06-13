@@ -9,7 +9,7 @@ func newPortObj() *PortType {
 	return &PortType{}
 }
 
-func (o *OutputJsonType) parseInBandPortFramework(i *InterfaceFrameworkType) {
+func (o *OutputType) parseInBandPortFramework(i *InterfaceFrameworkType) {
 	for _, intf := range i.InBandPort {
 		portObj := newPortObj()
 		portObj.Port = intf.Port
@@ -34,7 +34,7 @@ func (o *OutputJsonType) parseInBandPortFramework(i *InterfaceFrameworkType) {
 	}
 }
 
-func (o *OutputJsonType) searchSwitchMgmtIP(IPAddressName string) string {
+func (o *OutputType) searchSwitchMgmtIP(IPAddressName string) string {
 	for _, segment := range *o.Network {
 		if segment.Name == "SwitchMgmt" {
 			for _, ipAssign := range segment.IPAssignment {
@@ -47,7 +47,7 @@ func (o *OutputJsonType) searchSwitchMgmtIP(IPAddressName string) string {
 	return ""
 }
 
-func (o *OutputJsonType) updatePortUntagvlan(UntagVlanName string) int {
+func (o *OutputType) updatePortUntagvlan(UntagVlanName string) int {
 	for _, segment := range *o.Network {
 		if segment.VlanID != 0 {
 			if segment.Name == UntagVlanName {
@@ -58,7 +58,7 @@ func (o *OutputJsonType) updatePortUntagvlan(UntagVlanName string) int {
 	return 0
 }
 
-func (o *OutputJsonType) updatePortTagvlan(TagVlanName []string) []int {
+func (o *OutputType) updatePortTagvlan(TagVlanName []string) []int {
 	if len(TagVlanName) < 1 {
 		log.Fatalln("Tag Vlan Attributes of this Trunk Port is invalid.")
 	}

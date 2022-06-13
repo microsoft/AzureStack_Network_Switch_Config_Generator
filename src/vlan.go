@@ -8,7 +8,7 @@ func newVlanObj() *VlanType {
 	return &VlanType{}
 }
 
-func (o *OutputJsonType) parseVlanFramework(i *InterfaceFrameworkType) {
+func (o *OutputType) parseVlanFramework(i *InterfaceFrameworkType) {
 	for _, vlanItem := range i.Vlan {
 		vlanObj := newVlanObj()
 		vlanObj.VlanName = strings.Replace(vlanItem.Name, "TORX", o.Device.Type, -1)
@@ -19,7 +19,7 @@ func (o *OutputJsonType) parseVlanFramework(i *InterfaceFrameworkType) {
 	}
 }
 
-func (o *OutputJsonType) updateVlanIPAddr(VlanName, IPAssignment string) string {
+func (o *OutputType) updateVlanIPAddr(VlanName, IPAssignment string) string {
 	for _, segment := range *o.Network {
 		if segment.Name == VlanName {
 			for _, ipAssign := range segment.IPAssignment {
@@ -32,7 +32,7 @@ func (o *OutputJsonType) updateVlanIPAddr(VlanName, IPAssignment string) string 
 	return ""
 }
 
-func (v *VlanType) updateVlanFromNetwork(o *OutputJsonType, VlanName string) {
+func (v *VlanType) updateVlanFromNetwork(o *OutputType, VlanName string) {
 	for _, segment := range *o.Network {
 		if segment.Name == VlanName {
 			v.Shutdown = segment.Shutdown

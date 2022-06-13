@@ -9,7 +9,7 @@ import (
 	"sort"
 )
 
-func parseInterfaceSection(switchSubnetBytes []byte) *[]NetworkOutputType {
+func parseNetworkSection(switchSubnetBytes []byte) *[]NetworkOutputType {
 	switchSubnet := []NetworkInputType{}
 	outputResult := []NetworkOutputType{}
 	err := json.Unmarshal(switchSubnetBytes, &switchSubnet)
@@ -36,7 +36,6 @@ func parseInterfaceSection(switchSubnetBytes []byte) *[]NetworkOutputType {
 			}
 
 			// Subnet Segment [large -> small] and Assign IP from IP List
-
 			outputSubnet.assignIPFromList(ipList, inputSubnet)
 		} else {
 			outputSubnet.updateNoSubnetObj(inputSubnet)
