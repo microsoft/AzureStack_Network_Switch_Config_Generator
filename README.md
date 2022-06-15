@@ -361,25 +361,37 @@ flowchart
 
 ## MileStone Plan
 
-- POC Phase - 06/24
+### Phase1 - POC Phase - 06/24
 
   - Existing documentation
   - Unit Test
   - Optimize/Comment current code
 
-- Testing on Single Switch Validation Virtual (GNS3 Lab) - 08/19
+### Phase2 Testing on Single Switch Validation Virtual (GNS3 Lab) - 08/19
 
   - Cisco switch existing configuration operate
-  - Add `OutOfBandPort`,`Credential`,`Stig_Setting`,`PrefixList`,`PolicyMap`,`NTP`,`STP`,`VTY`, `Static`,`Syslog`
   - Complete `Unused` Port in `interface.json` framework
+  - Function To Do List:
+    - `OutOfBandPort`
+    - `Credential`
+    - `Stig_Setting`
+    - `PrefixList`
+    - `PolicyMap`
+    - `NTP`
+    - `STP`
+    -`VTY`
+    - `Static`
+    -`Syslog`
 
-- Testing on Multi-Switch Validation Virtual (GNS3 Lab) - 09/16
+### Phase3 Testing on Multi-Switch Validation Virtual (GNS3 Lab) - 09/16
 
-  - Add `Port-Channel`,`MLAG`
+  - Function To Do List: 
+    - `Port-Channel`
+    - `MLAG`
   - Define BMC Framework
   - BMC Cisco Switch Integration
 
-- Physical Device Testing - 09/30
+### Phase4 Physical Device Testing - 09/30
 
   - Single Switch
   - Multi-Switch
