@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+// Two group unit tests: 1. Json Object Unit Testing (Verify core functions logic); 2. Template Configuration Unit Test (Verify go templates)
 // JSON Object Unit Testing
 func TestOutputNetwork(t *testing.T) {
 	type test struct {
