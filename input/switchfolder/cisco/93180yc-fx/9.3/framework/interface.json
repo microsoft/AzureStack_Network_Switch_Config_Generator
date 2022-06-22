@@ -14,7 +14,7 @@
       "Name": "TwentyFiveGigEthernet"
     }
   ],
-  "InBandPort": [
+  "Port": [
     {
       "ID": 1,
       "Port": "1/1",
@@ -103,20 +103,6 @@
       "IPAddress": "P2P_TORX_To_Border1/TORX",
       "UntagVlan": "",
       "TagVlan": []
-    }
-  ],
-  "OutOfBandPort": [
-    {
-      "ID": 0,
-      "Name": "BMCMgmt",
-      "Description": "Host Port",
-      "MTU": null,
-      "Type": "mgmt",
-      "IPAddress": "BMCMgmt",
-      "MgmtAssignment": "TORX_IPv4",
-      "Shutdown": false,
-      "NextHop": "Gateway",
-      "DHCP": false
     }
   ],
   "VLAN": [

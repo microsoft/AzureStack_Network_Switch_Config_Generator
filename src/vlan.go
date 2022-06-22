@@ -11,9 +11,10 @@ func newVlanObj() *VlanType {
 func (o *OutputType) parseVlanFramework(i *InterfaceFrameworkType) {
 	for _, vlanItem := range i.Vlan {
 		vlanObj := newVlanObj()
-		vlanObj.VlanName = strings.Replace(vlanItem.Name, "TORX", o.Device.Type, -1)
+		vlanObj.VlanName = vlanItem.Name
 		vlanObj.Mtu = vlanItem.Mtu
-		vlanObj.IPAddress = o.updateVlanIPAddr(vlanItem.Name, vlanItem.IPAssignment)
+		IPAssignment := replaceTORXName(vlanItem.IPAssignment, o.Device.Type)
+		vlanObj.IPAddress = o.updateVlanIPAddr(vlanItem.Name, IPAssignment)
 		vlanObj.updateVlanFromNetwork(o, vlanItem.Name)
 		o.Vlan = append(o.Vlan, *vlanObj)
 	}

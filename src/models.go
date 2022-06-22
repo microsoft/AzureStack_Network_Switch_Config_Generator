@@ -17,6 +17,8 @@ type DeviceType struct {
 	Model                string `json:"Model"`
 	Firmware             string `json:"Firmware"`
 	GenerateDeviceConfig bool   `json:"GenerateDeviceConfig"`
+	Username             string `json:"Username"`
+	Password             string `json:"Password"`
 }
 
 type NetworkInputType struct {
@@ -62,7 +64,7 @@ type InterfaceFrameworkType struct {
 		Speed int    `json:"Speed"`
 		Name  string `json:"Name"`
 	} `json:"InterfaceName"`
-	InBandPort []struct {
+	Port []struct {
 		ID          int      `json:"ID"`
 		Port        string   `json:"Port"`
 		Speed       int      `json:"Speed"`
@@ -73,7 +75,7 @@ type InterfaceFrameworkType struct {
 		IPAddress   string   `json:"IPAddress"`
 		UntagVlan   string   `json:"UntagVlan"`
 		TagVlan     []string `json:"TagVlan"`
-	} `json:"InBandPort"`
+	} `json:"Port"`
 	OutOfBandPort []struct {
 		ID             int    `json:"ID"`
 		Name           string `json:"Name"`

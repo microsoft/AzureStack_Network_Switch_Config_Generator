@@ -61,7 +61,7 @@ func (o *OutputType) parseTemplate(templatePath, outputConfigName string) {
 	t, err := template.ParseFiles(
 		templatePath+"/allConfig.go.tmpl",
 		templatePath+"/header.go.tmpl",
-		templatePath+"/inBandPort.go.tmpl",
+		templatePath+"/port.go.tmpl",
 		templatePath+"/vlan.go.tmpl",
 		templatePath+"/bgp.go.tmpl",
 	)

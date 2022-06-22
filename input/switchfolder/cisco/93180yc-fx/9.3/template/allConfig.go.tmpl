@@ -6,7 +6,7 @@ hostname {{ .Device.Hostname }}
 
 {{ template "interface_vlan" .Vlan }}
 
-{{ template "inband_port" .Port }}
+{{ template "port" .Port }}
 
 {{ template "bgp" .Routing.Router.Bgp }}
 

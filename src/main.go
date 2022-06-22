@@ -29,6 +29,8 @@ func main() {
 
 	// Decode Network section. (Pass the raw bytes instead of Obj, because trying to detach the ipcaculator function for future open source.)
 	outputNetwork := inputObj.outputNetwork()
+	randomUsername := "aszadmin-" + generateRandomString(5, 0, 0, 0)
+	randomPassword := generateRandomString(16, 3, 3, 3)
 
 	// Decode the Device section
 	for _, deviceItem := range inputObj.Device {
@@ -40,6 +42,8 @@ func main() {
 			log.Println(deviceItem.Hostname, frameworkPath, templatePath)
 			outputObj.Network = outputNetwork
 			outputObj.Device = deviceItem
+			outputObj.Device.Username = randomUsername
+			outputObj.Device.Password = randomPassword
 
 			// Dynamic updating output object based on switch framework.
 			outputObj.updateOutputObj(frameworkPath, templatePath, inputObj)
@@ -54,6 +58,7 @@ func main() {
 			outputObj.parseTemplate(templatePath, outputConfigName)
 		}
 	}
+
 }
 
 func NewInputObj() *InputType {

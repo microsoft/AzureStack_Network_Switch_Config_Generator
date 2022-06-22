@@ -58,11 +58,11 @@ func (r *RoutingType) updateBgpNeighbor(outputObj *OutputType, inputJsonObj *Inp
 			log.Fatalln(err)
 		}
 		r.Router.Bgp.IPv4Neighbor[k].NeighborAsn = nbrAsn
-		nbrIPAddressName := strings.Replace(v.NeighborIPAddress, "TORX", outputObj.Device.Type, -1)
+		nbrIPAddressName := replaceTORXName(v.NeighborIPAddress, outputObj.Device.Type)
 		r.Router.Bgp.IPv4Neighbor[k].NeighborIPAddress = outputObj.searchSwitchMgmtIP(nbrIPAddressName)
 		r.Router.Bgp.IPv4Neighbor[k].Description = nbrIPAddressName
 
-		updateSourceName := strings.Replace(v.UpdateSource, "TORX", outputObj.Device.Type, -1)
+		updateSourceName := replaceTORXName(v.UpdateSource, outputObj.Device.Type)
 		r.Router.Bgp.IPv4Neighbor[k].UpdateSource = outputObj.searchSwitchMgmtIP(updateSourceName)
 	}
 
