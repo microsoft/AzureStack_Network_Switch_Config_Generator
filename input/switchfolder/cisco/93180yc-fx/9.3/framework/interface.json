@@ -107,7 +107,7 @@
   ],
   "VLAN": [
     {
-      "Name": "Compute",
+      "Group": "Compute",
       "IPAssignment": "TORX_IPv4",
       "MTU": 9000,
       "VirtualAssignment": {
@@ -120,7 +120,7 @@
       "ACL": []
     },
     {
-      "Name": "Management",
+      "Group": "Management",
       "IPAssignment": "TORX_IPv4",
       "MTU": 9000,
       "VirtualAssignment": {
@@ -140,7 +140,7 @@
       ]
     },
     {
-      "Name": "Storage1",
+      "Group": "Storage",
       "IPAssignment": "",
       "MTU": 9000,
       "VirtualAssignment": {
@@ -151,20 +151,21 @@
       "ACL": []
     },
     {
-      "Name": "Storage2",
-      "IPAssignment": "",
-      "MTU": 9000,
-      "VirtualAssignment": {
-        "PriorityId": null,
-        "IPAssignment": ""
-      },
-      "IPHelper": [],
-      "ACL": []
-    },
-    {
-      "Name": "Unused",
+      "Group": "Unused",
       "Shutdown": true,
       "IPAssignment": "",
+      "MTU": 9000,
+      "VirtualAssignment": {
+        "PriorityId": null,
+        "IPAssignment": ""
+      },
+      "IPHelper": [],
+      "ACL": []
+    },
+    {
+      "Group": "OOB",
+      "Shutdown": true,
+      "IPAssignment": "TORX_IPv4",
       "MTU": 9000,
       "VirtualAssignment": {
         "PriorityId": null,

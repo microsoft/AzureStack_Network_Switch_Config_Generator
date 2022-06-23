@@ -54,7 +54,7 @@
     "Network": [
         {
             "VlanID": 2,
-            "Type": "Unused",
+            "Group": "Unused",
             "Name": "Unused",
             "Subnet": "",
             "Shutdown": true,
@@ -62,13 +62,13 @@
         },
         {
             "VlanID": 7,
-            "Type": "Compute",
-            "Name": "Compute",
+            "Group": "Compute",
+            "Name": "Tenant0",
             "Subnet": "10.10.100.0/24",
             "Shutdown": false,
             "SubnetAssignment": [
                 {
-                    "Name": "Compute",
+                    "Name": "Tenant0",
                     "Netmask": 24,
                     "IPAssignment": [
                         {
@@ -89,7 +89,7 @@
         },
         {
             "VlanID": 8,
-            "Type": "Management",
+            "Group": "Management",
             "Name": "Management",
             "Subnet": "10.10.101.0/24",
             "Shutdown": false,
@@ -116,7 +116,7 @@
         },
         {
             "VlanID": 25,
-            "Type": "OOB",
+            "Group": "OOB",
             "Name": "BMCMgmt",
             "Subnet": "192.168.0.0/26",
             "Shutdown": false,
@@ -143,7 +143,7 @@
         },
         {
             "VlanID": 15,
-            "Type": "Compute",
+            "Group": "Compute",
             "Name": "Tenant1",
             "Subnet": "10.100.0.0/24",
             "Shutdown": false,
@@ -170,7 +170,7 @@
         },
         {
             "VlanID": 711,
-            "Type": "Storage",
+            "Group": "Storage",
             "Name": "Storage1",
             "Subnet": "",
             "Shutdown": false,
@@ -178,7 +178,7 @@
         },
         {
             "VlanID": 712,
-            "Type": "Storage",
+            "Group": "Storage",
             "Name": "Storage2",
             "Subnet": "",
             "Shutdown": false,
@@ -186,7 +186,7 @@
         },
         {
             "VlanID": null,
-            "Type": "IP",
+            "Group": "IP",
             "Name": "SwitchMgmt",
             "Subnet": "192.168.1.0/28",
             "Shutdown": false,

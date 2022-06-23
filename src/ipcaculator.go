@@ -74,7 +74,7 @@ func (o *NetworkOutputType) assignIPFromList(ipList *[]string, inputSubnet Netwo
 		pointer += v.IPSize
 	}
 	o.VlanID = inputSubnet.VlanID
-	o.Type = inputSubnet.Type
+	o.Group = inputSubnet.Group
 	o.Name = inputSubnet.Name
 	o.Subnet = inputSubnet.Subnet
 	o.Shutdown = inputSubnet.Shutdown
@@ -83,7 +83,7 @@ func (o *NetworkOutputType) assignIPFromList(ipList *[]string, inputSubnet Netwo
 
 func (o *NetworkOutputType) updateNoSubnetObj(inputSubnet NetworkInputType) {
 	o.VlanID = inputSubnet.VlanID
-	o.Type = inputSubnet.Type
+	o.Group = inputSubnet.Group
 	o.Name = inputSubnet.Name
 	o.Subnet = inputSubnet.Subnet
 	o.Shutdown = inputSubnet.Shutdown

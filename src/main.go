@@ -120,7 +120,7 @@ func (o *OutputType) parseInterfaceObj(frameworkPath string) {
 	interfaceFrameJson := fmt.Sprintf("%s/interface.json", frameworkPath)
 	InterfaceFrameworkObj := parseInterfaceJSON(interfaceFrameJson)
 	o.parseInBandPortFramework(InterfaceFrameworkObj)
-	o.parseVlanFramework(InterfaceFrameworkObj)
+	o.parseVlanObj(InterfaceFrameworkObj)
 }
 
 func parseInterfaceJSON(interfaceFrameJson string) *InterfaceFrameworkType {

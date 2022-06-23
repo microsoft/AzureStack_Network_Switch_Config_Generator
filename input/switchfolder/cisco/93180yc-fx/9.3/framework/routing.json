@@ -55,7 +55,7 @@
             "Index": 5,
             "Name": "ExternalPrefix",
             "Permit": false,
-            "Network": "PrivateNetworkSupernet",
+            "NetworkGroup": "Compute",
             "Operation": "le",
             "Prefix": 32
         }

@@ -6,8 +6,8 @@ hostname {{ .Device.Hostname }}
 
 {{ template "interface_vlan" .Vlan }}
 
+{{ template "oob_vlan" .Vlan }}
+
 {{ template "port" .Port }}
 
 {{ template "bgp" .Routing.Router.Bgp }}
-
-

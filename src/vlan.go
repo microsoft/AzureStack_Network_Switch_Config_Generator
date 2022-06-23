@@ -8,37 +8,27 @@ func newVlanObj() *VlanType {
 	return &VlanType{}
 }
 
-func (o *OutputType) parseVlanFramework(i *InterfaceFrameworkType) {
-	for _, vlanItem := range i.Vlan {
-		vlanObj := newVlanObj()
-		vlanObj.VlanName = vlanItem.Name
-		vlanObj.Mtu = vlanItem.Mtu
-		IPAssignment := replaceTORXName(vlanItem.IPAssignment, o.Device.Type)
-		vlanObj.IPAddress = o.updateVlanIPAddr(vlanItem.Name, IPAssignment)
-		vlanObj.updateVlanFromNetwork(o, vlanItem.Name)
-		o.Vlan = append(o.Vlan, *vlanObj)
-	}
-}
+func (o *OutputType) parseVlanObj(i *InterfaceFrameworkType) {
 
-func (o *OutputType) updateVlanIPAddr(VlanName, IPAssignment string) string {
 	for _, segment := range *o.Network {
-		if segment.Name == VlanName {
-			for _, ipAssign := range segment.IPAssignment {
-				if strings.Contains(ipAssign.Name, IPAssignment) {
-					return ipAssign.IPAddress
+		if segment.VlanID > 0 {
+			vlanObj := newVlanObj()
+			vlanObj.VlanName = segment.Name
+			vlanObj.Shutdown = segment.Shutdown
+			vlanObj.VlanID = segment.VlanID
+			vlanObj.Group = segment.Group
+			for _, vlanItem := range i.Vlan {
+				if vlanObj.Group == vlanItem.Group {
+					vlanObj.Mtu = vlanItem.Mtu
+					IPAssignmentName := replaceTORXName(vlanItem.IPAssignment, o.Device.Type)
+					for _, ipAssign := range segment.IPAssignment {
+						if strings.Contains(ipAssign.Name, IPAssignmentName) {
+							vlanObj.IPAddress = ipAssign.IPAddress
+						}
+					}
 				}
 			}
-		}
-	}
-	return ""
-}
-
-func (v *VlanType) updateVlanFromNetwork(o *OutputType, VlanName string) {
-	for _, segment := range *o.Network {
-		if segment.Name == VlanName {
-			v.Shutdown = segment.Shutdown
-			v.Type = segment.Type
-			v.VlanID = segment.VlanID
+			o.Vlan = append(o.Vlan, *vlanObj)
 		}
 	}
 }

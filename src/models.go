@@ -23,7 +23,7 @@ type DeviceType struct {
 
 type NetworkInputType struct {
 	VlanID           int    `json:"VlanID"`
-	Type             string `json:"Type"`
+	Group            string `json:"Group"`
 	Name             string `json:"Name"`
 	Subnet           string `json:"Subnet"`
 	Shutdown         bool   `json:"Shutdown"`
@@ -42,7 +42,7 @@ type NetworkInputIPItem struct {
 
 type NetworkOutputType struct {
 	VlanID       int                   `json:"VlanID"`
-	Type         string                `json:"Type"`
+	Group        string                `json:"Group"`
 	Name         string                `json:"Name"`
 	Subnet       string                `json:"Subnet"`
 	Shutdown     bool                  `json:"Shutdown"`
@@ -76,20 +76,8 @@ type InterfaceFrameworkType struct {
 		UntagVlan   string   `json:"UntagVlan"`
 		TagVlan     []string `json:"TagVlan"`
 	} `json:"Port"`
-	OutOfBandPort []struct {
-		ID             int    `json:"ID"`
-		Name           string `json:"Name"`
-		Description    string `json:"Description"`
-		Mtu            int    `json:"MTU"`
-		Type           string `json:"Type"`
-		Network        string `json:"Network"`
-		MgmtAssignment string `json:"MgmtAssignment"`
-		Shutdown       bool   `json:"Shutdown"`
-		NextHop        string `json:"NextHop"`
-		Dhcp           bool   `json:"DHCP"`
-	} `json:"OutOfBandPort"`
 	Vlan []struct {
-		Name              string `json:"Name"`
+		Group             string `json:"Group"`
 		IPAssignment      string `json:"IPAssignment"`
 		Mtu               int    `json:"MTU"`
 		Native            bool   `json:"Native"`
@@ -132,7 +120,7 @@ type PortType struct {
 type VlanType struct {
 	VlanName  string `json:"VlanName"`
 	VlanID    int    `json:"VlanID"`
-	Type      string `json:"Type"`
+	Group     string `json:"Group"`
 	IPAddress string `json:"IPAddress"`
 	Mtu       int    `json:"MTU"`
 	Shutdown  bool   `json:"Shutdown"`

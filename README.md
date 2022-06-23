@@ -379,9 +379,9 @@ flowchart
     - `PolicyMap`
     - `NTP`
     - `STP`
-    -`VTY`
+    - `VTY`
     - `Static`
-    -`Syslog`
+    - `Syslog`
 
 ### Phase3 Testing on Multi-Switch Validation Virtual (GNS3 Lab) - 09/16
 
