@@ -1,0 +1,22 @@
+{{define "bgp"}}
+! bgp.go.tmpl-bgp
+router bgp {{.BGPAsn}}
+  router-id {{.RouterID}}
+  bestpath as-path multipath-relax
+  log-neighbor-changes
+  address-family ipv4 unicast
+    maximum-paths 8
+    {{- range .IPv4Network}}
+    network {{.}}
+    {{- end -}}
+{{- /* Define variable before assign*/ -}}
+{{$MaxiPrefix:= .RoutePrefix.MaxiPrefix}}
+{{$ErrorAction:= .RoutePrefix.ErrorAction}}
+  {{- range .IPv4Neighbor}}
+  neighbor {{.NeighborIPAddress}}
+    remote-as {{.NeighborAsn}}
+    description {{.Description}}
+    address-family ipv4 unicast
+      maximum-prefix {{$MaxiPrefix}} {{$ErrorAction}}
+  {{end -}}
+{{end}}

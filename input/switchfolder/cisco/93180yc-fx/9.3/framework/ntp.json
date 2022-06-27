@@ -1,0 +1,15 @@
+{
+    "Name": "NTP",
+    "Enabled": true,
+    "SourceInterface": {
+        "Type": "VLAN",
+        "Name": "Management"
+    },
+    "Server": [
+        {
+            "Name": "Description",
+            "IPv4": "NtpServer",
+            "VRF": "default"
+        }
+    ]
+}

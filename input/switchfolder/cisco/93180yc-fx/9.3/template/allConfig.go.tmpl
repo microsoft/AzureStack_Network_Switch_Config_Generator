@@ -1,0 +1,13 @@
+{{ template "header" .Device }}
+
+hostname {{ .Device.Hostname }}
+
+{{ template "define_vlan" .Vlan }}
+
+{{ template "interface_vlan" .Vlan }}
+
+{{ template "oob_vlan" .Vlan }}
+
+{{ template "port" .Port }}
+
+{{ template "bgp" .Routing.Router.Bgp }}

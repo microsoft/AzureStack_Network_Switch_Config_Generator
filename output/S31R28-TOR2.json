@@ -1,0 +1,372 @@
+{
+ "Device": {
+  "Make": "Cisco",
+  "Type": "TOR2",
+  "ASN": 65000,
+  "Hostname": "S31R28-TOR2",
+  "Model": "93180YC-FX",
+  "Firmware": "9.3",
+  "GenerateDeviceConfig": true,
+  "Username": "aszadmin-vlzxb",
+  "Password": "c2!cuh%xMC8*aRt9"
+ },
+ "Port": [
+  {
+   "Port": "1/1",
+   "PortName": "TenGigEthernet",
+   "PortType": "Trunk",
+   "Description": "Host Port",
+   "MTU": 9000,
+   "Shutdown": false,
+   "IPAddress": "",
+   "UntagVlan": 8,
+   "TagVlan": [
+    0
+   ]
+  },
+  {
+   "Port": "1/2",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/3",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/4",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/16",
+   "PortName": "TenGigEthernet",
+   "PortType": "Trunk",
+   "Description": "Storage Port",
+   "MTU": 9000,
+   "Shutdown": false,
+   "IPAddress": "",
+   "UntagVlan": 8,
+   "TagVlan": [
+    711,
+    712
+   ]
+  },
+  {
+   "Port": "1/46",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "BMCMgmt",
+   "MTU": 9000,
+   "Shutdown": false,
+   "IPAddress": "",
+   "UntagVlan": 25,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/48",
+   "PortName": "TenGigEthernet",
+   "PortType": "IP",
+   "Description": "P2P_TOR2_To_Border1/TOR2",
+   "MTU": 9000,
+   "Shutdown": false,
+   "IPAddress": "192.168.1.4/31",
+   "UntagVlan": 0,
+   "TagVlan": null
+  }
+ ],
+ "Vlan": [
+  {
+   "VlanName": "Unused",
+   "VlanID": 2,
+   "Group": "Unused",
+   "IPAddress": "",
+   "MTU": 9000,
+   "Shutdown": true
+  },
+  {
+   "VlanName": "Tenant0",
+   "VlanID": 7,
+   "Group": "Compute",
+   "IPAddress": "10.10.100.3/24",
+   "MTU": 9000,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Management",
+   "VlanID": 8,
+   "Group": "Management",
+   "IPAddress": "10.10.101.3/24",
+   "MTU": 9000,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "BMCMgmt",
+   "VlanID": 25,
+   "Group": "OOB",
+   "IPAddress": "192.168.0.3/26",
+   "MTU": 9000,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Tenant1",
+   "VlanID": 15,
+   "Group": "Compute",
+   "IPAddress": "10.100.0.3/24",
+   "MTU": 9000,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Storage1",
+   "VlanID": 711,
+   "Group": "Storage",
+   "IPAddress": "",
+   "MTU": 9000,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Storage2",
+   "VlanID": 712,
+   "Group": "Storage",
+   "IPAddress": "",
+   "MTU": 9000,
+   "Shutdown": false
+  }
+ ],
+ "Routing": {
+  "Router": {
+   "BGP": {
+    "BGPAsn": 65000,
+    "RouterID": "192.168.1.9/32",
+    "IPv4Network": [
+     "10.100.0.0/24",
+     "Compute",
+     "10.10.101.0/24",
+     "192.168.1.0/28",
+     "192.168.0.0/26"
+    ],
+    "EnableDefaultOriginate": false,
+    "RoutePrefix": {
+     "MaxiPrefix": 12000,
+     "ErrorAction": "warning-only"
+    },
+    "IPv4Neighbor": [
+     {
+      "Description": "P2P_TOR2_To_Border1/Border1",
+      "EnablePassword": false,
+      "NeighborAsn": "63000",
+      "NeighborIPAddress": "192.168.1.5/31",
+      "PrefixList": [
+       {
+        "Name": "ExternalPrefix",
+        "Direction": "in"
+       },
+       {
+        "Name": "ExternalPrefix",
+        "Direction": "out"
+       }
+      ],
+      "RouteMap": [
+       {
+        "Name": "",
+        "Direction": ""
+       }
+      ],
+      "UpdateSource": "192.168.1.9/32",
+      "Shutdown": false
+     }
+    ]
+   },
+   "Static": null
+  },
+  "PrefixList": [
+   {
+    "Index": 5,
+    "Name": "ExternalPrefix",
+    "Permit": false,
+    "Network": "",
+    "Operation": "le",
+    "Prefix": 32
+   }
+  ],
+  "RouteMap": null
+ },
+ "Network": [
+  {
+   "VlanID": 2,
+   "Group": "Unused",
+   "Name": "Unused",
+   "Subnet": "",
+   "Shutdown": true,
+   "IPAssignment": []
+  },
+  {
+   "VlanID": 7,
+   "Group": "Compute",
+   "Name": "Tenant0",
+   "Subnet": "10.10.100.0/24",
+   "Shutdown": false,
+   "IPAssignment": [
+    {
+     "Name": "Tenant0/Gateway",
+     "IPAddress": "10.10.100.1/24"
+    },
+    {
+     "Name": "Tenant0/TOR1_IPv4",
+     "IPAddress": "10.10.100.2/24"
+    },
+    {
+     "Name": "Tenant0/TOR2_IPv4",
+     "IPAddress": "10.10.100.3/24"
+    }
+   ]
+  },
+  {
+   "VlanID": 8,
+   "Group": "Management",
+   "Name": "Management",
+   "Subnet": "10.10.101.0/24",
+   "Shutdown": false,
+   "IPAssignment": [
+    {
+     "Name": "Management/Gateway",
+     "IPAddress": "10.10.101.1/24"
+    },
+    {
+     "Name": "Management/TOR1_IPv4",
+     "IPAddress": "10.10.101.2/24"
+    },
+    {
+     "Name": "Management/TOR2_IPv4",
+     "IPAddress": "10.10.101.3/24"
+    }
+   ]
+  },
+  {
+   "VlanID": 25,
+   "Group": "OOB",
+   "Name": "BMCMgmt",
+   "Subnet": "192.168.0.0/26",
+   "Shutdown": false,
+   "IPAssignment": [
+    {
+     "Name": "BMCMgmt/Gateway",
+     "IPAddress": "192.168.0.1/26"
+    },
+    {
+     "Name": "BMCMgmt/TOR1_IPv4",
+     "IPAddress": "192.168.0.2/26"
+    },
+    {
+     "Name": "BMCMgmt/TOR2_IPv4",
+     "IPAddress": "192.168.0.3/26"
+    }
+   ]
+  },
+  {
+   "VlanID": 15,
+   "Group": "Compute",
+   "Name": "Tenant1",
+   "Subnet": "10.100.0.0/24",
+   "Shutdown": false,
+   "IPAssignment": [
+    {
+     "Name": "Tenant1/Gateway",
+     "IPAddress": "10.100.0.1/24"
+    },
+    {
+     "Name": "Tenant1/TOR1_IPv4",
+     "IPAddress": "10.100.0.2/24"
+    },
+    {
+     "Name": "Tenant1/TOR2_IPv4",
+     "IPAddress": "10.100.0.3/24"
+    }
+   ]
+  },
+  {
+   "VlanID": 711,
+   "Group": "Storage",
+   "Name": "Storage1",
+   "Subnet": "",
+   "Shutdown": false,
+   "IPAssignment": []
+  },
+  {
+   "VlanID": 712,
+   "Group": "Storage",
+   "Name": "Storage2",
+   "Subnet": "",
+   "Shutdown": false,
+   "IPAssignment": []
+  },
+  {
+   "VlanID": 0,
+   "Group": "IP",
+   "Name": "SwitchMgmt",
+   "Subnet": "192.168.1.0/28",
+   "Shutdown": false,
+   "IPAssignment": [
+    {
+     "Name": "P2P_TOR1_To_Border1/TOR1",
+     "IPAddress": "192.168.1.0/31"
+    },
+    {
+     "Name": "P2P_TOR1_To_Border1/Border1",
+     "IPAddress": "192.168.1.1/31"
+    },
+    {
+     "Name": "P2P_TOR1_To_Border2/TOR1",
+     "IPAddress": "192.168.1.2/31"
+    },
+    {
+     "Name": "P2P_TOR1_To_Border2/Border2",
+     "IPAddress": "192.168.1.3/31"
+    },
+    {
+     "Name": "P2P_TOR2_To_Border1/TOR2",
+     "IPAddress": "192.168.1.4/31"
+    },
+    {
+     "Name": "P2P_TOR2_To_Border1/Border1",
+     "IPAddress": "192.168.1.5/31"
+    },
+    {
+     "Name": "P2P_TOR2_To_Border2/TOR2",
+     "IPAddress": "192.168.1.6/31"
+    },
+    {
+     "Name": "P2P_TOR2_To_Border2/Border2",
+     "IPAddress": "192.168.1.7/31"
+    },
+    {
+     "Name": "TOR1_Loopback0/TOR1_Loopback0",
+     "IPAddress": "192.168.1.8/32"
+    },
+    {
+     "Name": "TOR2_Loopback0/TOR2_Loopback0",
+     "IPAddress": "192.168.1.9/32"
+    }
+   ]
+  }
+ ]
+}

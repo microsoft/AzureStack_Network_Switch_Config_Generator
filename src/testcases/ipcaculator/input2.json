@@ -1,0 +1,10 @@
+[
+    {
+        "VlanID": 711,
+        "Type": "Storage",
+        "Name": "Storage1",
+        "Subnet": "",
+        "Shutdown": false,
+        "SubnetAssignment": []
+    }
+]

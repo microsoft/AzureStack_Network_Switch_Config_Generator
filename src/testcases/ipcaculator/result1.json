@@ -1,0 +1,159 @@
+[
+  {
+    "VlanID": 2,
+    "Type": "Unused",
+    "Name": "Unused",
+    "Subnet": "",
+    "Shutdown": true,
+    "IPAssignment": []
+  },
+  {
+    "VlanID": 7,
+    "Type": "Compute",
+    "Name": "Compute",
+    "Subnet": "10.10.100.0/24",
+    "Shutdown": false,
+    "IPAssignment": [
+      {
+        "Name": "Compute/Gateway",
+        "IPAddress": "10.10.100.1/24"
+      },
+      {
+        "Name": "Compute/TOR1_IPv4",
+        "IPAddress": "10.10.100.2/24"
+      },
+      {
+        "Name": "Compute/TOR2_IPv4",
+        "IPAddress": "10.10.100.3/24"
+      }
+    ]
+  },
+  {
+    "VlanID": 8,
+    "Type": "Management",
+    "Name": "Management",
+    "Subnet": "10.10.101.0/24",
+    "Shutdown": false,
+    "IPAssignment": [
+      {
+        "Name": "Management/Gateway",
+        "IPAddress": "10.10.101.1/24"
+      },
+      {
+        "Name": "Management/TOR1_IPv4",
+        "IPAddress": "10.10.101.2/24"
+      },
+      {
+        "Name": "Management/TOR2_IPv4",
+        "IPAddress": "10.10.101.3/24"
+      }
+    ]
+  },
+  {
+    "VlanID": 25,
+    "Type": "OOB",
+    "Name": "BMCMgmt",
+    "Subnet": "192.168.0.0/26",
+    "Shutdown": false,
+    "IPAssignment": [
+      {
+        "Name": "BMCMgmt/Gateway",
+        "IPAddress": "192.168.0.1/26"
+      },
+      {
+        "Name": "BMCMgmt/TOR1_IPv4",
+        "IPAddress": "192.168.0.2/26"
+      },
+      {
+        "Name": "BMCMgmt/TOR2_IPv4",
+        "IPAddress": "192.168.0.3/26"
+      }
+    ]
+  },
+  {
+    "VlanID": 15,
+    "Type": "Compute",
+    "Name": "Tenant1",
+    "Subnet": "10.100.0.0/24",
+    "Shutdown": false,
+    "IPAssignment": [
+      {
+        "Name": "Tenant1/Gateway",
+        "IPAddress": "10.100.0.1/24"
+      },
+      {
+        "Name": "Tenant1/TOR1_IPv4",
+        "IPAddress": "10.100.0.2/24"
+      },
+      {
+        "Name": "Tenant1/TOR2_IPv4",
+        "IPAddress": "10.100.0.3/24"
+      }
+    ]
+  },
+  {
+    "VlanID": 711,
+    "Type": "Storage",
+    "Name": "Storage1",
+    "Subnet": "",
+    "Shutdown": false,
+    "IPAssignment": []
+  },
+  {
+    "VlanID": 712,
+    "Type": "Storage",
+    "Name": "Storage2",
+    "Subnet": "",
+    "Shutdown": false,
+    "IPAssignment": []
+  },
+  {
+    "VlanID": 0,
+    "Type": "IP",
+    "Name": "SwitchMgmt",
+    "Subnet": "192.168.1.0/28",
+    "Shutdown": false,
+    "IPAssignment": [
+      {
+        "Name": "P2P_TOR1_To_Border1/TOR1",
+        "IPAddress": "192.168.1.0/31"
+      },
+      {
+        "Name": "P2P_TOR1_To_Border1/Border1",
+        "IPAddress": "192.168.1.1/31"
+      },
+      {
+        "Name": "P2P_TOR1_To_Border2/TOR1",
+        "IPAddress": "192.168.1.2/31"
+      },
+      {
+        "Name": "P2P_TOR1_To_Border2/Border2",
+        "IPAddress": "192.168.1.3/31"
+      },
+      {
+        "Name": "P2P_TOR2_To_Border1/TOR2",
+        "IPAddress": "192.168.1.4/31"
+      },
+      {
+        "Name": "P2P_TOR2_To_Border1/Border1",
+        "IPAddress": "192.168.1.5/31"
+      },
+      {
+        "Name": "P2P_TOR2_To_Border2/TOR2",
+        "IPAddress": "192.168.1.6/31"
+      },
+      {
+        "Name": "P2P_TOR2_To_Border2/Border2",
+        "IPAddress": "192.168.1.7/31"
+      },
+      {
+        "Name": "TOR1_Loopback0/TOR1_Loopback0",
+        "IPAddress": "192.168.1.8/32"
+      },
+      {
+        "Name": "TOR2_Loopback0/TOR2_Loopback0",
+        "IPAddress": "192.168.1.9/32"
+      }
+    ]
+  }
+]
