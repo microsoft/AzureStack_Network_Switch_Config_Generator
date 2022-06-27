@@ -20,21 +20,3 @@ interface vlan{{.VlanID}}
   {{- end}}
 {{end}}
 {{ end }}
-
-
-{{ define "oob_vlan"}}
-! vlan.go.tmpl-oob_vlan
-{{- range .}}
-{{ if eq .Group "OOB" -}}
-interface vlan{{.VlanID}}
-  description {{.VlanName}}
-  mtu {{.Mtu}}
-  {{ if .Shutdown -}} 
-  shutdown 
-  {{- else -}} 
-  no shutdown
-  {{ if ne .IPAddress "" -}} ip address {{ .IPAddress }}{{end}}
-  {{- end}}
-{{- end}}
-{{- end}}
-{{end}}

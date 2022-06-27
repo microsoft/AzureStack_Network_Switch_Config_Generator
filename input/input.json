@@ -117,12 +117,12 @@
         {
             "VlanID": 25,
             "Group": "OOB",
-            "Name": "BMCMgmt",
+            "Name": "OOB",
             "Subnet": "192.168.0.0/26",
             "Shutdown": false,
             "SubnetAssignment": [
                 {
-                    "Name": "BMCMgmt",
+                    "Name": "OOB",
                     "Netmask": 26,
                     "IPAssignment": [
                         {

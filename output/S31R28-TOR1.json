@@ -12,6 +12,17 @@
  },
  "Port": [
   {
+   "Port": "mgmt0",
+   "PortName": "mgmt0",
+   "PortType": "OOB",
+   "Description": "OOB",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 0,
+   "TagVlan": null
+  },
+  {
    "Port": "1/1",
    "PortName": "TenGigEthernet",
    "PortType": "Trunk",
@@ -79,7 +90,7 @@
    "MTU": 9000,
    "Shutdown": false,
    "IPAddress": "",
-   "UntagVlan": 25,
+   "UntagVlan": 0,
    "TagVlan": null
   },
   {
@@ -120,7 +131,7 @@
    "Shutdown": false
   },
   {
-   "VlanName": "BMCMgmt",
+   "VlanName": "OOB",
    "VlanID": 25,
    "Group": "OOB",
    "IPAddress": "192.168.0.2/26",
@@ -162,7 +173,7 @@
      "Compute",
      "10.10.101.0/24",
      "192.168.1.0/28",
-     "192.168.0.0/26"
+     "BMCMgmt"
     ],
     "EnableDefaultOriginate": false,
     "RoutePrefix": {
@@ -264,20 +275,20 @@
   {
    "VlanID": 25,
    "Group": "OOB",
-   "Name": "BMCMgmt",
+   "Name": "OOB",
    "Subnet": "192.168.0.0/26",
    "Shutdown": false,
    "IPAssignment": [
     {
-     "Name": "BMCMgmt/Gateway",
+     "Name": "OOB/Gateway",
      "IPAddress": "192.168.0.1/26"
     },
     {
-     "Name": "BMCMgmt/TOR1_IPv4",
+     "Name": "OOB/TOR1_IPv4",
      "IPAddress": "192.168.0.2/26"
     },
     {
-     "Name": "BMCMgmt/TOR2_IPv4",
+     "Name": "OOB/TOR2_IPv4",
      "IPAddress": "192.168.0.3/26"
     }
    ]

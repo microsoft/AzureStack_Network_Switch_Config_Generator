@@ -18,8 +18,16 @@ func (o *OutputType) parseInBandPortFramework(i *InterfaceFrameworkType) {
 		portObj.Mtu = intf.Mtu
 		portObj.PortType = intf.PortType
 		portObj.Shutdown = intf.Shutdown
-		portObj.PortName = i.parseInterfaceName(intf.Speed)
-		if intf.PortType == "IP" {
+		if intf.Speed != 0 {
+			portObj.PortName = i.parseInterfaceName(intf.Speed)
+		} else {
+			portObj.PortName = intf.Port
+		}
+
+		if intf.PortType == "OOB" {
+			intf.IPAddress = replaceTORXName(intf.IPAddress, o.Device.Type)
+			portObj.IPAddress = o.searchOOBIP(intf.IPAddress)
+		} else if intf.PortType == "IP" {
 			intf.IPAddress = replaceTORXName(intf.IPAddress, o.Device.Type)
 			portObj.IPAddress = o.searchSwitchMgmtIP(intf.IPAddress)
 		} else if intf.PortType == "Access" {
@@ -34,9 +42,22 @@ func (o *OutputType) parseInBandPortFramework(i *InterfaceFrameworkType) {
 	}
 }
 
+func (o *OutputType) searchOOBIP(IPAddressName string) string {
+	for _, segment := range *o.Network {
+		if segment.Group == "OOB" {
+			for _, ipAssign := range segment.IPAssignment {
+				if strings.Contains(ipAssign.Name, IPAddressName) {
+					return ipAssign.IPAddress
+				}
+			}
+		}
+	}
+	return ""
+}
+
 func (o *OutputType) searchSwitchMgmtIP(IPAddressName string) string {
 	for _, segment := range *o.Network {
-		if segment.Name == "SwitchMgmt" {
+		if segment.Group == "IP" {
 			for _, ipAssign := range segment.IPAssignment {
 				if strings.Contains(ipAssign.Name, IPAddressName) {
 					return ipAssign.IPAddress

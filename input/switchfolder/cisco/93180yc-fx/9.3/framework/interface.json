@@ -16,6 +16,18 @@
   ],
   "Port": [
     {
+      "ID": 0,
+      "Port": "mgmt0",
+      "Speed": 0,
+      "Description": "OOB",
+      "MTU": 9000,
+      "PortType": "OOB",
+      "Shutdown": true,
+      "IPAddress": "BMCMgmt/TORX_IPv4",
+      "UntagVlan": "",
+      "TagVlan": []
+    },
+    {
       "ID": 1,
       "Port": "1/1",
       "Speed": 10000,

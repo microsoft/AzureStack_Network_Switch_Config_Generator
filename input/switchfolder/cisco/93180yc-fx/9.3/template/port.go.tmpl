@@ -1,6 +1,15 @@
 {{ define "port"}}
 ! port.go.tmpl-port
-{{range .}}    
+{{range .}} 
+
+{{if eq .PortType "OOB" -}} 
+interface {{ .PortName }}
+  description {{ .Description }}
+  no ip redirects
+  no ipv6 redirects
+  ip address {{ .IPAddress }}
+  {{if .Shutdown -}} shutdown {{else -}} no shutdown {{end}}
+{{else -}}
 interface {{ .PortName }} {{ .Port }}
   description {{ .Description }}
   no cdp enable
@@ -30,5 +39,6 @@ interface {{ .PortName }} {{ .Port }}
   no ip redirects
   no ipv6 redirects
   {{if .Shutdown -}} shutdown {{else -}} no shutdown {{end}}
+{{end -}}
 {{end}}
 {{ end }}
