@@ -1,5 +1,17 @@
-{{ define "header"}}
+{{ define "inject_header"}}
+! header.go.tmpl-inject_header
 ! Name: {{ .Hostname }}
 ! Make: {{ .Make }}
 ! Model: {{ .Model }}
+
+banner motd #
+NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE
+
+Unauthorized access and/or use prohibited.
+All access and/or use subject to monitoring.
+
+NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE
+#
+
+hostname {{ .Hostname }}
 {{ end }}

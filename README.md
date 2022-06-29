@@ -361,7 +361,7 @@ flowchart
 
 ## MileStone Plan
 
-### Phase1 - POC Phase - 06/24
+### ~~Phase1 - POC Phase - 06/24~~
 
   - Existing documentation
   - Unit Test
@@ -369,19 +369,18 @@ flowchart
 
 ### Phase2 Testing on Single Switch Validation Virtual (GNS3 Lab) - 08/19
 
-  - Cisco switch existing configuration operate
-  - Complete `Unused` Port in `interface.json` framework
   - Function To Do List:
-    - `OutOfBandPort`
-    - `Credential`
-    - `Stig_Setting`
+    - ~~`OutOfBandPort`~~
+    - ~~`Credential`~~
+    - ~~`Stig_Setting`~~
     - `PrefixList`
     - `PolicyMap`
-    - `NTP`
-    - `STP`
-    - `VTY`
+    - ~~`NTP`~~
+    - ~~`STP`~~
+    - ~~`VTY`~~
     - `Static`
-    - `Syslog`
+    - ~~`Syslog`~~
+  - ~~Complete `Unused` Port in `interface.json` framework~~
 
 ### Phase3 Testing on Multi-Switch Validation Virtual (GNS3 Lab) - 09/16
 

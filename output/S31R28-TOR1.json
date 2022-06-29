@@ -10,6 +10,19 @@
   "Username": "aszadmin-vlzxb",
   "Password": "c2!cuh%xMC8*aRt9"
  },
+ "External": {
+  "NTP": [
+   "10.10.10.10",
+   "10.10.10.11"
+  ],
+  "OOB": [
+   "Vlan25"
+  ],
+  "Syslog": [
+   "10.10.10.20",
+   "10.10.10.21"
+  ]
+ },
  "Port": [
   {
    "Port": "mgmt0",
@@ -18,7 +31,7 @@
    "Description": "OOB",
    "MTU": 9000,
    "Shutdown": true,
-   "IPAddress": "",
+   "IPAddress": "192.168.0.2/26",
    "UntagVlan": 0,
    "TagVlan": null
   },
@@ -69,6 +82,127 @@
    "TagVlan": null
   },
   {
+   "Port": "1/5",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/6",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/7",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/8",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/9",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/10",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/11",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/12",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/13",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/14",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/15",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
    "Port": "1/16",
    "PortName": "TenGigEthernet",
    "PortType": "Trunk",
@@ -83,6 +217,325 @@
    ]
   },
   {
+   "Port": "1/17",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/18",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/19",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/20",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/21",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/22",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/23",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/24",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/25",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/26",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/27",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/28",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/29",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/30",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/31",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/32",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/33",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/34",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/35",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/36",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/37",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/38",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/39",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/40",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/41",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/42",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/43",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/44",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/45",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
    "Port": "1/46",
    "PortName": "TenGigEthernet",
    "PortType": "Access",
@@ -94,6 +547,17 @@
    "TagVlan": null
   },
   {
+   "Port": "1/47",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
    "Port": "1/48",
    "PortName": "TenGigEthernet",
    "PortType": "IP",
@@ -102,6 +566,72 @@
    "Shutdown": false,
    "IPAddress": "192.168.1.0/31",
    "UntagVlan": 0,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/49",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/50",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/51",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/52",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/53",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": null
+  },
+  {
+   "Port": "1/54",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
    "TagVlan": null
   }
  ],

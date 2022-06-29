@@ -1,6 +1,6 @@
 {{ define "port"}}
 ! port.go.tmpl-port
-{{range .}} 
+{{ range . -}} 
 
 {{if eq .PortType "OOB" -}} 
 interface {{ .PortName }}
@@ -39,6 +39,6 @@ interface {{ .PortName }} {{ .Port }}
   no ip redirects
   no ipv6 redirects
   {{if .Shutdown -}} shutdown {{else -}} no shutdown {{end}}
+{{end }}
 {{end -}}
-{{end}}
 {{ end }}

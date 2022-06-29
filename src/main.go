@@ -48,6 +48,9 @@ func main() {
 			// Dynamic updating output object based on switch framework.
 			outputObj.updateOutputObj(frameworkPath, templatePath, inputObj)
 
+			// Update External Section
+			outputObj.updateExternal(inputObj)
+
 			// Generate JSON Output for Debug
 			createFolder(*outputFolder)
 			outputJsonName := *outputFolder + "/" + outputObj.Device.Hostname + ".json"
@@ -158,4 +161,22 @@ func (o *OutputType) updateOutputObj(frameworkPath, templatePath string, inputOb
 	if inputObj.isRoutingBGP() {
 		o.parseBGPFramework(frameworkPath, inputObj)
 	}
+}
+
+func (o *OutputType) updateExternal(inputObj *InputType) {
+	if len(inputObj.External) == 0 {
+		return
+	}
+	externalMap := make(map[string][]string, len(inputObj.External)+1)
+	for _, v := range inputObj.External {
+		externalMap[v.Type] = v.IP
+	}
+	// Add OOB interface to External Section
+	for _, v := range o.Vlan {
+		if v.Group == "OOB" {
+			vlanIntf := fmt.Sprintf("Vlan%d", v.VlanID)
+			externalMap["OOB"] = []string{vlanIntf}
+		}
+	}
+	o.External = externalMap
 }

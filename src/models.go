@@ -98,11 +98,12 @@ type InterfaceFrameworkType struct {
 }
 
 type OutputType struct {
-	Device  DeviceType           `json:"Device"`
-	Port    []PortType           `json:"Port"`
-	Vlan    []VlanType           `json:"Vlan"`
-	Routing *RoutingType         `json:"Routing"`
-	Network *[]NetworkOutputType `json:"Network"`
+	Device   DeviceType           `json:"Device"`
+	External map[string][]string  `json:"External"`
+	Port     []PortType           `json:"Port"`
+	Vlan     []VlanType           `json:"Vlan"`
+	Routing  *RoutingType         `json:"Routing"`
+	Network  *[]NetworkOutputType `json:"Network"`
 }
 
 type PortType struct {

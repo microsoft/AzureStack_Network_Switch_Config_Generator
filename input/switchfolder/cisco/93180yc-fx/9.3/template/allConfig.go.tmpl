@@ -1,11 +1,29 @@
-{{ template "header" .Device }}
+{{ template "inject_header" .Device -}}
 
-hostname {{ .Device.Hostname }}
+{{ template "stig_user" .Device -}}
 
-{{ template "define_vlan" .Vlan }}
+{{ template "stig_ssh" .Device -}}
 
-{{ template "interface_vlan" .Vlan }}
+{{ template "tor_feature" .Device -}}
 
-{{ template "port" .Port }}
+{{ template "inject_ntp" .External -}}
 
-{{ template "bgp" .Routing.Router.Bgp }}
+{{ template "inject_syslog" .External -}}
+
+{{ template "default_snmp" -}}
+
+{{ template "inject_stp" -}}
+
+{{ template "define_vlan" .Vlan -}}
+
+{{ template "interface_vlan" .Vlan -}}
+
+{{ template "port" .Port -}}
+
+{{ template "default_errdisable_setting" -}}
+
+{{ template "default_rmon" -}}
+
+{{ template "bgp" .Routing.Router.Bgp -}}
+
+{{ template "default_console_vty" -}}

@@ -61,9 +61,13 @@ func (o *OutputType) parseTemplate(templatePath, outputConfigName string) {
 	t, err := template.ParseFiles(
 		templatePath+"/allConfig.go.tmpl",
 		templatePath+"/header.go.tmpl",
+		templatePath+"/stig.go.tmpl",
 		templatePath+"/port.go.tmpl",
 		templatePath+"/vlan.go.tmpl",
+		templatePath+"/default.go.tmpl",
 		templatePath+"/bgp.go.tmpl",
+		templatePath+"/stp.go.tmpl",
+		templatePath+"/external.go.tmpl",
 	)
 	if err != nil {
 		log.Fatalln(err)
