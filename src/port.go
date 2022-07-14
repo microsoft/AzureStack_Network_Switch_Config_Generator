@@ -57,7 +57,7 @@ func (o *OutputType) searchOOBIP(IPAddressName string) string {
 
 func (o *OutputType) searchSwitchMgmtIP(IPAddressName string) string {
 	for _, segment := range *o.Network {
-		if segment.Group == "IP" {
+		if segment.Group == "SwitchMgmt" {
 			for _, ipAssign := range segment.IPAssignment {
 				if strings.Contains(ipAssign.Name, IPAddressName) {
 					return ipAssign.IPAddress

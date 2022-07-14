@@ -5,7 +5,7 @@ router bgp {{.BGPAsn}}
   bestpath as-path multipath-relax
   log-neighbor-changes
   address-family ipv4 unicast
-    maximum-paths 8
+    maximum-paths 9
     {{- range .IPv4Network}}
     network {{.}}
     {{- end -}}

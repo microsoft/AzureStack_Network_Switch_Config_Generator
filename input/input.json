@@ -46,7 +46,7 @@
         {
             "Make": "",
             "Type": "Border2",
-            "ASN": 62000,
+            "ASN": 63000,
             "Hostname": "Border2",
             "Model": "Router",
             "Firmware": "",
@@ -61,60 +61,6 @@
             "Subnet": "",
             "Shutdown": true,
             "SubnetAssignment": []
-        },
-        {
-            "VlanID": 7,
-            "Group": "Compute",
-            "Name": "Tenant0",
-            "Subnet": "10.10.100.0/24",
-            "Shutdown": false,
-            "SubnetAssignment": [
-                {
-                    "Name": "Tenant0",
-                    "Netmask": 24,
-                    "IPAssignment": [
-                        {
-                            "Name": "Gateway",
-                            "Position": 1
-                        },
-                        {
-                            "Name": "TOR1_IPv4",
-                            "Position": 2
-                        },
-                        {
-                            "Name": "TOR2_IPv4",
-                            "Position": 3
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "VlanID": 8,
-            "Group": "Management",
-            "Name": "Management",
-            "Subnet": "10.10.101.0/24",
-            "Shutdown": false,
-            "SubnetAssignment": [
-                {
-                    "Name": "Management",
-                    "Netmask": 24,
-                    "IPAssignment": [
-                        {
-                            "Name": "Gateway",
-                            "Position": 1
-                        },
-                        {
-                            "Name": "TOR1_IPv4",
-                            "Position": 2
-                        },
-                        {
-                            "Name": "TOR2_IPv4",
-                            "Position": 3
-                        }
-                    ]
-                }
-            ]
         },
         {
             "VlanID": 25,
@@ -144,10 +90,64 @@
             ]
         },
         {
+            "VlanID": 8,
+            "Group": "Management",
+            "Name": "Management",
+            "Subnet": "10.10.10.0/24",
+            "Shutdown": false,
+            "SubnetAssignment": [
+                {
+                    "Name": "Management",
+                    "Netmask": 24,
+                    "IPAssignment": [
+                        {
+                            "Name": "Gateway",
+                            "Position": 1
+                        },
+                        {
+                            "Name": "TOR1_IPv4",
+                            "Position": 2
+                        },
+                        {
+                            "Name": "TOR2_IPv4",
+                            "Position": 3
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "VlanID": 7,
+            "Group": "Compute",
+            "Name": "Tenant0",
+            "Subnet": "10.10.100.0/24",
+            "Shutdown": false,
+            "SubnetAssignment": [
+                {
+                    "Name": "Tenant0",
+                    "Netmask": 24,
+                    "IPAssignment": [
+                        {
+                            "Name": "Gateway",
+                            "Position": 1
+                        },
+                        {
+                            "Name": "TOR1_IPv4",
+                            "Position": 2
+                        },
+                        {
+                            "Name": "TOR2_IPv4",
+                            "Position": 3
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "VlanID": 15,
             "Group": "Compute",
             "Name": "Tenant1",
-            "Subnet": "10.100.0.0/24",
+            "Subnet": "10.10.101.0/24",
             "Shutdown": false,
             "SubnetAssignment": [
                 {
@@ -188,7 +188,7 @@
         },
         {
             "VlanID": null,
-            "Group": "IP",
+            "Group": "SwitchMgmt",
             "Name": "SwitchMgmt",
             "Subnet": "192.168.1.0/28",
             "Shutdown": false,

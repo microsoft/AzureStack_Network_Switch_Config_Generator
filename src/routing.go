@@ -44,7 +44,6 @@ func (r *RoutingType) updateBgpNetwork(outputObj *OutputType) {
 	for _, segment := range *outputObj.Network {
 		for index, netname := range r.Router.Bgp.IPv4Network {
 			if segment.Name == netname {
-				// fmt.Println(netname, segment.Subnet)
 				r.Router.Bgp.IPv4Network[index] = segment.Subnet
 			}
 		}
@@ -59,7 +58,8 @@ func (r *RoutingType) updateBgpNeighbor(outputObj *OutputType, inputJsonObj *Inp
 		}
 		r.Router.Bgp.IPv4Neighbor[k].NeighborAsn = nbrAsn
 		nbrIPAddressName := replaceTORXName(v.NeighborIPAddress, outputObj.Device.Type)
-		r.Router.Bgp.IPv4Neighbor[k].NeighborIPAddress = outputObj.searchSwitchMgmtIP(nbrIPAddressName)
+		IPv4IPNet := outputObj.searchSwitchMgmtIP(nbrIPAddressName)
+		r.Router.Bgp.IPv4Neighbor[k].NeighborIPAddress = strings.Split(IPv4IPNet, "/")[0]
 		r.Router.Bgp.IPv4Neighbor[k].Description = nbrIPAddressName
 
 		updateSourceName := replaceTORXName(v.UpdateSource, outputObj.Device.Type)

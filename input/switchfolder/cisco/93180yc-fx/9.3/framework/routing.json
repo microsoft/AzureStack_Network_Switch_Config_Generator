@@ -4,11 +4,11 @@
             "BGPAsn": 65000,
             "RouterID": "TORX_Loopback0",
             "IPv4Network": [
+                "Tenant0",
                 "Tenant1",
-                "Compute",
                 "Management",
                 "SwitchMgmt",
-                "BMCMgmt"
+                "OOB"
             ],
             "EnableDefaultOriginate": false,
             "RoutePrefix": {
@@ -55,7 +55,10 @@
             "Index": 5,
             "Name": "ExternalPrefix",
             "Permit": false,
-            "NetworkGroup": "Compute",
+            "Networks": [
+                "Tenant0",
+                "Tenant1"
+            ],
             "Operation": "le",
             "Prefix": 32
         }
