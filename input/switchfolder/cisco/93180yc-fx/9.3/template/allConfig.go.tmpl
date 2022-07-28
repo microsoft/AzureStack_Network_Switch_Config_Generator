@@ -6,9 +6,9 @@
 
 {{ template "tor_feature" .Device -}}
 
-{{ template "inject_ntp" .External -}}
+{{ template "inject_ntp" .Settings -}}
 
-{{ template "inject_syslog" .External -}}
+{{ template "inject_syslog" .Settings -}}
 
 {{ template "default_snmp" -}}
 

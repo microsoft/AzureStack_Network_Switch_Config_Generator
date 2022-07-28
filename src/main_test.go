@@ -25,8 +25,8 @@ func TestOutputNetwork(t *testing.T) {
 			inputObj := parseInputJSON(tc.inputJsonFile)
 			outputObj := parseOutputJSON(tc.outputJsonFile)
 
-			got := inputObj.outputNetwork()
-			want := outputObj.Network
+			got := inputObj.parseSupernets()
+			want := outputObj.Supernets
 			if !reflect.DeepEqual(*got, *want) {
 				t.Errorf("[Failed] name: %s \n want: %#v \n got: %#v", name, want, got)
 			}

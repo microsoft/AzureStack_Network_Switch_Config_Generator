@@ -1,26 +1,22 @@
 {
-    "External": [
-        {
-            "Type": "NTP",
-            "IP": [
-                "10.10.10.10",
-                "10.10.10.11"
-            ]
-        },
-        {
-            "Type": "Syslog",
-            "IP": [
-                "10.10.10.20",
-                "10.10.10.21"
-            ]
-        }
-    ],
-    "Device": [
+    "Version": "1.2022.8.1",
+    "Settings": {
+        "StaticRouting": true,
+        "NTP": [
+            "10.10.10.10",
+            "10.10.10.11"
+        ],
+        "Syslog": [
+            "10.10.10.10",
+            "10.10.10.11"
+        ]
+    },
+    "Devices": [
         {
             "Make": "Cisco",
             "Type": "TOR1",
-            "ASN": 65000,
             "Hostname": "S31R28-TOR1",
+            "ASN": 65000,
             "Model": "93180YC-FX",
             "Firmware": "9.3",
             "GenerateDeviceConfig": true
@@ -28,8 +24,8 @@
         {
             "Make": "Cisco",
             "Type": "TOR2",
-            "ASN": 65000,
             "Hostname": "S31R28-TOR2",
+            "ASN": 65000,
             "Model": "93180YC-FX",
             "Firmware": "9.3",
             "GenerateDeviceConfig": true
@@ -37,8 +33,8 @@
         {
             "Make": "",
             "Type": "Border1",
+            "Hostname": "",
             "ASN": 63000,
-            "Hostname": "Border1",
             "Model": "Router",
             "Firmware": "",
             "GenerateDeviceConfig": false
@@ -46,14 +42,14 @@
         {
             "Make": "",
             "Type": "Border2",
+            "Hostname": "",
             "ASN": 63000,
-            "Hostname": "Border2",
             "Model": "Router",
             "Firmware": "",
             "GenerateDeviceConfig": false
         }
     ],
-    "Network": [
+    "Supernets": [
         {
             "VlanID": 2,
             "Group": "Unused",

@@ -1,19 +1,17 @@
 package main
 
 type InputType struct {
-	External []struct {
-		Type string   `json:"Type"`
-		IP   []string `json:"IP"`
-	} `json:"External"`
-	Device  []DeviceType `json:"Device"`
-	Network interface{}  `json:"Network"`
+	Version   string                 `json:"Version"`
+	Settings  map[string]interface{} `json:"Settings"`
+	Devices   []DeviceType           `json:"Devices"`
+	Supernets interface{}            `json:"Supernets"`
 }
 
 type DeviceType struct {
 	Make                 string `json:"Make"`
 	Type                 string `json:"Type"`
-	Asn                  int    `json:"ASN"`
 	Hostname             string `json:"Hostname"`
+	Asn                  int    `json:"ASN"`
 	Model                string `json:"Model"`
 	Firmware             string `json:"Firmware"`
 	GenerateDeviceConfig bool   `json:"GenerateDeviceConfig"`
@@ -21,35 +19,35 @@ type DeviceType struct {
 	Password             string `json:"Password"`
 }
 
-type NetworkInputType struct {
+type SupernetInputType struct {
 	VlanID           int    `json:"VlanID"`
 	Group            string `json:"Group"`
 	Name             string `json:"Name"`
 	Subnet           string `json:"Subnet"`
 	Shutdown         bool   `json:"Shutdown"`
 	SubnetAssignment []struct {
-		Name         string               `json:"Name"`
-		Netmask      int                  `json:"Netmask"`
-		IPSize       int                  `json:"IPSize"`
-		IPAssignment []NetworkInputIPItem `json:"IPAssignment"`
+		Name         string                  `json:"Name"`
+		Netmask      int                     `json:"Netmask"`
+		IPSize       int                     `json:"IPSize"`
+		IPAssignment []IPAssignmentInputItem `json:"IPAssignment"`
 	} `json:"SubnetAssignment"`
 }
 
-type NetworkInputIPItem struct {
+type IPAssignmentInputItem struct {
 	Name     string `json:"Name"`
 	Position int    `json:"Position"`
 }
 
-type NetworkOutputType struct {
-	VlanID       int                   `json:"VlanID"`
-	Group        string                `json:"Group"`
-	Name         string                `json:"Name"`
-	Subnet       string                `json:"Subnet"`
-	Shutdown     bool                  `json:"Shutdown"`
-	IPAssignment []NetworkOutputIPItem `json:"IPAssignment"`
+type SupernetOutputType struct {
+	VlanID       int                      `json:"VlanID"`
+	Group        string                   `json:"Group"`
+	Name         string                   `json:"Name"`
+	Subnet       string                   `json:"Subnet"`
+	Shutdown     bool                     `json:"Shutdown"`
+	IPAssignment []IPAssignmentOutputItem `json:"IPAssignment"`
 }
 
-type NetworkOutputIPItem struct {
+type IPAssignmentOutputItem struct {
 	Name      string `json:"Name"`
 	IPAddress string `json:"IPAddress"`
 }
@@ -98,12 +96,12 @@ type InterfaceFrameworkType struct {
 }
 
 type OutputType struct {
-	Device   DeviceType           `json:"Device"`
-	External map[string][]string  `json:"External"`
-	Port     []PortType           `json:"Port"`
-	Vlan     []VlanType           `json:"Vlan"`
-	Routing  *RoutingType         `json:"Routing"`
-	Network  *[]NetworkOutputType `json:"Network"`
+	Device    DeviceType             `json:"Device"`
+	Settings  map[string]interface{} `json:"Settings"`
+	Port      []PortType             `json:"Port"`
+	Vlan      []VlanType             `json:"Vlan"`
+	Routing   *RoutingType           `json:"Routing"`
+	Supernets *[]SupernetOutputType  `json:"Supernets"`
 }
 
 type PortType struct {

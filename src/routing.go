@@ -41,7 +41,7 @@ func parseRoutingJSON(routingFrameJson string) *RoutingType {
 }
 
 func (r *RoutingType) updateBgpNetwork(outputObj *OutputType) {
-	for _, segment := range *outputObj.Network {
+	for _, segment := range *outputObj.Supernets {
 		for index, netname := range r.Router.Bgp.IPv4Network {
 			if segment.Name == netname {
 				r.Router.Bgp.IPv4Network[index] = segment.Subnet
@@ -66,13 +66,4 @@ func (r *RoutingType) updateBgpNeighbor(outputObj *OutputType, inputJsonObj *Inp
 		r.Router.Bgp.IPv4Neighbor[k].UpdateSource = outputObj.searchSwitchMgmtIP(updateSourceName)
 	}
 
-}
-
-func (i *InputType) getBgpASN(deviceName string) (string, error) {
-	for _, v := range i.Device {
-		if v.Hostname == deviceName {
-			return fmt.Sprint(v.Asn), nil
-		}
-	}
-	return "", fmt.Errorf("%s BGP ASN is invalid", deviceName)
 }

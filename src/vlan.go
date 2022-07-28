@@ -10,7 +10,7 @@ func newVlanObj() *VlanType {
 
 func (o *OutputType) parseVlanObj(i *InterfaceFrameworkType) {
 
-	for _, segment := range *o.Network {
+	for _, segment := range *o.Supernets {
 		if segment.VlanID > 0 {
 			vlanObj := newVlanObj()
 			vlanObj.VlanName = segment.Name

@@ -2,12 +2,58 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"text/template"
-
-	"gopkg.in/yaml.v3"
 )
+
+func newOutputObj() *OutputType {
+	return &OutputType{}
+}
+
+func (o *OutputType) parseInterfaceObj(frameworkPath string) {
+	interfaceFrameJson := fmt.Sprintf("%s/interface.json", frameworkPath)
+	InterfaceFrameworkObj := parseInterfaceJSON(interfaceFrameJson)
+	o.parseInBandPortFramework(InterfaceFrameworkObj)
+	o.parseVlanObj(InterfaceFrameworkObj)
+}
+
+func (o *OutputType) updateOutputObj(frameworkPath, templatePath string, inputObj *InputType) {
+	o.parseInterfaceObj(frameworkPath)
+	if inputObj.isRoutingBGP() {
+		o.parseBGPFramework(frameworkPath, inputObj)
+	}
+}
+
+func (o *OutputType) updateSettings(inputObj *InputType) {
+	if len(inputObj.Settings) == 0 {
+		return
+	}
+	settingMap := inputObj.Settings
+	// Add OOB interface to External Section
+	for _, v := range o.Vlan {
+		if v.Group == "OOB" {
+			vlanIntf := fmt.Sprintf("Vlan%d", v.VlanID)
+			settingMap["OOB"] = []string{vlanIntf}
+		}
+	}
+	o.Settings = settingMap
+}
+
+func parseOutputJSON(outputJsonFile string) *OutputType {
+	outputObj := newOutputObj()
+	bytes, err := ioutil.ReadFile(outputJsonFile)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	err = json.Unmarshal(bytes, outputObj)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return outputObj
+}
 
 func createFolder(folderPath string) {
 	_, err := os.Stat(folderPath)
@@ -19,24 +65,6 @@ func createFolder(folderPath string) {
 		}
 
 	}
-}
-
-func writeToYaml(yamlFile string, outputResult interface{}) {
-	b, err := yaml.Marshal(outputResult)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	f, err := os.OpenFile(yamlFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	_, err = f.Write(b)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	f.Close()
 }
 
 func writeToJson(jsonFile string, outputResult interface{}) {
@@ -91,3 +119,21 @@ func (o *OutputType) parseTemplate(templatePath, outputConfigName string) {
 	}
 	f.Close()
 }
+
+// func writeToYaml(yamlFile string, outputResult interface{}) {
+// 	b, err := yaml.Marshal(outputResult)
+// 	if err != nil {
+// 		log.Fatalln(err)
+// 	}
+
+// 	f, err := os.OpenFile(yamlFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
+// 	if err != nil {
+// 		log.Fatalln(err)
+// 	}
+
+// 	_, err = f.Write(b)
+// 	if err != nil {
+// 		log.Fatalln(err)
+// 	}
+// 	f.Close()
+// }

@@ -9,9 +9,9 @@ import (
 	"sort"
 )
 
-func parseNetworkSection(switchSubnetBytes []byte) *[]NetworkOutputType {
-	switchSubnet := []NetworkInputType{}
-	outputResult := []NetworkOutputType{}
+func parseSupernetSection(switchSubnetBytes []byte) *[]SupernetOutputType {
+	switchSubnet := []SupernetInputType{}
+	outputResult := []SupernetOutputType{}
 	err := json.Unmarshal(switchSubnetBytes, &switchSubnet)
 	if err != nil {
 		log.Fatalln(err)
@@ -46,18 +46,18 @@ func parseNetworkSection(switchSubnetBytes []byte) *[]NetworkOutputType {
 	return &outputResult
 }
 
-func newOutputSubnet() *NetworkOutputType {
-	return &NetworkOutputType{}
+func newOutputSubnet() *SupernetOutputType {
+	return &SupernetOutputType{}
 }
 
-func (o *NetworkOutputType) assignIPFromList(ipList *[]string, inputSubnet NetworkInputType) {
+func (o *SupernetOutputType) assignIPFromList(ipList *[]string, inputSubnet SupernetInputType) {
 	inputAssignment := inputSubnet.SubnetAssignment
 	sort.SliceStable(inputAssignment, func(i, j int) bool {
 		return inputAssignment[i].IPSize > inputAssignment[j].IPSize
 	})
 
 	pointer := 0
-	tmpAssign := []NetworkOutputIPItem{}
+	tmpAssign := []IPAssignmentOutputItem{}
 	for _, v := range inputAssignment {
 		ipRange := (*ipList)[pointer : pointer+v.IPSize]
 
@@ -65,7 +65,7 @@ func (o *NetworkOutputType) assignIPFromList(ipList *[]string, inputSubnet Netwo
 			for _, p := range v.IPAssignment {
 				fullName := fmt.Sprintf("%s/%s", v.Name, p.Name)
 				network := fmt.Sprintf("%s/%d", ipRange[p.Position], v.Netmask)
-				tmpAssign = append(tmpAssign, NetworkOutputIPItem{
+				tmpAssign = append(tmpAssign, IPAssignmentOutputItem{
 					Name:      fullName,
 					IPAddress: network,
 				})
@@ -81,13 +81,13 @@ func (o *NetworkOutputType) assignIPFromList(ipList *[]string, inputSubnet Netwo
 	o.IPAssignment = tmpAssign
 }
 
-func (o *NetworkOutputType) updateNoSubnetObj(inputSubnet NetworkInputType) {
+func (o *SupernetOutputType) updateNoSubnetObj(inputSubnet SupernetInputType) {
 	o.VlanID = inputSubnet.VlanID
 	o.Group = inputSubnet.Group
 	o.Name = inputSubnet.Name
 	o.Subnet = inputSubnet.Subnet
 	o.Shutdown = inputSubnet.Shutdown
-	o.IPAssignment = []NetworkOutputIPItem{}
+	o.IPAssignment = []IPAssignmentOutputItem{}
 }
 
 func getMaxIPSize(ipnet string) int {
@@ -99,7 +99,7 @@ func getMaxIPSize(ipnet string) int {
 	return int(math.Pow(2, float64(iBits-iMask)))
 }
 
-func validateIPSize(maxIPSize int, inputSubnet NetworkInputType) error {
+func validateIPSize(maxIPSize int, inputSubnet SupernetInputType) error {
 	var actualIPSize int
 	for k, s := range inputSubnet.SubnetAssignment {
 		space := int(math.Pow(2, float64(32-s.Netmask)))

@@ -43,7 +43,7 @@ func (o *OutputType) parseInBandPortFramework(i *InterfaceFrameworkType) {
 }
 
 func (o *OutputType) searchOOBIP(IPAddressName string) string {
-	for _, segment := range *o.Network {
+	for _, segment := range *o.Supernets {
 		if segment.Group == "OOB" {
 			for _, ipAssign := range segment.IPAssignment {
 				if strings.Contains(ipAssign.Name, IPAddressName) {
@@ -56,7 +56,7 @@ func (o *OutputType) searchOOBIP(IPAddressName string) string {
 }
 
 func (o *OutputType) searchSwitchMgmtIP(IPAddressName string) string {
-	for _, segment := range *o.Network {
+	for _, segment := range *o.Supernets {
 		if segment.Group == "SwitchMgmt" {
 			for _, ipAssign := range segment.IPAssignment {
 				if strings.Contains(ipAssign.Name, IPAddressName) {
@@ -69,7 +69,7 @@ func (o *OutputType) searchSwitchMgmtIP(IPAddressName string) string {
 }
 
 func (o *OutputType) updatePortUntagvlan(UntagVlanName string) int {
-	for _, segment := range *o.Network {
+	for _, segment := range *o.Supernets {
 		if segment.VlanID != 0 {
 			if segment.Name == UntagVlanName {
 				return segment.VlanID
@@ -84,7 +84,7 @@ func (o *OutputType) updatePortTagvlan(TagVlanName []string) []int {
 		log.Fatalln("Tag Vlan Attributes of this Trunk Port is invalid.")
 	}
 	ret := make([]int, len(TagVlanName))
-	for _, segment := range *o.Network {
+	for _, segment := range *o.Supernets {
 		for index, vlanName := range TagVlanName {
 			if segment.VlanID != 0 {
 				if segment.Name == vlanName {

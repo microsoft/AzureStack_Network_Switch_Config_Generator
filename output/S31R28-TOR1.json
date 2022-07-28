@@ -2,15 +2,15 @@
  "Device": {
   "Make": "Cisco",
   "Type": "TOR1",
-  "ASN": 65000,
   "Hostname": "S31R28-TOR1",
+  "ASN": 65000,
   "Model": "93180YC-FX",
   "Firmware": "9.3",
   "GenerateDeviceConfig": true,
   "Username": "aszadmin-vlzxb",
   "Password": "c2!cuh%xMC8*aRt9"
  },
- "External": {
+ "Settings": {
   "NTP": [
    "10.10.10.10",
    "10.10.10.11"
@@ -18,9 +18,10 @@
   "OOB": [
    "Vlan25"
   ],
+  "StaticRouting": true,
   "Syslog": [
-   "10.10.10.20",
-   "10.10.10.21"
+   "10.10.10.10",
+   "10.10.10.11"
   ]
  },
  "Port": [
@@ -253,7 +254,7 @@
   ],
   "RouteMap": null
  },
- "Network": [
+ "Supernets": [
   {
    "VlanID": 2,
    "Group": "Unused",
