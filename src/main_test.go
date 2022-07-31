@@ -100,10 +100,8 @@ func TestParseBGPFramework(t *testing.T) {
 				gotoutputObj := parseOutputJSON(v)
 				gotoutputObj.Routing = nil
 
-				// BGP Unit Test
-				if inputObj.isRoutingBGP() {
-					gotoutputObj.parseBGPFramework(tc.frameworkPath, inputObj)
-				}
+				// Routing Unit Test
+				gotoutputObj.parseRoutingFramework(tc.frameworkPath, inputObj)
 				wantBGP := wantoutputObj.Routing
 				gotBGP := gotoutputObj.Routing
 				if !reflect.DeepEqual(gotBGP, wantBGP) {

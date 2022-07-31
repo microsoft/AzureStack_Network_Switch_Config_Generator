@@ -1,5 +1,5 @@
 {{ define "inject_ntp"}}
-! external.go.tmpl-ntp
+! settings.go.tmpl-ntp
 clock timezone UTC 0 0
 {{ range .NTP -}}
 ntp server 10.10.240.20
@@ -10,7 +10,7 @@ ntp source-interface {{ . }}
 {{ end }}
 
 {{ define "inject_syslog"}}
-! external.go.tmpl-inject_syslog
+! settings.go.tmpl-inject_syslog
 {{ range .Syslog -}}
 logging server {{ . }} 7 facility local7 use-vrf default
 {{ end -}}

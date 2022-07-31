@@ -15,6 +15,7 @@ type DeviceType struct {
 	Model                string `json:"Model"`
 	Firmware             string `json:"Firmware"`
 	GenerateDeviceConfig bool   `json:"GenerateDeviceConfig"`
+	StaticRouting        bool   `json:"StaticRouting"`
 	Username             string `json:"Username"`
 	Password             string `json:"Password"`
 }
@@ -126,53 +127,53 @@ type VlanType struct {
 }
 
 type RoutingType struct {
-	Router struct {
-		Bgp struct {
-			BGPAsn                 int      `json:"BGPAsn"`
-			RouterID               string   `json:"RouterID"`
-			IPv4Network            []string `json:"IPv4Network"`
-			EnableDefaultOriginate bool     `json:"EnableDefaultOriginate"`
-			RoutePrefix            struct {
-				MaxiPrefix  int    `json:"MaxiPrefix"`
-				ErrorAction string `json:"ErrorAction"`
-			} `json:"RoutePrefix"`
-			IPv4Neighbor []struct {
-				Description       string `json:"Description"`
-				EnablePassword    bool   `json:"EnablePassword"`
-				NeighborAsn       string `json:"NeighborAsn"`
-				NeighborIPAddress string `json:"NeighborIPAddress"`
-				PrefixList        []struct {
-					Name      string `json:"Name"`
-					Direction string `json:"Direction"`
-				} `json:"PrefixList"`
-				RouteMap []struct {
-					Name      string `json:"Name"`
-					Direction string `json:"Direction"`
-				} `json:"RouteMap"`
-				UpdateSource string `json:"UpdateSource"`
-				Shutdown     bool   `json:"Shutdown"`
-			} `json:"IPv4Neighbor"`
-		} `json:"BGP"`
-		Static []struct {
-			Name              string `json:"Name"`
-			NetworkName       string `json:"NetworkName"`
-			NetworkAssignment string `json:"NetworkAssignment"`
-		} `json:"Static"`
-	} `json:"Router"`
+	Bgp    BGPType    `json:"BGP"`
+	Static StaticType `json:"Static"`
+}
+
+type BGPType struct {
+	BGPAsn                 int      `json:"BGPAsn"`
+	RouterID               string   `json:"RouterID"`
+	IPv4Network            []string `json:"IPv4Network"`
+	EnableDefaultOriginate bool     `json:"EnableDefaultOriginate"`
+	RoutePrefix            struct {
+		MaxiPrefix  int    `json:"MaxiPrefix"`
+		ErrorAction string `json:"ErrorAction"`
+	} `json:"RoutePrefix"`
+	IPv4Neighbor []struct {
+		Description       string `json:"Description"`
+		EnablePassword    bool   `json:"EnablePassword"`
+		NeighborAsn       string `json:"NeighborAsn"`
+		NeighborIPAddress string `json:"NeighborIPAddress"`
+		PrefixList        []struct {
+			Name      string `json:"Name"`
+			Direction string `json:"Direction"`
+		} `json:"PrefixList"`
+		RouteMap []struct {
+			Name      string `json:"Name"`
+			Direction string `json:"Direction"`
+		} `json:"RouteMap"`
+		UpdateSource string `json:"UpdateSource"`
+		Shutdown     bool   `json:"Shutdown"`
+	} `json:"IPv4Neighbor"`
+}
+
+type StaticType struct {
 	PrefixList []struct {
-		Index     int    `json:"Index"`
-		Name      string `json:"Name"`
-		Permit    bool   `json:"Permit"`
-		Network   string `json:"Network"`
-		Operation string `json:"Operation"`
-		Prefix    int    `json:"Prefix"`
+		Index        int    `json:"Index"`
+		Name         string `json:"Name"`
+		Permit       bool   `json:"Permit"`
+		SupernetName string `json:"SupernetName"`
+		IPNet        string `json:"IPNet"`
+		Operation    string `json:"Operation"`
+		Prefix       int    `json:"Prefix"`
 	} `json:"PrefixList"`
 	RouteMap []struct {
-		Index     int    `json:"Index"`
-		Name      string `json:"Name"`
-		Permit    bool   `json:"Permit"`
-		Network   string `json:"Network"`
-		Operation string `json:"Operation"`
-		Prefix    int    `json:"Prefix"`
+		Index          int      `json:"Index"`
+		Name           string   `json:"Name"`
+		Permit         bool     `json:"Permit"`
+		IPAddressNames []string `json:"IPAddressNames"`
 	} `json:"RouteMap"`
+	Null0   []string `json:"Null0"`
+	NextHop []string `json:"NextHop"`
 }

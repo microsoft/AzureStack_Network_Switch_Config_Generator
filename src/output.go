@@ -22,9 +22,7 @@ func (o *OutputType) parseInterfaceObj(frameworkPath string) {
 
 func (o *OutputType) updateOutputObj(frameworkPath, templatePath string, inputObj *InputType) {
 	o.parseInterfaceObj(frameworkPath)
-	if inputObj.isRoutingBGP() {
-		o.parseBGPFramework(frameworkPath, inputObj)
-	}
+	o.parseRoutingFramework(frameworkPath, inputObj)
 }
 
 func (o *OutputType) updateSettings(inputObj *InputType) {
@@ -95,7 +93,7 @@ func (o *OutputType) parseTemplate(templatePath, outputConfigName string) {
 		templatePath+"/default.go.tmpl",
 		templatePath+"/bgp.go.tmpl",
 		templatePath+"/stp.go.tmpl",
-		templatePath+"/external.go.tmpl",
+		templatePath+"/settings.go.tmpl",
 	)
 	if err != nil {
 		log.Fatalln(err)
@@ -119,21 +117,3 @@ func (o *OutputType) parseTemplate(templatePath, outputConfigName string) {
 	}
 	f.Close()
 }
-
-// func writeToYaml(yamlFile string, outputResult interface{}) {
-// 	b, err := yaml.Marshal(outputResult)
-// 	if err != nil {
-// 		log.Fatalln(err)
-// 	}
-
-// 	f, err := os.OpenFile(yamlFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
-// 	if err != nil {
-// 		log.Fatalln(err)
-// 	}
-
-// 	_, err = f.Write(b)
-// 	if err != nil {
-// 		log.Fatalln(err)
-// 	}
-// 	f.Close()
-// }

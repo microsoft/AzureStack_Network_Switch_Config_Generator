@@ -57,12 +57,3 @@ func (i *InputType) getBgpASN(typeName string) (string, error) {
 	}
 	return "", fmt.Errorf("%s BGP ASN is invalid", typeName)
 }
-
-func (i *InputType) isRoutingBGP() bool {
-	for _, v := range i.Devices {
-		if v.Asn <= 0 {
-			return false
-		}
-	}
-	return true
-}

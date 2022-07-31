@@ -1,7 +1,6 @@
 {
     "Version": "1.2022.8.1",
     "Settings": {
-        "StaticRouting": true,
         "NTP": [
             "10.10.10.10",
             "10.10.10.11"
@@ -19,7 +18,8 @@
             "ASN": 65000,
             "Model": "93180YC-FX",
             "Firmware": "9.3",
-            "GenerateDeviceConfig": true
+            "GenerateDeviceConfig": true,
+            "StaticRouting": false
         },
         {
             "Make": "Cisco",
@@ -28,7 +28,8 @@
             "ASN": 65000,
             "Model": "93180YC-FX",
             "Firmware": "9.3",
-            "GenerateDeviceConfig": true
+            "GenerateDeviceConfig": true,
+            "StaticRouting": false
         },
         {
             "Make": "",

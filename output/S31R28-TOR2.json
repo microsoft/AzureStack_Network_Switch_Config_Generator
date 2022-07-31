@@ -7,6 +7,7 @@
   "Model": "93180YC-FX",
   "Firmware": "9.3",
   "GenerateDeviceConfig": true,
+  "StaticRouting": false,
   "Username": "aszadmin-vlzxb",
   "Password": "c2!cuh%xMC8*aRt9"
  },
@@ -18,7 +19,6 @@
   "OOB": [
    "Vlan25"
   ],
-  "StaticRouting": true,
   "Syslog": [
    "10.10.10.10",
    "10.10.10.11"
@@ -197,62 +197,79 @@
   }
  ],
  "Routing": {
-  "Router": {
-   "BGP": {
-    "BGPAsn": 65000,
-    "RouterID": "192.168.1.9/32",
-    "IPv4Network": [
-     "10.10.100.0/24",
-     "10.10.101.0/24",
-     "10.10.10.0/24",
-     "192.168.1.0/28",
-     "192.168.0.0/26"
-    ],
-    "EnableDefaultOriginate": false,
-    "RoutePrefix": {
-     "MaxiPrefix": 12000,
-     "ErrorAction": "warning-only"
-    },
-    "IPv4Neighbor": [
-     {
-      "Description": "P2P_TOR2_To_Border1/Border1",
-      "EnablePassword": false,
-      "NeighborAsn": "63000",
-      "NeighborIPAddress": "192.168.1.5",
-      "PrefixList": [
-       {
-        "Name": "ExternalPrefix",
-        "Direction": "in"
-       },
-       {
-        "Name": "ExternalPrefix",
-        "Direction": "out"
-       }
-      ],
-      "RouteMap": [
-       {
-        "Name": "",
-        "Direction": ""
-       }
-      ],
-      "UpdateSource": "192.168.1.9/32",
-      "Shutdown": false
-     }
-    ]
+  "BGP": {
+   "BGPAsn": 65000,
+   "RouterID": "192.168.1.9/32",
+   "IPv4Network": [
+    "10.10.100.0/24",
+    "10.10.101.0/24",
+    "10.10.10.0/24",
+    "192.168.1.0/28",
+    "192.168.0.0/26"
+   ],
+   "EnableDefaultOriginate": false,
+   "RoutePrefix": {
+    "MaxiPrefix": 12000,
+    "ErrorAction": "warning-only"
    },
-   "Static": null
+   "IPv4Neighbor": [
+    {
+     "Description": "P2P_TOR2_To_Border1/Border1",
+     "EnablePassword": false,
+     "NeighborAsn": "63000",
+     "NeighborIPAddress": "192.168.1.5",
+     "PrefixList": [
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "in"
+      },
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "out"
+      }
+     ],
+     "RouteMap": [
+      {
+       "Name": "",
+       "Direction": ""
+      }
+     ],
+     "UpdateSource": "192.168.1.9/32",
+     "Shutdown": false
+    }
+   ]
   },
-  "PrefixList": [
-   {
-    "Index": 5,
-    "Name": "ExternalPrefix",
-    "Permit": false,
-    "Network": "",
-    "Operation": "le",
-    "Prefix": 32
-   }
-  ],
-  "RouteMap": null
+  "Static": {
+   "PrefixList": [
+    {
+     "Index": 10,
+     "Name": "IPv4-DEFAULT",
+     "Permit": true,
+     "SupernetName": "Any",
+     "IPNet": "",
+     "Operation": "le",
+     "Prefix": 32
+    }
+   ],
+   "RouteMap": [
+    {
+     "Index": 10,
+     "Name": "IPv4-DEFAULT",
+     "Permit": true,
+     "IPAddressNames": [
+      "IPv4-DEFAULT"
+     ]
+    }
+   ],
+   "Null0": [
+    "Compute",
+    "Storage"
+   ],
+   "NextHop": [
+    "P2P_TORX_To_Border1/TORX",
+    "P2P_TORX_To_Border2/TORX"
+   ]
+  }
  },
  "Supernets": [
   {
@@ -411,6 +428,14 @@
      "IPAddress": "192.168.1.9/32"
     }
    ]
+  },
+  {
+   "VlanID": 0,
+   "Group": "Any",
+   "Name": "Any",
+   "Subnet": "0.0.0.0/0",
+   "Shutdown": false,
+   "IPAssignment": null
   }
  ]
 }
