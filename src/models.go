@@ -160,20 +160,25 @@ type BGPType struct {
 
 type StaticType struct {
 	PrefixList []struct {
-		Index        int    `json:"Index"`
-		Name         string `json:"Name"`
-		Permit       bool   `json:"Permit"`
-		SupernetName string `json:"SupernetName"`
-		IPNet        string `json:"IPNet"`
-		Operation    string `json:"Operation"`
-		Prefix       int    `json:"Prefix"`
+		Index     int    `json:"Index"`
+		Name      string `json:"Name"`
+		Action    string `json:"Action"`
+		Supernet  string `json:"Supernet"`
+		IPAddress string `json:"IPAddress"`
+		Operation string `json:"Operation"`
+		Prefix    int    `json:"Prefix"`
 	} `json:"PrefixList"`
 	RouteMap []struct {
 		Index          int      `json:"Index"`
 		Name           string   `json:"Name"`
-		Permit         bool     `json:"Permit"`
-		IPAddressNames []string `json:"IPAddressNames"`
+		Action         string   `json:"Action"`
+		PrefixListName []string `json:"PrefixListName"`
 	} `json:"RouteMap"`
-	Null0   []string `json:"Null0"`
-	NextHop []string `json:"NextHop"`
+	Network []StaticNetworkType `json:"Network"`
+}
+
+type StaticNetworkType struct {
+	DstIPAddress string
+	NextHop      string
+	Name         string
 }

@@ -7,7 +7,7 @@
   "Model": "93180YC-FX",
   "Firmware": "9.3",
   "GenerateDeviceConfig": true,
-  "StaticRouting": false,
+  "StaticRouting": true,
   "Username": "aszadmin-vlzxb",
   "Password": "c2!cuh%xMC8*aRt9"
  },
@@ -199,13 +199,13 @@
  "Routing": {
   "BGP": {
    "BGPAsn": 65000,
-   "RouterID": "192.168.1.8/32",
+   "RouterID": "TORX_Loopback0",
    "IPv4Network": [
-    "10.10.100.0/24",
-    "10.10.101.0/24",
-    "10.10.10.0/24",
-    "192.168.1.0/28",
-    "192.168.0.0/26"
+    "Tenant0",
+    "Tenant1",
+    "Management",
+    "SwitchMgmt",
+    "OOB"
    ],
    "EnableDefaultOriginate": false,
    "RoutePrefix": {
@@ -214,10 +214,10 @@
    },
    "IPv4Neighbor": [
     {
-     "Description": "P2P_TOR1_To_Border1/Border1",
+     "Description": "P2P_TORX_To_Border1/Border1",
      "EnablePassword": false,
-     "NeighborAsn": "63000",
-     "NeighborIPAddress": "192.168.1.1",
+     "NeighborAsn": "Border1",
+     "NeighborIPAddress": "P2P_TORX_To_Border1/Border1",
      "PrefixList": [
       {
        "Name": "ExternalPrefix",
@@ -234,7 +234,7 @@
        "Direction": ""
       }
      ],
-     "UpdateSource": "192.168.1.8/32",
+     "UpdateSource": "TORX_Loopback0",
      "Shutdown": false
     }
    ]
@@ -244,9 +244,9 @@
     {
      "Index": 10,
      "Name": "IPv4-DEFAULT",
-     "Permit": true,
-     "SupernetName": "Any",
-     "IPNet": "",
+     "Action": "permit",
+     "Supernet": "0.0.0.0/0",
+     "IPAddress": "",
      "Operation": "le",
      "Prefix": 32
     }
@@ -255,19 +255,33 @@
     {
      "Index": 10,
      "Name": "IPv4-DEFAULT",
-     "Permit": true,
-     "IPAddressNames": [
+     "Action": "permit",
+     "PrefixListName": [
       "IPv4-DEFAULT"
      ]
     }
    ],
-   "Null0": [
-    "Compute",
-    "Storage"
-   ],
-   "NextHop": [
-    "P2P_TORX_To_Border1/TORX",
-    "P2P_TORX_To_Border2/TORX"
+   "Network": [
+    {
+     "DstIPAddress": "10.10.100.0/24",
+     "NextHop": "null 0",
+     "Name": "Tenant0"
+    },
+    {
+     "DstIPAddress": "10.10.101.0/24",
+     "NextHop": "null 0",
+     "Name": "Tenant1"
+    },
+    {
+     "DstIPAddress": "0.0.0.0/0",
+     "NextHop": "192.168.1.0/31",
+     "Name": "P2P_TOR1_To_Border1/TOR1"
+    },
+    {
+     "DstIPAddress": "0.0.0.0/0",
+     "NextHop": "192.168.1.2/31",
+     "Name": "P2P_TOR1_To_Border2/TOR1"
+    }
    ]
   }
  },

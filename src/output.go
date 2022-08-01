@@ -92,6 +92,7 @@ func (o *OutputType) parseTemplate(templatePath, outputConfigName string) {
 		templatePath+"/vlan.go.tmpl",
 		templatePath+"/default.go.tmpl",
 		templatePath+"/bgp.go.tmpl",
+		templatePath+"/static.go.tmpl",
 		templatePath+"/stp.go.tmpl",
 		templatePath+"/settings.go.tmpl",
 	)

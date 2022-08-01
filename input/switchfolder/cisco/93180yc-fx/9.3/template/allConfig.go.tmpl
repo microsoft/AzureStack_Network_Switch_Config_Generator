@@ -24,6 +24,10 @@
 
 {{ template "default_rmon" -}}
 
+{{if .Device.StaticRouting}}
+{{ template "static" .Routing.Static -}}
+{{else -}}
 {{ template "bgp" .Routing.Bgp -}}
+{{end}}
 
 {{ template "default_console_vty" -}}

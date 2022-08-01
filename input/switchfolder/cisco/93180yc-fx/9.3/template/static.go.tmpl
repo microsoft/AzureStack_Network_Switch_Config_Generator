@@ -1,0 +1,18 @@
+{{ define "static" }}
+! static.go.tmpl-static
+!!!
+!!! Static Route
+!!!
+{{ range .PrefixList -}}
+ip prefix-list {{.Name}} seq {{.Index}} {{.Action}} {{.Supernet}}
+{{end}}
+{{- range .RouteMap -}}
+route-map {{.Name}} {{.Action}} {{.Index}}
+  {{ range .PrefixListName -}}
+  match ip address prefix-list {{.}}
+  {{end}}
+{{end}}
+{{- range .Network -}}
+ip route {{.DstIPAddress}} {{.NextHop}} name {{.Name}}
+{{end -}}
+{{ end }}
