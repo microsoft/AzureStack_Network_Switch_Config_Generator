@@ -37,6 +37,7 @@ func (o *OutputType) parseRoutingFramework(frameworkPath string, inputJsonObj *I
 		// BGP Routing
 		routingFrameworkObj.Bgp.BGPAsn = o.Device.Asn
 		routingFrameworkObj.updateBgpNetwork(o)
+		routingFrameworkObj.updateBGPPrefixList(o)
 		routerIDName := strings.Replace(routingFrameworkObj.Bgp.RouterID, "TORX", o.Device.Type, -1)
 		routingFrameworkObj.Bgp.RouterID = o.getSwitchMgmtIPbyName(routerIDName)
 		routingFrameworkObj.updateBgpNeighbor(o, inputJsonObj)
@@ -47,6 +48,14 @@ func (o *OutputType) parseRoutingFramework(frameworkPath string, inputJsonObj *I
 func (r *RoutingType) updateBgpNetwork(outputObj *OutputType) {
 	for index, netname := range r.Bgp.IPv4Network {
 		r.Bgp.IPv4Network[index] = outputObj.getSupernetIPbyName(netname)
+	}
+}
+
+func (r *RoutingType) updateBGPPrefixList(outputObj *OutputType) {
+	for index, item := range r.Bgp.PrefixList {
+		// Update Supernet Name to Supernet IP
+		supernetIP := outputObj.getSupernetIPbyName(item.Supernet)
+		r.Bgp.PrefixList[index].Supernet = supernetIP
 	}
 }
 

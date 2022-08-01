@@ -4,7 +4,7 @@
 !!! Static Route
 !!!
 {{ range .PrefixList -}}
-ip prefix-list {{.Name}} seq {{.Index}} {{.Action}} {{.Supernet}}
+ip prefix-list {{.Name}} {{.Action}} {{.Supernet}}
 {{end}}
 {{- range .RouteMap -}}
 route-map {{.Name}} {{.Action}} {{.Index}}

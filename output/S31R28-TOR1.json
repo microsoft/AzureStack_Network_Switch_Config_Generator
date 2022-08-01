@@ -7,7 +7,7 @@
   "Model": "93180YC-FX",
   "Firmware": "9.3",
   "GenerateDeviceConfig": true,
-  "StaticRouting": true,
+  "StaticRouting": false,
   "Username": "aszadmin-vlzxb",
   "Password": "c2!cuh%xMC8*aRt9"
  },
@@ -199,13 +199,13 @@
  "Routing": {
   "BGP": {
    "BGPAsn": 65000,
-   "RouterID": "TORX_Loopback0",
+   "RouterID": "192.168.1.8/32",
    "IPv4Network": [
-    "Tenant0",
-    "Tenant1",
-    "Management",
-    "SwitchMgmt",
-    "OOB"
+    "10.10.100.0/24",
+    "10.10.101.0/24",
+    "10.10.10.0/24",
+    "192.168.1.0/28",
+    "192.168.0.0/26"
    ],
    "EnableDefaultOriginate": false,
    "RoutePrefix": {
@@ -214,10 +214,10 @@
    },
    "IPv4Neighbor": [
     {
-     "Description": "P2P_TORX_To_Border1/Border1",
+     "Description": "P2P_TOR1_To_Border1/Border1",
      "EnablePassword": false,
-     "NeighborAsn": "Border1",
-     "NeighborIPAddress": "P2P_TORX_To_Border1/Border1",
+     "NeighborAsn": "63000",
+     "NeighborIPAddress": "192.168.1.1",
      "PrefixList": [
       {
        "Name": "ExternalPrefix",
@@ -234,18 +234,67 @@
        "Direction": ""
       }
      ],
-     "UpdateSource": "TORX_Loopback0",
+     "UpdateSource": "192.168.1.8/32",
      "Shutdown": false
+    },
+    {
+     "Description": "P2P_TOR1_To_Border2/Border2",
+     "EnablePassword": false,
+     "NeighborAsn": "63000",
+     "NeighborIPAddress": "192.168.1.3",
+     "PrefixList": [
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "in"
+      },
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "out"
+      }
+     ],
+     "RouteMap": [
+      {
+       "Name": "",
+       "Direction": ""
+      }
+     ],
+     "UpdateSource": "192.168.1.8/32",
+     "Shutdown": false
+    }
+   ],
+   "PrefixList": [
+    {
+     "Name": "ExternalPrefix",
+     "Action": "deny",
+     "Supernet": "10.10.100.0/24",
+     "IPAddress": "",
+     "Operation": "le",
+     "Prefix": 32
+    },
+    {
+     "Name": "ExternalPrefix",
+     "Action": "deny",
+     "Supernet": "10.10.101.0/24",
+     "IPAddress": "",
+     "Operation": "le",
+     "Prefix": 32
+    },
+    {
+     "Name": "ExternalPrefix",
+     "Action": "permit",
+     "Supernet": "0.0.0.0/0",
+     "IPAddress": "",
+     "Operation": "le",
+     "Prefix": 32
     }
    ]
   },
   "Static": {
    "PrefixList": [
     {
-     "Index": 10,
-     "Name": "IPv4-DEFAULT",
+     "Name": "DefaultRoute",
      "Action": "permit",
-     "Supernet": "0.0.0.0/0",
+     "Supernet": "Any",
      "IPAddress": "",
      "Operation": "le",
      "Prefix": 32
@@ -254,33 +303,38 @@
    "RouteMap": [
     {
      "Index": 10,
-     "Name": "IPv4-DEFAULT",
+     "Name": "DefaultRoute",
      "Action": "permit",
      "PrefixListName": [
-      "IPv4-DEFAULT"
+      "DefaultRoute"
      ]
     }
    ],
    "Network": [
     {
-     "DstIPAddress": "10.10.100.0/24",
+     "DstIPAddress": "",
      "NextHop": "null 0",
      "Name": "Tenant0"
     },
     {
-     "DstIPAddress": "10.10.101.0/24",
+     "DstIPAddress": "",
      "NextHop": "null 0",
      "Name": "Tenant1"
     },
     {
-     "DstIPAddress": "0.0.0.0/0",
-     "NextHop": "192.168.1.0/31",
-     "Name": "P2P_TOR1_To_Border1/TOR1"
+     "DstIPAddress": "",
+     "NextHop": "null 0",
+     "Name": "Storage1"
     },
     {
-     "DstIPAddress": "0.0.0.0/0",
-     "NextHop": "192.168.1.2/31",
-     "Name": "P2P_TOR1_To_Border2/TOR1"
+     "DstIPAddress": "Any",
+     "NextHop": "",
+     "Name": "P2P_TORX_To_Border1/TORX"
+    },
+    {
+     "DstIPAddress": "Any",
+     "NextHop": "",
+     "Name": "P2P_TORX_To_Border2/TORX"
     }
    ]
   }

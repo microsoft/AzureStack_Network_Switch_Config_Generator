@@ -156,19 +156,12 @@ type BGPType struct {
 		UpdateSource string `json:"UpdateSource"`
 		Shutdown     bool   `json:"Shutdown"`
 	} `json:"IPv4Neighbor"`
+	PrefixList []PrefixListType `json:"PrefixList"`
 }
 
 type StaticType struct {
-	PrefixList []struct {
-		Index     int    `json:"Index"`
-		Name      string `json:"Name"`
-		Action    string `json:"Action"`
-		Supernet  string `json:"Supernet"`
-		IPAddress string `json:"IPAddress"`
-		Operation string `json:"Operation"`
-		Prefix    int    `json:"Prefix"`
-	} `json:"PrefixList"`
-	RouteMap []struct {
+	PrefixList []PrefixListType `json:"PrefixList"`
+	RouteMap   []struct {
 		Index          int      `json:"Index"`
 		Name           string   `json:"Name"`
 		Action         string   `json:"Action"`
@@ -181,4 +174,13 @@ type StaticNetworkType struct {
 	DstIPAddress string
 	NextHop      string
 	Name         string
+}
+
+type PrefixListType struct {
+	Name      string `json:"Name"`
+	Action    string `json:"Action"`
+	Supernet  string `json:"Supernet"`
+	IPAddress string `json:"IPAddress"`
+	Operation string `json:"Operation"`
+	Prefix    int    `json:"Prefix"`
 }

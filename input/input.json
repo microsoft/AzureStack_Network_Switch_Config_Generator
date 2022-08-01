@@ -19,7 +19,7 @@
             "Model": "93180YC-FX",
             "Firmware": "9.3",
             "GenerateDeviceConfig": true,
-            "StaticRouting": true
+            "StaticRouting": false
         },
         {
             "Make": "Cisco",
@@ -29,7 +29,7 @@
             "Model": "93180YC-FX",
             "Firmware": "9.3",
             "GenerateDeviceConfig": true,
-            "StaticRouting": true
+            "StaticRouting": false
         },
         {
             "Make": "",

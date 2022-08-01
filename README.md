@@ -373,12 +373,13 @@ flowchart
     - ~~`OutOfBandPort`~~
     - ~~`Credential`~~
     - ~~`Stig_Setting`~~
-    - `PrefixList`
-    - `PolicyMap`
+    - ~~`PrefixList`~~
+    - ~~`PolicyMap`~~
     - ~~`NTP`~~
     - ~~`STP`~~
     - ~~`VTY`~~
-    - `Static`
+    - ~~`Static`~~
+    - `QOS`
     - ~~`Syslog`~~
   - ~~Complete `Unused` Port in `interface.json` framework~~
 

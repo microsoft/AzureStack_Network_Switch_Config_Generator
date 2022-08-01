@@ -1,4 +1,9 @@
 {{define "bgp"}}
+! bgp_prefix_list
+{{ range .PrefixList -}}
+ip prefix-list {{.Name}} {{.Action}} {{.Supernet}}
+{{end}}
+
 ! bgp.go.tmpl-bgp
 router bgp {{.BGPAsn}}
   router-id {{.RouterID}}
@@ -18,5 +23,8 @@ router bgp {{.BGPAsn}}
     description {{.Description}}
     address-family ipv4 unicast
       maximum-prefix {{$MaxiPrefix}} {{$ErrorAction}}
+      {{ range .PrefixList -}}
+      prefix-list {{.Name}} {{.Direction}}
+      {{end -}}
   {{end -}}
 {{end}}
