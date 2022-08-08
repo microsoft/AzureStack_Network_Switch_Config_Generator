@@ -25,7 +25,8 @@
       "Shutdown": true,
       "IPAddress": "TORX_IPv4",
       "UntagVlan": "",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 1,
@@ -39,7 +40,11 @@
       "UntagVlan": "Management",
       "TagVlan": [
         "Compute"
-      ]
+      ],
+      "Others": {
+        "service-policy-input": "AZS_SERVICES",
+        "pfc": "on"
+      }
     },
     {
       "ID": 2,
@@ -51,7 +56,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 3,
@@ -63,7 +69,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 4,
@@ -75,7 +82,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 5,
@@ -87,7 +95,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 6,
@@ -99,7 +108,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 7,
@@ -111,7 +121,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 8,
@@ -123,7 +134,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 9,
@@ -135,7 +147,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 10,
@@ -147,7 +160,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 11,
@@ -159,7 +173,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 12,
@@ -171,7 +186,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 13,
@@ -183,7 +199,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 14,
@@ -195,7 +212,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 15,
@@ -207,7 +225,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 16,
@@ -222,7 +241,8 @@
       "TagVlan": [
         "Storage1",
         "Storage2"
-      ]
+      ],
+      "Others": {}
     },
     {
       "ID": 17,
@@ -234,7 +254,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 18,
@@ -246,7 +267,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 19,
@@ -258,7 +280,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 20,
@@ -270,7 +293,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 21,
@@ -282,7 +306,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 22,
@@ -294,7 +319,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 23,
@@ -306,7 +332,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 24,
@@ -318,7 +345,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 25,
@@ -330,7 +358,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 26,
@@ -342,7 +371,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 27,
@@ -354,7 +384,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 28,
@@ -366,7 +397,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 29,
@@ -378,7 +410,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 30,
@@ -390,7 +423,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 31,
@@ -402,7 +436,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 32,
@@ -414,7 +449,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 33,
@@ -426,7 +462,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 34,
@@ -438,7 +475,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 35,
@@ -450,7 +488,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 36,
@@ -462,7 +501,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 37,
@@ -474,7 +514,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 38,
@@ -486,7 +527,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 39,
@@ -498,7 +540,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 40,
@@ -510,7 +553,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 41,
@@ -522,7 +566,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 42,
@@ -534,7 +579,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 43,
@@ -546,7 +592,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 44,
@@ -558,7 +605,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 45,
@@ -570,7 +618,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 46,
@@ -582,7 +631,8 @@
       "Shutdown": false,
       "IPAddress": "",
       "UntagVlan": "OOB",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 47,
@@ -594,7 +644,8 @@
       "Shutdown": false,
       "IPAddress": "P2P_TORX_To_Border2/TORX",
       "UntagVlan": "",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 48,
@@ -606,7 +657,8 @@
       "Shutdown": false,
       "IPAddress": "P2P_TORX_To_Border1/TORX",
       "UntagVlan": "",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 49,
@@ -618,7 +670,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 50,
@@ -630,7 +683,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 51,
@@ -642,7 +696,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 52,
@@ -654,7 +709,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 53,
@@ -666,7 +722,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 54,
@@ -678,7 +735,8 @@
       "Shutdown": true,
       "IPAddress": "",
       "UntagVlan": "Unused",
-      "TagVlan": []
+      "TagVlan": [],
+      "Others": {}
     }
   ],
   "VLAN": [

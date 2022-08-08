@@ -18,6 +18,7 @@ func (o *OutputType) parseInBandPortFramework(i *InterfaceFrameworkType) {
 		portObj.Mtu = intf.Mtu
 		portObj.PortType = intf.PortType
 		portObj.Shutdown = intf.Shutdown
+		portObj.Others = intf.Others
 		if intf.Speed != 0 {
 			portObj.PortName = i.parseInterfaceName(intf.Speed)
 		} else {

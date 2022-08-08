@@ -34,6 +34,9 @@ interface {{ .PortName }} {{ .Port }}
   {{end -}}
   no logging event port link-status
   spanning-tree port type edge trunk
+  {{if .Others.ServicePolicyInput -}}
+  service-policy type qos input {{.Others.ServicePolicyInput}}
+  {{end  -}}
   priority-flow-control mode on
   {{end -}}
   no ip redirects

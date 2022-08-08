@@ -64,16 +64,17 @@ type InterfaceFrameworkType struct {
 		Name  string `json:"Name"`
 	} `json:"InterfaceName"`
 	Port []struct {
-		ID          int      `json:"ID"`
-		Port        string   `json:"Port"`
-		Speed       int      `json:"Speed"`
-		Description string   `json:"Description"`
-		Mtu         int      `json:"MTU"`
-		PortType    string   `json:"PortType"`
-		Shutdown    bool     `json:"Shutdown,omitempty"`
-		IPAddress   string   `json:"IPAddress"`
-		UntagVlan   string   `json:"UntagVlan"`
-		TagVlan     []string `json:"TagVlan"`
+		ID          int               `json:"ID"`
+		Port        string            `json:"Port"`
+		Speed       int               `json:"Speed"`
+		Description string            `json:"Description"`
+		Mtu         int               `json:"MTU"`
+		PortType    string            `json:"PortType"`
+		Shutdown    bool              `json:"Shutdown,omitempty"`
+		IPAddress   string            `json:"IPAddress"`
+		UntagVlan   string            `json:"UntagVlan"`
+		TagVlan     []string          `json:"TagVlan"`
+		Others      map[string]string `json:"Others"`
 	} `json:"Port"`
 	Vlan []struct {
 		Group             string `json:"Group"`
@@ -106,15 +107,16 @@ type OutputType struct {
 }
 
 type PortType struct {
-	Port        string `json:"Port"`
-	PortName    string `json:"PortName"`
-	PortType    string `json:"PortType"`
-	Description string `json:"Description"`
-	Mtu         int    `json:"MTU"`
-	Shutdown    bool   `json:"Shutdown"`
-	IPAddress   string `json:"IPAddress"`
-	UntagVlan   int    `json:"UntagVlan"`
-	TagVlan     []int  `json:"TagVlan"`
+	Port        string            `json:"Port"`
+	PortName    string            `json:"PortName"`
+	PortType    string            `json:"PortType"`
+	Description string            `json:"Description"`
+	Mtu         int               `json:"MTU"`
+	Shutdown    bool              `json:"Shutdown"`
+	IPAddress   string            `json:"IPAddress"`
+	UntagVlan   int               `json:"UntagVlan"`
+	TagVlan     []int             `json:"TagVlan"`
+	Others      map[string]string `json:"Others"`
 }
 
 type VlanType struct {
