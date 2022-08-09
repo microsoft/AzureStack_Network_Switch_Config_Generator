@@ -18,6 +18,7 @@ func (o *OutputType) parseInterfaceObj(frameworkPath string) {
 	InterfaceFrameworkObj := parseInterfaceJSON(interfaceFrameJson)
 	o.parseInBandPortFramework(InterfaceFrameworkObj)
 	o.parseVlanObj(InterfaceFrameworkObj)
+	o.parseLoopbackObj(InterfaceFrameworkObj)
 }
 
 func (o *OutputType) updateOutputObj(frameworkPath, templatePath string, inputObj *InputType) {

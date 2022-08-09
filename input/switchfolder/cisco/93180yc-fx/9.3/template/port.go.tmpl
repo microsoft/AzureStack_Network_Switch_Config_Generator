@@ -29,9 +29,7 @@ interface {{ .PortName }} {{ .Port }}
   switchport
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}
-  {{range .TagVlan -}}
-  switchport trunk allowed vlan add {{.}}
-  {{end -}}
+  switchport trunk allowed vlan {{.TagVlan}}
   no logging event port link-status
   spanning-tree port type edge trunk
   {{if .Others.ServicePolicyInput -}}
@@ -39,8 +37,6 @@ interface {{ .PortName }} {{ .Port }}
   {{end  -}}
   priority-flow-control mode on
   {{end -}}
-  no ip redirects
-  no ipv6 redirects
   {{if .Shutdown -}} shutdown {{else -}} no shutdown {{end}}
 {{end }}
 {{end -}}

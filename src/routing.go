@@ -39,7 +39,8 @@ func (o *OutputType) parseRoutingFramework(frameworkPath string, inputJsonObj *I
 		routingFrameworkObj.updateBgpNetwork(o)
 		routingFrameworkObj.updateBGPPrefixList(o)
 		routerIDName := strings.Replace(routingFrameworkObj.Bgp.RouterID, "TORX", o.Device.Type, -1)
-		routingFrameworkObj.Bgp.RouterID = o.getSwitchMgmtIPbyName(routerIDName)
+		RouterIDIPAddress := o.getSwitchMgmtIPbyName(routerIDName)
+		routingFrameworkObj.Bgp.RouterID = strings.Split(RouterIDIPAddress, "/")[0]
 		routingFrameworkObj.updateBgpNeighbor(o, inputJsonObj)
 	}
 	o.Routing = routingFrameworkObj

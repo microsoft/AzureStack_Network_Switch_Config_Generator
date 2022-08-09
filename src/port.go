@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"strconv"
 	"strings"
 )
 
@@ -80,21 +81,21 @@ func (o *OutputType) updatePortUntagvlan(UntagVlanName string) int {
 	return 0
 }
 
-func (o *OutputType) updatePortTagvlan(TagVlanName []string) []int {
+func (o *OutputType) updatePortTagvlan(TagVlanName []string) string {
 	if len(TagVlanName) < 1 {
 		log.Fatalln("Tag Vlan Attributes of this Trunk Port is invalid.")
 	}
-	ret := make([]int, len(TagVlanName))
+	res := []string{}
 	for _, segment := range *o.Supernets {
-		for index, vlanName := range TagVlanName {
+		for _, vlanName := range TagVlanName {
 			if segment.VlanID != 0 {
-				if segment.Name == vlanName {
-					ret[index] = segment.VlanID
+				if segment.Group == vlanName {
+					res = append(res, strconv.Itoa(segment.VlanID))
 				}
 			}
 		}
 	}
-	return ret
+	return strings.Join(res, ",")
 }
 
 func (i *InterfaceFrameworkType) parseInterfaceName(Speed int) string {

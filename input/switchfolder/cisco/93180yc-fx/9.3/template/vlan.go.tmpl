@@ -18,6 +18,8 @@ interface vlan{{.VlanID}}
   no shutdown
   {{ if ne .IPAddress "" -}}
   ip address {{ .IPAddress }}
+  no ip redirects
+  no ipv6 redirects
   {{ else -}}
   {{ end -}}
   {{- end}}

@@ -89,6 +89,7 @@ type InterfaceFrameworkType struct {
 		ACL      []interface{} `json:"ACL"`
 		Shutdown bool          `json:"Shutdown,omitempty"`
 	} `json:"VLAN"`
+	Loopback    []LoopbackType `json:"Loopback"`
 	PortChannel []struct {
 		Name     string        `json:"Name"`
 		ID       int           `json:"ID"`
@@ -102,6 +103,7 @@ type OutputType struct {
 	Settings  map[string]interface{} `json:"Settings"`
 	Port      []PortType             `json:"Port"`
 	Vlan      []VlanType             `json:"Vlan"`
+	Loopback  []LoopbackType         `json:"Loopback"`
 	Routing   *RoutingType           `json:"Routing"`
 	Supernets *[]SupernetOutputType  `json:"Supernets"`
 }
@@ -115,7 +117,7 @@ type PortType struct {
 	Shutdown    bool              `json:"Shutdown"`
 	IPAddress   string            `json:"IPAddress"`
 	UntagVlan   int               `json:"UntagVlan"`
-	TagVlan     []int             `json:"TagVlan"`
+	TagVlan     string            `json:"TagVlan"`
 	Others      map[string]string `json:"Others"`
 }
 
@@ -126,6 +128,11 @@ type VlanType struct {
 	IPAddress string `json:"IPAddress"`
 	Mtu       int    `json:"MTU"`
 	Shutdown  bool   `json:"Shutdown"`
+}
+
+type LoopbackType struct {
+	Description string `json:"Description"`
+	IPAddress   string `json:"IPAddress"`
 }
 
 type RoutingType struct {
