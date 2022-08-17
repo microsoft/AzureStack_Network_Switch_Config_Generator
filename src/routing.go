@@ -31,13 +31,13 @@ func (o *OutputType) parseRoutingFramework(frameworkPath string, inputJsonObj *I
 	// Use StaticRouting attribute to update StaticRoute or BGPRoute
 	if o.Device.StaticRouting {
 		// Static Routing
-		routingFrameworkObj.updateStaticPrefixList(o)
+		routingFrameworkObj.updateStaticRoutingPolicy(o)
 		routingFrameworkObj.updateStaticNetwork(o)
 	} else {
 		// BGP Routing
 		routingFrameworkObj.Bgp.BGPAsn = o.Device.Asn
 		routingFrameworkObj.updateBgpNetwork(o)
-		routingFrameworkObj.updateBGPPrefixList(o)
+		routingFrameworkObj.updateBGPRoutingPolicy(o)
 		routerIDName := strings.Replace(routingFrameworkObj.Bgp.RouterID, "TORX", o.Device.Type, -1)
 		RouterIDIPAddress := o.getSwitchMgmtIPbyName(routerIDName)
 		routingFrameworkObj.Bgp.RouterID = strings.Split(RouterIDIPAddress, "/")[0]
@@ -52,12 +52,24 @@ func (r *RoutingType) updateBgpNetwork(outputObj *OutputType) {
 	}
 }
 
-func (r *RoutingType) updateBGPPrefixList(outputObj *OutputType) {
-	for index, item := range r.Bgp.PrefixList {
-		// Update Supernet Name to Supernet IP
-		supernetIP := outputObj.getSupernetIPbyName(item.Supernet)
-		r.Bgp.PrefixList[index].Supernet = supernetIP
+func (r *RoutingType) updateBGPRoutingPolicy(outputObj *OutputType) {
+	newPrefixList := []PrefixListType{}
+	// Update PrefexList
+	for i, item := range r.RoutingPolicy.PrefixList {
+		for _, prefixListName := range r.Bgp.PrefixListName {
+			if prefixListName == item.Name {
+				for j, config := range item.Config {
+					// Update Supernet Name to Supernet IP
+					supernetIP := outputObj.getSupernetIPbyName(config.Supernet)
+					r.RoutingPolicy.PrefixList[i].Config[j].Supernet = supernetIP
+				}
+				//Append the validate item to newPrefixList
+				newPrefixList = append(newPrefixList, item)
+			}
+		}
 	}
+	r.RoutingPolicy.PrefixList = newPrefixList
+	r.RoutingPolicy.RouteMap = nil
 }
 
 func (r *RoutingType) updateBgpNeighbor(outputObj *OutputType, inputJsonObj *InputType) {
@@ -102,14 +114,6 @@ func (r *RoutingType) updateStaticNetwork(outputObj *OutputType) {
 	r.Static.Network = tmp
 }
 
-func (r *RoutingType) updateStaticPrefixList(outputObj *OutputType) {
-	for index, item := range r.Static.PrefixList {
-		// Update Supernet Name to Supernet IP
-		supernetIP := outputObj.getSupernetIPbyName(item.Supernet)
-		r.Static.PrefixList[index].Supernet = supernetIP
-	}
-}
-
 func (o *OutputType) getSupernetIPbyName(SupernetName string) string {
 	for _, segment := range *o.Supernets {
 		if segment.Name == SupernetName {
@@ -117,4 +121,23 @@ func (o *OutputType) getSupernetIPbyName(SupernetName string) string {
 		}
 	}
 	return ""
+}
+
+func (r *RoutingType) updateStaticRoutingPolicy(outputObj *OutputType) {
+	newPrefixList := []PrefixListType{}
+	// Update PrefexList
+	for i, item := range r.RoutingPolicy.PrefixList {
+		for _, prefixListName := range r.Static.PrefixListName {
+			if prefixListName == item.Name {
+				for j, config := range item.Config {
+					// Update Supernet Name to Supernet IP
+					supernetIP := outputObj.getSupernetIPbyName(config.Supernet)
+					r.RoutingPolicy.PrefixList[i].Config[j].Supernet = supernetIP
+				}
+				//Append the validate item to newPrefixList
+				newPrefixList = append(newPrefixList, item)
+			}
+		}
+	}
+	r.RoutingPolicy.PrefixList = newPrefixList
 }

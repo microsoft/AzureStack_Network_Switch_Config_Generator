@@ -1,9 +1,13 @@
-{{define "bgp"}}
+{{define "bgp_prefix"}}
 ! bgp_prefix_list
 {{ range .PrefixList -}}
+{{ range .Config -}}
 ip prefix-list {{.Name}} {{.Action}} {{.Supernet}}
 {{end}}
+{{end}}
+{{end}}
 
+{{define "bgp_routing"}}
 ! bgp.go.tmpl-bgp
 router bgp {{.BGPAsn}}
   router-id {{.RouterID}}

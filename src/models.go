@@ -136,8 +136,12 @@ type LoopbackType struct {
 }
 
 type RoutingType struct {
-	Bgp    BGPType    `json:"BGP"`
-	Static StaticType `json:"Static"`
+	Bgp           BGPType    `json:"BGP"`
+	Static        StaticType `json:"Static"`
+	RoutingPolicy struct {
+		PrefixList []PrefixListType `json:"PrefixList"`
+		RouteMap   []RouteMapType   `json:"RouteMap"`
+	} `json:"RoutingPolicy"`
 }
 
 type BGPType struct {
@@ -158,25 +162,16 @@ type BGPType struct {
 			Name      string `json:"Name"`
 			Direction string `json:"Direction"`
 		} `json:"PrefixList"`
-		RouteMap []struct {
-			Name      string `json:"Name"`
-			Direction string `json:"Direction"`
-		} `json:"RouteMap"`
 		UpdateSource string `json:"UpdateSource"`
 		Shutdown     bool   `json:"Shutdown"`
 	} `json:"IPv4Neighbor"`
-	PrefixList []PrefixListType `json:"PrefixList"`
+	PrefixListName []string `json:"PrefixListName"`
 }
 
 type StaticType struct {
-	PrefixList []PrefixListType `json:"PrefixList"`
-	RouteMap   []struct {
-		Index          int      `json:"Index"`
-		Name           string   `json:"Name"`
-		Action         string   `json:"Action"`
-		PrefixListName []string `json:"PrefixListName"`
-	} `json:"RouteMap"`
-	Network []StaticNetworkType `json:"Network"`
+	PrefixListName []string            `json:"PrefixListName"`
+	RouteMapName   []string            `json:"RouteMapName"`
+	Network        []StaticNetworkType `json:"Network"`
 }
 
 type StaticNetworkType struct {
@@ -186,10 +181,23 @@ type StaticNetworkType struct {
 }
 
 type PrefixListType struct {
-	Name      string `json:"Name"`
-	Action    string `json:"Action"`
-	Supernet  string `json:"Supernet"`
-	IPAddress string `json:"IPAddress"`
-	Operation string `json:"Operation"`
-	Prefix    int    `json:"Prefix"`
+	Name   string `json:"Name"`
+	Config []struct {
+		Name      string `json:"Name"`
+		Action    string `json:"Action"`
+		Supernet  string `json:"Supernet"`
+		IPAddress string `json:"IPAddress"`
+		Operation string `json:"Operation"`
+		Prefix    int    `json:"Prefix"`
+	} `json:"Config"`
+}
+
+type RouteMapType struct {
+	Name   string `json:"Name"`
+	Config []struct {
+		Index          int      `json:"Index"`
+		Name           string   `json:"Name"`
+		Action         string   `json:"Action"`
+		PrefixListName []string `json:"PrefixListName"`
+	} `json:"Config"`
 }
