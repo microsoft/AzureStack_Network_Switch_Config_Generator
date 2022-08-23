@@ -1,0 +1,56 @@
+{{define "qos"}}
+! qos.go.tmpl-bgp
+!
+! Identify the traffic
+!
+class-map type qos match-all RDMA
+  match cos 3
+class-map type qos match-all CLUSTER
+  match cos 5
+!
+! Map the traffic to a queue map from the class-map
+!
+policy-map type qos AZS_SERVICES
+  class RDMA
+    set qos-group 3
+  class CLUSTER
+    set qos-group 5
+!
+! Ingress traffic to the Interface
+!
+policy-map type network-qos QOS_NETWORK
+  class type network-qos c-8q-nq3
+    pause pfc-cos 3
+    mtu 9216
+  class type network-qos c-8q-nq5
+    mtu 9216
+  class type network-qos c-8q-nq-default
+    mtu 9216
+!
+! Egress traffic from the interface
+!
+policy-map type queuing QOS_EGRESS_PORT
+  class type queuing c-out-8q-q3
+    bandwidth remaining percent 50
+    random-detect minimum-threshold 300 kbytes maximum-threshold 300 kbytes drop-probability 100 weight 0 ecn
+  class type queuing c-out-8q-q-default
+    bandwidth remaining percent 48
+  class type queuing c-out-8q-q1
+    bandwidth remaining percent 0
+  class type queuing c-out-8q-q2
+    bandwidth remaining percent 0
+  class type queuing c-out-8q-q4
+    bandwidth remaining percent 0
+  class type queuing c-out-8q-q5
+    bandwidth percent 2
+  class type queuing c-out-8q-q6
+    bandwidth remaining percent 0
+  class type queuing c-out-8q-q7
+    bandwidth remaining percent 0
+!
+! Apply to the system
+!
+system qos
+  service-policy type queuing output QOS_EGRESS_PORT
+  service-policy type network-qos QOS_NETWORK
+{{end}}

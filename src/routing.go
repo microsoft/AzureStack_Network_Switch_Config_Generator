@@ -12,21 +12,6 @@ func newRoutingObj() *RoutingType {
 	return &RoutingType{}
 }
 
-func (o *OutputType) parseBGPFramework(frameworkPath string, inputJsonObj *InputType) {
-	routingFrameJson := fmt.Sprintf("%s/routing.json", frameworkPath)
-	routingFrameworkObj := parseRoutingJSON(routingFrameJson)
-	// Set unused section to null
-	routingFrameworkObj.Router.Static = nil
-	routingFrameworkObj.RouteMap = nil
-	// Update template used variables
-	routingFrameworkObj.Router.Bgp.BGPAsn = o.Device.Asn
-	routingFrameworkObj.updateBgpNetwork(o)
-	routerIDName := strings.Replace(routingFrameworkObj.Router.Bgp.RouterID, "TORX", o.Device.Type, -1)
-	routingFrameworkObj.Router.Bgp.RouterID = o.searchSwitchMgmtIP(routerIDName)
-	routingFrameworkObj.updateBgpNeighbor(o, inputJsonObj)
-	o.Routing = routingFrameworkObj
-}
-
 func parseRoutingJSON(routingFrameJson string) *RoutingType {
 	routingFrameworkObj := newRoutingObj()
 	bytes, err := ioutil.ReadFile(routingFrameJson)
@@ -40,39 +25,119 @@ func parseRoutingJSON(routingFrameJson string) *RoutingType {
 	return routingFrameworkObj
 }
 
+func (o *OutputType) parseRoutingFramework(frameworkPath string, inputJsonObj *InputType) {
+	routingFrameJson := fmt.Sprintf("%s/routing.json", frameworkPath)
+	routingFrameworkObj := parseRoutingJSON(routingFrameJson)
+	// Use StaticRouting attribute to update StaticRoute or BGPRoute
+	if o.Device.StaticRouting {
+		// Static Routing
+		routingFrameworkObj.updateStaticRoutingPolicy(o)
+		routingFrameworkObj.updateStaticNetwork(o)
+	} else {
+		// BGP Routing
+		routingFrameworkObj.Bgp.BGPAsn = o.Device.Asn
+		routingFrameworkObj.updateBgpNetwork(o)
+		routingFrameworkObj.updateBGPRoutingPolicy(o)
+		routerIDName := strings.Replace(routingFrameworkObj.Bgp.RouterID, "TORX", o.Device.Type, -1)
+		RouterIDIPAddress := o.getSwitchMgmtIPbyName(routerIDName)
+		routingFrameworkObj.Bgp.RouterID = strings.Split(RouterIDIPAddress, "/")[0]
+		routingFrameworkObj.updateBgpNeighbor(o, inputJsonObj)
+	}
+	o.Routing = routingFrameworkObj
+}
+
 func (r *RoutingType) updateBgpNetwork(outputObj *OutputType) {
-	for _, segment := range *outputObj.Network {
-		for index, netname := range r.Router.Bgp.IPv4Network {
-			if segment.Name == netname {
-				// fmt.Println(netname, segment.Subnet)
-				r.Router.Bgp.IPv4Network[index] = segment.Subnet
-			}
-		}
+	for index, netname := range r.Bgp.IPv4Network {
+		r.Bgp.IPv4Network[index] = outputObj.getSupernetIPbyName(netname)
 	}
 }
 
+func (r *RoutingType) updateBGPRoutingPolicy(outputObj *OutputType) {
+	newPrefixList := []PrefixListType{}
+	// Update PrefexList
+	for i, item := range r.RoutingPolicy.PrefixList {
+		for _, prefixListName := range r.Bgp.PrefixListName {
+			if prefixListName == item.Name {
+				for j, config := range item.Config {
+					// Update Supernet Name to Supernet IP
+					supernetIP := outputObj.getSupernetIPbyName(config.Supernet)
+					r.RoutingPolicy.PrefixList[i].Config[j].Supernet = supernetIP
+				}
+				//Append the validate item to newPrefixList
+				newPrefixList = append(newPrefixList, item)
+			}
+		}
+	}
+	r.RoutingPolicy.PrefixList = newPrefixList
+	r.RoutingPolicy.RouteMap = nil
+}
+
 func (r *RoutingType) updateBgpNeighbor(outputObj *OutputType, inputJsonObj *InputType) {
-	for k, v := range r.Router.Bgp.IPv4Neighbor {
+	for k, v := range r.Bgp.IPv4Neighbor {
 		nbrAsn, err := inputJsonObj.getBgpASN(v.NeighborAsn)
 		if err != nil {
 			log.Fatalln(err)
 		}
-		r.Router.Bgp.IPv4Neighbor[k].NeighborAsn = nbrAsn
+		r.Bgp.IPv4Neighbor[k].NeighborAsn = nbrAsn
 		nbrIPAddressName := replaceTORXName(v.NeighborIPAddress, outputObj.Device.Type)
-		r.Router.Bgp.IPv4Neighbor[k].NeighborIPAddress = outputObj.searchSwitchMgmtIP(nbrIPAddressName)
-		r.Router.Bgp.IPv4Neighbor[k].Description = nbrIPAddressName
+		IPv4IPNet := outputObj.getSwitchMgmtIPbyName(nbrIPAddressName)
+		r.Bgp.IPv4Neighbor[k].NeighborIPAddress = strings.Split(IPv4IPNet, "/")[0]
+		r.Bgp.IPv4Neighbor[k].Description = nbrIPAddressName
 
 		updateSourceName := replaceTORXName(v.UpdateSource, outputObj.Device.Type)
-		r.Router.Bgp.IPv4Neighbor[k].UpdateSource = outputObj.searchSwitchMgmtIP(updateSourceName)
+		r.Bgp.IPv4Neighbor[k].UpdateSource = outputObj.getSwitchMgmtIPbyName(updateSourceName)
 	}
-
 }
 
-func (i *InputType) getBgpASN(deviceName string) (string, error) {
-	for _, v := range i.Device {
-		if v.Hostname == deviceName {
-			return fmt.Sprint(v.Asn), nil
+func (r *RoutingType) updateStaticNetwork(outputObj *OutputType) {
+	tmp := []StaticNetworkType{}
+	for _, staticItem := range r.Static.Network {
+		// Replace template name with right TOR number.
+		routeName := strings.Replace(staticItem.Name, "TORX", outputObj.Device.Type, -1)
+
+		if len(staticItem.NextHop) != 0 {
+			// Update null 0 static route
+			tmp = append(tmp, StaticNetworkType{
+				DstIPAddress: outputObj.getSupernetIPbyName(routeName),
+				NextHop:      staticItem.NextHop,
+				Name:         routeName,
+			})
+		} else if len(staticItem.DstIPAddress) != 0 {
+			// update default route to border
+			tmp = append(tmp, StaticNetworkType{
+				DstIPAddress: outputObj.getSupernetIPbyName(staticItem.DstIPAddress),
+				NextHop:      outputObj.getSwitchMgmtIPbyName(routeName),
+				Name:         routeName,
+			})
 		}
 	}
-	return "", fmt.Errorf("%s BGP ASN is invalid", deviceName)
+	r.Static.Network = tmp
+}
+
+func (o *OutputType) getSupernetIPbyName(SupernetName string) string {
+	for _, segment := range *o.Supernets {
+		if segment.Name == SupernetName {
+			return segment.Subnet
+		}
+	}
+	return ""
+}
+
+func (r *RoutingType) updateStaticRoutingPolicy(outputObj *OutputType) {
+	newPrefixList := []PrefixListType{}
+	// Update PrefexList
+	for i, item := range r.RoutingPolicy.PrefixList {
+		for _, prefixListName := range r.Static.PrefixListName {
+			if prefixListName == item.Name {
+				for j, config := range item.Config {
+					// Update Supernet Name to Supernet IP
+					supernetIP := outputObj.getSupernetIPbyName(config.Supernet)
+					r.RoutingPolicy.PrefixList[i].Config[j].Supernet = supernetIP
+				}
+				//Append the validate item to newPrefixList
+				newPrefixList = append(newPrefixList, item)
+			}
+		}
+	}
+	r.RoutingPolicy.PrefixList = newPrefixList
 }

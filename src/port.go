@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"strconv"
 	"strings"
 )
 
@@ -18,10 +19,19 @@ func (o *OutputType) parseInBandPortFramework(i *InterfaceFrameworkType) {
 		portObj.Mtu = intf.Mtu
 		portObj.PortType = intf.PortType
 		portObj.Shutdown = intf.Shutdown
-		portObj.PortName = i.parseInterfaceName(intf.Speed)
-		if intf.PortType == "IP" {
+		portObj.Others = intf.Others
+		if intf.Speed != 0 {
+			portObj.PortName = i.parseInterfaceName(intf.Speed)
+		} else {
+			portObj.PortName = intf.Port
+		}
+
+		if intf.PortType == "OOB" {
 			intf.IPAddress = replaceTORXName(intf.IPAddress, o.Device.Type)
-			portObj.IPAddress = o.searchSwitchMgmtIP(intf.IPAddress)
+			portObj.IPAddress = o.searchOOBIP(intf.IPAddress)
+		} else if intf.PortType == "IP" {
+			intf.IPAddress = replaceTORXName(intf.IPAddress, o.Device.Type)
+			portObj.IPAddress = o.getSwitchMgmtIPbyName(intf.IPAddress)
 		} else if intf.PortType == "Access" {
 			portObj.UntagVlan = o.updatePortUntagvlan(intf.UntagVlan)
 		} else if intf.PortType == "Trunk" {
@@ -34,9 +44,9 @@ func (o *OutputType) parseInBandPortFramework(i *InterfaceFrameworkType) {
 	}
 }
 
-func (o *OutputType) searchSwitchMgmtIP(IPAddressName string) string {
-	for _, segment := range *o.Network {
-		if segment.Name == "SwitchMgmt" {
+func (o *OutputType) searchOOBIP(IPAddressName string) string {
+	for _, segment := range *o.Supernets {
+		if segment.Group == "OOB" {
 			for _, ipAssign := range segment.IPAssignment {
 				if strings.Contains(ipAssign.Name, IPAddressName) {
 					return ipAssign.IPAddress
@@ -47,8 +57,21 @@ func (o *OutputType) searchSwitchMgmtIP(IPAddressName string) string {
 	return ""
 }
 
+func (o *OutputType) getSwitchMgmtIPbyName(SwitchMgmtName string) string {
+	for _, segment := range *o.Supernets {
+		if segment.Group == "SwitchMgmt" {
+			for _, ipAssign := range segment.IPAssignment {
+				if strings.Contains(ipAssign.Name, SwitchMgmtName) {
+					return ipAssign.IPAddress
+				}
+			}
+		}
+	}
+	return ""
+}
+
 func (o *OutputType) updatePortUntagvlan(UntagVlanName string) int {
-	for _, segment := range *o.Network {
+	for _, segment := range *o.Supernets {
 		if segment.VlanID != 0 {
 			if segment.Name == UntagVlanName {
 				return segment.VlanID
@@ -58,21 +81,21 @@ func (o *OutputType) updatePortUntagvlan(UntagVlanName string) int {
 	return 0
 }
 
-func (o *OutputType) updatePortTagvlan(TagVlanName []string) []int {
+func (o *OutputType) updatePortTagvlan(TagVlanName []string) string {
 	if len(TagVlanName) < 1 {
 		log.Fatalln("Tag Vlan Attributes of this Trunk Port is invalid.")
 	}
-	ret := make([]int, len(TagVlanName))
-	for _, segment := range *o.Network {
-		for index, vlanName := range TagVlanName {
+	res := []string{}
+	for _, segment := range *o.Supernets {
+		for _, vlanName := range TagVlanName {
 			if segment.VlanID != 0 {
-				if segment.Name == vlanName {
-					ret[index] = segment.VlanID
+				if segment.Group == vlanName {
+					res = append(res, strconv.Itoa(segment.VlanID))
 				}
 			}
 		}
 	}
-	return ret
+	return strings.Join(res, ",")
 }
 
 func (i *InterfaceFrameworkType) parseInterfaceName(Speed int) string {

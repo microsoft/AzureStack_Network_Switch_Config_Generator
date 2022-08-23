@@ -1,73 +1,162 @@
 {
-    "Router": {
-        "BGP": {
-            "BGPAsn": 65000,
-            "RouterID": "TORX_Loopback0",
-            "IPv4Network": [
-                "Tenant1",
-                "Compute",
-                "Management",
-                "SwitchMgmt",
-                "BMCMgmt"
-            ],
-            "EnableDefaultOriginate": false,
-            "RoutePrefix": {
-                "MaxiPrefix": 12000,
-                "ErrorAction": "warning-only"
-            },
-            "IPv4Neighbor": [
-                {
-                    "Description": "P2P_TORX_To_Border1/Border1",
-                    "EnablePassword": false,
-                    "NeighborAsn": "Border1",
-                    "NeighborIPAddress": "P2P_TORX_To_Border1/Border1",
-                    "PrefixList": [
-                        {
-                            "Name": "ExternalPrefix",
-                            "Direction": "in"
-                        },
-                        {
-                            "Name": "ExternalPrefix",
-                            "Direction": "out"
-                        }
-                    ],
-                    "RouteMap": [
-                        {
-                            "Name": "",
-                            "Direction": ""
-                        }
-                    ],
-                    "UpdateSource": "TORX_Loopback0",
-                    "Shutdown": false
-                }
-            ]
+    "BGP": {
+        "BGPAsn": 65000,
+        "RouterID": "TORX_Loopback0",
+        "IPv4Network": [
+            "Tenant0",
+            "Tenant1",
+            "Management",
+            "SwitchMgmt",
+            "OOB"
+        ],
+        "EnableDefaultOriginate": false,
+        "RoutePrefix": {
+            "MaxiPrefix": 12000,
+            "ErrorAction": "warning-only"
         },
-        "Static": [
+        "IPv4Neighbor": [
             {
-                "Name": "P2P_Border1_To_TORX",
-                "NetworkName": "P2P_Border1_To_TORX",
-                "NetworkAssignment": "P2P_Border1"
+                "Description": "P2P_TORX_To_Border1/Border1",
+                "EnablePassword": false,
+                "NeighborAsn": "Border1",
+                "NeighborIPAddress": "P2P_TORX_To_Border1/Border1",
+                "PrefixList": [
+                    {
+                        "Name": "ExternalPrefix",
+                        "Direction": "in"
+                    },
+                    {
+                        "Name": "ExternalPrefix",
+                        "Direction": "out"
+                    }
+                ],
+                "RouteMap": [
+                    {
+                        "Name": "",
+                        "Direction": ""
+                    }
+                ],
+                "UpdateSource": "TORX_Loopback0",
+                "Shutdown": false
+            },
+            {
+                "Description": "P2P_TORX_To_Border2/Border2",
+                "EnablePassword": false,
+                "NeighborAsn": "Border2",
+                "NeighborIPAddress": "P2P_TORX_To_Border2/Border2",
+                "PrefixList": [
+                    {
+                        "Name": "ExternalPrefix",
+                        "Direction": "in"
+                    },
+                    {
+                        "Name": "ExternalPrefix",
+                        "Direction": "out"
+                    }
+                ],
+                "RouteMap": [
+                    {
+                        "Name": "",
+                        "Direction": ""
+                    }
+                ],
+                "UpdateSource": "TORX_Loopback0",
+                "Shutdown": false
+            }
+        ],
+        "PrefixListName": [
+            "ExternalPrefix"
+        ]
+    },
+    "Static": {
+        "PrefixListName": [
+            "DefaultRoute"
+        ],
+        "RouteMapName": [
+            "DefaultRoute"
+        ],
+        "Network": [
+            {
+                "DstIPAddress": "",
+                "NextHop": "null 0",
+                "Name": "Tenant0"
+            },
+            {
+                "DstIPAddress": "",
+                "NextHop": "null 0",
+                "Name": "Tenant1"
+            },
+            {
+                "DstIPAddress": "Any",
+                "NextHop": "",
+                "Name": "P2P_TORX_To_Border1/TORX"
+            },
+            {
+                "DstIPAddress": "Any",
+                "NextHop": "",
+                "Name": "P2P_TORX_To_Border2/TORX"
             }
         ]
     },
-    "PrefixList": [
-        {
-            "Index": 5,
-            "Name": "ExternalPrefix",
-            "Permit": false,
-            "NetworkGroup": "Compute",
-            "Operation": "le",
-            "Prefix": 32
-        }
-    ],
-    "RouteMap": [
-        {
-            "Index": 0,
-            "Name": "p1",
-            "Permit": true,
-            "Network": "BMCMgmt",
-            "Operation": "le",
-            "Prefix": 32
-        }
-    ]
+    "RoutingPolicy": {
+        "PrefixList": [
+            {
+                "Name": "ExternalPrefix",
+                "Config": [
+                    {
+                        "Name": "ExternalPrefix",
+                        "Action": "deny",
+                        "Supernet": "Tenant0",
+                        "IPAddress": "",
+                        "Operation": "le",
+                        "Prefix": 32
+                    },
+                    {
+                        "Name": "ExternalPrefix",
+                        "Action": "deny",
+                        "Supernet": "Tenant1",
+                        "IPAddress": "",
+                        "Operation": "le",
+                        "Prefix": 32
+                    },
+                    {
+                        "Name": "ExternalPrefix",
+                        "Action": "permit",
+                        "Supernet": "Any",
+                        "IPAddress": "",
+                        "Operation": "le",
+                        "Prefix": 32
+                    }
+                ]
+            },
+            {
+                "Name": "DefaultRoute",
+                "Config": [
+                    {
+                        "Name": "DefaultRoute",
+                        "Action": "permit",
+                        "Supernet": "Any",
+                        "IPAddress": "",
+                        "Operation": "le",
+                        "Prefix": 32
+                    }
+                ]
+            }
+        ],
+        "RouteMap": [
+            {
+                "Name": "DefaultRoute",
+                "Config": [
+                    {
+                        "Index": 10,
+                        "Name": "DefaultRoute",
+                        "Action": "permit",
+                        "PrefixListName": [
+                            "DefaultRoute"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
 }

@@ -1,6 +1,15 @@
 {{ define "port"}}
 ! port.go.tmpl-port
-{{range .}}    
+{{ range . -}} 
+
+{{if eq .PortType "OOB" -}} 
+interface {{ .PortName }}
+  description {{ .Description }}
+  no ip redirects
+  no ipv6 redirects
+  ip address {{ .IPAddress }}
+  {{if .Shutdown -}} shutdown {{else -}} no shutdown {{end}}
+{{else -}}
 interface {{ .PortName }} {{ .Port }}
   description {{ .Description }}
   no cdp enable
@@ -20,15 +29,15 @@ interface {{ .PortName }} {{ .Port }}
   switchport
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}
-  {{range .TagVlan -}}
-  switchport trunk allowed vlan add {{.}}
-  {{end -}}
+  switchport trunk allowed vlan {{.TagVlan}}
   no logging event port link-status
   spanning-tree port type edge trunk
+  {{if .Others.ServicePolicyInput -}}
+  service-policy type qos input {{.Others.ServicePolicyInput}}
+  {{end  -}}
   priority-flow-control mode on
   {{end -}}
-  no ip redirects
-  no ipv6 redirects
   {{if .Shutdown -}} shutdown {{else -}} no shutdown {{end}}
-{{end}}
+{{end }}
+{{end -}}
 {{ end }}

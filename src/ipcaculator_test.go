@@ -71,7 +71,7 @@ func TestIPCaculator2(t *testing.T) {
 			if err != nil {
 				log.Fatalln(err)
 			}
-			got := parseNetworkSection(bytes)
+			got := parseSupernetSection(bytes)
 			expect := parseJsonFile(tc.resultJsonFile)
 			if !reflect.DeepEqual(*got, *expect) {
 				t.Errorf("name: %s failed \n want: %#v \n got: %#v", name, expect, got)
@@ -80,12 +80,12 @@ func TestIPCaculator2(t *testing.T) {
 	}
 }
 
-func parseJsonFile(jsonFile string) *[]NetworkOutputType {
+func parseJsonFile(jsonFile string) *[]SupernetOutputType {
 	b, err := ioutil.ReadFile(jsonFile)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	outputResult := []NetworkOutputType{}
+	outputResult := []SupernetOutputType{}
 	err = json.Unmarshal(b, &outputResult)
 	if err != nil {
 		log.Fatalln(err)

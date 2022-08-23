@@ -25,8 +25,8 @@ func TestOutputNetwork(t *testing.T) {
 			inputObj := parseInputJSON(tc.inputJsonFile)
 			outputObj := parseOutputJSON(tc.outputJsonFile)
 
-			got := inputObj.outputNetwork()
-			want := outputObj.Network
+			got := inputObj.parseSupernets()
+			want := outputObj.Supernets
 			if !reflect.DeepEqual(*got, *want) {
 				t.Errorf("[Failed] name: %s \n want: %#v \n got: %#v", name, want, got)
 			}
@@ -100,10 +100,8 @@ func TestParseBGPFramework(t *testing.T) {
 				gotoutputObj := parseOutputJSON(v)
 				gotoutputObj.Routing = nil
 
-				// BGP Unit Test
-				if inputObj.isRoutingBGP() {
-					gotoutputObj.parseBGPFramework(tc.frameworkPath, inputObj)
-				}
+				// Routing Unit Test
+				gotoutputObj.parseRoutingFramework(tc.frameworkPath, inputObj)
 				wantBGP := wantoutputObj.Routing
 				gotBGP := gotoutputObj.Routing
 				if !reflect.DeepEqual(gotBGP, wantBGP) {

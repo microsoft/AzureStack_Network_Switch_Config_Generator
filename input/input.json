@@ -1,42 +1,41 @@
 {
-    "External": [
-        {
-            "Type": "NTP",
-            "IP": [
-                "10.10.10.10"
-            ]
-        },
-        {
-            "Type": "DVM",
-            "IP": [
-                "10.10.10.20"
-            ]
-        }
-    ],
-    "Device": [
+    "Version": "1.2022.8.1",
+    "Settings": {
+        "NTP": [
+            "100.100.10.10",
+            "100.100.10.11"
+        ],
+        "Syslog": [
+            "100.100.10.10",
+            "100.100.10.11"
+        ]
+    },
+    "Devices": [
         {
             "Make": "Cisco",
             "Type": "TOR1",
-            "ASN": 65000,
             "Hostname": "S31R28-TOR1",
+            "ASN": 65000,
             "Model": "93180YC-FX",
             "Firmware": "9.3",
-            "GenerateDeviceConfig": true
+            "GenerateDeviceConfig": true,
+            "StaticRouting": true
         },
         {
             "Make": "Cisco",
             "Type": "TOR2",
-            "ASN": 65000,
             "Hostname": "S31R28-TOR2",
+            "ASN": 65000,
             "Model": "93180YC-FX",
             "Firmware": "9.3",
-            "GenerateDeviceConfig": true
+            "GenerateDeviceConfig": true,
+            "StaticRouting": true
         },
         {
             "Make": "",
             "Type": "Border1",
+            "Hostname": "",
             "ASN": 63000,
-            "Hostname": "Border1",
             "Model": "Router",
             "Firmware": "",
             "GenerateDeviceConfig": false
@@ -44,14 +43,14 @@
         {
             "Make": "",
             "Type": "Border2",
-            "ASN": 62000,
-            "Hostname": "Border2",
+            "Hostname": "",
+            "ASN": 63000,
             "Model": "Router",
             "Firmware": "",
             "GenerateDeviceConfig": false
         }
     ],
-    "Network": [
+    "Supernets": [
         {
             "VlanID": 2,
             "Group": "Unused",
@@ -61,15 +60,15 @@
             "SubnetAssignment": []
         },
         {
-            "VlanID": 7,
-            "Group": "Compute",
-            "Name": "Tenant0",
-            "Subnet": "10.10.100.0/24",
+            "VlanID": 25,
+            "Group": "OOB",
+            "Name": "OOB",
+            "Subnet": "172.17.0.0/26",
             "Shutdown": false,
             "SubnetAssignment": [
                 {
-                    "Name": "Tenant0",
-                    "Netmask": 24,
+                    "Name": "OOB",
+                    "Netmask": 26,
                     "IPAssignment": [
                         {
                             "Name": "Gateway",
@@ -91,7 +90,7 @@
             "VlanID": 8,
             "Group": "Management",
             "Name": "Management",
-            "Subnet": "10.10.101.0/24",
+            "Subnet": "100.100.10.0/24",
             "Shutdown": false,
             "SubnetAssignment": [
                 {
@@ -115,15 +114,15 @@
             ]
         },
         {
-            "VlanID": 25,
-            "Group": "OOB",
-            "Name": "BMCMgmt",
-            "Subnet": "192.168.0.0/26",
+            "VlanID": 7,
+            "Group": "Compute",
+            "Name": "Tenant0",
+            "Subnet": "100.100.100.0/24",
             "Shutdown": false,
             "SubnetAssignment": [
                 {
-                    "Name": "BMCMgmt",
-                    "Netmask": 26,
+                    "Name": "Tenant0",
+                    "Netmask": 24,
                     "IPAssignment": [
                         {
                             "Name": "Gateway",
@@ -145,7 +144,7 @@
             "VlanID": 15,
             "Group": "Compute",
             "Name": "Tenant1",
-            "Subnet": "10.100.0.0/24",
+            "Subnet": "100.100.101.0/24",
             "Shutdown": false,
             "SubnetAssignment": [
                 {
@@ -186,9 +185,9 @@
         },
         {
             "VlanID": null,
-            "Group": "IP",
+            "Group": "SwitchMgmt",
             "Name": "SwitchMgmt",
-            "Subnet": "192.168.1.0/28",
+            "Subnet": "100.100.1.0/28",
             "Shutdown": false,
             "SubnetAssignment": [
                 {

@@ -1,40 +1,27 @@
 {{ define "define_vlan"}}
 ! vlan.go.tmpl-define_vlan
-{{range .}}    
+{{ range . -}}    
 vlan {{.VlanID}}
   name {{.VlanName}}
-{{end}}
+{{ end }}
 {{ end }}
 
 {{ define "interface_vlan"}}
 ! vlan.go.tmpl-interface_vlan
-{{range .}}    
+{{ range . -}}    
 interface vlan{{.VlanID}}
   description {{.VlanName}}
   mtu {{.Mtu}}
   {{if .Shutdown -}} 
   shutdown 
-  {{- else -}} 
+  {{ else -}} 
   no shutdown
-  {{if ne .IPAddress "" -}} ip address {{ .IPAddress }}{{end}}
+  {{ if ne .IPAddress "" -}}
+  ip address {{ .IPAddress }}
+  no ip redirects
+  no ipv6 redirects
+  {{ else -}}
+  {{ end -}}
   {{- end}}
-{{end}}
-{{ end }}
-
-
-{{ define "oob_vlan"}}
-! vlan.go.tmpl-oob_vlan
-{{- range .}}
-{{ if eq .Group "OOB" -}}
-interface vlan{{.VlanID}}
-  description {{.VlanName}}
-  mtu {{.Mtu}}
-  {{ if .Shutdown -}} 
-  shutdown 
-  {{- else -}} 
-  no shutdown
-  {{ if ne .IPAddress "" -}} ip address {{ .IPAddress }}{{end}}
-  {{- end}}
-{{- end}}
-{{- end}}
-{{end}}
+{{ end -}}
+{{ end -}}
