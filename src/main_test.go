@@ -15,7 +15,7 @@ func TestOutputNetwork(t *testing.T) {
 	testFolder := "./testcases/"
 	testCases := map[string]test{
 		"cisco93180yc-fx": {
-			testFolder + "cisco93180yc-fx/input.json",
+			testFolder + "cisco93180yc-fx/input_nobmc.json",
 			testFolder + "cisco93180yc-fx/S31R28-TOR1.json",
 		},
 	}
@@ -84,7 +84,7 @@ func TestParseBGPFramework(t *testing.T) {
 	testFolder := "./testcases/"
 	testCases := map[string]test{
 		"cisco93180yc-fx": {
-			inputJson:     testFolder + "cisco93180yc-fx/input.json",
+			inputJson:     testFolder + "cisco93180yc-fx/input_nobmc.json",
 			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.3/framework",
 			outputJson: []string{
 				testFolder + "cisco93180yc-fx/S31R28-TOR1.json",

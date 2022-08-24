@@ -18,7 +18,7 @@ const (
 func main() {
 
 	// Input Variables
-	inputJsonFile := flag.String("inputJsonFile", "../input/input.json", "File path of switch deploy input.json")
+	inputJsonFile := flag.String("inputJsonFile", "../input/input_nobmc.json", "File path of switch deploy input.json")
 	switchFolder := flag.String("switchFolder", "../input/switchfolder", "Folder path of switch frameworks and templates")
 	outputFolder := flag.String("outputFolder", "../output", "Folder path of switch configurations")
 
@@ -27,12 +27,6 @@ func main() {
 
 	// Decode Network section. (Pass the raw bytes instead of Obj, because trying to detach the ipcaculator function for future open source.)
 	outputSupernets := inputObj.parseSupernets()
-	// Add Any Any supernet for function consume.
-	*outputSupernets = append(*outputSupernets, SupernetOutputType{
-		Group:  "Any",
-		Name:   "Any",
-		Subnet: "0.0.0.0/0",
-	})
 	// Create random credential for switch config
 	randomUsername := "aszadmin-" + generateRandomString(5, 0, 0, 0)
 	randomPassword := generateRandomString(16, 3, 3, 3)
