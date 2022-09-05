@@ -14,9 +14,9 @@ func TestOutputNetwork(t *testing.T) {
 	}
 	testFolder := "./testcases/"
 	testCases := map[string]test{
-		"cisco93180yc-fx": {
-			testFolder + "cisco93180yc-fx/input_nobmc.json",
-			testFolder + "cisco93180yc-fx/S31R28-TOR1.json",
+		"cisco93180yc-fx_nobmc": {
+			testFolder + "cisco93180yc-fx_nobmc/input_nobmc.json",
+			testFolder + "cisco93180yc-fx_nobmc/S31R28-TOR1.json",
 		},
 	}
 
@@ -36,16 +36,17 @@ func TestOutputNetwork(t *testing.T) {
 
 func TestParseInterfaceObj(t *testing.T) {
 	type test struct {
+		inputJsonFile string
 		frameworkPath string
 		outputJson    []string
 	}
 	testFolder := "./testcases/"
 	testCases := map[string]test{
-		"cisco93180yc-fx": {
-			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.3/framework",
+		"cisco93180yc-fx_nobmc": {
+			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
 			outputJson: []string{
-				testFolder + "cisco93180yc-fx/S31R28-TOR1.json",
-				testFolder + "cisco93180yc-fx/S31R28-TOR2.json"},
+				testFolder + "cisco93180yc-fx_nobmc/S31R28-TOR1.json",
+				testFolder + "cisco93180yc-fx_nobmc/S31R28-TOR2.json"},
 		},
 	}
 
@@ -83,12 +84,12 @@ func TestParseBGPFramework(t *testing.T) {
 	}
 	testFolder := "./testcases/"
 	testCases := map[string]test{
-		"cisco93180yc-fx": {
-			inputJson:     testFolder + "cisco93180yc-fx/input_nobmc.json",
-			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.3/framework",
+		"cisco93180yc-fx_nobmc": {
+			inputJson:     testFolder + "cisco93180yc-fx_nobmc/input_nobmc.json",
+			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
 			outputJson: []string{
-				testFolder + "cisco93180yc-fx/S31R28-TOR1.json",
-				testFolder + "cisco93180yc-fx/S31R28-TOR2.json"},
+				testFolder + "cisco93180yc-fx_nobmc/S31R28-TOR1.json",
+				testFolder + "cisco93180yc-fx_nobmc/S31R28-TOR2.json"},
 		},
 	}
 

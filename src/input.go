@@ -34,6 +34,7 @@ func parseInterfaceJSON(interfaceFrameJson string) *InterfaceFrameworkType {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	fmt.Println(interfaceFrameJson)
 	err = json.Unmarshal(bytes, InterfaceFrameworkObj)
 	if err != nil {
 		log.Fatalln(err)

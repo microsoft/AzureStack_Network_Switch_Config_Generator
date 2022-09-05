@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 	"text/template"
 )
 
@@ -13,17 +14,27 @@ func newOutputObj() *OutputType {
 	return &OutputType{}
 }
 
-func (o *OutputType) parseInterfaceObj(frameworkPath string) {
-	interfaceFrameJson := fmt.Sprintf("%s/interface.json", frameworkPath)
-	InterfaceFrameworkObj := parseInterfaceJSON(interfaceFrameJson)
+// Framework Selection based on Device Type
+func (o *OutputType) updateOutputObj(frameworkPath string, inputObj *InputType) {
+	if o.Device.Type == DeviceType_BMC {
+		o.parseInterfaceObj(frameworkPath, DeviceType_BMC)
+	} else {
+		o.parseInterfaceObj(frameworkPath, DeviceType_TOR)
+		o.parseRoutingFramework(frameworkPath, DeviceType_TOR, inputObj)
+	}
+}
+
+func (o *OutputType) parseInterfaceObj(frameworkPath, deviceType string) {
+	var interfaceFrameJson string
+	if o.IsNoBMC {
+		interfaceFrameJson = fmt.Sprintf("%s/%s_%s_%s.%s", frameworkPath, deviceType, INTERFACE, NOBMC, JSON)
+	} else {
+		interfaceFrameJson = fmt.Sprintf("%s/%s_%s_%s.%s", frameworkPath, deviceType, INTERFACE, HASBMC, JSON)
+	}
+	InterfaceFrameworkObj := parseInterfaceJSON(strings.ToLower(interfaceFrameJson))
 	o.parseInBandPortFramework(InterfaceFrameworkObj)
 	o.parseVlanObj(InterfaceFrameworkObj)
 	o.parseLoopbackObj(InterfaceFrameworkObj)
-}
-
-func (o *OutputType) updateOutputObj(frameworkPath, templatePath string, inputObj *InputType) {
-	o.parseInterfaceObj(frameworkPath)
-	o.parseRoutingFramework(frameworkPath, inputObj)
 }
 
 func (o *OutputType) updateSettings(inputObj *InputType) {
@@ -85,21 +96,43 @@ func writeToJson(jsonFile string, outputResult interface{}) {
 }
 
 func (o *OutputType) parseTemplate(templatePath, outputConfigName string) {
-	t, err := template.ParseFiles(
-		templatePath+"/allConfig.go.tmpl",
-		templatePath+"/header.go.tmpl",
-		templatePath+"/stig.go.tmpl",
-		templatePath+"/port.go.tmpl",
-		templatePath+"/vlan.go.tmpl",
-		templatePath+"/default.go.tmpl",
-		templatePath+"/bgp.go.tmpl",
-		templatePath+"/static.go.tmpl",
-		templatePath+"/stp.go.tmpl",
-		templatePath+"/settings.go.tmpl",
-		templatePath+"/qos.go.tmpl",
-	)
-	if err != nil {
-		log.Fatalln(err)
+	var t *template.Template
+	var err error
+	if o.Device.Type == DeviceType_BMC {
+		t, err = template.ParseFiles(
+			// BMC
+			templatePath+"/bmcConfig.go.tmpl",
+			templatePath+"/header.go.tmpl",
+			templatePath+"/stig.go.tmpl",
+			templatePath+"/port.go.tmpl",
+			templatePath+"/vlan.go.tmpl",
+			templatePath+"/default.go.tmpl",
+			templatePath+"/stp.go.tmpl",
+			templatePath+"/settings.go.tmpl",
+			templatePath+"/qos.go.tmpl",
+		)
+		if err != nil {
+			log.Fatalln(err)
+		}
+	} else {
+		// TOR
+		t, err = template.ParseFiles(
+			templatePath+"/torConfig.go.tmpl",
+			templatePath+"/bmcConfig.go.tmpl",
+			templatePath+"/header.go.tmpl",
+			templatePath+"/stig.go.tmpl",
+			templatePath+"/port.go.tmpl",
+			templatePath+"/vlan.go.tmpl",
+			templatePath+"/default.go.tmpl",
+			templatePath+"/bgp.go.tmpl",
+			templatePath+"/static.go.tmpl",
+			templatePath+"/stp.go.tmpl",
+			templatePath+"/settings.go.tmpl",
+			templatePath+"/qos.go.tmpl",
+		)
+		if err != nil {
+			log.Fatalln(err)
+		}
 	}
 
 	// err = t.Execute(os.Stdout, o)

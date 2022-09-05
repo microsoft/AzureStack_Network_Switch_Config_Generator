@@ -10,6 +10,7 @@
             "100.100.10.11"
         ]
     },
+    "isNoBMC": true,
     "Devices": [
         {
             "Make": "Cisco",
@@ -61,13 +62,13 @@
         },
         {
             "VlanID": 25,
-            "Group": "OOB",
-            "Name": "OOB",
+            "Group": "BMCMgmt",
+            "Name": "BMCMgmt",
             "Subnet": "172.17.0.0/26",
             "Shutdown": false,
             "SubnetAssignment": [
                 {
-                    "Name": "OOB",
+                    "Name": "BMCMgmt",
                     "Netmask": 26,
                     "IPAssignment": [
                         {
@@ -88,13 +89,13 @@
         },
         {
             "VlanID": 8,
-            "Group": "Management",
-            "Name": "Management",
+            "Group": "InfraMgmt",
+            "Name": "InfraMgmt",
             "Subnet": "100.100.10.0/24",
             "Shutdown": false,
             "SubnetAssignment": [
                 {
-                    "Name": "Management",
+                    "Name": "InfraMgmt",
                     "Netmask": 24,
                     "IPAssignment": [
                         {

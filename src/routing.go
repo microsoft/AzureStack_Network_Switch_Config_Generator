@@ -25,9 +25,9 @@ func parseRoutingJSON(routingFrameJson string) *RoutingType {
 	return routingFrameworkObj
 }
 
-func (o *OutputType) parseRoutingFramework(frameworkPath string, inputJsonObj *InputType) {
-	routingFrameJson := fmt.Sprintf("%s/routing.json", frameworkPath)
-	routingFrameworkObj := parseRoutingJSON(routingFrameJson)
+func (o *OutputType) parseRoutingFramework(frameworkPath, deviceType string, inputJsonObj *InputType) {
+	routingFrameJson := fmt.Sprintf("%s/%s_%s.%s", frameworkPath, deviceType, ROUTING, JSON)
+	routingFrameworkObj := parseRoutingJSON(strings.ToLower(routingFrameJson))
 	// Use StaticRouting attribute to update StaticRoute or BGPRoute
 	if o.Device.StaticRouting {
 		// Static Routing

@@ -3,6 +3,7 @@ package main
 type InputType struct {
 	Version   string                 `json:"Version"`
 	Settings  map[string]interface{} `json:"Settings"`
+	IsNoBMC   bool                   `json:"IsNoBMC"`
 	Devices   []DeviceType           `json:"Devices"`
 	Supernets interface{}            `json:"Supernets"`
 }
@@ -100,6 +101,7 @@ type InterfaceFrameworkType struct {
 
 type OutputType struct {
 	Device    DeviceType             `json:"Device"`
+	IsNoBMC   bool                   `json:"IsNoBMC"`
 	Settings  map[string]interface{} `json:"Settings"`
 	Port      []PortType             `json:"Port"`
 	Vlan      []VlanType             `json:"Vlan"`

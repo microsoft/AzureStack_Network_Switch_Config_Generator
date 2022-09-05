@@ -62,6 +62,30 @@
                 ],
                 "UpdateSource": "TORX_Loopback0",
                 "Shutdown": false
+            },
+            {
+                "Description": "P2P_TORX_To_BMC/BMC",
+                "EnablePassword": false,
+                "NeighborAsn": "BMC",
+                "NeighborIPAddress": "P2P_TORX_To_Border2/Border2",
+                "PrefixList": [
+                    {
+                        "Name": "ExternalPrefix",
+                        "Direction": "in"
+                    },
+                    {
+                        "Name": "ExternalPrefix",
+                        "Direction": "out"
+                    }
+                ],
+                "RouteMap": [
+                    {
+                        "Name": "",
+                        "Direction": ""
+                    }
+                ],
+                "UpdateSource": "TORX_Loopback0",
+                "Shutdown": false
             }
         ],
         "PrefixListName": [

@@ -28,8 +28,12 @@ interface {{ .PortName }} {{ .Port }}
   {{if eq .PortType "Trunk" -}} 
   switchport
   switchport mode trunk
+  {{if .UntagVlan -}}
   switchport trunk native vlan {{ .UntagVlan }}
+  {{end -}}
+  {{if .TagVlan -}}
   switchport trunk allowed vlan {{.TagVlan}}
+  {{end -}}
   no logging event port link-status
   spanning-tree port type edge trunk
   {{if .Others.ServicePolicyInput -}}
