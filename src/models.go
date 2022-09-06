@@ -77,19 +77,7 @@ type InterfaceFrameworkType struct {
 		TagVlan     []string          `json:"TagVlan"`
 		Others      map[string]string `json:"Others"`
 	} `json:"Port"`
-	Vlan []struct {
-		Group             string `json:"Group"`
-		IPAssignment      string `json:"IPAssignment"`
-		Mtu               int    `json:"MTU"`
-		Native            bool   `json:"Native"`
-		VirtualAssignment struct {
-			PriorityID   int    `json:"PriorityId"`
-			IPAssignment string `json:"IPAssignment"`
-		} `json:"VirtualAssignment"`
-		IPHelper []string      `json:"IPHelper"`
-		ACL      []interface{} `json:"ACL"`
-		Shutdown bool          `json:"Shutdown,omitempty"`
-	} `json:"VLAN"`
+	Vlan        []VlanType     `json:"VLAN"`
 	Loopback    []LoopbackType `json:"Loopback"`
 	PortChannel []struct {
 		Name     string        `json:"Name"`
@@ -129,7 +117,11 @@ type VlanType struct {
 	Group     string `json:"Group"`
 	IPAddress string `json:"IPAddress"`
 	Mtu       int    `json:"MTU"`
-	Shutdown  bool   `json:"Shutdown"`
+	Vip       struct {
+		PriorityId int    `json:"PriorityId"`
+		VIPAddress string `json:"VIPAddress"`
+	} `json:"VIP"`
+	Shutdown bool `json:"Shutdown"`
 }
 
 type LoopbackType struct {

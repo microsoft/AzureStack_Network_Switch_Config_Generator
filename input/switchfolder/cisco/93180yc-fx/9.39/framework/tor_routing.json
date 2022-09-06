@@ -5,9 +5,9 @@
         "IPv4Network": [
             "Tenant0",
             "Tenant1",
-            "Management",
+            "InfraMgmt",
             "SwitchMgmt",
-            "OOB"
+            "BMCMgmt"
         ],
         "EnableDefaultOriginate": false,
         "RoutePrefix": {
@@ -64,10 +64,10 @@
                 "Shutdown": false
             },
             {
-                "Description": "P2P_TORX_To_BMC/BMC",
+                "Description": "P2P_TORX_To_TORY/TORY",
                 "EnablePassword": false,
-                "NeighborAsn": "BMC",
-                "NeighborIPAddress": "P2P_TORX_To_Border2/Border2",
+                "NeighborAsn": "TORY",
+                "NeighborIPAddress": "P2P_TORX_To_TORY/TORY",
                 "PrefixList": [
                     {
                         "Name": "ExternalPrefix",

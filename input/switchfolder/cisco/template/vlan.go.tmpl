@@ -16,11 +16,16 @@ interface vlan{{.VlanID}}
   shutdown 
   {{ else -}} 
   no shutdown
-  {{ if ne .IPAddress "" -}}
+  {{ end -}}
+  {{ if .IPAddress -}}
   ip address {{ .IPAddress }}
   no ip redirects
   no ipv6 redirects
-  {{ else -}}
+  {{ if .Vip.VIPAddress -}}
+  hsrp version 2
+    hsrp {{.VlanID}}
+    priority {{.Vip.PriorityId}} forwarding-threshold lower 1 upper 150
+    ip {{.Vip.VIPAddress}}
   {{ end -}}
   {{- end}}
 {{ end -}}

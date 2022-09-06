@@ -722,6 +722,18 @@
   ],
   "VLAN": [
     {
+      "Group": "Unused",
+      "Shutdown": true,
+      "IPAssignment": "",
+      "MTU": 1500,
+      "VirtualAssignment": {
+        "PriorityId": null,
+        "IPAssignment": ""
+      },
+      "IPHelper": [],
+      "ACL": []
+    },
+    {
       "Group": "BMCMgmt",
       "Shutdown": false,
       "IPAssignment": "BMC_IPv4",

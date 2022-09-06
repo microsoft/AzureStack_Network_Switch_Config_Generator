@@ -71,15 +71,16 @@
             "SubnetAssignment": []
         },
         {
-            "VlanID": 25,
+            "VlanID": 125,
             "Group": "BMCMgmt",
             "Name": "BMCMgmt",
-            "Subnet": "172.17.0.0/26",
+            "Subnet": "100.71.28.64/26",
             "Shutdown": false,
             "SubnetAssignment": [
                 {
                     "Name": "BMCMgmt",
                     "Netmask": 26,
+                    "IPSize": 4,
                     "IPAssignment": [
                         {
                             "Name": "Gateway",
@@ -111,6 +112,7 @@
                 {
                     "Name": "InfraMgmt",
                     "Netmask": 24,
+                    "IPSize": 3,
                     "IPAssignment": [
                         {
                             "Name": "Gateway",
@@ -138,6 +140,7 @@
                 {
                     "Name": "Tenant0",
                     "Netmask": 24,
+                    "IPSize": 3,
                     "IPAssignment": [
                         {
                             "Name": "Gateway",
@@ -165,6 +168,7 @@
                 {
                     "Name": "Tenant1",
                     "Netmask": 24,
+                    "IPSize": 3,
                     "IPAssignment": [
                         {
                             "Name": "Gateway",

@@ -16,13 +16,9 @@ const (
 	DeviceType_TOR = "TOR"
 	DeviceType_BMC = "BMC"
 	// No BMC Framework
-	NOBMC                         = "nobmc"
-	TOR_NOBMC_INTERFACE_FRAMEWORK = "tor_nobmc_interface.json"
-	TOR_NOBMC_ROUTING_FRAMEWORK   = "tor_nobmc_routing.json"
+	NOBMC = "nobmc"
 	// Has BMC Framework
-	HASBMC                         = "hasbmc"
-	TOR_HASBMC_INTERFACE_FRAMEWORK = "tor_hasbmc_interface.json"
-	BMC_INTERFACE_FRAMEWORK        = "bmc_interface.json"
+	HASBMC = "hasbmc"
 	// PortType Name
 	PortType_BMC_MGMT   = "BMCMgmt"
 	PortType_IP         = "IP"
@@ -42,7 +38,7 @@ func main() {
 	// Set Log Output Options - 2022/08/24 21:51:10 main.go:58:
 	log.SetFlags(log.Lshortfile | log.Ldate | log.Ltime)
 	// Input Variables
-	inputJsonFile := flag.String("inputJsonFile", "../input/input_hasbmc.json", "File path of switch deploy input.json")
+	inputJsonFile := flag.String("inputJsonFile", "../input/input_nobmc.json", "File path of switch deploy input.json")
 	switchFolder := flag.String("switchFolder", "../input/switchfolder", "Folder path of switch frameworks and templates")
 	outputFolder := flag.String("outputFolder", "../output", "Folder path of switch configurations")
 

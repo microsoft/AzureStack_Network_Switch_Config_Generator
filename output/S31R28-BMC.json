@@ -43,7 +43,7 @@
    "MTU": 1500,
    "Shutdown": false,
    "IPAddress": "",
-   "UntagVlan": 25,
+   "UntagVlan": 125,
    "TagVlan": "",
    "Others": {}
   },
@@ -55,7 +55,7 @@
    "MTU": 1500,
    "Shutdown": false,
    "IPAddress": "",
-   "UntagVlan": 25,
+   "UntagVlan": 125,
    "TagVlan": "",
    "Others": {}
   },
@@ -67,7 +67,7 @@
    "MTU": 1500,
    "Shutdown": false,
    "IPAddress": "",
-   "UntagVlan": 25,
+   "UntagVlan": 125,
    "TagVlan": "",
    "Others": {}
   },
@@ -79,7 +79,7 @@
    "MTU": 1500,
    "Shutdown": false,
    "IPAddress": "",
-   "UntagVlan": 25,
+   "UntagVlan": 125,
    "TagVlan": "",
    "Others": {}
   },
@@ -583,7 +583,7 @@
    "MTU": 1500,
    "Shutdown": false,
    "IPAddress": "",
-   "UntagVlan": 25,
+   "UntagVlan": 125,
    "TagVlan": "",
    "Others": {}
   },
@@ -644,7 +644,7 @@
    "Shutdown": false,
    "IPAddress": "",
    "UntagVlan": 0,
-   "TagVlan": "25",
+   "TagVlan": "125",
    "Others": {
     "port-channel": "102"
    }
@@ -658,7 +658,7 @@
    "Shutdown": false,
    "IPAddress": "",
    "UntagVlan": 0,
-   "TagVlan": "25",
+   "TagVlan": "125",
    "Others": {
     "PortChannel": "102"
    }
@@ -670,55 +670,15 @@
    "VlanID": 2,
    "Group": "Unused",
    "IPAddress": "",
-   "MTU": 0,
+   "MTU": 1500,
    "Shutdown": true
   },
   {
    "VlanName": "BMCMgmt",
-   "VlanID": 25,
+   "VlanID": 125,
    "Group": "BMCMgmt",
    "IPAddress": "172.17.0.4/26",
    "MTU": 1500,
-   "Shutdown": false
-  },
-  {
-   "VlanName": "InfraMgmt",
-   "VlanID": 8,
-   "Group": "InfraMgmt",
-   "IPAddress": "",
-   "MTU": 0,
-   "Shutdown": false
-  },
-  {
-   "VlanName": "Tenant0",
-   "VlanID": 7,
-   "Group": "Compute",
-   "IPAddress": "",
-   "MTU": 0,
-   "Shutdown": false
-  },
-  {
-   "VlanName": "Tenant1",
-   "VlanID": 15,
-   "Group": "Compute",
-   "IPAddress": "",
-   "MTU": 0,
-   "Shutdown": false
-  },
-  {
-   "VlanName": "Storage1",
-   "VlanID": 711,
-   "Group": "Storage",
-   "IPAddress": "",
-   "MTU": 0,
-   "Shutdown": false
-  },
-  {
-   "VlanName": "Storage2",
-   "VlanID": 712,
-   "Group": "Storage",
-   "IPAddress": "",
-   "MTU": 0,
    "Shutdown": false
   }
  ],
@@ -734,7 +694,7 @@
    "IPAssignment": []
   },
   {
-   "VlanID": 25,
+   "VlanID": 125,
    "Group": "BMCMgmt",
    "Name": "BMCMgmt",
    "Subnet": "172.17.0.0/26",

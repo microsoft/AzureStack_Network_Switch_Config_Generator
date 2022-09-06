@@ -742,11 +742,11 @@
   "VLAN": [
     {
       "Group": "Compute",
-      "IPAssignment": "TORX_IPv4",
+      "IPAddress": "TORX_IPv4",
       "MTU": 9000,
-      "VirtualAssignment": {
+      "VIP": {
         "PriorityId": 150,
-        "IPAssignment": "Gateway"
+        "VIPAddress": "Gateway"
       },
       "IPHelper": [
         "DVM"
@@ -755,11 +755,11 @@
     },
     {
       "Group": "InfraMgmt",
-      "IPAssignment": "TORX_IPv4",
+      "IPAddress": "TORX_IPv4",
       "MTU": 9000,
-      "VirtualAssignment": {
+      "VIP": {
         "PriorityId": 150,
-        "IPAssignment": "Gateway"
+        "VIPAddress": "Gateway"
       },
       "IPHelper": [],
       "ACL": [
@@ -775,11 +775,11 @@
     },
     {
       "Group": "Storage",
-      "IPAssignment": "",
+      "IPAddress": "",
       "MTU": 9000,
-      "VirtualAssignment": {
+      "VIP": {
         "PriorityId": null,
-        "IPAssignment": ""
+        "VIPAddress": ""
       },
       "IPHelper": [],
       "ACL": []
@@ -787,11 +787,11 @@
     {
       "Group": "Unused",
       "Shutdown": true,
-      "IPAssignment": "",
+      "IPAddress": "",
       "MTU": 9000,
-      "VirtualAssignment": {
+      "VIP": {
         "PriorityId": null,
-        "IPAssignment": ""
+        "VIPAddress": ""
       },
       "IPHelper": [],
       "ACL": []
@@ -799,11 +799,11 @@
     {
       "Group": "BMCMgmt",
       "Shutdown": true,
-      "IPAssignment": "TORX_IPv4",
+      "IPAddress": "TORX_IPv4",
       "MTU": 9000,
-      "VirtualAssignment": {
-        "PriorityId": null,
-        "IPAssignment": ""
+      "VIP": {
+        "PriorityId": 150,
+        "VIPAddress": "Gateway"
       },
       "IPHelper": [],
       "ACL": []
@@ -811,9 +811,30 @@
   ],
   "PortChannel": [
     {
-      "Name": "BMC_Mgmt_PC",
-      "ID": 102,
+      "Name": "PO50",
+      "Description": "MLAG Heartbeat and iBGP TOR1-TOR2",
+      "ID": 50,
+      "PortType": "IP",
+      "IPAddress": "TORX_IPv4",
+      "MTU": 9216,
+      "Ports": [
+        "1/41",
+        "1/42"
+      ],
+      "Settings": []
+    },
+    {
+      "Name": "PO101",
+      "Description": "MLAG_PEER",
+      "ID": 101,
       "PortType": "Trunk",
+      "IPAddress": "",
+      "MTU": 9216,
+      "Ports": [
+        "1/49",
+        "1/50",
+        "1/51"
+      ],
       "Settings": []
     }
   ]

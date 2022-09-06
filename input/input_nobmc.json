@@ -18,7 +18,7 @@
             "Hostname": "S31R28-TOR1",
             "ASN": 65000,
             "Model": "93180YC-FX",
-            "Firmware": "9.3",
+            "Firmware": "9.39",
             "GenerateDeviceConfig": true,
             "StaticRouting": true
         },
@@ -28,7 +28,7 @@
             "Hostname": "S31R28-TOR2",
             "ASN": 65000,
             "Model": "93180YC-FX",
-            "Firmware": "9.3",
+            "Firmware": "9.39",
             "GenerateDeviceConfig": true,
             "StaticRouting": true
         },
@@ -61,15 +61,16 @@
             "SubnetAssignment": []
         },
         {
-            "VlanID": 25,
+            "VlanID": 125,
             "Group": "BMCMgmt",
             "Name": "BMCMgmt",
-            "Subnet": "172.17.0.0/26",
+            "Subnet": "100.71.28.64/26",
             "Shutdown": false,
             "SubnetAssignment": [
                 {
                     "Name": "BMCMgmt",
                     "Netmask": 26,
+                    "IPSize": 3,
                     "IPAssignment": [
                         {
                             "Name": "Gateway",
@@ -97,6 +98,7 @@
                 {
                     "Name": "InfraMgmt",
                     "Netmask": 24,
+                    "IPSize": 3,
                     "IPAssignment": [
                         {
                             "Name": "Gateway",
@@ -124,6 +126,7 @@
                 {
                     "Name": "Tenant0",
                     "Netmask": 24,
+                    "IPSize": 3,
                     "IPAssignment": [
                         {
                             "Name": "Gateway",
@@ -151,6 +154,7 @@
                 {
                     "Name": "Tenant1",
                     "Netmask": 24,
+                    "IPSize": 3,
                     "IPAssignment": [
                         {
                             "Name": "Gateway",
@@ -270,6 +274,21 @@
                         {
                             "Name": "TOR2_Loopback0",
                             "Position": 0
+                        }
+                    ]
+                },
+                {
+                    "Name": "PO50",
+                    "Netmask": 30,
+                    "IPSize": 2,
+                    "IPAssignment": [
+                        {
+                            "Name": "TOR1_PO50",
+                            "Position": 1
+                        },
+                        {
+                            "Name": "TOR2_PO50",
+                            "Position": 2
                         }
                     ]
                 }

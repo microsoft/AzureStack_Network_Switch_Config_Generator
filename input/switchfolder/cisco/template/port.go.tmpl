@@ -2,7 +2,7 @@
 ! port.go.tmpl-port
 {{ range . -}} 
 
-{{if eq .PortType "OOB" -}} 
+{{if eq .PortType "BMCMgmt" -}} 
 interface {{ .PortName }}
   description {{ .Description }}
   no ip redirects
@@ -18,13 +18,14 @@ interface {{ .PortName }} {{ .Port }}
   no switchport
   ip address {{ .IPAddress }}
   {{end -}}
-
+  {{- /*Access Port*/ -}}
   {{if eq .PortType "Access" -}} 
   switchport
   switchport access vlan {{ .UntagVlan }}
+  spanning-tree port type edge
   no logging event port link-status
-  {{end -}}
-  {{- /*Trunk Section*/ -}}
+  {{end -}}{{- /*Access Port*/ -}}
+  {{- /*Trunk Port*/ -}}
   {{if eq .PortType "Trunk" -}} 
   switchport
   switchport mode trunk
@@ -40,7 +41,7 @@ interface {{ .PortName }} {{ .Port }}
   service-policy type qos input {{.Others.ServicePolicyInput}}
   {{end  -}}
   priority-flow-control mode on
-  {{end -}}
+  {{end -}}{{- /*Trunk Port*/ -}}
   {{if .Shutdown -}} shutdown {{else -}} no shutdown {{end}}
 {{end }}
 {{end -}}
