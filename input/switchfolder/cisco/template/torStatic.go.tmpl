@@ -19,7 +19,7 @@ route-map {{.Name}} {{.Action}} {{.Index}}
 !!!
 !!! Static Route
 !!!
-{{- range .Network -}}
+{{ range .Network -}}
 ip route {{.DstIPAddress}} {{.NextHop}} name {{.Name}}
 {{end -}}
 {{ end }}

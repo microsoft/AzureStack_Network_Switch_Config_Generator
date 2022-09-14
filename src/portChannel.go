@@ -12,9 +12,9 @@ func (o *OutputType) parsePortchannelObj(i *InterfaceFrameworkType) {
 	for i, item := range o.PortChannel {
 		if item.Type == IP && len(item.IPAddress) > 0 {
 			PCIPName := strings.Replace(item.IPAddress, "TORX", TORX, -1)
-			PCIPAddress := o.getSwitchMgmtIPbyName(PCIPName)
+			PCIPAddress := o.getIPbyName(PCIPName, SWITCH_MGMT)
 			PCNbrIPName := strings.Replace(item.NbrIPAddress, "TORY", TORY, -1)
-			PCNbrIPAddress := o.getSwitchMgmtIPbyName(PCNbrIPName)
+			PCNbrIPAddress := o.getIPbyName(PCNbrIPName, SWITCH_MGMT)
 			o.PortChannel[i].IPAddress = PCIPAddress
 			o.PortChannel[i].NbrIPAddress = PCNbrIPAddress
 		} else if item.Type == TRUNK {

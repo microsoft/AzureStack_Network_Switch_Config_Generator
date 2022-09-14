@@ -40,7 +40,7 @@ func (o *OutputType) parseRoutingFramework(frameworkPath, deviceType string, inp
 		routingFrameworkObj.updateBgpNetwork(o)
 		routingFrameworkObj.updateBGPRoutingPolicy(o)
 		routerIDName := strings.Replace(routingFrameworkObj.Bgp.RouterID, "TORX", TORX, -1)
-		RouterIDIPAddress := o.getSwitchMgmtIPbyName(routerIDName)
+		RouterIDIPAddress := o.getIPbyName(routerIDName, SWITCH_MGMT)
 		routingFrameworkObj.Bgp.RouterID = strings.Split(RouterIDIPAddress, "/")[0]
 		routingFrameworkObj.updateBgpNeighbor(o, inputJsonObj)
 	}
@@ -83,12 +83,12 @@ func (r *RoutingType) updateBgpNeighbor(outputObj *OutputType, inputJsonObj *Inp
 		r.Bgp.IPv4Neighbor[k].NeighborAsn = nbrAsn
 		nbrIPAddressName := strings.Replace(v.NeighborIPAddress, "TORX", TORX, -1)
 		nbrIPAddressName = strings.Replace(nbrIPAddressName, "TORY", TORY, -1)
-		IPv4IPNet := outputObj.getSwitchMgmtIPbyName(nbrIPAddressName)
+		IPv4IPNet := outputObj.getIPbyName(nbrIPAddressName, SWITCH_MGMT)
 		r.Bgp.IPv4Neighbor[k].NeighborIPAddress = strings.Split(IPv4IPNet, "/")[0]
 		r.Bgp.IPv4Neighbor[k].Description = nbrIPAddressName
 
 		updateSourceName := replaceTORXName(v.UpdateSource, outputObj.Device.Type)
-		r.Bgp.IPv4Neighbor[k].UpdateSource = outputObj.getSwitchMgmtIPbyName(updateSourceName)
+		r.Bgp.IPv4Neighbor[k].UpdateSource = outputObj.getIPbyName(updateSourceName, SWITCH_MGMT)
 	}
 }
 
@@ -98,9 +98,12 @@ func (r *RoutingType) updateStaticNetwork(outputObj *OutputType) {
 		// Replace template name with right TOR number.
 		routeName := strings.Replace(staticItem.Name, "TORX", TORX, -1)
 		if len(staticItem.NextHop) != 0 {
-			// Update null 0 static route
+			// Update null 0 static route or Get BMCmgmt VIP
+			if strings.Contains(staticItem.NextHop, DeviceType_BMC) {
+				staticItem.NextHop = outputObj.getIPbyName(staticItem.NextHop, BMC_MGMT)
+			}
 			tmp = append(tmp, StaticNetworkType{
-				DstIPAddress: outputObj.getSupernetIPbyName(routeName),
+				DstIPAddress: outputObj.getSupernetIPbyName(staticItem.DstIPAddress),
 				NextHop:      staticItem.NextHop,
 				Name:         routeName,
 			})
@@ -108,7 +111,7 @@ func (r *RoutingType) updateStaticNetwork(outputObj *OutputType) {
 			// update default route to border
 			tmp = append(tmp, StaticNetworkType{
 				DstIPAddress: outputObj.getSupernetIPbyName(staticItem.DstIPAddress),
-				NextHop:      outputObj.getSwitchMgmtIPbyName(routeName),
+				NextHop:      outputObj.getIPbyName(routeName, SWITCH_MGMT),
 				Name:         routeName,
 			})
 		}

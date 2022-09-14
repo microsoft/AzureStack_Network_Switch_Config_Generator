@@ -18,6 +18,7 @@ func newOutputObj() *OutputType {
 func (o *OutputType) updateOutputObj(frameworkPath string, inputObj *InputType) {
 	if o.Device.Type == DeviceType_BMC {
 		o.parseInterfaceObj(frameworkPath, DeviceType_BMC)
+		o.parseRoutingFramework(frameworkPath, DeviceType_BMC, inputObj)
 	} else {
 		o.parseInterfaceObj(frameworkPath, DeviceType_TOR)
 		o.parseRoutingFramework(frameworkPath, DeviceType_TOR, inputObj)
@@ -45,9 +46,9 @@ func (o *OutputType) updateSettings(inputObj *InputType) {
 	settingMap := inputObj.Settings
 	// Add VPC srcIP and dstIP
 	po50TOR1IPName := fmt.Sprintf("%s_%s", TOR1, IBGP_PO)
-	po50TOR1IP := o.getSwitchMgmtIPbyName(po50TOR1IPName)
+	po50TOR1IP := o.getIPbyName(po50TOR1IPName, SWITCH_MGMT)
 	po50TOR2IPName := fmt.Sprintf("%s_%s", TOR2, IBGP_PO)
-	po50TOR2IP := o.getSwitchMgmtIPbyName(po50TOR2IPName)
+	po50TOR2IP := o.getIPbyName(po50TOR2IPName, SWITCH_MGMT)
 	if o.Device.Type == TOR1 {
 		settingMap[VPC] = []string{po50TOR1IP, po50TOR2IP}
 	} else {
@@ -122,6 +123,7 @@ func (o *OutputType) parseTemplate(templatePath, outputConfigName string) {
 			templatePath+"/settings.go.tmpl",
 			templatePath+"/qos.go.tmpl",
 			templatePath+"/portchannel.go.tmpl",
+			templatePath+"/bmcStatic.go.tmpl",
 		)
 		if err != nil {
 			log.Fatalln(err)

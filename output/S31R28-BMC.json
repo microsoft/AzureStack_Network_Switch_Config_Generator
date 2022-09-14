@@ -7,7 +7,7 @@
   "Model": "9348GC-FXP",
   "Firmware": "9.39",
   "GenerateDeviceConfig": true,
-  "StaticRouting": false,
+  "StaticRouting": true,
   "Username": "aszadmin-vlzxb",
   "Password": "c2!cuh%xMC8*aRt9"
  },
@@ -25,8 +25,8 @@
    "100.100.10.11"
   ],
   "VPC": [
-   "",
-   ""
+   "TOR2_PO50",
+   "TOR1_PO50"
   ]
  },
  "Port": [
@@ -724,7 +724,35 @@
   }
  ],
  "Loopback": null,
- "Routing": null,
+ "Routing": {
+  "BGP": {
+   "BGPAsn": "",
+   "RouterID": "",
+   "IPv4Network": null,
+   "EnableDefaultOriginate": false,
+   "RoutePrefix": {
+    "MaxiPrefix": 0,
+    "ErrorAction": ""
+   },
+   "IPv4Neighbor": null,
+   "PrefixListName": null
+  },
+  "Static": {
+   "PrefixListName": [],
+   "RouteMapName": [],
+   "Network": [
+    {
+     "DstIPAddress": "0.0.0.0/0",
+     "NextHop": "100.71.28.65/26",
+     "Name": "GlobalDefaultRoute"
+    }
+   ]
+  },
+  "RoutingPolicy": {
+   "PrefixList": [],
+   "RouteMap": null
+  }
+ },
  "Supernets": [
   {
    "VlanID": 2,

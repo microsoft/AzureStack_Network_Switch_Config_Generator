@@ -87,12 +87,12 @@
         ],
         "Network": [
             {
-                "DstIPAddress": "",
+                "DstIPAddress": "Tenant0",
                 "NextHop": "null 0",
                 "Name": "Tenant0"
             },
             {
-                "DstIPAddress": "",
+                "DstIPAddress": "Tenant1",
                 "NextHop": "null 0",
                 "Name": "Tenant1"
             },
