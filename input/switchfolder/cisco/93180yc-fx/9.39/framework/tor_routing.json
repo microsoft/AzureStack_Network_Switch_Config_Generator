@@ -1,6 +1,6 @@
 {
     "BGP": {
-        "BGPAsn": 65000,
+        "BGPAsn": "TORX",
         "RouterID": "TORX_Loopback0",
         "IPv4Network": [
             "Tenant0",
@@ -64,26 +64,12 @@
                 "Shutdown": false
             },
             {
-                "Description": "P2P_TORX_To_TORY/TORY",
+                "Description": "iBGPPeer_TORX_To_TORY/TORY",
                 "EnablePassword": false,
                 "NeighborAsn": "TORY",
-                "NeighborIPAddress": "P2P_TORX_To_TORY/TORY",
-                "PrefixList": [
-                    {
-                        "Name": "ExternalPrefix",
-                        "Direction": "in"
-                    },
-                    {
-                        "Name": "ExternalPrefix",
-                        "Direction": "out"
-                    }
-                ],
-                "RouteMap": [
-                    {
-                        "Name": "",
-                        "Direction": ""
-                    }
-                ],
+                "NeighborIPAddress": "PO50/TORY_PO50",
+                "PrefixList": [],
+                "RouteMap": [],
                 "UpdateSource": "TORX_Loopback0",
                 "Shutdown": false
             }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strconv"
 	"strings"
 )
 
@@ -35,10 +36,10 @@ func (o *OutputType) parseRoutingFramework(frameworkPath, deviceType string, inp
 		routingFrameworkObj.updateStaticNetwork(o)
 	} else {
 		// BGP Routing
-		routingFrameworkObj.Bgp.BGPAsn = o.Device.Asn
+		routingFrameworkObj.Bgp.BGPAsn = strconv.Itoa(o.Device.Asn)
 		routingFrameworkObj.updateBgpNetwork(o)
 		routingFrameworkObj.updateBGPRoutingPolicy(o)
-		routerIDName := strings.Replace(routingFrameworkObj.Bgp.RouterID, "TORX", o.Device.Type, -1)
+		routerIDName := strings.Replace(routingFrameworkObj.Bgp.RouterID, "TORX", TORX, -1)
 		RouterIDIPAddress := o.getSwitchMgmtIPbyName(routerIDName)
 		routingFrameworkObj.Bgp.RouterID = strings.Split(RouterIDIPAddress, "/")[0]
 		routingFrameworkObj.updateBgpNeighbor(o, inputJsonObj)
@@ -74,12 +75,14 @@ func (r *RoutingType) updateBGPRoutingPolicy(outputObj *OutputType) {
 
 func (r *RoutingType) updateBgpNeighbor(outputObj *OutputType, inputJsonObj *InputType) {
 	for k, v := range r.Bgp.IPv4Neighbor {
-		nbrAsn, err := inputJsonObj.getBgpASN(v.NeighborAsn)
+		nbrASNName := strings.Replace(v.NeighborAsn, "TORY", TORY, -1)
+		nbrAsn, err := inputJsonObj.getBgpASN(nbrASNName)
 		if err != nil {
 			log.Fatalln(err)
 		}
 		r.Bgp.IPv4Neighbor[k].NeighborAsn = nbrAsn
-		nbrIPAddressName := replaceTORXName(v.NeighborIPAddress, outputObj.Device.Type)
+		nbrIPAddressName := strings.Replace(v.NeighborIPAddress, "TORX", TORX, -1)
+		nbrIPAddressName = strings.Replace(nbrIPAddressName, "TORY", TORY, -1)
 		IPv4IPNet := outputObj.getSwitchMgmtIPbyName(nbrIPAddressName)
 		r.Bgp.IPv4Neighbor[k].NeighborIPAddress = strings.Split(IPv4IPNet, "/")[0]
 		r.Bgp.IPv4Neighbor[k].Description = nbrIPAddressName
@@ -93,8 +96,7 @@ func (r *RoutingType) updateStaticNetwork(outputObj *OutputType) {
 	tmp := []StaticNetworkType{}
 	for _, staticItem := range r.Static.Network {
 		// Replace template name with right TOR number.
-		routeName := strings.Replace(staticItem.Name, "TORX", outputObj.Device.Type, -1)
-
+		routeName := strings.Replace(staticItem.Name, "TORX", TORX, -1)
 		if len(staticItem.NextHop) != 0 {
 			// Update null 0 static route
 			tmp = append(tmp, StaticNetworkType{

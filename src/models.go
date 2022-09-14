@@ -149,7 +149,7 @@ type RoutingType struct {
 }
 
 type BGPType struct {
-	BGPAsn                 int      `json:"BGPAsn"`
+	BGPAsn                 string   `json:"BGPAsn"`
 	RouterID               string   `json:"RouterID"`
 	IPv4Network            []string `json:"IPv4Network"`
 	EnableDefaultOriginate bool     `json:"EnableDefaultOriginate"`

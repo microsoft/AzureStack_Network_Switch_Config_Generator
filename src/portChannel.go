@@ -9,13 +9,6 @@ import (
 
 func (o *OutputType) parsePortchannelObj(i *InterfaceFrameworkType) {
 	o.PortChannel = i.PortChannel
-	deviceType := o.Device.Type
-	var TORX, TORY string
-	if deviceType == TOR1 {
-		TORX, TORY = "TOR1", "TOR2"
-	} else {
-		TORX, TORY = "TOR2", "TOR1"
-	}
 	for i, item := range o.PortChannel {
 		if item.Type == IP && len(item.IPAddress) > 0 {
 			PCIPName := strings.Replace(item.IPAddress, "TORX", TORX, -1)
@@ -24,7 +17,6 @@ func (o *OutputType) parsePortchannelObj(i *InterfaceFrameworkType) {
 			PCNbrIPAddress := o.getSwitchMgmtIPbyName(PCNbrIPName)
 			o.PortChannel[i].IPAddress = PCIPAddress
 			o.PortChannel[i].NbrIPAddress = PCNbrIPAddress
-
 		} else if item.Type == TRUNK {
 			tmpVlans := []string{}
 			vlanList := strings.Split(item.VLANs, ",")
@@ -39,11 +31,11 @@ func (o *OutputType) parsePortchannelObj(i *InterfaceFrameworkType) {
 			}
 			o.PortChannel[i].VLANs = strings.Join(tmpVlans, ",")
 		}
-		o.UpdatePortAttrbyPC(&item)
+		o.UpdatePortAttrbyPC(o.PortChannel[i])
 	}
 }
 
-func (o *OutputType) UpdatePortAttrbyPC(p *PortChannelType) {
+func (o *OutputType) UpdatePortAttrbyPC(p PortChannelType) {
 	if len(p.Members) == 0 {
 		log.Fatalf("PortChannel %d has 0 members\n", p.ID)
 	}

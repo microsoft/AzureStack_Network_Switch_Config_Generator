@@ -18,6 +18,8 @@
 
 {{ template "interface_vlan" .Vlan -}}
 
+{{ template "port_channel" .PortChannel -}}
+
 {{ template "port" .Port -}}
 
 {{ template "default_errdisable_setting" -}}

@@ -121,6 +121,7 @@ func (o *OutputType) parseTemplate(templatePath, outputConfigName string) {
 			templatePath+"/stp.go.tmpl",
 			templatePath+"/settings.go.tmpl",
 			templatePath+"/qos.go.tmpl",
+			templatePath+"/portchannel.go.tmpl",
 		)
 		if err != nil {
 			log.Fatalln(err)

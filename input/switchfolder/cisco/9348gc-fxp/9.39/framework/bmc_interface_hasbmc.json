@@ -695,12 +695,8 @@
       "Shutdown": false,
       "IPAddress": "",
       "UntagVlan": "",
-      "TagVlan": [
-        "BMCMgmt"
-      ],
-      "Others": {
-        "port-channel": "102"
-      }
+      "TagVlan": [],
+      "Others": {}
     },
     {
       "ID": 52,
@@ -712,12 +708,8 @@
       "Shutdown": false,
       "IPAddress": "",
       "UntagVlan": "",
-      "TagVlan": [
-        "BMCMgmt"
-      ],
-      "Others": {
-        "PortChannel": "102"
-      }
+      "TagVlan": [],
+      "Others": {}
     }
   ],
   "VLAN": [
@@ -748,15 +740,23 @@
   ],
   "PortChannel": [
     {
+      "Name": "port-channel102",
+      "Description": "VPC:TORtoBMC",
       "ID": 102,
-      "Description": "TOR-BMC",
-      "PortType": "Trunk",
+      "Type": "Trunk",
       "Shutdown": false,
       "IPAddress": "",
-      "UntagVlan": "",
-      "TagVlan": [
-        "BMCMgmt"
-      ]
+      "NbrIPAddress": "",
+      "VLANs": "BMCMgmt",
+      "MTU": 9216,
+      "Members": [
+        "1/51",
+        "1/52"
+      ],
+      "Others": {
+        "stp": "network",
+        "vpc": "102"
+      }
     }
   ]
 }

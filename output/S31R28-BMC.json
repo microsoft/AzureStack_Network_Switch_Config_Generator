@@ -13,6 +13,9 @@
  },
  "IsNoBMC": false,
  "Settings": {
+  "BMCMgmt": [
+   "Vlan125"
+  ],
   "NTP": [
    "100.100.10.10",
    "100.100.10.11"
@@ -20,6 +23,10 @@
   "Syslog": [
    "100.100.10.10",
    "100.100.10.11"
+  ],
+  "VPC": [
+   "",
+   ""
   ]
  },
  "Port": [
@@ -30,7 +37,7 @@
    "Description": "BMCMgmt",
    "MTU": 9000,
    "Shutdown": true,
-   "IPAddress": "172.17.0.4/26",
+   "IPAddress": "100.71.28.68/26",
    "UntagVlan": 0,
    "TagVlan": "",
    "Others": {}
@@ -639,28 +646,32 @@
    "Port": "1/51",
    "PortName": "Ethernet",
    "PortType": "Trunk",
-   "Description": "TOR-BMC",
+   "Description": "VPC:TORtoBMC",
    "MTU": 1500,
    "Shutdown": false,
    "IPAddress": "",
    "UntagVlan": 0,
    "TagVlan": "125",
    "Others": {
-    "port-channel": "102"
+    "channel_group": "102",
+    "stp": "network",
+    "vpc": "102"
    }
   },
   {
    "Port": "1/52",
    "PortName": "Ethernet",
    "PortType": "Trunk",
-   "Description": "TOR-BMC",
+   "Description": "VPC:TORtoBMC",
    "MTU": 1500,
    "Shutdown": false,
    "IPAddress": "",
    "UntagVlan": 0,
    "TagVlan": "125",
    "Others": {
-    "PortChannel": "102"
+    "channel_group": "102",
+    "stp": "network",
+    "vpc": "102"
    }
   }
  ],
@@ -671,15 +682,45 @@
    "Group": "Unused",
    "IPAddress": "",
    "MTU": 1500,
+   "VIP": {
+    "PriorityId": 0,
+    "VIPAddress": ""
+   },
    "Shutdown": true
   },
   {
    "VlanName": "BMCMgmt",
    "VlanID": 125,
    "Group": "BMCMgmt",
-   "IPAddress": "172.17.0.4/26",
+   "IPAddress": "100.71.28.68/26",
    "MTU": 1500,
+   "VIP": {
+    "PriorityId": 0,
+    "VIPAddress": "100.71.28.65/26"
+   },
    "Shutdown": false
+  }
+ ],
+ "PortChannel": [
+  {
+   "Name": "port-channel102",
+   "ID": 102,
+   "Type": "Trunk",
+   "Description": "VPC:TORtoBMC",
+   "MTU": 9216,
+   "Shutdown": false,
+   "IPAddress": "",
+   "NbrIPAddress": "",
+   "VLANs": "125",
+   "Members": [
+    "1/51",
+    "1/52"
+   ],
+   "Others": {
+    "channel_group": "102",
+    "stp": "network",
+    "vpc": "102"
+   }
   }
  ],
  "Loopback": null,
@@ -697,24 +738,24 @@
    "VlanID": 125,
    "Group": "BMCMgmt",
    "Name": "BMCMgmt",
-   "Subnet": "172.17.0.0/26",
+   "Subnet": "100.71.28.64/26",
    "Shutdown": false,
    "IPAssignment": [
     {
      "Name": "BMCMgmt/Gateway",
-     "IPAddress": "172.17.0.1/26"
+     "IPAddress": "100.71.28.65/26"
     },
     {
      "Name": "BMCMgmt/TOR1_IPv4",
-     "IPAddress": "172.17.0.2/26"
+     "IPAddress": "100.71.28.66/26"
     },
     {
      "Name": "BMCMgmt/TOR2_IPv4",
-     "IPAddress": "172.17.0.3/26"
+     "IPAddress": "100.71.28.67/26"
     },
     {
      "Name": "BMCMgmt/BMC_IPv4",
-     "IPAddress": "172.17.0.4/26"
+     "IPAddress": "100.71.28.68/26"
     }
    ]
   },

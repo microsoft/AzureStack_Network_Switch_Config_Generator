@@ -853,24 +853,6 @@
         "stp": "network",
         "vpc": "peer-link"
       }
-    },
-    {
-      "Name": "port-channel102",
-      "Description": "VPC:TORtoBMC",
-      "ID": 102,
-      "Type": "Trunk",
-      "Shutdown": false,
-      "IPAddress": "",
-      "NbrIPAddress": "",
-      "VLANs": "BMCMgmt",
-      "MTU": 9216,
-      "Members": [
-        "1/44"
-      ],
-      "Others": {
-        "stp": "network",
-        "vpc": "102"
-      }
     }
   ],
   "Loopback": [

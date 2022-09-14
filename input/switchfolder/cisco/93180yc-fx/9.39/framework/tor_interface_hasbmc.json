@@ -820,10 +820,68 @@
   ],
   "PortChannel": [
     {
-      "Name": "BMC_Mgmt_PC",
+      "Name": "port-channel50",
+      "Description": "MLAG Heartbeat and iBGP TOR1-TOR2",
+      "ID": 50,
+      "Type": "IP",
+      "Shutdown": false,
+      "IPAddress": "TORX_PO50",
+      "NbrIPAddress": "TORY_PO50",
+      "VLANs": "",
+      "MTU": 9216,
+      "Members": [
+        "1/41",
+        "1/42"
+      ],
+      "Others": {
+        "pfc": "on",
+        "inputPolicy": "AZS_SERVICES"
+      }
+    },
+    {
+      "Name": "port-channel101",
+      "Description": "MLAG_PEER",
+      "ID": 101,
+      "Type": "Trunk",
+      "Shutdown": false,
+      "IPAddress": "",
+      "NbrIPAddress": "",
+      "VLANs": "99",
+      "MTU": 9216,
+      "Members": [
+        "1/49",
+        "1/50",
+        "1/51"
+      ],
+      "Others": {
+        "pfc": "on",
+        "stp": "network",
+        "vpc": "peer-link"
+      }
+    },
+    {
+      "Name": "port-channel102",
+      "Description": "VPC:TORtoBMC",
       "ID": 102,
-      "PortType": "Trunk",
-      "Settings": []
+      "Type": "Trunk",
+      "Shutdown": false,
+      "IPAddress": "",
+      "NbrIPAddress": "",
+      "VLANs": "BMCMgmt",
+      "MTU": 9216,
+      "Members": [
+        "1/44"
+      ],
+      "Others": {
+        "stp": "network",
+        "vpc": "102"
+      }
+    }
+  ],
+  "Loopback": [
+    {
+      "Name": "Loopback0",
+      "IPAddress": "TORX_Loopback0"
     }
   ]
 }

@@ -40,13 +40,17 @@ const (
 	CISCO_NATIVE_VLAN = "99"
 )
 
+var (
+	TORX, TORY string
+)
+
 // Logic: Input.json -> Object -Modify-> NewObject -> Output.json -> Template -> Config
 
 func main() {
 	// Set Log Output Options - 2022/08/24 21:51:10 main.go:58:
 	log.SetFlags(log.Lshortfile | log.Ldate | log.Ltime)
 	// Input Variables
-	inputJsonFile := flag.String("inputJsonFile", "../input/input_nobmc.json", "File path of switch deploy input.json")
+	inputJsonFile := flag.String("inputJsonFile", "../input/input_hasbmc.json", "File path of switch deploy input.json")
 	switchFolder := flag.String("switchFolder", "../input/switchfolder", "Folder path of switch frameworks and templates")
 	outputFolder := flag.String("outputFolder", "../output", "Folder path of switch configurations")
 
@@ -73,6 +77,12 @@ func main() {
 			outputObj.Device.Username = randomUsername
 			outputObj.Device.Password = randomPassword
 			outputObj.IsNoBMC = inputObj.IsNoBMC
+			deviceType := deviceItem.Type
+			if deviceType == TOR1 {
+				TORX, TORY = TOR1, TOR2
+			} else {
+				TORX, TORY = TOR2, TOR1
+			}
 
 			// Dynamic updating output object based on switch framework.
 			outputObj.updateOutputObj(frameworkPath, inputObj)
