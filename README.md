@@ -19,7 +19,7 @@
   - [Concerns and Thoughts](#concerns-and-thoughts)
   - [MileStone Plan](#milestone-plan)
     - [~~Phase1 - POC Phase - 06/24~~](#phase1---poc-phase---0624)
-    - [Phase2 Testing on Single Switch Validation Virtual (GNS3 Lab) - 08/19](#phase2-testing-on-single-switch-validation-virtual-gns3-lab---0819)
+    - [~~Phase2 Testing on Single Switch Validation Virtual (GNS3 Lab) - 08/19~~](#phase2-testing-on-single-switch-validation-virtual-gns3-lab---0819)
     - [Phase3 Testing on Multi-Switch Validation Virtual (GNS3 Lab) - 09/16](#phase3-testing-on-multi-switch-validation-virtual-gns3-lab---0916)
     - [Phase4 Physical Device Testing - 09/30](#phase4-physical-device-testing---0930)
   - [Question](#question)
@@ -449,7 +449,7 @@ Active Package(s):
   - Unit Test
   - Optimize/Comment current code
 
-### Phase2 Testing on Single Switch Validation Virtual (GNS3 Lab) - 08/19
+### ~~Phase2 Testing on Single Switch Validation Virtual (GNS3 Lab) - 08/19~~
 
   - Function To Do List:
     - ~~`OutOfBandPort`~~ - port.go.tmpl-port + interface.json
@@ -484,5 +484,7 @@ Active Package(s):
 
 ## Question
 1. Supernet IP Dynamic, so the IP address could be possible change if new supernet add to vlan 0
-
-2. PO Channel Supernet group?
+2. PO Channel Supernet group? SwitchMgmt? InfraMgmt?
+3. Internal/External/GRE VIPS reservation?
+4. Native Vlan 99 for MLAG?
+5. PO member update interface automatically?

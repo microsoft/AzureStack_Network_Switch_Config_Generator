@@ -35,6 +35,7 @@ func (o *OutputType) parseInterfaceObj(frameworkPath, deviceType string) {
 	o.parseInBandPortFramework(InterfaceFrameworkObj)
 	o.parseVlanObj(InterfaceFrameworkObj)
 	o.parseLoopbackObj(InterfaceFrameworkObj)
+	o.parsePortchannelObj(InterfaceFrameworkObj)
 }
 
 func (o *OutputType) updateSettings(inputObj *InputType) {
@@ -42,11 +43,21 @@ func (o *OutputType) updateSettings(inputObj *InputType) {
 		return
 	}
 	settingMap := inputObj.Settings
-	// Add OOB interface to External Section
+	// Add VPC srcIP and dstIP
+	po50TOR1IPName := fmt.Sprintf("%s_%s", TOR1, IBGP_PO)
+	po50TOR1IP := o.getSwitchMgmtIPbyName(po50TOR1IPName)
+	po50TOR2IPName := fmt.Sprintf("%s_%s", TOR2, IBGP_PO)
+	po50TOR2IP := o.getSwitchMgmtIPbyName(po50TOR2IPName)
+	if o.Device.Type == TOR1 {
+		settingMap[VPC] = []string{po50TOR1IP, po50TOR2IP}
+	} else {
+		settingMap[VPC] = []string{po50TOR2IP, po50TOR1IP}
+	}
+	// Add BMC_MGMT interface to External Section
 	for _, v := range o.Vlan {
-		if v.Group == "OOB" {
+		if v.Group == BMC_MGMT {
 			vlanIntf := fmt.Sprintf("Vlan%d", v.VlanID)
-			settingMap["OOB"] = []string{vlanIntf}
+			settingMap[BMC_MGMT] = []string{vlanIntf}
 		}
 	}
 	o.Settings = settingMap
@@ -129,6 +140,8 @@ func (o *OutputType) parseTemplate(templatePath, outputConfigName string) {
 			templatePath+"/stp.go.tmpl",
 			templatePath+"/settings.go.tmpl",
 			templatePath+"/qos.go.tmpl",
+			templatePath+"/vpc.go.tmpl",
+			templatePath+"/portchannel.go.tmpl",
 		)
 		if err != nil {
 			log.Fatalln(err)

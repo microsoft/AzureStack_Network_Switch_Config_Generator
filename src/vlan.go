@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"sort"
 	"strings"
 )
@@ -31,4 +32,14 @@ func (o *OutputType) parseVlanObj(i *InterfaceFrameworkType) {
 	sort.Slice(o.Vlan, func(i, j int) bool {
 		return o.Vlan[i].VlanID < o.Vlan[j].VlanID
 	})
+}
+
+func (o *OutputType) getVLANIDbyName(vlanName string) int {
+	for _, vlan := range o.Vlan {
+		if vlan.VlanName == vlanName {
+			return vlan.VlanID
+		}
+	}
+	log.Printf("VLAN Name %s is not founded", vlanName)
+	return 0
 }

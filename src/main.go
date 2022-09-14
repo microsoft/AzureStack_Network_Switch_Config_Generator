@@ -15,21 +15,29 @@ const (
 	// Device Type
 	DeviceType_TOR = "TOR"
 	DeviceType_BMC = "BMC"
+	TOR1           = "TOR1"
+	TOR2           = "TOR2"
 	// No BMC Framework
 	NOBMC = "nobmc"
 	// Has BMC Framework
 	HASBMC = "hasbmc"
 	// PortType Name
-	PortType_BMC_MGMT   = "BMCMgmt"
-	PortType_IP         = "IP"
-	PortType_ACCESS     = "Access"
-	PortType_TRUNK      = "Trunk"
-	PortType_INFRA_MGMT = "InfraMgmt"
+	BMC_MGMT    = "BMCMgmt"
+	IP          = "IP"
+	ACCESS      = "Access"
+	TRUNK       = "Trunk"
+	INFRA_MGMT  = "InfraMgmt"
+	SWITCH_MGMT = "SwitchMgmt"
 	// Framework Module Name
 	INTERFACE = "interface"
 	ROUTING   = "routing"
 	// File Extension
 	JSON = "json"
+	// Settings
+	VPC               = "VPC"
+	IBGP_PO           = "PO50"
+	CHANNEL_GROUP     = "channel_group"
+	CISCO_NATIVE_VLAN = "99"
 )
 
 // Logic: Input.json -> Object -Modify-> NewObject -> Output.json -> Template -> Config

@@ -2,6 +2,17 @@
 ! port.go.tmpl-port
 {{ range . -}} 
 
+{{if .Others.channel_group -}} 
+interface {{ .PortName }} {{ .Port }}
+  description {{ .Description }}
+  no cdp enable
+  mtu {{ .Mtu }}
+  logging event port link-status
+  {{if eq .Others.pfc "on" -}} priority-flow-control mode on{{end}}
+  channel-group {{.Others.channel_group}} mode active
+  {{if .Shutdown -}} shutdown {{else -}} no shutdown {{end}}
+
+{{else -}}
 {{if eq .PortType "BMCMgmt" -}} 
 interface {{ .PortName }}
   description {{ .Description }}
@@ -44,5 +55,6 @@ interface {{ .PortName }} {{ .Port }}
   {{end -}}{{- /*Trunk Port*/ -}}
   {{if .Shutdown -}} shutdown {{else -}} no shutdown {{end}}
 {{end }}
+{{end -}}
 {{end -}}
 {{ end }}

@@ -20,6 +20,10 @@
 
 {{ template "interface_vlan" .Vlan -}}
 
+{{ template "vpc_domain" .Supernets -}}
+
+{{ template "port_channel" .PortChannel -}}
+
 {{ template "port" .Port -}}
 
 {{ template "default_errdisable_setting" -}}

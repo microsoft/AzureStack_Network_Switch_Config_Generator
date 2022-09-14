@@ -13,6 +13,9 @@
  },
  "IsNoBMC": true,
  "Settings": {
+  "BMCMgmt": [
+   "Vlan125"
+  ],
   "NTP": [
    "100.100.10.10",
    "100.100.10.11"
@@ -20,6 +23,10 @@
   "Syslog": [
    "100.100.10.10",
    "100.100.10.11"
+  ],
+  "VPC": [
+   "100.100.1.2/30",
+   "100.100.1.1/30"
   ]
  },
  "Port": [
@@ -521,26 +528,34 @@
   {
    "Port": "1/41",
    "PortName": "TenGigEthernet",
-   "PortType": "Access",
-   "Description": "Unused",
-   "MTU": 9000,
-   "Shutdown": true,
+   "PortType": "IP",
+   "Description": "MLAG Heartbeat and iBGP TOR1-TOR2",
+   "MTU": 9216,
+   "Shutdown": false,
    "IPAddress": "",
-   "UntagVlan": 2,
+   "UntagVlan": 0,
    "TagVlan": "",
-   "Others": {}
+   "Others": {
+    "channel_group": "50",
+    "inputPolicy": "AZS_SERVICES",
+    "pfc": "on"
+   }
   },
   {
    "Port": "1/42",
    "PortName": "TenGigEthernet",
-   "PortType": "Access",
-   "Description": "Unused",
-   "MTU": 9000,
-   "Shutdown": true,
+   "PortType": "IP",
+   "Description": "MLAG Heartbeat and iBGP TOR1-TOR2",
+   "MTU": 9216,
+   "Shutdown": false,
    "IPAddress": "",
-   "UntagVlan": 2,
+   "UntagVlan": 0,
    "TagVlan": "",
-   "Others": {}
+   "Others": {
+    "channel_group": "50",
+    "inputPolicy": "AZS_SERVICES",
+    "pfc": "on"
+   }
   },
   {
    "Port": "1/43",
@@ -557,14 +572,18 @@
   {
    "Port": "1/44",
    "PortName": "TenGigEthernet",
-   "PortType": "Access",
-   "Description": "Unused",
+   "PortType": "Trunk",
+   "Description": "VPC:TORtoBMC",
    "MTU": 9000,
-   "Shutdown": true,
+   "Shutdown": false,
    "IPAddress": "",
-   "UntagVlan": 2,
-   "TagVlan": "",
-   "Others": {}
+   "UntagVlan": 0,
+   "TagVlan": "BMCMgmt",
+   "Others": {
+    "channel_group": "102",
+    "stp": "network",
+    "vpc": "102"
+   }
   },
   {
    "Port": "1/45",
@@ -597,7 +616,7 @@
    "Description": "P2P_TOR2_To_Border2/TOR2",
    "MTU": 9000,
    "Shutdown": false,
-   "IPAddress": "",
+   "IPAddress": "100.100.1.10/31",
    "UntagVlan": 0,
    "TagVlan": "",
    "Others": {}
@@ -609,7 +628,7 @@
    "Description": "P2P_TOR2_To_Border1/TOR2",
    "MTU": 9000,
    "Shutdown": false,
-   "IPAddress": "",
+   "IPAddress": "100.100.1.8/31",
    "UntagVlan": 0,
    "TagVlan": "",
    "Others": {}
@@ -617,38 +636,53 @@
   {
    "Port": "1/49",
    "PortName": "TenGigEthernet",
-   "PortType": "Access",
-   "Description": "Unused",
+   "PortType": "Trunk",
+   "Description": "MLAG_PEER",
    "MTU": 9000,
-   "Shutdown": true,
+   "Shutdown": false,
    "IPAddress": "",
-   "UntagVlan": 2,
-   "TagVlan": "",
-   "Others": {}
+   "UntagVlan": 0,
+   "TagVlan": "99",
+   "Others": {
+    "channel_group": "101",
+    "pfc": "on",
+    "stp": "network",
+    "vpc": "peer-link"
+   }
   },
   {
    "Port": "1/50",
    "PortName": "TenGigEthernet",
-   "PortType": "Access",
-   "Description": "Unused",
+   "PortType": "Trunk",
+   "Description": "MLAG_PEER",
    "MTU": 9000,
-   "Shutdown": true,
+   "Shutdown": false,
    "IPAddress": "",
-   "UntagVlan": 2,
-   "TagVlan": "",
-   "Others": {}
+   "UntagVlan": 0,
+   "TagVlan": "99",
+   "Others": {
+    "channel_group": "101",
+    "pfc": "on",
+    "stp": "network",
+    "vpc": "peer-link"
+   }
   },
   {
    "Port": "1/51",
    "PortName": "TenGigEthernet",
-   "PortType": "Access",
-   "Description": "Unused",
+   "PortType": "Trunk",
+   "Description": "MLAG_PEER",
    "MTU": 9000,
-   "Shutdown": true,
+   "Shutdown": false,
    "IPAddress": "",
-   "UntagVlan": 2,
-   "TagVlan": "",
-   "Others": {}
+   "UntagVlan": 0,
+   "TagVlan": "99",
+   "Others": {
+    "channel_group": "101",
+    "pfc": "on",
+    "stp": "network",
+    "vpc": "peer-link"
+   }
   },
   {
    "Port": "1/52",
@@ -773,7 +807,75 @@
    "Shutdown": false
   }
  ],
- "Loopback": null,
+ "PortChannel": [
+  {
+   "Name": "port-channel50",
+   "ID": 50,
+   "Type": "IP",
+   "Description": "MLAG Heartbeat and iBGP TOR1-TOR2",
+   "MTU": 9216,
+   "Shutdown": false,
+   "IPAddress": "100.100.1.2/30",
+   "NbrIPAddress": "100.100.1.1/30",
+   "VLANs": "",
+   "Members": [
+    "1/41",
+    "1/42"
+   ],
+   "Others": {
+    "channel_group": "50",
+    "inputPolicy": "AZS_SERVICES",
+    "pfc": "on"
+   }
+  },
+  {
+   "Name": "port-channel101",
+   "ID": 101,
+   "Type": "Trunk",
+   "Description": "MLAG_PEER",
+   "MTU": 9216,
+   "Shutdown": false,
+   "IPAddress": "",
+   "NbrIPAddress": "",
+   "VLANs": "99",
+   "Members": [
+    "1/49",
+    "1/50",
+    "1/51"
+   ],
+   "Others": {
+    "channel_group": "101",
+    "pfc": "on",
+    "stp": "network",
+    "vpc": "peer-link"
+   }
+  },
+  {
+   "Name": "port-channel102",
+   "ID": 102,
+   "Type": "Trunk",
+   "Description": "VPC:TORtoBMC",
+   "MTU": 9216,
+   "Shutdown": false,
+   "IPAddress": "",
+   "NbrIPAddress": "",
+   "VLANs": "125",
+   "Members": [
+    "1/44"
+   ],
+   "Others": {
+    "channel_group": "102",
+    "stp": "network",
+    "vpc": "102"
+   }
+  }
+ ],
+ "Loopback": [
+  {
+   "Name": "Loopback0",
+   "IPAddress": "100.100.1.13/32"
+  }
+ ],
  "Routing": {
   "BGP": {
    "BGPAsn": 65000,
@@ -870,12 +972,12 @@
     },
     {
      "DstIPAddress": "0.0.0.0/0",
-     "NextHop": "",
+     "NextHop": "100.100.1.8/31",
      "Name": "P2P_TOR2_To_Border1/TOR2"
     },
     {
      "DstIPAddress": "0.0.0.0/0",
-     "NextHop": "",
+     "NextHop": "100.100.1.10/31",
      "Name": "P2P_TOR2_To_Border2/TOR2"
     }
    ]

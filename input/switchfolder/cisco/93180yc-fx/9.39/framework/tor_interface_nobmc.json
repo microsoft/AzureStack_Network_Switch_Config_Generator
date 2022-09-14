@@ -6,6 +6,10 @@
   },
   "InterfaceName": [
     {
+      "Speed": 1000,
+      "Name": "Ethernet"
+    },
+    {
       "Speed": 10000,
       "Name": "TenGigEthernet"
     },
@@ -560,10 +564,10 @@
       "ID": 41,
       "Port": "1/41",
       "Speed": 10000,
-      "Description": "Unused",
-      "MTU": 9000,
+      "Description": "MLAG Heartbeat and iBGP TOR1-TOR2",
+      "MTU": 9216,
       "PortType": "Access",
-      "Shutdown": true,
+      "Shutdown": false,
       "IPAddress": "",
       "UntagVlan": "Unused",
       "TagVlan": [],
@@ -573,10 +577,10 @@
       "ID": 42,
       "Port": "1/42",
       "Speed": 10000,
-      "Description": "Unused",
-      "MTU": 9000,
+      "Description": "MLAG Heartbeat and iBGP TOR1-TOR2",
+      "MTU": 9216,
       "PortType": "Access",
-      "Shutdown": true,
+      "Shutdown": false,
       "IPAddress": "",
       "UntagVlan": "Unused",
       "TagVlan": [],
@@ -811,31 +815,68 @@
   ],
   "PortChannel": [
     {
-      "Name": "PO50",
+      "Name": "port-channel50",
       "Description": "MLAG Heartbeat and iBGP TOR1-TOR2",
       "ID": 50,
-      "PortType": "IP",
-      "IPAddress": "TORX_IPv4",
+      "Type": "IP",
+      "Shutdown": false,
+      "IPAddress": "TORX_PO50",
+      "NbrIPAddress": "TORY_PO50",
+      "VLANs": "",
       "MTU": 9216,
-      "Ports": [
+      "Members": [
         "1/41",
         "1/42"
       ],
-      "Settings": []
+      "Others": {
+        "pfc": "on",
+        "inputPolicy": "AZS_SERVICES"
+      }
     },
     {
-      "Name": "PO101",
+      "Name": "port-channel101",
       "Description": "MLAG_PEER",
       "ID": 101,
-      "PortType": "Trunk",
+      "Type": "Trunk",
+      "Shutdown": false,
       "IPAddress": "",
+      "NbrIPAddress": "",
+      "VLANs": "99",
       "MTU": 9216,
-      "Ports": [
+      "Members": [
         "1/49",
         "1/50",
         "1/51"
       ],
-      "Settings": []
+      "Others": {
+        "pfc": "on",
+        "stp": "network",
+        "vpc": "peer-link"
+      }
+    },
+    {
+      "Name": "port-channel102",
+      "Description": "VPC:TORtoBMC",
+      "ID": 102,
+      "Type": "Trunk",
+      "Shutdown": false,
+      "IPAddress": "",
+      "NbrIPAddress": "",
+      "VLANs": "BMCMgmt",
+      "MTU": 9216,
+      "Members": [
+        "1/44"
+      ],
+      "Others": {
+        "stp": "network",
+        "vpc": "102"
+      }
+    }
+  ],
+  "Loopback": [
+    {
+      "Name": "Loopback0",
+      "IPAddress": "TORX_Loopback0"
     }
   ]
 }

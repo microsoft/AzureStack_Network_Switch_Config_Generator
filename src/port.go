@@ -26,15 +26,15 @@ func (o *OutputType) parseInBandPortFramework(i *InterfaceFrameworkType) {
 			portObj.PortName = intf.Port
 		}
 
-		if intf.PortType == PortType_BMC_MGMT {
+		if intf.PortType == BMC_MGMT {
 			intf.IPAddress = replaceTORXName(intf.IPAddress, o.Device.Type)
 			portObj.IPAddress = o.searchOOBIP(intf.IPAddress)
-		} else if intf.PortType == PortType_IP {
+		} else if intf.PortType == IP {
 			intf.IPAddress = replaceTORXName(intf.IPAddress, o.Device.Type)
 			portObj.IPAddress = o.getSwitchMgmtIPbyName(intf.IPAddress)
-		} else if intf.PortType == PortType_ACCESS {
+		} else if intf.PortType == ACCESS {
 			portObj.UntagVlan = o.updatePortUntagvlan(intf.UntagVlan)
-		} else if intf.PortType == PortType_TRUNK {
+		} else if intf.PortType == TRUNK {
 			portObj.UntagVlan = o.updatePortUntagvlan(intf.UntagVlan)
 			portObj.TagVlan = o.updatePortTagvlan(intf.TagVlan)
 		} else {
@@ -46,7 +46,7 @@ func (o *OutputType) parseInBandPortFramework(i *InterfaceFrameworkType) {
 
 func (o *OutputType) searchOOBIP(IPAddressName string) string {
 	for _, segment := range *o.Supernets {
-		if segment.Group == PortType_BMC_MGMT {
+		if segment.Group == BMC_MGMT {
 			for _, ipAssign := range segment.IPAssignment {
 				if strings.Contains(ipAssign.Name, IPAddressName) {
 					return ipAssign.IPAddress
@@ -59,7 +59,7 @@ func (o *OutputType) searchOOBIP(IPAddressName string) string {
 
 func (o *OutputType) getSwitchMgmtIPbyName(SwitchMgmtName string) string {
 	for _, segment := range *o.Supernets {
-		if segment.Group == PortType_INFRA_MGMT {
+		if segment.Group == SWITCH_MGMT {
 			for _, ipAssign := range segment.IPAssignment {
 				if strings.Contains(ipAssign.Name, SwitchMgmtName) {
 					return ipAssign.IPAddress
