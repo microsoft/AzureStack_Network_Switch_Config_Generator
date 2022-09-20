@@ -10,7 +10,7 @@
             "100.100.10.11"
         ]
     },
-    "IsNoBMC": false,
+    "isNoBMC": true,
     "Devices": [
         {
             "Make": "Cisco",
@@ -31,16 +31,6 @@
             "Firmware": "9.39",
             "GenerateDeviceConfig": true,
             "StaticRouting": false
-        },
-        {
-            "Make": "Cisco",
-            "Type": "BMC",
-            "Hostname": "S31R28-BMC",
-            "ASN": 0,
-            "Model": "9348GC-FXP",
-            "Firmware": "9.39",
-            "GenerateDeviceConfig": true,
-            "StaticRouting": true
         },
         {
             "Make": "",
@@ -80,7 +70,7 @@
                 {
                     "Name": "BMCMgmt",
                     "Netmask": 26,
-                    "IPSize": 4,
+                    "IPSize": 3,
                     "IPAssignment": [
                         {
                             "Name": "Gateway",
@@ -93,10 +83,6 @@
                         {
                             "Name": "TOR2_IPv4",
                             "Position": 3
-                        },
-                        {
-                            "Name": "BMC_IPv4",
-                            "Position": 4
                         }
                     ]
                 }
@@ -288,6 +274,21 @@
                         {
                             "Name": "TOR2_Loopback0",
                             "Position": 0
+                        }
+                    ]
+                },
+                {
+                    "Name": "PO50",
+                    "Netmask": 30,
+                    "IPSize": 2,
+                    "IPAssignment": [
+                        {
+                            "Name": "TOR1_PO50",
+                            "Position": 1
+                        },
+                        {
+                            "Name": "TOR2_PO50",
+                            "Position": 2
                         }
                     ]
                 }

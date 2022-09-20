@@ -10,6 +10,7 @@
             "100.100.10.11"
         ]
     },
+    "IsNoBMC": false,
     "Devices": [
         {
             "Make": "Cisco",
@@ -17,7 +18,7 @@
             "Hostname": "S31R28-TOR1",
             "ASN": 65000,
             "Model": "93180YC-FX",
-            "Firmware": "9.3",
+            "Firmware": "9.39",
             "GenerateDeviceConfig": true,
             "StaticRouting": true
         },
@@ -27,7 +28,17 @@
             "Hostname": "S31R28-TOR2",
             "ASN": 65000,
             "Model": "93180YC-FX",
-            "Firmware": "9.3",
+            "Firmware": "9.39",
+            "GenerateDeviceConfig": true,
+            "StaticRouting": true
+        },
+        {
+            "Make": "Cisco",
+            "Type": "BMC",
+            "Hostname": "S31R28-BMC",
+            "ASN": 0,
+            "Model": "9348GC-FXP",
+            "Firmware": "9.39",
             "GenerateDeviceConfig": true,
             "StaticRouting": true
         },
@@ -60,15 +71,16 @@
             "SubnetAssignment": []
         },
         {
-            "VlanID": 25,
-            "Group": "OOB",
-            "Name": "OOB",
-            "Subnet": "172.17.0.0/26",
+            "VlanID": 125,
+            "Group": "BMCMgmt",
+            "Name": "BMCMgmt",
+            "Subnet": "100.71.28.64/26",
             "Shutdown": false,
             "SubnetAssignment": [
                 {
-                    "Name": "OOB",
+                    "Name": "BMCMgmt",
                     "Netmask": 26,
+                    "IPSize": 4,
                     "IPAssignment": [
                         {
                             "Name": "Gateway",
@@ -81,6 +93,10 @@
                         {
                             "Name": "TOR2_IPv4",
                             "Position": 3
+                        },
+                        {
+                            "Name": "BMC_IPv4",
+                            "Position": 4
                         }
                     ]
                 }
@@ -88,14 +104,15 @@
         },
         {
             "VlanID": 8,
-            "Group": "Management",
-            "Name": "Management",
+            "Group": "InfraMgmt",
+            "Name": "InfraMgmt",
             "Subnet": "100.100.10.0/24",
             "Shutdown": false,
             "SubnetAssignment": [
                 {
-                    "Name": "Management",
+                    "Name": "InfraMgmt",
                     "Netmask": 24,
+                    "IPSize": 3,
                     "IPAssignment": [
                         {
                             "Name": "Gateway",
@@ -123,6 +140,7 @@
                 {
                     "Name": "Tenant0",
                     "Netmask": 24,
+                    "IPSize": 3,
                     "IPAssignment": [
                         {
                             "Name": "Gateway",
@@ -150,6 +168,7 @@
                 {
                     "Name": "Tenant1",
                     "Netmask": 24,
+                    "IPSize": 3,
                     "IPAssignment": [
                         {
                             "Name": "Gateway",
