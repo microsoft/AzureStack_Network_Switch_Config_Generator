@@ -1,0 +1,9 @@
+{{define "vpc_domain"}}
+! vpc.go.tmpl-vpc_domain
+vpc domain 1
+  role priority 1
+  peer-keepalive destination 100.73.28.162 source 100.73.28.161 vrf default
+  delay restore 150
+  peer-gateway
+  auto-recovery
+{{end}}

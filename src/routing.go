@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strconv"
 	"strings"
 )
 
@@ -25,9 +26,9 @@ func parseRoutingJSON(routingFrameJson string) *RoutingType {
 	return routingFrameworkObj
 }
 
-func (o *OutputType) parseRoutingFramework(frameworkPath string, inputJsonObj *InputType) {
-	routingFrameJson := fmt.Sprintf("%s/routing.json", frameworkPath)
-	routingFrameworkObj := parseRoutingJSON(routingFrameJson)
+func (o *OutputType) parseRoutingFramework(frameworkPath, deviceType string, inputJsonObj *InputType) {
+	routingFrameJson := fmt.Sprintf("%s/%s_%s.%s", frameworkPath, deviceType, ROUTING, JSON)
+	routingFrameworkObj := parseRoutingJSON(strings.ToLower(routingFrameJson))
 	// Use StaticRouting attribute to update StaticRoute or BGPRoute
 	if o.Device.StaticRouting {
 		// Static Routing
@@ -35,11 +36,11 @@ func (o *OutputType) parseRoutingFramework(frameworkPath string, inputJsonObj *I
 		routingFrameworkObj.updateStaticNetwork(o)
 	} else {
 		// BGP Routing
-		routingFrameworkObj.Bgp.BGPAsn = o.Device.Asn
+		routingFrameworkObj.Bgp.BGPAsn = strconv.Itoa(o.Device.Asn)
 		routingFrameworkObj.updateBgpNetwork(o)
 		routingFrameworkObj.updateBGPRoutingPolicy(o)
-		routerIDName := strings.Replace(routingFrameworkObj.Bgp.RouterID, "TORX", o.Device.Type, -1)
-		RouterIDIPAddress := o.getSwitchMgmtIPbyName(routerIDName)
+		routerIDName := strings.Replace(routingFrameworkObj.Bgp.RouterID, "TORX", TORX, -1)
+		RouterIDIPAddress := o.getIPbyName(routerIDName, SWITCH_MGMT)
 		routingFrameworkObj.Bgp.RouterID = strings.Split(RouterIDIPAddress, "/")[0]
 		routingFrameworkObj.updateBgpNeighbor(o, inputJsonObj)
 	}
@@ -74,18 +75,20 @@ func (r *RoutingType) updateBGPRoutingPolicy(outputObj *OutputType) {
 
 func (r *RoutingType) updateBgpNeighbor(outputObj *OutputType, inputJsonObj *InputType) {
 	for k, v := range r.Bgp.IPv4Neighbor {
-		nbrAsn, err := inputJsonObj.getBgpASN(v.NeighborAsn)
+		nbrASNName := strings.Replace(v.NeighborAsn, "TORY", TORY, -1)
+		nbrAsn, err := inputJsonObj.getBgpASN(nbrASNName)
 		if err != nil {
 			log.Fatalln(err)
 		}
 		r.Bgp.IPv4Neighbor[k].NeighborAsn = nbrAsn
-		nbrIPAddressName := replaceTORXName(v.NeighborIPAddress, outputObj.Device.Type)
-		IPv4IPNet := outputObj.getSwitchMgmtIPbyName(nbrIPAddressName)
+		nbrIPAddressName := strings.Replace(v.NeighborIPAddress, "TORX", TORX, -1)
+		nbrIPAddressName = strings.Replace(nbrIPAddressName, "TORY", TORY, -1)
+		IPv4IPNet := outputObj.getIPbyName(nbrIPAddressName, SWITCH_MGMT)
 		r.Bgp.IPv4Neighbor[k].NeighborIPAddress = strings.Split(IPv4IPNet, "/")[0]
 		r.Bgp.IPv4Neighbor[k].Description = nbrIPAddressName
 
 		updateSourceName := replaceTORXName(v.UpdateSource, outputObj.Device.Type)
-		r.Bgp.IPv4Neighbor[k].UpdateSource = outputObj.getSwitchMgmtIPbyName(updateSourceName)
+		r.Bgp.IPv4Neighbor[k].UpdateSource = outputObj.getIPbyName(updateSourceName, SWITCH_MGMT)
 	}
 }
 
@@ -93,12 +96,14 @@ func (r *RoutingType) updateStaticNetwork(outputObj *OutputType) {
 	tmp := []StaticNetworkType{}
 	for _, staticItem := range r.Static.Network {
 		// Replace template name with right TOR number.
-		routeName := strings.Replace(staticItem.Name, "TORX", outputObj.Device.Type, -1)
-
+		routeName := strings.Replace(staticItem.Name, "TORX", TORX, -1)
 		if len(staticItem.NextHop) != 0 {
-			// Update null 0 static route
+			// Update null 0 static route or Get BMCmgmt VIP
+			if strings.Contains(staticItem.NextHop, DeviceType_BMC) {
+				staticItem.NextHop = outputObj.getIPbyName(staticItem.NextHop, BMC_MGMT)
+			}
 			tmp = append(tmp, StaticNetworkType{
-				DstIPAddress: outputObj.getSupernetIPbyName(routeName),
+				DstIPAddress: outputObj.getSupernetIPbyName(staticItem.DstIPAddress),
 				NextHop:      staticItem.NextHop,
 				Name:         routeName,
 			})
@@ -106,7 +111,7 @@ func (r *RoutingType) updateStaticNetwork(outputObj *OutputType) {
 			// update default route to border
 			tmp = append(tmp, StaticNetworkType{
 				DstIPAddress: outputObj.getSupernetIPbyName(staticItem.DstIPAddress),
-				NextHop:      outputObj.getSwitchMgmtIPbyName(routeName),
+				NextHop:      outputObj.getIPbyName(routeName, SWITCH_MGMT),
 				Name:         routeName,
 			})
 		}

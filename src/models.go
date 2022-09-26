@@ -3,6 +3,7 @@ package main
 type InputType struct {
 	Version   string                 `json:"Version"`
 	Settings  map[string]interface{} `json:"Settings"`
+	IsNoBMC   bool                   `json:"IsNoBMC"`
 	Devices   []DeviceType           `json:"Devices"`
 	Supernets interface{}            `json:"Supernets"`
 }
@@ -76,36 +77,21 @@ type InterfaceFrameworkType struct {
 		TagVlan     []string          `json:"TagVlan"`
 		Others      map[string]string `json:"Others"`
 	} `json:"Port"`
-	Vlan []struct {
-		Group             string `json:"Group"`
-		IPAssignment      string `json:"IPAssignment"`
-		Mtu               int    `json:"MTU"`
-		Native            bool   `json:"Native"`
-		VirtualAssignment struct {
-			PriorityID   int    `json:"PriorityId"`
-			IPAssignment string `json:"IPAssignment"`
-		} `json:"VirtualAssignment"`
-		IPHelper []string      `json:"IPHelper"`
-		ACL      []interface{} `json:"ACL"`
-		Shutdown bool          `json:"Shutdown,omitempty"`
-	} `json:"VLAN"`
-	Loopback    []LoopbackType `json:"Loopback"`
-	PortChannel []struct {
-		Name     string        `json:"Name"`
-		ID       int           `json:"ID"`
-		PortType string        `json:"PortType"`
-		Settings []interface{} `json:"Settings"`
-	} `json:"PortChannel"`
+	Vlan        []VlanType        `json:"VLAN"`
+	Loopback    []LoopbackType    `json:"Loopback"`
+	PortChannel []PortChannelType `json:"PortChannel"`
 }
 
 type OutputType struct {
-	Device    DeviceType             `json:"Device"`
-	Settings  map[string]interface{} `json:"Settings"`
-	Port      []PortType             `json:"Port"`
-	Vlan      []VlanType             `json:"Vlan"`
-	Loopback  []LoopbackType         `json:"Loopback"`
-	Routing   *RoutingType           `json:"Routing"`
-	Supernets *[]SupernetOutputType  `json:"Supernets"`
+	Device      DeviceType             `json:"Device"`
+	IsNoBMC     bool                   `json:"IsNoBMC"`
+	Settings    map[string]interface{} `json:"Settings"`
+	Port        []PortType             `json:"Port"`
+	Vlan        []VlanType             `json:"Vlan"`
+	PortChannel []PortChannelType      `json:"PortChannel"`
+	Loopback    []LoopbackType         `json:"Loopback"`
+	Routing     *RoutingType           `json:"Routing"`
+	Supernets   *[]SupernetOutputType  `json:"Supernets"`
 }
 
 type PortType struct {
@@ -127,12 +113,30 @@ type VlanType struct {
 	Group     string `json:"Group"`
 	IPAddress string `json:"IPAddress"`
 	Mtu       int    `json:"MTU"`
-	Shutdown  bool   `json:"Shutdown"`
+	Vip       struct {
+		PriorityId int    `json:"PriorityId"`
+		VIPAddress string `json:"VIPAddress"`
+	} `json:"VIP"`
+	Shutdown bool `json:"Shutdown"`
+}
+
+type PortChannelType struct {
+	Name         string            `json:"Name"`
+	ID           int               `json:"ID"`
+	Type         string            `json:"Type"`
+	Description  string            `json:"Description"`
+	Mtu          int               `json:"MTU"`
+	Shutdown     bool              `json:"Shutdown"`
+	IPAddress    string            `json:"IPAddress"`
+	NbrIPAddress string            `json:"NbrIPAddress"`
+	VLANs        string            `json:"VLANs"`
+	Members      []string          `json:"Members"`
+	Others       map[string]string `json:"Others"`
 }
 
 type LoopbackType struct {
-	Description string `json:"Description"`
-	IPAddress   string `json:"IPAddress"`
+	Name      string `json:"Name"`
+	IPAddress string `json:"IPAddress"`
 }
 
 type RoutingType struct {
@@ -145,7 +149,7 @@ type RoutingType struct {
 }
 
 type BGPType struct {
-	BGPAsn                 int      `json:"BGPAsn"`
+	BGPAsn                 string   `json:"BGPAsn"`
 	RouterID               string   `json:"RouterID"`
 	IPv4Network            []string `json:"IPv4Network"`
 	EnableDefaultOriginate bool     `json:"EnableDefaultOriginate"`

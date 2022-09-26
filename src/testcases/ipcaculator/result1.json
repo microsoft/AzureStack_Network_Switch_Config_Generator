@@ -155,5 +155,13 @@
         "IPAddress": "192.168.1.9/32"
       }
     ]
+  },
+  {
+    "VlanID": 0,
+    "Group": "Any",
+    "Name": "Any",
+    "Subnet": "0.0.0.0/0",
+    "Shutdown": false,
+    "IPAssignment": null
   }
 ]

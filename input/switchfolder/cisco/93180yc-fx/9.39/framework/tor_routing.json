@@ -1,0 +1,172 @@
+{
+    "BGP": {
+        "BGPAsn": "TORX",
+        "RouterID": "TORX_Loopback0",
+        "IPv4Network": [
+            "Tenant0",
+            "Tenant1",
+            "InfraMgmt",
+            "SwitchMgmt",
+            "BMCMgmt"
+        ],
+        "EnableDefaultOriginate": false,
+        "RoutePrefix": {
+            "MaxiPrefix": 12000,
+            "ErrorAction": "warning-only"
+        },
+        "IPv4Neighbor": [
+            {
+                "Description": "P2P_TORX_To_Border1/Border1",
+                "EnablePassword": false,
+                "NeighborAsn": "Border1",
+                "NeighborIPAddress": "P2P_TORX_To_Border1/Border1",
+                "PrefixList": [
+                    {
+                        "Name": "ExternalPrefix",
+                        "Direction": "in"
+                    },
+                    {
+                        "Name": "ExternalPrefix",
+                        "Direction": "out"
+                    }
+                ],
+                "RouteMap": [
+                    {
+                        "Name": "",
+                        "Direction": ""
+                    }
+                ],
+                "UpdateSource": "TORX_Loopback0",
+                "Shutdown": false
+            },
+            {
+                "Description": "P2P_TORX_To_Border2/Border2",
+                "EnablePassword": false,
+                "NeighborAsn": "Border2",
+                "NeighborIPAddress": "P2P_TORX_To_Border2/Border2",
+                "PrefixList": [
+                    {
+                        "Name": "ExternalPrefix",
+                        "Direction": "in"
+                    },
+                    {
+                        "Name": "ExternalPrefix",
+                        "Direction": "out"
+                    }
+                ],
+                "RouteMap": [
+                    {
+                        "Name": "",
+                        "Direction": ""
+                    }
+                ],
+                "UpdateSource": "TORX_Loopback0",
+                "Shutdown": false
+            },
+            {
+                "Description": "iBGPPeer_TORX_To_TORY/TORY",
+                "EnablePassword": false,
+                "NeighborAsn": "TORY",
+                "NeighborIPAddress": "PO50/TORY_PO50",
+                "PrefixList": [],
+                "RouteMap": [],
+                "UpdateSource": "TORX_Loopback0",
+                "Shutdown": false
+            }
+        ],
+        "PrefixListName": [
+            "ExternalPrefix"
+        ]
+    },
+    "Static": {
+        "PrefixListName": [
+            "DefaultRoute"
+        ],
+        "RouteMapName": [
+            "DefaultRoute"
+        ],
+        "Network": [
+            {
+                "DstIPAddress": "Tenant0",
+                "NextHop": "null 0",
+                "Name": "Tenant0"
+            },
+            {
+                "DstIPAddress": "Tenant1",
+                "NextHop": "null 0",
+                "Name": "Tenant1"
+            },
+            {
+                "DstIPAddress": "Any",
+                "NextHop": "",
+                "Name": "P2P_TORX_To_Border1/TORX"
+            },
+            {
+                "DstIPAddress": "Any",
+                "NextHop": "",
+                "Name": "P2P_TORX_To_Border2/TORX"
+            }
+        ]
+    },
+    "RoutingPolicy": {
+        "PrefixList": [
+            {
+                "Name": "ExternalPrefix",
+                "Config": [
+                    {
+                        "Name": "ExternalPrefix",
+                        "Action": "deny",
+                        "Supernet": "Tenant0",
+                        "IPAddress": "",
+                        "Operation": "le",
+                        "Prefix": 32
+                    },
+                    {
+                        "Name": "ExternalPrefix",
+                        "Action": "deny",
+                        "Supernet": "Tenant1",
+                        "IPAddress": "",
+                        "Operation": "le",
+                        "Prefix": 32
+                    },
+                    {
+                        "Name": "ExternalPrefix",
+                        "Action": "permit",
+                        "Supernet": "Any",
+                        "IPAddress": "",
+                        "Operation": "le",
+                        "Prefix": 32
+                    }
+                ]
+            },
+            {
+                "Name": "DefaultRoute",
+                "Config": [
+                    {
+                        "Name": "DefaultRoute",
+                        "Action": "permit",
+                        "Supernet": "Any",
+                        "IPAddress": "",
+                        "Operation": "le",
+                        "Prefix": 32
+                    }
+                ]
+            }
+        ],
+        "RouteMap": [
+            {
+                "Name": "DefaultRoute",
+                "Config": [
+                    {
+                        "Index": 10,
+                        "Name": "DefaultRoute",
+                        "Action": "permit",
+                        "PrefixListName": [
+                            "DefaultRoute"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

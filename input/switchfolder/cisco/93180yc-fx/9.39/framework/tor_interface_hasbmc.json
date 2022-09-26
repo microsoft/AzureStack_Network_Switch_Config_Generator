@@ -1,0 +1,887 @@
+{
+  "Device": {
+    "Type": "TOR",
+    "Make": "Cisco",
+    "Model": "93180YC-FX"
+  },
+  "InterfaceName": [
+    {
+      "Speed": 1000,
+      "Name": "Ethernet"
+    },
+    {
+      "Speed": 10000,
+      "Name": "TenGigEthernet"
+    },
+    {
+      "Speed": 25000,
+      "Name": "TwentyFiveGigEthernet"
+    }
+  ],
+  "Port": [
+    {
+      "ID": 0,
+      "Port": "mgmt0",
+      "Speed": 0,
+      "Description": "BMCMgmt",
+      "MTU": 9000,
+      "PortType": "BMCMgmt",
+      "Shutdown": true,
+      "IPAddress": "TORX_IPv4",
+      "UntagVlan": "",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 1,
+      "Port": "1/1",
+      "Speed": 1000,
+      "Description": "Host Port",
+      "MTU": 9216,
+      "PortType": "Trunk",
+      "Shutdown": false,
+      "IPAddress": "",
+      "UntagVlan": "InfraMgmt",
+      "TagVlan": [
+        "Compute"
+      ],
+      "Others": {
+        "service-policy-input": "AZS_SERVICES",
+        "pfc": "on"
+      }
+    },
+    {
+      "ID": 2,
+      "Port": "1/2",
+      "Speed": 1000,
+      "Description": "Host Port",
+      "MTU": 9216,
+      "PortType": "Trunk",
+      "Shutdown": false,
+      "IPAddress": "",
+      "UntagVlan": "InfraMgmt",
+      "TagVlan": [
+        "Compute"
+      ],
+      "Others": {
+        "service-policy-input": "AZS_SERVICES",
+        "pfc": "on"
+      }
+    },
+    {
+      "ID": 3,
+      "Port": "1/3",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 4,
+      "Port": "1/4",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 5,
+      "Port": "1/5",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 6,
+      "Port": "1/6",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 7,
+      "Port": "1/7",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 8,
+      "Port": "1/8",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 9,
+      "Port": "1/9",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 10,
+      "Port": "1/10",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 11,
+      "Port": "1/11",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 12,
+      "Port": "1/12",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 13,
+      "Port": "1/13",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 14,
+      "Port": "1/14",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 15,
+      "Port": "1/15",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 16,
+      "Port": "1/16",
+      "Speed": 10000,
+      "Description": "Storage Port",
+      "MTU": 9000,
+      "PortType": "Trunk",
+      "Shutdown": false,
+      "IPAddress": "",
+      "UntagVlan": "InfraMgmt",
+      "TagVlan": [
+        "Storage1",
+        "Storage2"
+      ],
+      "Others": {}
+    },
+    {
+      "ID": 17,
+      "Port": "1/17",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 18,
+      "Port": "1/18",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 19,
+      "Port": "1/19",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 20,
+      "Port": "1/20",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 21,
+      "Port": "1/21",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 22,
+      "Port": "1/22",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 23,
+      "Port": "1/23",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 24,
+      "Port": "1/24",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 25,
+      "Port": "1/25",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 26,
+      "Port": "1/26",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 27,
+      "Port": "1/27",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 28,
+      "Port": "1/28",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 29,
+      "Port": "1/29",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 30,
+      "Port": "1/30",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 31,
+      "Port": "1/31",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 32,
+      "Port": "1/32",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 33,
+      "Port": "1/33",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 34,
+      "Port": "1/34",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 35,
+      "Port": "1/35",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 36,
+      "Port": "1/36",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 37,
+      "Port": "1/37",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 38,
+      "Port": "1/38",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 39,
+      "Port": "1/39",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 40,
+      "Port": "1/40",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 41,
+      "Port": "1/41",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 42,
+      "Port": "1/42",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 43,
+      "Port": "1/43",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 44,
+      "Port": "1/44",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 45,
+      "Port": "1/45",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 46,
+      "Port": "1/46",
+      "Speed": 10000,
+      "Description": "BMCMgmt",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": false,
+      "IPAddress": "",
+      "UntagVlan": "BMCMgmt",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 47,
+      "Port": "1/47",
+      "Speed": 10000,
+      "Description": "P2P_TORX_To_Border2/TORX",
+      "MTU": 9000,
+      "PortType": "IP",
+      "Shutdown": false,
+      "IPAddress": "P2P_TORX_To_Border2/TORX",
+      "UntagVlan": "",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 48,
+      "Port": "1/48",
+      "Speed": 10000,
+      "Description": "P2P_TORX_To_Border1/TORX",
+      "MTU": 9000,
+      "PortType": "IP",
+      "Shutdown": false,
+      "IPAddress": "P2P_TORX_To_Border1/TORX",
+      "UntagVlan": "",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 49,
+      "Port": "1/49",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 50,
+      "Port": "1/50",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 51,
+      "Port": "1/51",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 52,
+      "Port": "1/52",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 53,
+      "Port": "1/53",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    },
+    {
+      "ID": 54,
+      "Port": "1/54",
+      "Speed": 10000,
+      "Description": "Unused",
+      "MTU": 9000,
+      "PortType": "Access",
+      "Shutdown": true,
+      "IPAddress": "",
+      "UntagVlan": "Unused",
+      "TagVlan": [],
+      "Others": {}
+    }
+  ],
+  "VLAN": [
+    {
+      "Group": "Compute",
+      "IPAssignment": "TORX_IPv4",
+      "MTU": 9000,
+      "VirtualAssignment": {
+        "PriorityId": 150,
+        "IPAssignment": "Gateway"
+      },
+      "IPHelper": [
+        "DVM"
+      ],
+      "ACL": []
+    },
+    {
+      "Group": "InfraMgmt",
+      "IPAssignment": "TORX_IPv4",
+      "MTU": 9000,
+      "VirtualAssignment": {
+        "PriorityId": 150,
+        "IPAssignment": "Gateway"
+      },
+      "IPHelper": [],
+      "ACL": [
+        {
+          "Name": "ACLName",
+          "Direction": "IN"
+        },
+        {
+          "Name": "ACLName",
+          "Direction": "OUT"
+        }
+      ]
+    },
+    {
+      "Group": "Storage",
+      "IPAssignment": "",
+      "MTU": 9000,
+      "VirtualAssignment": {
+        "PriorityId": null,
+        "IPAssignment": ""
+      },
+      "IPHelper": [],
+      "ACL": []
+    },
+    {
+      "Group": "Unused",
+      "Shutdown": true,
+      "IPAssignment": "",
+      "MTU": 9000,
+      "VirtualAssignment": {
+        "PriorityId": null,
+        "IPAssignment": ""
+      },
+      "IPHelper": [],
+      "ACL": []
+    },
+    {
+      "Group": "BMCMgmt",
+      "Shutdown": true,
+      "IPAssignment": "TORX_IPv4",
+      "MTU": 9000,
+      "VirtualAssignment": {
+        "PriorityId": null,
+        "IPAssignment": ""
+      },
+      "IPHelper": [],
+      "ACL": []
+    }
+  ],
+  "PortChannel": [
+    {
+      "Name": "port-channel50",
+      "Description": "MLAG Heartbeat and iBGP TOR1-TOR2",
+      "ID": 50,
+      "Type": "IP",
+      "Shutdown": false,
+      "IPAddress": "TORX_PO50",
+      "NbrIPAddress": "TORY_PO50",
+      "VLANs": "",
+      "MTU": 9216,
+      "Members": [
+        "1/41",
+        "1/42"
+      ],
+      "Others": {
+        "pfc": "on",
+        "inputPolicy": "AZS_SERVICES"
+      }
+    },
+    {
+      "Name": "port-channel101",
+      "Description": "MLAG_PEER",
+      "ID": 101,
+      "Type": "Trunk",
+      "Shutdown": false,
+      "IPAddress": "",
+      "NbrIPAddress": "",
+      "VLANs": "99",
+      "MTU": 9216,
+      "Members": [
+        "1/49",
+        "1/50",
+        "1/51"
+      ],
+      "Others": {
+        "pfc": "on",
+        "stp": "network",
+        "vpc": "peer-link"
+      }
+    },
+    {
+      "Name": "port-channel102",
+      "Description": "VPC:TORtoBMC",
+      "ID": 102,
+      "Type": "Trunk",
+      "Shutdown": false,
+      "IPAddress": "",
+      "NbrIPAddress": "",
+      "VLANs": "BMCMgmt",
+      "MTU": 9216,
+      "Members": [
+        "1/44"
+      ],
+      "Others": {
+        "stp": "network",
+        "vpc": "102"
+      }
+    }
+  ],
+  "Loopback": [
+    {
+      "Name": "Loopback0",
+      "IPAddress": "TORX_Loopback0"
+    }
+  ]
+}

@@ -14,9 +14,21 @@ func TestOutputNetwork(t *testing.T) {
 	}
 	testFolder := "./testcases/"
 	testCases := map[string]test{
-		"cisco93180yc-fx": {
-			testFolder + "cisco93180yc-fx/input.json",
-			testFolder + "cisco93180yc-fx/S31R28-TOR1.json",
+		"cisco93180yc-fx_nobmc_bgp": {
+			testFolder + "cisco93180yc-fx_nobmc_bgp/input_nobmc_bgp.json",
+			testFolder + "cisco93180yc-fx_nobmc_bgp/S31R28-TOR1.json",
+		},
+		"cisco93180yc-fx_nobmc_static": {
+			testFolder + "cisco93180yc-fx_nobmc_static/input_nobmc_static.json",
+			testFolder + "cisco93180yc-fx_nobmc_static/S31R28-TOR1.json",
+		},
+		"cisco93180yc-fx_hasbmc_bgp": {
+			testFolder + "cisco93180yc-fx_hasbmc_bgp/input_hasbmc_bgp.json",
+			testFolder + "cisco93180yc-fx_hasbmc_bgp/S31R28-TOR1.json",
+		},
+		"cisco93180yc-fx_hasbmc_static": {
+			testFolder + "cisco93180yc-fx_hasbmc_static/input_hasbmc_static.json",
+			testFolder + "cisco93180yc-fx_hasbmc_static/S31R28-TOR1.json",
 		},
 	}
 
@@ -41,11 +53,29 @@ func TestParseInterfaceObj(t *testing.T) {
 	}
 	testFolder := "./testcases/"
 	testCases := map[string]test{
-		"cisco93180yc-fx": {
-			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.3/framework",
+		"cisco93180yc-fx_nobmc_bgp": {
+			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
 			outputJson: []string{
-				testFolder + "cisco93180yc-fx/S31R28-TOR1.json",
-				testFolder + "cisco93180yc-fx/S31R28-TOR2.json"},
+				testFolder + "cisco93180yc-fx_nobmc_bgp/S31R28-TOR1.json",
+				testFolder + "cisco93180yc-fx_nobmc_bgp/S31R28-TOR2.json"},
+		},
+		"cisco93180yc-fx_nobmc_static": {
+			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
+			outputJson: []string{
+				testFolder + "cisco93180yc-fx_nobmc_static/S31R28-TOR1.json",
+				testFolder + "cisco93180yc-fx_nobmc_static/S31R28-TOR2.json"},
+		},
+		"cisco93180yc-fx_hasbmc_bgp": {
+			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
+			outputJson: []string{
+				testFolder + "cisco93180yc-fx_hasbmc_bgp/S31R28-TOR1.json",
+				testFolder + "cisco93180yc-fx_hasbmc_bgp/S31R28-TOR2.json"},
+		},
+		"cisco93180yc-fx_hasbmc_static": {
+			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
+			outputJson: []string{
+				testFolder + "cisco93180yc-fx_hasbmc_static/S31R28-TOR1.json",
+				testFolder + "cisco93180yc-fx_hasbmc_static/S31R28-TOR2.json"},
 		},
 	}
 
@@ -56,7 +86,11 @@ func TestParseInterfaceObj(t *testing.T) {
 				gotoutputObj := parseOutputJSON(v)
 				gotoutputObj.Vlan = nil
 				gotoutputObj.Port = nil
-				gotoutputObj.parseInterfaceObj(tc.frameworkPath)
+				if gotoutputObj.Device.Type == DeviceType_BMC {
+					gotoutputObj.parseInterfaceObj(tc.frameworkPath, DeviceType_BMC)
+				} else {
+					gotoutputObj.parseInterfaceObj(tc.frameworkPath, DeviceType_TOR)
+				}
 				// Vlan Unit Test
 				wantVlan := wantoutputObj.Vlan
 				gotVlan := gotoutputObj.Vlan
@@ -83,12 +117,33 @@ func TestParseBGPFramework(t *testing.T) {
 	}
 	testFolder := "./testcases/"
 	testCases := map[string]test{
-		"cisco93180yc-fx": {
-			inputJson:     testFolder + "cisco93180yc-fx/input.json",
-			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.3/framework",
+		"cisco93180yc-fx_nobmc_bgp": {
+			inputJson:     testFolder + "cisco93180yc-fx_nobmc_bgp/input_nobmc_bgp.json",
+			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
 			outputJson: []string{
-				testFolder + "cisco93180yc-fx/S31R28-TOR1.json",
-				testFolder + "cisco93180yc-fx/S31R28-TOR2.json"},
+				testFolder + "cisco93180yc-fx_nobmc_bgp/S31R28-TOR1.json",
+				testFolder + "cisco93180yc-fx_nobmc_bgp/S31R28-TOR2.json"},
+		},
+		"cisco93180yc-fx_nobmc_static": {
+			inputJson:     testFolder + "cisco93180yc-fx_nobmc_static/input_nobmc_static.json",
+			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
+			outputJson: []string{
+				testFolder + "cisco93180yc-fx_nobmc_static/S31R28-TOR1.json",
+				testFolder + "cisco93180yc-fx_nobmc_static/S31R28-TOR2.json"},
+		},
+		"cisco93180yc-fx_hasbmc_bgp": {
+			inputJson:     testFolder + "cisco93180yc-fx_hasbmc_bgp/input_hasbmc_bgp.json",
+			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
+			outputJson: []string{
+				testFolder + "cisco93180yc-fx_hasbmc_bgp/S31R28-TOR1.json",
+				testFolder + "cisco93180yc-fx_hasbmc_bgp/S31R28-TOR2.json"},
+		},
+		"cisco93180yc-fx_hasbmc_static": {
+			inputJson:     testFolder + "cisco93180yc-fx_hasbmc_static/input_hasbmc_static.json",
+			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
+			outputJson: []string{
+				testFolder + "cisco93180yc-fx_hasbmc_static/S31R28-TOR1.json",
+				testFolder + "cisco93180yc-fx_hasbmc_static/S31R28-TOR2.json"},
 		},
 	}
 
@@ -99,9 +154,18 @@ func TestParseBGPFramework(t *testing.T) {
 				wantoutputObj := parseOutputJSON(v)
 				gotoutputObj := parseOutputJSON(v)
 				gotoutputObj.Routing = nil
-
+				deviceType := gotoutputObj.Device.Type
+				if deviceType == TOR1 {
+					TORX, TORY = TOR1, TOR2
+				} else {
+					TORX, TORY = TOR2, TOR1
+				}
 				// Routing Unit Test
-				gotoutputObj.parseRoutingFramework(tc.frameworkPath, inputObj)
+				if deviceType == DeviceType_BMC {
+					gotoutputObj.parseRoutingFramework(tc.frameworkPath, DeviceType_BMC, inputObj)
+				} else {
+					gotoutputObj.parseRoutingFramework(tc.frameworkPath, DeviceType_TOR, inputObj)
+				}
 				wantBGP := wantoutputObj.Routing
 				gotBGP := gotoutputObj.Routing
 				if !reflect.DeepEqual(gotBGP, wantBGP) {

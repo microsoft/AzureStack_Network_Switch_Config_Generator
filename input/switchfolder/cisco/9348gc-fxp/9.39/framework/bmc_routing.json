@@ -1,0 +1,13 @@
+{
+    "Static": {
+        "PrefixListName": [],
+        "RouteMapName": [],
+        "Network": [
+            {
+                "DstIPAddress": "Any",
+                "NextHop": "BMCMgmt/Gateway",
+                "Name": "GlobalDefaultRoute"
+            }
+        ]
+    }
+}

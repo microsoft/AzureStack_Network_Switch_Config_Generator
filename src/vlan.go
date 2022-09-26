@@ -1,34 +1,45 @@
 package main
 
 import (
+	"log"
+	"sort"
 	"strings"
 )
 
-func newVlanObj() *VlanType {
-	return &VlanType{}
-}
-
 func (o *OutputType) parseVlanObj(i *InterfaceFrameworkType) {
-
-	for _, segment := range *o.Supernets {
-		if segment.VlanID > 0 {
-			vlanObj := newVlanObj()
-			vlanObj.VlanName = segment.Name
-			vlanObj.Shutdown = segment.Shutdown
-			vlanObj.VlanID = segment.VlanID
-			vlanObj.Group = segment.Group
-			for _, vlanItem := range i.Vlan {
-				if vlanObj.Group == vlanItem.Group {
-					vlanObj.Mtu = vlanItem.Mtu
-					IPAssignmentName := replaceTORXName(vlanItem.IPAssignment, o.Device.Type)
-					for _, ipAssign := range segment.IPAssignment {
-						if strings.Contains(ipAssign.Name, IPAssignmentName) {
-							vlanObj.IPAddress = ipAssign.IPAddress
-						}
+	for _, vlanItem := range i.Vlan {
+		for _, segment := range *o.Supernets {
+			if segment.Group == vlanItem.Group {
+				vlanItem.VlanName = segment.Name
+				vlanItem.Shutdown = segment.Shutdown
+				vlanItem.VlanID = segment.VlanID
+				IPAssignmentName := replaceTORXName(vlanItem.IPAddress, o.Device.Type)
+				for _, ipAssign := range segment.IPAssignment {
+					// Vlan Name Match
+					if strings.Contains(ipAssign.Name, IPAssignmentName) {
+						vlanItem.IPAddress = ipAssign.IPAddress
+					}
+					// VIP Name Match
+					if strings.Contains(ipAssign.Name, vlanItem.Vip.VIPAddress) {
+						vlanItem.Vip.VIPAddress = ipAssign.IPAddress
 					}
 				}
+				o.Vlan = append(o.Vlan, vlanItem)
 			}
-			o.Vlan = append(o.Vlan, *vlanObj)
 		}
 	}
+	// Increasing Sort by VlanID
+	sort.Slice(o.Vlan, func(i, j int) bool {
+		return o.Vlan[i].VlanID < o.Vlan[j].VlanID
+	})
+}
+
+func (o *OutputType) getVLANIDbyName(vlanName string) int {
+	for _, vlan := range o.Vlan {
+		if vlan.VlanName == vlanName {
+			return vlan.VlanID
+		}
+	}
+	log.Printf("VLAN Name %s is not founded", vlanName)
+	return 0
 }

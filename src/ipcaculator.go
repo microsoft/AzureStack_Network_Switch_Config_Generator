@@ -43,6 +43,13 @@ func parseSupernetSection(switchSubnetBytes []byte) *[]SupernetOutputType {
 		// fmt.Println(outputSubnet)
 		outputResult = append(outputResult, *outputSubnet)
 	}
+
+	// Add Any Any supernet for function consume.
+	outputResult = append(outputResult, SupernetOutputType{
+		Group:  "Any",
+		Name:   "Any",
+		Subnet: "0.0.0.0/0",
+	})
 	return &outputResult
 }
 
