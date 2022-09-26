@@ -32,15 +32,14 @@
 
 ```mermaid
 flowchart TD
-    A[Switch Framework+Template]
-    B[User Input]
+    A[Switch Framework + Go Template]
+    B[User Input Template]
     C(Generator Tool)
     D(Switch Output Object)
     E[Switch Object JSON Files]
     F[Switch Configuration Files]
-    B -.-> A
-    A --> C
     B --> C
+    A --> C
     C --> D
     D -.-> |For Debug| E
     D --> |For Deploy| F
@@ -468,10 +467,10 @@ Active Package(s):
 ### Phase3 Testing on Multi-Switch Validation Virtual (GNS3 Lab) - 09/16
 
   - Function To Do List: 
-    - `Port-Channel`
-    - `MLAG`
-  - Define BMC Framework
-  - BMC Cisco Switch Integration
+    - ~~`Port-Channel`~~
+    - ~~`MLAG`~~
+  - ~~Define BMC Framework~~
+  - ~~BMC Cisco Switch Integration~~
 
 ### Phase4 Physical Device Testing - 09/30
 
