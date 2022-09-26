@@ -20,9 +20,8 @@
   - [MileStone Plan](#milestone-plan)
     - [~~Phase1 - POC Phase - 06/24~~](#phase1---poc-phase---0624)
     - [~~Phase2 Testing on Single Switch Validation Virtual (GNS3 Lab) - 08/19~~](#phase2-testing-on-single-switch-validation-virtual-gns3-lab---0819)
-    - [Phase3 Testing on Multi-Switch Validation Virtual (GNS3 Lab) - 09/16](#phase3-testing-on-multi-switch-validation-virtual-gns3-lab---0916)
-    - [Phase4 Physical Device Testing - 09/30](#phase4-physical-device-testing---0930)
-  - [Question](#question)
+    - [~~Phase3 Testing on Multi-Switch Validation Virtual (GNS3 Lab) - 09/23~~](#phase3-testing-on-multi-switch-validation-virtual-gns3-lab---0923)
+    - [Phase4 Physical Device Testing - 10/30](#phase4-physical-device-testing---1030)
 
 ## Project Design
 
@@ -464,26 +463,17 @@ Active Package(s):
     - ~~`Syslog`~~ - settings.go.tmpl-inject_syslog + outputObj
   - ~~Complete `Unused` Port in `interface.json` framework~~
 
-### Phase3 Testing on Multi-Switch Validation Virtual (GNS3 Lab) - 09/16
-
+### ~~Phase3 Testing on Multi-Switch Validation Virtual (GNS3 Lab) - 09/23~~
   - Function To Do List: 
     - ~~`Port-Channel`~~
     - ~~`MLAG`~~
   - ~~Define BMC Framework~~
   - ~~BMC Cisco Switch Integration~~
 
-### Phase4 Physical Device Testing - 09/30
+### Phase4 Physical Device Testing - 10/30
 
   - Single Switch
   - Multi-Switch
   - CI/CD for Lab
   - Documentation
   - Lab team training
-
-
-## Question
-1. Supernet IP Dynamic, so the IP address could be possible change if new supernet add to vlan 0
-2. PO Channel Supernet group? SwitchMgmt? InfraMgmt?
-3. Internal/External/GRE VIPS reservation?
-4. Native Vlan 99 for MLAG?
-5. PO member update interface automatically?
