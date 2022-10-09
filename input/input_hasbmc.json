@@ -20,7 +20,7 @@
             "Model": "93180YC-FX",
             "Firmware": "9.39",
             "GenerateDeviceConfig": true,
-            "StaticRouting": false
+            "StaticRouting": true
         },
         {
             "Make": "Cisco",
@@ -30,7 +30,7 @@
             "Model": "93180YC-FX",
             "Firmware": "9.39",
             "GenerateDeviceConfig": true,
-            "StaticRouting": false
+            "StaticRouting": true
         },
         {
             "Make": "Cisco",
@@ -288,6 +288,21 @@
                         {
                             "Name": "TOR2_Loopback0",
                             "Position": 0
+                        }
+                    ]
+                },
+                {
+                    "Name": "PO50",
+                    "Netmask": 30,
+                    "IPSize": 2,
+                    "IPAssignment": [
+                        {
+                            "Name": "TOR1_PO50",
+                            "Position": 1
+                        },
+                        {
+                            "Name": "TOR2_PO50",
+                            "Position": 2
                         }
                     ]
                 }

@@ -1,0 +1,1191 @@
+{
+ "Device": {
+  "Make": "Cisco",
+  "Type": "TOR1",
+  "Hostname": "S31R28-TOR1",
+  "ASN": 65000,
+  "Model": "93180YC-FX",
+  "Firmware": "9.39",
+  "GenerateDeviceConfig": true,
+  "StaticRouting": true,
+  "Username": "aszadmin-vlzxb",
+  "Password": "c2!cuh%xMC8*aRt9"
+ },
+ "IsNoBMC": false,
+ "Settings": {
+  "BMCMgmt": [
+   "Vlan125"
+  ],
+  "NTP": [
+   "100.100.10.10",
+   "100.100.10.11"
+  ],
+  "Syslog": [
+   "100.100.10.10",
+   "100.100.10.11"
+  ],
+  "VPC": [
+   "100.100.1.1/30",
+   "100.100.1.2/30"
+  ]
+ },
+ "Port": [
+  {
+   "Port": "mgmt0",
+   "PortName": "mgmt0",
+   "PortType": "BMCMgmt",
+   "Description": "BMCMgmt",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "100.71.28.66/26",
+   "UntagVlan": 0,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/1",
+   "PortName": "Ethernet",
+   "PortType": "Trunk",
+   "Description": "Host Port",
+   "MTU": 9216,
+   "Shutdown": false,
+   "IPAddress": "",
+   "UntagVlan": 8,
+   "TagVlan": "7,15",
+   "Others": {
+    "pfc": "on",
+    "service-policy-input": "AZS_SERVICES"
+   }
+  },
+  {
+   "Port": "1/2",
+   "PortName": "Ethernet",
+   "PortType": "Trunk",
+   "Description": "Host Port",
+   "MTU": 9216,
+   "Shutdown": false,
+   "IPAddress": "",
+   "UntagVlan": 8,
+   "TagVlan": "7,15",
+   "Others": {
+    "pfc": "on",
+    "service-policy-input": "AZS_SERVICES"
+   }
+  },
+  {
+   "Port": "1/3",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/4",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/5",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/6",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/7",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/8",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/9",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/10",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/11",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/12",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/13",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/14",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/15",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/16",
+   "PortName": "TenGigEthernet",
+   "PortType": "Trunk",
+   "Description": "Storage Port",
+   "MTU": 9000,
+   "Shutdown": false,
+   "IPAddress": "",
+   "UntagVlan": 8,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/17",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/18",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/19",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/20",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/21",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/22",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/23",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/24",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/25",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/26",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/27",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/28",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/29",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/30",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/31",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/32",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/33",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/34",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/35",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/36",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/37",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/38",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/39",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/40",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/41",
+   "PortName": "TenGigEthernet",
+   "PortType": "IP",
+   "Description": "MLAG Heartbeat and iBGP TOR1-TOR2",
+   "MTU": 9000,
+   "Shutdown": false,
+   "IPAddress": "",
+   "UntagVlan": 0,
+   "TagVlan": "",
+   "Others": {
+    "channel_group": "50",
+    "inputPolicy": "AZS_SERVICES",
+    "pfc": "on"
+   }
+  },
+  {
+   "Port": "1/42",
+   "PortName": "TenGigEthernet",
+   "PortType": "IP",
+   "Description": "MLAG Heartbeat and iBGP TOR1-TOR2",
+   "MTU": 9000,
+   "Shutdown": false,
+   "IPAddress": "",
+   "UntagVlan": 0,
+   "TagVlan": "",
+   "Others": {
+    "channel_group": "50",
+    "inputPolicy": "AZS_SERVICES",
+    "pfc": "on"
+   }
+  },
+  {
+   "Port": "1/43",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/44",
+   "PortName": "TenGigEthernet",
+   "PortType": "Trunk",
+   "Description": "VPC:TORtoBMC",
+   "MTU": 9000,
+   "Shutdown": false,
+   "IPAddress": "",
+   "UntagVlan": 0,
+   "TagVlan": "125",
+   "Others": {
+    "channel_group": "102",
+    "stp": "network",
+    "vpc": "102"
+   }
+  },
+  {
+   "Port": "1/45",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/46",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "BMCMgmt",
+   "MTU": 9000,
+   "Shutdown": false,
+   "IPAddress": "",
+   "UntagVlan": 125,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/47",
+   "PortName": "TenGigEthernet",
+   "PortType": "IP",
+   "Description": "P2P_TOR1_To_Border2/TOR1",
+   "MTU": 9000,
+   "Shutdown": false,
+   "IPAddress": "100.100.1.6/31",
+   "UntagVlan": 0,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/48",
+   "PortName": "TenGigEthernet",
+   "PortType": "IP",
+   "Description": "P2P_TOR1_To_Border1/TOR1",
+   "MTU": 9000,
+   "Shutdown": false,
+   "IPAddress": "100.100.1.4/31",
+   "UntagVlan": 0,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/49",
+   "PortName": "TenGigEthernet",
+   "PortType": "Trunk",
+   "Description": "MLAG_PEER",
+   "MTU": 9000,
+   "Shutdown": false,
+   "IPAddress": "",
+   "UntagVlan": 0,
+   "TagVlan": "99",
+   "Others": {
+    "channel_group": "101",
+    "pfc": "on",
+    "stp": "network",
+    "vpc": "peer-link"
+   }
+  },
+  {
+   "Port": "1/50",
+   "PortName": "TenGigEthernet",
+   "PortType": "Trunk",
+   "Description": "MLAG_PEER",
+   "MTU": 9000,
+   "Shutdown": false,
+   "IPAddress": "",
+   "UntagVlan": 0,
+   "TagVlan": "99",
+   "Others": {
+    "channel_group": "101",
+    "pfc": "on",
+    "stp": "network",
+    "vpc": "peer-link"
+   }
+  },
+  {
+   "Port": "1/51",
+   "PortName": "TenGigEthernet",
+   "PortType": "Trunk",
+   "Description": "MLAG_PEER",
+   "MTU": 9000,
+   "Shutdown": false,
+   "IPAddress": "",
+   "UntagVlan": 0,
+   "TagVlan": "99",
+   "Others": {
+    "channel_group": "101",
+    "pfc": "on",
+    "stp": "network",
+    "vpc": "peer-link"
+   }
+  },
+  {
+   "Port": "1/52",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/53",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  },
+  {
+   "Port": "1/54",
+   "PortName": "TenGigEthernet",
+   "PortType": "Access",
+   "Description": "Unused",
+   "MTU": 9000,
+   "Shutdown": true,
+   "IPAddress": "",
+   "UntagVlan": 2,
+   "TagVlan": "",
+   "Others": {}
+  }
+ ],
+ "Vlan": [
+  {
+   "VlanName": "Unused",
+   "VlanID": 2,
+   "Group": "Unused",
+   "IPAddress": "",
+   "MTU": 9000,
+   "VIP": {
+    "PriorityId": 0,
+    "VIPAddress": ""
+   },
+   "Shutdown": true
+  },
+  {
+   "VlanName": "Tenant0",
+   "VlanID": 7,
+   "Group": "Compute",
+   "IPAddress": "100.100.100.3/24",
+   "MTU": 9000,
+   "VIP": {
+    "PriorityId": 0,
+    "VIPAddress": "100.100.100.1/24"
+   },
+   "Shutdown": false
+  },
+  {
+   "VlanName": "InfraMgmt",
+   "VlanID": 8,
+   "Group": "InfraMgmt",
+   "IPAddress": "100.100.10.3/24",
+   "MTU": 9000,
+   "VIP": {
+    "PriorityId": 0,
+    "VIPAddress": "100.100.10.1/24"
+   },
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Tenant1",
+   "VlanID": 15,
+   "Group": "Compute",
+   "IPAddress": "100.100.100.3/24",
+   "MTU": 9000,
+   "VIP": {
+    "PriorityId": 0,
+    "VIPAddress": "100.100.100.1/24"
+   },
+   "Shutdown": false
+  },
+  {
+   "VlanName": "BMCMgmt",
+   "VlanID": 125,
+   "Group": "BMCMgmt",
+   "IPAddress": "100.71.28.68/26",
+   "MTU": 9000,
+   "VIP": {
+    "PriorityId": 0,
+    "VIPAddress": "100.71.28.65/26"
+   },
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Storage1",
+   "VlanID": 711,
+   "Group": "Storage",
+   "IPAddress": "",
+   "MTU": 9000,
+   "VIP": {
+    "PriorityId": 0,
+    "VIPAddress": ""
+   },
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Storage2",
+   "VlanID": 712,
+   "Group": "Storage",
+   "IPAddress": "",
+   "MTU": 9000,
+   "VIP": {
+    "PriorityId": 0,
+    "VIPAddress": ""
+   },
+   "Shutdown": false
+  }
+ ],
+ "PortChannel": [
+  {
+   "Name": "port-channel50",
+   "ID": 50,
+   "Type": "IP",
+   "Description": "MLAG Heartbeat and iBGP TOR1-TOR2",
+   "MTU": 9216,
+   "Shutdown": false,
+   "IPAddress": "100.100.1.1/30",
+   "NbrIPAddress": "100.100.1.2/30",
+   "VLANs": "",
+   "Members": [
+    "1/41",
+    "1/42"
+   ],
+   "Others": {
+    "channel_group": "50",
+    "inputPolicy": "AZS_SERVICES",
+    "pfc": "on"
+   }
+  },
+  {
+   "Name": "port-channel101",
+   "ID": 101,
+   "Type": "Trunk",
+   "Description": "MLAG_PEER",
+   "MTU": 9216,
+   "Shutdown": false,
+   "IPAddress": "",
+   "NbrIPAddress": "",
+   "VLANs": "99",
+   "Members": [
+    "1/49",
+    "1/50",
+    "1/51"
+   ],
+   "Others": {
+    "channel_group": "101",
+    "pfc": "on",
+    "stp": "network",
+    "vpc": "peer-link"
+   }
+  },
+  {
+   "Name": "port-channel102",
+   "ID": 102,
+   "Type": "Trunk",
+   "Description": "VPC:TORtoBMC",
+   "MTU": 9216,
+   "Shutdown": false,
+   "IPAddress": "",
+   "NbrIPAddress": "",
+   "VLANs": "125",
+   "Members": [
+    "1/44"
+   ],
+   "Others": {
+    "channel_group": "102",
+    "stp": "network",
+    "vpc": "102"
+   }
+  }
+ ],
+ "Loopback": [
+  {
+   "Name": "Loopback0",
+   "IPAddress": "100.100.1.12/32"
+  }
+ ],
+ "Routing": {
+  "BGP": {
+   "BGPAsn": "TORX",
+   "RouterID": "TORX_Loopback0",
+   "IPv4Network": [
+    "Tenant0",
+    "Tenant1",
+    "InfraMgmt",
+    "SwitchMgmt",
+    "BMCMgmt"
+   ],
+   "EnableDefaultOriginate": false,
+   "RoutePrefix": {
+    "MaxiPrefix": 12000,
+    "ErrorAction": "warning-only"
+   },
+   "IPv4Neighbor": [
+    {
+     "Description": "P2P_TORX_To_Border1/Border1",
+     "EnablePassword": false,
+     "NeighborAsn": "Border1",
+     "NeighborIPAddress": "P2P_TORX_To_Border1/Border1",
+     "PrefixList": [
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "in"
+      },
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "out"
+      }
+     ],
+     "UpdateSource": "TORX_Loopback0",
+     "Shutdown": false
+    },
+    {
+     "Description": "P2P_TORX_To_Border2/Border2",
+     "EnablePassword": false,
+     "NeighborAsn": "Border2",
+     "NeighborIPAddress": "P2P_TORX_To_Border2/Border2",
+     "PrefixList": [
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "in"
+      },
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "out"
+      }
+     ],
+     "UpdateSource": "TORX_Loopback0",
+     "Shutdown": false
+    },
+    {
+     "Description": "iBGPPeer_TORX_To_TORY/TORY",
+     "EnablePassword": false,
+     "NeighborAsn": "TORY",
+     "NeighborIPAddress": "PO50/TORY_PO50",
+     "PrefixList": [],
+     "UpdateSource": "TORX_Loopback0",
+     "Shutdown": false
+    }
+   ],
+   "PrefixListName": [
+    "ExternalPrefix"
+   ]
+  },
+  "Static": {
+   "PrefixListName": [
+    "DefaultRoute"
+   ],
+   "RouteMapName": [
+    "DefaultRoute"
+   ],
+   "Network": [
+    {
+     "DstIPAddress": "100.100.100.0/24",
+     "NextHop": "null 0",
+     "Name": "Tenant0"
+    },
+    {
+     "DstIPAddress": "100.100.101.0/24",
+     "NextHop": "null 0",
+     "Name": "Tenant1"
+    },
+    {
+     "DstIPAddress": "0.0.0.0/0",
+     "NextHop": "100.100.1.4",
+     "Name": "P2P_TOR1_To_Border1/TOR1"
+    },
+    {
+     "DstIPAddress": "0.0.0.0/0",
+     "NextHop": "100.100.1.6",
+     "Name": "P2P_TOR1_To_Border2/TOR1"
+    }
+   ]
+  },
+  "RoutingPolicy": {
+   "PrefixList": [
+    {
+     "Name": "DefaultRoute",
+     "Config": [
+      {
+       "Name": "DefaultRoute",
+       "Action": "permit",
+       "Supernet": "0.0.0.0/0",
+       "IPAddress": "",
+       "Operation": "le",
+       "Prefix": 32
+      }
+     ]
+    }
+   ],
+   "RouteMap": [
+    {
+     "Name": "DefaultRoute",
+     "Config": [
+      {
+       "Index": 10,
+       "Name": "DefaultRoute",
+       "Action": "permit",
+       "PrefixListName": [
+        "DefaultRoute"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "Supernets": [
+  {
+   "VlanID": 2,
+   "Group": "Unused",
+   "Name": "Unused",
+   "Subnet": "",
+   "Shutdown": true,
+   "IPAssignment": []
+  },
+  {
+   "VlanID": 125,
+   "Group": "BMCMgmt",
+   "Name": "BMCMgmt",
+   "Subnet": "100.71.28.64/26",
+   "Shutdown": false,
+   "IPAssignment": [
+    {
+     "Name": "BMCMgmt/Gateway",
+     "IPAddress": "100.71.28.65/26"
+    },
+    {
+     "Name": "BMCMgmt/TOR1_IPv4",
+     "IPAddress": "100.71.28.66/26"
+    },
+    {
+     "Name": "BMCMgmt/TOR2_IPv4",
+     "IPAddress": "100.71.28.67/26"
+    },
+    {
+     "Name": "BMCMgmt/BMC_IPv4",
+     "IPAddress": "100.71.28.68/26"
+    }
+   ]
+  },
+  {
+   "VlanID": 8,
+   "Group": "InfraMgmt",
+   "Name": "InfraMgmt",
+   "Subnet": "100.100.10.0/24",
+   "Shutdown": false,
+   "IPAssignment": [
+    {
+     "Name": "InfraMgmt/Gateway",
+     "IPAddress": "100.100.10.1/24"
+    },
+    {
+     "Name": "InfraMgmt/TOR1_IPv4",
+     "IPAddress": "100.100.10.2/24"
+    },
+    {
+     "Name": "InfraMgmt/TOR2_IPv4",
+     "IPAddress": "100.100.10.3/24"
+    }
+   ]
+  },
+  {
+   "VlanID": 7,
+   "Group": "Compute",
+   "Name": "Tenant0",
+   "Subnet": "100.100.100.0/24",
+   "Shutdown": false,
+   "IPAssignment": [
+    {
+     "Name": "Tenant0/Gateway",
+     "IPAddress": "100.100.100.1/24"
+    },
+    {
+     "Name": "Tenant0/TOR1_IPv4",
+     "IPAddress": "100.100.100.2/24"
+    },
+    {
+     "Name": "Tenant0/TOR2_IPv4",
+     "IPAddress": "100.100.100.3/24"
+    }
+   ]
+  },
+  {
+   "VlanID": 15,
+   "Group": "Compute",
+   "Name": "Tenant1",
+   "Subnet": "100.100.101.0/24",
+   "Shutdown": false,
+   "IPAssignment": [
+    {
+     "Name": "Tenant1/Gateway",
+     "IPAddress": "100.100.101.1/24"
+    },
+    {
+     "Name": "Tenant1/TOR1_IPv4",
+     "IPAddress": "100.100.101.2/24"
+    },
+    {
+     "Name": "Tenant1/TOR2_IPv4",
+     "IPAddress": "100.100.101.3/24"
+    }
+   ]
+  },
+  {
+   "VlanID": 711,
+   "Group": "Storage",
+   "Name": "Storage1",
+   "Subnet": "",
+   "Shutdown": false,
+   "IPAssignment": []
+  },
+  {
+   "VlanID": 712,
+   "Group": "Storage",
+   "Name": "Storage2",
+   "Subnet": "",
+   "Shutdown": false,
+   "IPAssignment": []
+  },
+  {
+   "VlanID": 0,
+   "Group": "SwitchMgmt",
+   "Name": "SwitchMgmt",
+   "Subnet": "100.100.1.0/28",
+   "Shutdown": false,
+   "IPAssignment": [
+    {
+     "Name": "PO50/TOR1_PO50",
+     "IPAddress": "100.100.1.1/30"
+    },
+    {
+     "Name": "PO50/TOR2_PO50",
+     "IPAddress": "100.100.1.2/30"
+    },
+    {
+     "Name": "P2P_TOR1_To_Border1/TOR1",
+     "IPAddress": "100.100.1.4/31"
+    },
+    {
+     "Name": "P2P_TOR1_To_Border1/Border1",
+     "IPAddress": "100.100.1.5/31"
+    },
+    {
+     "Name": "P2P_TOR1_To_Border2/TOR1",
+     "IPAddress": "100.100.1.6/31"
+    },
+    {
+     "Name": "P2P_TOR1_To_Border2/Border2",
+     "IPAddress": "100.100.1.7/31"
+    },
+    {
+     "Name": "P2P_TOR2_To_Border1/TOR2",
+     "IPAddress": "100.100.1.8/31"
+    },
+    {
+     "Name": "P2P_TOR2_To_Border1/Border1",
+     "IPAddress": "100.100.1.9/31"
+    },
+    {
+     "Name": "P2P_TOR2_To_Border2/TOR2",
+     "IPAddress": "100.100.1.10/31"
+    },
+    {
+     "Name": "P2P_TOR2_To_Border2/Border2",
+     "IPAddress": "100.100.1.11/31"
+    },
+    {
+     "Name": "TOR1_Loopback0/TOR1_Loopback0",
+     "IPAddress": "100.100.1.12/32"
+    },
+    {
+     "Name": "TOR2_Loopback0/TOR2_Loopback0",
+     "IPAddress": "100.100.1.13/32"
+    }
+   ]
+  },
+  {
+   "VlanID": 0,
+   "Group": "Any",
+   "Name": "Any",
+   "Subnet": "0.0.0.0/0",
+   "Shutdown": false,
+   "IPAssignment": null
+  }
+ ]
+}

@@ -109,9 +109,10 @@ func (r *RoutingType) updateStaticNetwork(outputObj *OutputType) {
 			})
 		} else if len(staticItem.DstIPAddress) != 0 {
 			// update default route to border
+			nextHop := outputObj.getIPbyName(routeName, SWITCH_MGMT)
 			tmp = append(tmp, StaticNetworkType{
 				DstIPAddress: outputObj.getSupernetIPbyName(staticItem.DstIPAddress),
-				NextHop:      outputObj.getIPbyName(routeName, SWITCH_MGMT),
+				NextHop:      strings.Split(nextHop, "/")[0],
 				Name:         routeName,
 			})
 		}

@@ -53,6 +53,7 @@ func main() {
 	inputJsonFile := flag.String("inputJsonFile", "../input/input_hasbmc.json", "File path of switch deploy input.json")
 	switchFolder := flag.String("switchFolder", "../input/switchfolder", "Folder path of switch frameworks and templates")
 	outputFolder := flag.String("outputFolder", "../output", "Folder path of switch configurations")
+	flag.Parse()
 
 	// Covert input.json to Go Object
 	inputObj := parseInputJSON(*inputJsonFile)
@@ -71,7 +72,7 @@ func main() {
 			// Determine the switch category based on Device info.
 			frameworkPath := deviceItem.validateFrameworkPath(*switchFolder)
 			templatePath := deviceItem.validateTemplatePath(*switchFolder)
-			log.Println(deviceItem.Hostname, frameworkPath, templatePath)
+			// log.Println(deviceItem.Hostname, frameworkPath, templatePath)
 			outputObj.Supernets = outputSupernets
 			outputObj.Device = deviceItem
 			outputObj.Device.Username = randomUsername

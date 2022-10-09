@@ -290,6 +290,21 @@
                             "Position": 0
                         }
                     ]
+                },
+                {
+                    "Name": "PO50",
+                    "Netmask": 30,
+                    "IPSize": 2,
+                    "IPAssignment": [
+                        {
+                            "Name": "TOR1_PO50",
+                            "Position": 1
+                        },
+                        {
+                            "Name": "TOR2_PO50",
+                            "Position": 2
+                        }
+                    ]
                 }
             ]
         }
