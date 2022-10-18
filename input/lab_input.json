@@ -1,0 +1,282 @@
+{
+    "Version": "1.2022.10.12",
+    "Description": "Template for ASZ Rack, key values are all upper case",
+    "InputData": {
+        "Cloud": [
+            {
+                "Id": "CL01",
+                "NodeCount": 0,
+                "NamingPrefix": "B42TCA3",
+                "PhysicalNamingPrefix": "B42TCA3",
+                "CompanyName": "Microsoft",
+                "RegionName": "Redmond",
+                "DomainFQDN": "B42TCA3.masd.stbtest.microsoft.com",
+                "ExternalDomainFQDN": "Ext-B42TCA3.masd.stbtest.microsoft.com",
+                "InfraAzureEnvironment": "AzureCloud",
+                "InfraAzureDirectoryTenantName": "msazurestack.microsoft.com",
+                "ConnectToAzure": "Azure Active Directory",
+                "TimeServer": [
+                    "13.86.101.172"
+                ],
+                "SyslogServerIPv4Address": "10.185.192.141",
+                "DNSForwarder": [
+                    "10.50.10.50",
+                    "10.50.50.50"
+                ],
+                "ScaleUnits": [
+                    {
+                        "Name": "SU01",
+                        "NodeCount": 4,
+                        "RackId": "Rack01",
+                        "Index": 1
+                    }
+                ]
+            }
+        ],
+        "Switches": [
+            {
+                "Make": "Border",
+                "Type": "Border",
+                "Model": null,
+                "ASN": 64626
+            },
+            {
+                "Make": "Border",
+                "Type": "Border",
+                "Model": null,
+                "ASN": 64626
+            },
+            {
+                "Make": "DellEMC",
+                "Type": "BMC",
+                "Hostname": "B88RR14-{Type}",
+                "Model": "S3048-ON",
+                "ASN": 64629
+            },
+            {
+                "Make": "DellEMC",
+                "Type": "TOR1",
+                "Hostname": "B88RR14-{Type}",
+                "Model": "S5048-ON",
+                "ASN": 64629
+            },
+            {
+                "Make": "DellEMC",
+                "Type": "TOR2",
+                "Hostname": "B88RR14-{Type}",
+                "Model": "S5048-ON",
+                "ASN": 64629
+            },
+            {
+                "Make": "Microsoft",
+                "Type": "MUX",
+                "Model": null,
+                "ASN": 64630
+            }
+        ],
+        "BorderConnectivity": "BGP",
+        "Supernets": [
+            {
+                "NetworkKey": "BMC",
+                "Name": "BMC125",
+                "VLANID": 125,
+                "Description": "BMC Network. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "SwitchSVI": true,
+                    "Cidr": 26,
+                    "Network": "100.100.113.192",
+                    "Gateway": "100.100.113.193"
+                },
+                "IPv6": {}
+            },
+            {
+                "NetworkKey": "SWITCHMGMT",
+                "Name": "SWITCHMGMT",
+                "VLANID": 0,
+                "Description": "SwitchMgmt Network. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "__comment__": "investigate using smaller or using private.  Need to define what to use for loopback switch IPs which then are used in stamp TORswitchBGB",
+                    "SwitchSVI": false,
+                    "Cidr": 26,
+                    "Network": "100.100.113.128",
+                    "Gateway": "100.100.113.129"
+                },
+                "IPv6": {}
+            },
+            {
+                "NetworkKey": "L3FORWARD",
+                "Name": "L3FORWARD501",
+                "VLANID": 501,
+                "Description": "L3FORWARD Network. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "SwitchSVI": true,
+                    "Cidr": 29,
+                    "Network": "100.101.111.192",
+                    "Gateway": "100.100.111.193"
+                },
+                "IPv6": {}
+            },
+            {
+                "NetworkKey": "MANAGEMENT",
+                "Name": "MANAGEMENT7",
+                "VLANID": 7,
+                "Description": "MANAGEMENT Network. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "SwitchSVI": true,
+                    "Cidr": 24,
+                    "Network": "100.101.108.0",
+                    "Gateway": "100.101.108.1"
+                },
+                "IPv6": {}
+            },
+            {
+                "NetworkKey": "HVNPA",
+                "Name": "HVNPA6",
+                "VLANID": 6,
+                "Description": "HVNPA Network. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "SwitchSVI": true,
+                    "Cidr": 25,
+                    "Network": "100.101.111.0",
+                    "Gateway": "100.101.111.1"
+                },
+                "IPv6": {}
+            },
+            {
+                "NetworkKey": "TENANT",
+                "Name": "TENANT201",
+                "VLANID": 201,
+                "Description": "TENANT Network. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "SwitchSVI": true,
+                    "Cidr": 24,
+                    "Network": "100.101.109.0",
+                    "Gateway": "100.101.109.1"
+                },
+                "IPv6": {}
+            },
+            {
+                "NetworkKey": "TENANT",
+                "Name": "TENANT301",
+                "VLANID": 301,
+                "Description": "TENANT Network. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "SwitchSVI": true,
+                    "Cidr": 24,
+                    "Network": "100.101.110.0",
+                    "Gateway": "100.101.110.0"
+                },
+                "IPv6": {}
+            },
+            {
+                "NetworkKey": "EXTERNALIP",
+                "Name": "GRE",
+                "VLANID": 0,
+                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 26,
+                    "Network": "100.101.111.128",
+                    "Gateway": "100.101.111.128"
+                },
+                "IPv6": {}
+            },
+            {
+                "NetworkKey": "EXTERNALIP",
+                "Name": "Storage711",
+                "VLANID": 711,
+                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Network": "10.71.1.0"
+                },
+                "IPv6": {}
+            },
+            {
+                "NetworkKey": "EXTERNALIP",
+                "Name": "Storage712",
+                "VLANID": 712,
+                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Network": "10.71.2.0"
+                },
+                "IPv6": {}
+            },
+            {
+                "NetworkKey": "EXTERNALIP",
+                "Name": "Storage713",
+                "VLANID": 713,
+                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Network": "10.71.3.0"
+                },
+                "IPv6": {}
+            },
+            {
+                "NetworkKey": "EXTERNALIP",
+                "Name": "Storage714",
+                "VLANID": 714,
+                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Network": "10.71.4.0"
+                },
+                "IPv6": {}
+            },
+            {
+                "NetworkKey": "EXTERNALIP",
+                "Name": "Storage715",
+                "VLANID": 715,
+                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Network": "10.71.5.0"
+                },
+                "IPv6": {}
+            },
+            {
+                "NetworkKey": "EXTERNALIP",
+                "Name": "Storage716",
+                "VLANID": 716,
+                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Network": "10.71.6.0"
+                },
+                "IPv6": {}
+            },
+            {
+                "NetworkKey": "EXTERNALIP",
+                "Name": "Storage717",
+                "VLANID": 717,
+                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Network": "10.71.7.0"
+                },
+                "IPv6": {}
+            },
+            {
+                "NetworkKey": "EXTERNALIP",
+                "Name": "Storage718",
+                "VLANID": 718,
+                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Network": "10.71.8.0"
+                },
+                "IPv6": {}
+            }
+        ]
+    }
+}

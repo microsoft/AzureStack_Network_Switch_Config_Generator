@@ -25,6 +25,11 @@
     - [~~Phase2 Testing on Single Switch Validation Virtual (GNS3 Lab) - 08/19~~](#phase2-testing-on-single-switch-validation-virtual-gns3-lab---0819)
     - [~~Phase3 Testing on Multi-Switch Validation Virtual (GNS3 Lab) - 09/23~~](#phase3-testing-on-multi-switch-validation-virtual-gns3-lab---0923)
     - [Phase4 Physical Device Testing - 10/30](#phase4-physical-device-testing---1030)
+- [TO Do List](#to-do-list)
+  - [Lab Input](#lab-input)
+    - [Switch](#switch)
+    - [Supernets](#supernets)
+    - [Others](#others)
 
 ## Project Design
 
@@ -575,3 +580,25 @@ Active Package(s):
   - CI/CD for Lab
   - Documentation
   - Lab team training
+
+# TO Do List
+## Lab Input
+### Switch
+- Remove generateConfig/BMC flag, use provide data as true. 1 Tor? No BMC? Use Class to control.
+- Add Mux element
+- Leave hostname since the cloud section is not the dependcy. Template variable and render based on logic.
+- Border connect routing will be global defined and use as string. Like "bgp","static"?
+- Only Border for now? If >1 switches, use BGP for peer? iBGP port-channel50 for interface.
+- Firmware? no vlan2 for unused port. Only generate config for ports with configuration?
+
+### Supernets
+- Name and VLAN ID, which can be the unique key? Network Name or ID? I prefer name which is readable but need to all lower case and unique meaning. VLAN ID can be customized input based on user define.
+- GRE? Network input?
+- Logic Tenant? 
+- Gateway? Assignment? Separate segment template?
+
+### Others
+- Multi-Cloud? Customer provide or provide incremental logic? Leave an extenable design.
+- NTP information in cloud? Hostname will read from it. Define once in template.
+- Version, Description will be option for json input track only.
+- Config can be modular generated. Like VLAN, BGP, Static.
