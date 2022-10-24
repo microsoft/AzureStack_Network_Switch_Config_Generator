@@ -1,5 +1,5 @@
 {
-    "Version": "1.2022.10.12",
+    "Version": "1.0.0",
     "Description": "Template for ASZ Rack, key values are all upper case",
     "InputData": {
         "Cloud": [
@@ -74,40 +74,102 @@
                 "ASN": 64630
             }
         ],
-        "BorderConnectivity": "BGP",
+        "SwitchUplink": "[BGP|Static]",
+        "HCIConnectivity": "[L2|BGP|Static]",
         "Supernets": [
             {
-                "NetworkKey": "BMC",
-                "Name": "BMC125",
+                "GroupID": "SwitchMGMT",
+                "Name": "P2P_TOR1_To_Border1",
+                "VLANID": 0,
+                "Description": "Uplink to Boarder1",
+                "IPv4": {
+                    "Cidr": 31,
+                    "TOR1": "100.100.113.128",
+                    "Border1": "100.100.113.129"
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "SwitchMGMT",
+                "Name": "P2P_TOR2_To_Border1",
+                "VLANID": 0,
+                "Description": "Uplink to Boarder1",
+                "IPv4": {
+                    "Cidr": 31,
+                    "TOR2": "100.100.113.130",
+                    "Border1": "100.100.113.131"
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "SwitchMGMT",
+                "Name": "P2P_TOR1_To_Border2",
+                "VLANID": 0,
+                "Description": "Uplink to Boarder2",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 31,
+                    "TOR1": "100.100.113.132",
+                    "Border1": "100.100.113.133"
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "SwitchMGMT",
+                "Name": "P2P_TOR2_To_Border2",
+                "VLANID": 0,
+                "Description": "Uplink to Boarder2",
+                "IPv4": {
+                    "Cidr": 31,
+                    "TOR2": "100.100.113.134",
+                    "Border1": "100.100.113.135"
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "SwitchMGMT",
+                "Name": "P2P_IBGP",
+                "VLANID": 0,
+                "Description": "iBGP Link",
+                "IPv4": {
+                    "Cidr": 31,
+                    "TOR1": "100.100.113.136",
+                    "TOR2": "100.100.113.137"
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "SwitchMGMT",
+                "Name": "Loopback0",
+                "VLANID": 0,
+                "Description": "Switch Loopback assignment",
+                "IPv4": {
+                    "Cidr": 32,
+                    "TOR1": "100.100.113.138",
+                    "TOR2": "100.100.113.139"
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "BMC",
+                "Name": "BMC",
                 "VLANID": 125,
-                "Description": "BMC Network. NetworkKey is unique key, DO NOT CHANGE!",
+                "Description": "BMC Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Cidr": 26,
                     "Network": "100.100.113.192",
-                    "Gateway": "100.100.113.193"
+                    "Gateway": "100.100.113.193",
+                    "TOR1": "100.100.113.194",
+                    "TOR2": "100.100.113.195"
                 },
                 "IPv6": {}
             },
             {
-                "NetworkKey": "SWITCHMGMT",
-                "Name": "SWITCHMGMT",
-                "VLANID": 0,
-                "Description": "SwitchMgmt Network. NetworkKey is unique key, DO NOT CHANGE!",
-                "IPv4": {
-                    "__comment__": "investigate using smaller or using private.  Need to define what to use for loopback switch IPs which then are used in stamp TORswitchBGB",
-                    "SwitchSVI": false,
-                    "Cidr": 26,
-                    "Network": "100.100.113.128",
-                    "Gateway": "100.100.113.129"
-                },
-                "IPv6": {}
-            },
-            {
-                "NetworkKey": "L3FORWARD",
-                "Name": "L3FORWARD501",
+                "GroupID": "L3FORWARD",
+                "Name": "L3FORWARD",
                 "VLANID": 501,
-                "Description": "L3FORWARD Network. NetworkKey is unique key, DO NOT CHANGE!",
+                "Description": "L3FORWARD Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Cidr": 29,
@@ -117,23 +179,25 @@
                 "IPv6": {}
             },
             {
-                "NetworkKey": "MANAGEMENT",
+                "GroupID": "MANAGEMENT",
                 "Name": "MANAGEMENT7",
                 "VLANID": 7,
-                "Description": "MANAGEMENT Network. NetworkKey is unique key, DO NOT CHANGE!",
+                "Description": "MANAGEMENT Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Cidr": 24,
                     "Network": "100.101.108.0",
-                    "Gateway": "100.101.108.1"
+                    "Gateway": "100.101.108.1",
+                    "TOR1": "100.101.108.2",
+                    "TOR2": "100.101.108.3"
                 },
                 "IPv6": {}
             },
             {
-                "NetworkKey": "HVNPA",
+                "GroupID": "HVNPA",
                 "Name": "HVNPA6",
                 "VLANID": 6,
-                "Description": "HVNPA Network. NetworkKey is unique key, DO NOT CHANGE!",
+                "Description": "HVNPA Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Cidr": 25,
@@ -143,10 +207,10 @@
                 "IPv6": {}
             },
             {
-                "NetworkKey": "TENANT",
+                "GroupID": "TENANT",
                 "Name": "TENANT201",
                 "VLANID": 201,
-                "Description": "TENANT Network. NetworkKey is unique key, DO NOT CHANGE!",
+                "Description": "TENANT Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Cidr": 24,
@@ -156,10 +220,10 @@
                 "IPv6": {}
             },
             {
-                "NetworkKey": "TENANT",
+                "GroupID": "TENANT",
                 "Name": "TENANT301",
                 "VLANID": 301,
-                "Description": "TENANT Network. NetworkKey is unique key, DO NOT CHANGE!",
+                "Description": "TENANT Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Cidr": 24,
@@ -169,10 +233,10 @@
                 "IPv6": {}
             },
             {
-                "NetworkKey": "EXTERNALIP",
+                "GroupID": "ExternalIP",
                 "Name": "GRE",
                 "VLANID": 0,
-                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "Description": "ExternalIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Cidr": 26,
@@ -182,10 +246,10 @@
                 "IPv6": {}
             },
             {
-                "NetworkKey": "EXTERNALIP",
+                "GroupID": "StorageIP",
                 "Name": "Storage711",
                 "VLANID": 711,
-                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Cidr": 24,
@@ -194,10 +258,10 @@
                 "IPv6": {}
             },
             {
-                "NetworkKey": "EXTERNALIP",
+                "GroupID": "StorageIP",
                 "Name": "Storage712",
                 "VLANID": 712,
-                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Cidr": 24,
@@ -206,10 +270,10 @@
                 "IPv6": {}
             },
             {
-                "NetworkKey": "EXTERNALIP",
+                "GroupID": "StorageIP",
                 "Name": "Storage713",
                 "VLANID": 713,
-                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Cidr": 24,
@@ -218,10 +282,10 @@
                 "IPv6": {}
             },
             {
-                "NetworkKey": "EXTERNALIP",
+                "GroupID": "StorageIP",
                 "Name": "Storage714",
                 "VLANID": 714,
-                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Cidr": 24,
@@ -230,10 +294,10 @@
                 "IPv6": {}
             },
             {
-                "NetworkKey": "EXTERNALIP",
+                "GroupID": "StorageIP",
                 "Name": "Storage715",
                 "VLANID": 715,
-                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Cidr": 24,
@@ -242,10 +306,10 @@
                 "IPv6": {}
             },
             {
-                "NetworkKey": "EXTERNALIP",
+                "GroupID": "StorageIP",
                 "Name": "Storage716",
                 "VLANID": 716,
-                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Cidr": 24,
@@ -254,10 +318,10 @@
                 "IPv6": {}
             },
             {
-                "NetworkKey": "EXTERNALIP",
+                "GroupID": "StorageIP",
                 "Name": "Storage717",
                 "VLANID": 717,
-                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Cidr": 24,
@@ -266,10 +330,10 @@
                 "IPv6": {}
             },
             {
-                "NetworkKey": "EXTERNALIP",
+                "GroupID": "StorageIP",
                 "Name": "Storage718",
                 "VLANID": 718,
-                "Description": "EXTERNALIP Network, no config on switch. NetworkKey is unique key, DO NOT CHANGE!",
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Cidr": 24,
