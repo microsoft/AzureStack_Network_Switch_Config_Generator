@@ -607,3 +607,7 @@ Active Package(s):
 
 ### To DO
 - All key will be capitalize to unify to avoid typo.
+- Modular all the configuration. Parse while coding, block by block.
+  - Banner/Hostname
+  - Default
+  - VLAN

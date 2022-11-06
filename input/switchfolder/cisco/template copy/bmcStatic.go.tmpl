@@ -1,0 +1,6 @@
+{{ define "bmc_static_routing" }}
+! bmcStatic.go.tmpl-bmc_static_routing
+{{- range .Network }}
+ip route {{.DstIPAddress}} {{.NextHop}} name {{.Name}}
+{{end -}}
+{{ end }}
