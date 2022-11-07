@@ -1,0 +1,32 @@
+{
+ "Switch": {
+  "Make": "Cisco",
+  "Model": "93180YC-FX",
+  "Type": "TOR2",
+  "Hostname": "Hostname2",
+  "ASN": 64629,
+  "Firmware": ""
+ },
+ "SwitchBMC": null,
+ "Uplinks": [
+  {
+   "Make": "Border",
+   "Model": "",
+   "Type": "Border1",
+   "Hostname": "",
+   "ASN": 64626,
+   "Firmware": ""
+  }
+ ],
+ "Downlinks": [
+  {
+   "Make": "Microsoft",
+   "Model": "",
+   "Type": "MUX",
+   "Hostname": "",
+   "ASN": 64630,
+   "Firmware": ""
+  }
+ ],
+ "Vlans": null
+}

@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"math/rand"
+	"os"
 	"strings"
 )
 
@@ -65,5 +66,15 @@ func randCharStrings(randString *strings.Builder, charset string, minCharNum int
 	for i := 0; i < minCharNum; i++ {
 		randNum := rand.Intn(len(charset))
 		randString.WriteString(string(charset[randNum]))
+	}
+}
+
+func createFolder(folderPath string) {
+	_, err := os.Stat(folderPath)
+	if os.IsNotExist(err) {
+		errDir := os.MkdirAll(folderPath, 0755)
+		if errDir != nil {
+			log.Fatal(err)
+		}
 	}
 }

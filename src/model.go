@@ -1,22 +1,26 @@
 package main
 
 type InputType struct {
-	Version     string `json:"Version"`
-	Description string `json:"Description"`
-	InputData   struct {
-		Cloud            []CloudType    `json:"Cloud"`
-		Switches         []SwitchesType `json:"Switches"`
-		SwitchUplink     string         `json:"SwitchUplink"`
-		HostConnectivity string         `json:"HostConnectivity"`
-		Supernets        []Supernet     `json:"Supernets"`
-	} `json:"InputData"`
+	Version     string    `json:"Version"`
+	Description string    `json:"Description"`
+	InputData   InputData `json:"InputData"`
+}
+
+type InputData struct {
+	Cloud            []CloudType  `json:"Cloud"`
+	Switches         []SwitchType `json:"Switches"`
+	SwitchUplink     string       `json:"SwitchUplink"`
+	HostConnectivity string       `json:"HostConnectivity"`
+	Supernets        []Supernet   `json:"Supernets"`
 }
 
 type OutputType struct {
-	Switch    SwitchesType   `json:"Switch"`
-	Uplinks   []SwitchesType `json:"Uplinks"`
-	Downlinks []SwitchesType `json:"Downlinks"`
-	Vlans     []VlanType     `json:"Vlans"`
+	Switch         SwitchType   `json:"Switch"`
+	SwitchPeers    []SwitchType `json:"SwitchPeers"`
+	SwitchBMC      []SwitchType `json:"SwitchBMC"`
+	SwitchUplink   []SwitchType `json:"Uplinks"`
+	SwitchDownlink []SwitchType `json:"Downlinks"`
+	Vlans          []VlanType   `json:"Vlans"`
 }
 
 type VlanType struct {
@@ -39,7 +43,7 @@ type CloudType struct {
 	DNSForwarder            []string `json:"DNSForwarder"`
 }
 
-type SwitchesType struct {
+type SwitchType struct {
 	Make     string `json:"Make"`
 	Model    string `json:"Model"`
 	Type     string `json:"Type"`
