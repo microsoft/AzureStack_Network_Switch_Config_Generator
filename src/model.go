@@ -15,12 +15,18 @@ type InputData struct {
 }
 
 type OutputType struct {
-	Switch         SwitchType   `json:"Switch"`
-	SwitchPeers    []SwitchType `json:"SwitchPeers"`
-	SwitchBMC      []SwitchType `json:"SwitchBMC"`
-	SwitchUplink   []SwitchType `json:"Uplinks"`
-	SwitchDownlink []SwitchType `json:"Downlinks"`
-	Vlans          []VlanType   `json:"Vlans"`
+	Switch         SwitchType        `json:"Switch"`
+	SwitchPeers    []SwitchType      `json:"SwitchPeers"`
+	SwitchBMC      []SwitchType      `json:"SwitchBMC"`
+	SwitchUplink   []SwitchType      `json:"Uplinks"`
+	SwitchDownlink []SwitchType      `json:"Downlinks"`
+	GlobalSetting  GlobalSettingType `json:"GlobalSetting"`
+	Vlans          []VlanType        `json:"Vlans"`
+}
+
+type GlobalSettingType struct {
+	Username string `json:"Username"`
+	Password string `json:"Password"`
 }
 
 type VlanType struct {

@@ -7,12 +7,39 @@
   "ASN": 64629,
   "Firmware": ""
  },
- "SwitchBMC": null,
+ "SwitchPeers": [
+  {
+   "Make": "Cisco",
+   "Model": "93180YC-FX",
+   "Type": "TOR1",
+   "Hostname": "Hostname1",
+   "ASN": 64629,
+   "Firmware": ""
+  }
+ ],
+ "SwitchBMC": [
+  {
+   "Make": "Cisco",
+   "Model": "9348GC-FXP",
+   "Type": "BMC",
+   "Hostname": "Hostname3",
+   "ASN": 64629,
+   "Firmware": ""
+  }
+ ],
  "Uplinks": [
   {
    "Make": "Border",
    "Model": "",
    "Type": "Border1",
+   "Hostname": "",
+   "ASN": 64626,
+   "Firmware": ""
+  },
+  {
+   "Make": "Border",
+   "Model": "",
+   "Type": "Border2",
    "Hostname": "",
    "ASN": 64626,
    "Firmware": ""
@@ -28,5 +55,9 @@
    "Firmware": ""
   }
  ],
+ "GlobalSetting": {
+  "Username": "aszadmin-vlzxb",
+  "Password": "c2!cuh%xMC8*aRt9"
+ },
  "Vlans": null
 }
