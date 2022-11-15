@@ -30,7 +30,8 @@
     - [Switch](#switch)
     - [Supernets](#supernets)
     - [Others](#others)
-    - [To DO](#to-do)
+  - [To DO](#to-do)
+    - [Design](#design)
 
 ## Project Design
 
@@ -605,9 +606,12 @@ Active Package(s):
 - Config can be modular generated. Like VLAN, BGP, Static.
 
 
-### To DO
+## To DO
 - All key will be capitalize to unify to avoid typo.
 - Modular all the configuration. Parse while coding, block by block.
-  - Banner/Hostname
-  - Default
-  - VLAN
+  - Hostname
+  - Fibs
+  - Vlan
+### Design
+- Create Global Device Map, which flexiable to adapt to different pattern.
+- Clearly separate functions and template by feature, so easier to generate certain config.

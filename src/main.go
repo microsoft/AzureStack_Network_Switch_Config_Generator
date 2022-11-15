@@ -12,6 +12,10 @@ var (
 	MUX                      = "MUX"
 	UPLINK                   = "UPLINK"
 	DOWNLINK                 = "DOWNLINK"
+	VIPGATEWAY               = "Gateway"
+	UNUSED                   = "Unused"
+	JUMBOMTU                 = 9216
+	DefaultMTU               = 1500
 	NO_Valid_TOR_Switch      = "NO Valid TOR Switch Founded"
 	JSONExtension            = ".json"
 	CONFIGExtension          = ".config"
@@ -44,6 +48,7 @@ func main() {
 			torOutput := &OutputType{}
 			torOutput.UpdateSwitch(torItem, TOR, DeviceTypeMap)
 			torOutput.UpdateGlobalSetting(inputData)
+			torOutput.UpdateVlan(inputData)
 			// Output JSON File for Debug
 			torOutput.writeToJson(*outputFolder)
 			torOutput.parseTemplate(*templateFolder, *outputFolder)
@@ -57,6 +62,7 @@ func main() {
 			bmcOutput := &OutputType{}
 			bmcOutput.UpdateSwitch(bmdItem, BMC, DeviceTypeMap)
 			bmcOutput.UpdateGlobalSetting(inputData)
+			bmcOutput.UpdateVlan(inputData)
 			// Output JSON File for Debug
 			bmcOutput.writeToJson(*outputFolder)
 			bmcOutput.parseTemplate(*templateFolder, *outputFolder)

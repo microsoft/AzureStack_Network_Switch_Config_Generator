@@ -217,7 +217,7 @@
             {
                 "GroupID": "BMC",
                 "Name": "BMC",
-                "VLANID": 125,
+                "VlanID": 125,
                 "Description": "BMC Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
@@ -238,6 +238,10 @@
                         {
                             "Name": "TOR2",
                             "IP": "100.100.113.195"
+                        },
+                        {
+                            "Name": "BMC",
+                            "IP": "100.100.113.196"
                         }
                     ]
                 },
@@ -246,7 +250,7 @@
             {
                 "GroupID": "L3FORWARD",
                 "Name": "L3FORWARD",
-                "VLANID": 501,
+                "VlanID": 501,
                 "Description": "L3FORWARD Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
@@ -275,7 +279,7 @@
             {
                 "GroupID": "MANAGEMENT",
                 "Name": "MANAGEMENT7",
-                "VLANID": 7,
+                "VlanID": 7,
                 "Description": "MANAGEMENT Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
@@ -304,7 +308,7 @@
             {
                 "GroupID": "HVNPA",
                 "Name": "HVNPA6",
-                "VLANID": 6,
+                "VlanID": 6,
                 "Description": "HVNPA Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
@@ -333,7 +337,7 @@
             {
                 "GroupID": "TENANT",
                 "Name": "TENANT201",
-                "VLANID": 201,
+                "VlanID": 201,
                 "Description": "TENANT Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
@@ -362,7 +366,7 @@
             {
                 "GroupID": "TENANT",
                 "Name": "TENANT301",
-                "VLANID": 301,
+                "VlanID": 301,
                 "Description": "TENANT Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
@@ -391,7 +395,7 @@
             {
                 "GroupID": "ExternalIP",
                 "Name": "GRE",
-                "VLANID": 0,
+                "VlanID": 0,
                 "Description": "ExternalIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
@@ -408,7 +412,7 @@
             {
                 "GroupID": "StorageIP",
                 "Name": "Storage711",
-                "VLANID": 711,
+                "VlanID": 711,
                 "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
@@ -425,7 +429,7 @@
             {
                 "GroupID": "StorageIP",
                 "Name": "Storage712",
-                "VLANID": 712,
+                "VlanID": 712,
                 "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
@@ -442,7 +446,7 @@
             {
                 "GroupID": "StorageIP",
                 "Name": "Storage713",
-                "VLANID": 713,
+                "VlanID": 713,
                 "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
@@ -459,7 +463,7 @@
             {
                 "GroupID": "StorageIP",
                 "Name": "Storage714",
-                "VLANID": 714,
+                "VlanID": 714,
                 "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
@@ -476,7 +480,7 @@
             {
                 "GroupID": "StorageIP",
                 "Name": "Storage715",
-                "VLANID": 715,
+                "VlanID": 715,
                 "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
@@ -493,7 +497,7 @@
             {
                 "GroupID": "StorageIP",
                 "Name": "Storage716",
-                "VLANID": 716,
+                "VlanID": 716,
                 "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
@@ -510,7 +514,7 @@
             {
                 "GroupID": "StorageIP",
                 "Name": "Storage717",
-                "VLANID": 717,
+                "VlanID": 717,
                 "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
@@ -527,7 +531,7 @@
             {
                 "GroupID": "StorageIP",
                 "Name": "Storage718",
-                "VLANID": 718,
+                "VlanID": 718,
                 "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
@@ -538,6 +542,17 @@
                             "IP": "10.71.8.0"
                         }
                     ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "Unused",
+                "Name": "Unused",
+                "VlanID": 2,
+                "Description": "Unused Vlan for non used interfaces.",
+                "ShutDown": true,
+                "IPv4": {
+                    "SwitchSVI": false
                 },
                 "IPv6": {}
             }

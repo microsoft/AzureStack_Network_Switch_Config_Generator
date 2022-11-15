@@ -30,16 +30,14 @@ type GlobalSettingType struct {
 }
 
 type VlanType struct {
-	VlanName  string `json:"VlanName"`
-	VlanID    int    `json:"VlanID"`
-	Group     string `json:"Group"`
-	IPAddress string `json:"IPAddress"`
-	Mtu       int    `json:"MTU"`
-	Vip       struct {
-		PriorityId int    `json:"PriorityId"`
-		VIPAddress string `json:"VIPAddress"`
-	} `json:"VIP"`
-	Shutdown bool `json:"Shutdown"`
+	VlanName      string `json:"VlanName"`
+	VlanID        int    `json:"VlanID"`
+	GroupID       string `json:"GroupID"`
+	IPAddress     string `json:"IPAddress"`
+	Mtu           int    `json:"MTU"`
+	VIPAddress    string `json:"VIPAddress"`
+	VIPPriorityId int    `json:"VIPPriorityId"`
+	Shutdown      bool   `json:"Shutdown"`
 }
 
 type CloudType struct {
@@ -61,8 +59,11 @@ type SwitchType struct {
 type Supernet struct {
 	GroupID     string `json:"GroupID"`
 	Name        string `json:"Name"`
+	VlanID      int    `json:"VLANID"`
 	Description string `json:"Description"`
+	Shutdown    bool   `json:"Shutdown"`
 	IPv4        struct {
+		SwitchSVI  bool       `json:"SwitchSVI"`
 		Cidr       int        `json:"Cidr"`
 		Assignment []IPv4Unit `json:"Assignment"`
 	} `json:"IPv4"`
