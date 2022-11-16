@@ -31,9 +31,12 @@ func (o *OutputType) writeToJson(outputFolder string) {
 func (o *OutputType) parseTemplate(templateFolder, outputFolder string) {
 	configFilePath := outputFolder + "/" + o.Switch.Hostname + CONFIGExtension
 	t, err := template.ParseFiles(
-		templateFolder+"/AllTorConfig.go.tmpl",
+		templateFolder+"/AllConfig.go.tmpl",
 		templateFolder+"/hostname.go.tmpl",
 		templateFolder+"/fips.go.tmpl",
+		templateFolder+"/vlan.go.tmpl",
+		templateFolder+"/default.go.tmpl",
+		templateFolder+"/settings.go.tmpl",
 	)
 	if err != nil {
 		log.Fatalln(err)

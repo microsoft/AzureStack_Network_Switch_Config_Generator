@@ -1,22 +1,18 @@
-{{ define "inject_ntp"}}
-! settings.go.tmpl-ntp
+{{ define "set_ntp"}}
+! settings.go.tmpl-set_ntp
 clock timezone UTC 0 0
-{{ range .NTP -}}
-ntp server 10.10.240.20
+{{ range .TimeServer -}}
+ntp server {{.}}
 {{ end -}}
-{{ range .OOB -}}
-ntp source-interface {{ . }}
-{{ end -}}
+ntp source-interface {{.OOB}}
 {{ end }}
 
-{{ define "inject_syslog"}}
-! settings.go.tmpl-inject_syslog
-{{ range .Syslog -}}
+{{ define "set_syslog"}}
+! settings.go.tmpl-set_syslog
+{{ range .SyslogServer -}}
 logging server {{ . }} 7 facility local7 use-vrf default
 {{ end -}}
-{{ range .OOB -}}
-logging source-interface {{ . }}
-{{ end -}}
+logging source-interface {{.OOB}}
 logging level local7 7
 no logging console
 login on-success log

@@ -2,24 +2,28 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
+	"os"
+	"strings"
 )
 
 var (
-	TOR                      = "TOR"
-	BMC                      = "BMC"
-	BORDER                   = "BORDER"
-	MUX                      = "MUX"
-	UPLINK                   = "UPLINK"
-	DOWNLINK                 = "DOWNLINK"
-	VIPGATEWAY               = "Gateway"
-	UNUSED                   = "Unused"
-	JUMBOMTU                 = 9216
-	DefaultMTU               = 1500
-	NO_Valid_TOR_Switch      = "NO Valid TOR Switch Founded"
-	JSONExtension            = ".json"
-	CONFIGExtension          = ".config"
-	ranUsername, ranPassword string
+	TOR                 = "TOR"
+	BMC                 = "BMC"
+	BORDER              = "BORDER"
+	MUX                 = "MUX"
+	UPLINK              = "UPLINK"
+	DOWNLINK            = "DOWNLINK"
+	VIPGATEWAY          = "Gateway"
+	UNUSED              = "Unused"
+	TEMPLATE            = "template"
+	JUMBOMTU            = 9216
+	DefaultMTU          = 1500
+	NO_Valid_TOR_Switch = "NO Valid TOR Switch Founded"
+	JSONExtension       = ".json"
+	CONFIGExtension     = ".config"
+	Username, Password  string
 )
 
 func init() {
@@ -31,14 +35,18 @@ func main() {
 	// Input Variables
 	inputJsonFile := flag.String("inputJsonFile", "../input/lab_input.json", "File path of switch deploy input.json")
 	outputFolder := flag.String("outputFolder", "../output", "Folder path of switch configurations")
-	templateFolder := flag.String("switchFolder", "../input/switchfolder/cisco/template", "Folder path of switch frameworks and templates")
+	switchLibFolder := flag.String("switchLib", "../input/switchLib", "Folder path of switch frameworks and templates")
+	flag.StringVar(&Username, "username", "", "Username for switch configuration")
+	flag.StringVar(&Password, "password", "", "Password for switch configuration")
 	flag.Parse()
 	// Covert input.json to Go Object, structs are defined in model.go
 	inputObj := parseInputJson(*inputJsonFile)
 	inputData := inputObj.InputData
-	// Create random credential for switch config
-	ranUsername = "aszadmin-" + generateRandomString(5, 0, 0, 0)
-	ranPassword = generateRandomString(16, 3, 3, 3)
+	// Create random credential for switch config if no input values
+	if Username == "" || Password == "" {
+		Username = "aszadmin-" + generateRandomString(5, 0, 0, 0)
+		Password = generateRandomString(16, 3, 3, 3)
+	}
 
 	// Create device categrory map: Border, TOR, BMC, MUX based on Type
 	DeviceTypeMap := inputData.createDeviceTypeMap()
@@ -46,12 +54,15 @@ func main() {
 	if len(DeviceTypeMap[TOR]) > 0 {
 		for _, torItem := range DeviceTypeMap[TOR] {
 			torOutput := &OutputType{}
+			// Function sequence matters, because the object construct phase by phase
 			torOutput.UpdateSwitch(torItem, TOR, DeviceTypeMap)
-			torOutput.UpdateGlobalSetting(inputData)
 			torOutput.UpdateVlan(inputData)
+			torOutput.UpdateGlobalSetting(inputData)
+			templateFolder, frameworkFolder := torOutput.parseFrameworkPath(*switchLibFolder)
 			// Output JSON File for Debug
+			fmt.Println(templateFolder, frameworkFolder)
 			torOutput.writeToJson(*outputFolder)
-			torOutput.parseTemplate(*templateFolder, *outputFolder)
+			torOutput.parseTemplate(templateFolder, *outputFolder)
 		}
 	} else {
 		log.Fatalln(NO_Valid_TOR_Switch)
@@ -61,11 +72,31 @@ func main() {
 		for _, bmdItem := range DeviceTypeMap[BMC] {
 			bmcOutput := &OutputType{}
 			bmcOutput.UpdateSwitch(bmdItem, BMC, DeviceTypeMap)
-			bmcOutput.UpdateGlobalSetting(inputData)
 			bmcOutput.UpdateVlan(inputData)
+			bmcOutput.UpdateGlobalSetting(inputData)
+			templateFolder, frameworkFolder := bmcOutput.parseFrameworkPath(*switchLibFolder)
 			// Output JSON File for Debug
+			fmt.Println(templateFolder, frameworkFolder)
 			bmcOutput.writeToJson(*outputFolder)
-			bmcOutput.parseTemplate(*templateFolder, *outputFolder)
+			bmcOutput.parseTemplate(templateFolder, *outputFolder)
 		}
 	}
+}
+
+func (o *OutputType) parseFrameworkPath(switchLibFolder string) (string, string) {
+	makeLow := strings.ToLower(o.Switch.Make)
+	modelLow := strings.ToLower(o.Switch.Model)
+	// Template Folder Path
+	templateFolder := fmt.Sprintf("%s/%s/%s/%s", switchLibFolder, makeLow, o.Switch.Firmware, TEMPLATE)
+	_, err := os.Stat(templateFolder)
+	if err != nil {
+		log.Println(err)
+	}
+	// Framework Folder Path
+	frameworkFolder := fmt.Sprintf("%s/%s/%s/%s", switchLibFolder, makeLow, o.Switch.Firmware, modelLow)
+	_, err = os.Stat(frameworkFolder)
+	if err != nil {
+		log.Println(err)
+	}
+	return templateFolder, frameworkFolder
 }

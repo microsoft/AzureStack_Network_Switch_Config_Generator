@@ -5,7 +5,7 @@
   "Type": "TOR2",
   "Hostname": "Hostname2",
   "ASN": 64629,
-  "Firmware": ""
+  "Firmware": "9.3(9)"
  },
  "SwitchPeers": [
   {
@@ -14,7 +14,7 @@
    "Type": "TOR1",
    "Hostname": "Hostname1",
    "ASN": 64629,
-   "Firmware": ""
+   "Firmware": "9.3(9)"
   }
  ],
  "SwitchBMC": [
@@ -22,9 +22,9 @@
    "Make": "Cisco",
    "Model": "9348GC-FXP",
    "Type": "BMC",
-   "Hostname": "Hostname3",
+   "Hostname": "Hostname11",
    "ASN": 64629,
-   "Firmware": ""
+   "Firmware": "9.3(9)"
   }
  ],
  "Uplinks": [
@@ -32,14 +32,6 @@
    "Make": "Border",
    "Model": "",
    "Type": "Border1",
-   "Hostname": "",
-   "ASN": 64626,
-   "Firmware": ""
-  },
-  {
-   "Make": "Border",
-   "Model": "",
-   "Type": "Border2",
    "Hostname": "",
    "ASN": 64626,
    "Firmware": ""
@@ -57,7 +49,169 @@
  ],
  "GlobalSetting": {
   "Username": "aszadmin-vlzxb",
-  "Password": "c2!cuh%xMC8*aRt9"
+  "Password": "c2!cuh%xMC8*aRt9",
+  "TimeServer": [
+   "13.86.101.172"
+  ],
+  "SyslogServer": [
+   "10.185.192.141"
+  ],
+  "DNSForwarder": [
+   "10.50.10.50",
+   "10.50.50.50"
+  ],
+  "OOB": "vlan125"
  },
- "Vlans": null
+ "Vlans": [
+  {
+   "VlanName": "BMC",
+   "VlanID": 125,
+   "GroupID": "BMC",
+   "IPAddress": "100.100.113.195",
+   "MTU": 9216,
+   "VIPAddress": "100.100.113.193",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "L3FORWARD",
+   "VlanID": 501,
+   "GroupID": "L3FORWARD",
+   "IPAddress": "100.100.111.195",
+   "MTU": 9216,
+   "VIPAddress": "100.100.111.193",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "MANAGEMENT7",
+   "VlanID": 7,
+   "GroupID": "MANAGEMENT",
+   "IPAddress": "100.101.108.3",
+   "MTU": 9216,
+   "VIPAddress": "100.101.108.1",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "HVNPA6",
+   "VlanID": 6,
+   "GroupID": "HVNPA",
+   "IPAddress": "100.101.111.3",
+   "MTU": 9216,
+   "VIPAddress": "100.101.111.1",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "TENANT201",
+   "VlanID": 201,
+   "GroupID": "TENANT",
+   "IPAddress": "100.101.109.3",
+   "MTU": 9216,
+   "VIPAddress": "100.101.109.1",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "TENANT301",
+   "VlanID": 301,
+   "GroupID": "TENANT",
+   "IPAddress": "100.101.110.3",
+   "MTU": 9216,
+   "VIPAddress": "100.101.110.1",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Storage711",
+   "VlanID": 711,
+   "GroupID": "StorageIP",
+   "IPAddress": "",
+   "MTU": 9216,
+   "VIPAddress": "",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Storage712",
+   "VlanID": 712,
+   "GroupID": "StorageIP",
+   "IPAddress": "",
+   "MTU": 9216,
+   "VIPAddress": "",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Storage713",
+   "VlanID": 713,
+   "GroupID": "StorageIP",
+   "IPAddress": "",
+   "MTU": 9216,
+   "VIPAddress": "",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Storage714",
+   "VlanID": 714,
+   "GroupID": "StorageIP",
+   "IPAddress": "",
+   "MTU": 9216,
+   "VIPAddress": "",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Storage715",
+   "VlanID": 715,
+   "GroupID": "StorageIP",
+   "IPAddress": "",
+   "MTU": 9216,
+   "VIPAddress": "",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Storage716",
+   "VlanID": 716,
+   "GroupID": "StorageIP",
+   "IPAddress": "",
+   "MTU": 9216,
+   "VIPAddress": "",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Storage717",
+   "VlanID": 717,
+   "GroupID": "StorageIP",
+   "IPAddress": "",
+   "MTU": 9216,
+   "VIPAddress": "",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Storage718",
+   "VlanID": 718,
+   "GroupID": "StorageIP",
+   "IPAddress": "",
+   "MTU": 9216,
+   "VIPAddress": "",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Unused",
+   "VlanID": 2,
+   "GroupID": "Unused",
+   "IPAddress": "",
+   "MTU": 9216,
+   "VIPAddress": "",
+   "VIPPriorityId": 0,
+   "Shutdown": true
+  }
+ ]
 }

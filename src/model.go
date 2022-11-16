@@ -12,6 +12,11 @@ type InputData struct {
 	SwitchUplink     string       `json:"SwitchUplink"`
 	HostConnectivity string       `json:"HostConnectivity"`
 	Supernets        []Supernet   `json:"Supernets"`
+	Setting          struct {
+		TimeServer   []string `json:"TimeServer"`
+		SyslogServer []string `json:"SyslogServer"`
+		DNSForwarder []string `json:"DNSForwarder"`
+	}
 }
 
 type OutputType struct {
@@ -25,8 +30,12 @@ type OutputType struct {
 }
 
 type GlobalSettingType struct {
-	Username string `json:"Username"`
-	Password string `json:"Password"`
+	Username     string   `json:"Username"`
+	Password     string   `json:"Password"`
+	TimeServer   []string `json:"TimeServer"`
+	SyslogServer []string `json:"SyslogServer"`
+	DNSForwarder []string `json:"DNSForwarder"`
+	OOB          string   `json:"OOB"`
 }
 
 type VlanType struct {

@@ -8,7 +8,8 @@ vlan {{.VlanID}}
 
 {{ define "interface_vlan"}}
 ! vlan.go.tmpl-interface_vlan
-{{ range . -}}    
+{{ range . -}}
+{{ if .IPAddress -}} 
 interface vlan{{.VlanID}}
   description {{.VlanName}}
   mtu {{.Mtu}}
@@ -17,16 +18,15 @@ interface vlan{{.VlanID}}
   {{ else -}} 
   no shutdown
   {{ end -}}
-  {{ if .IPAddress -}}
   ip address {{ .IPAddress }}
   no ip redirects
   no ipv6 redirects
-  {{ if .Vip.VIPAddress -}}
+  {{ if .VIPAddress -}}
   hsrp version 2
     hsrp {{.VlanID}}
-    priority {{.Vip.PriorityId}} forwarding-threshold lower 1 upper 150
-    ip {{.Vip.VIPAddress}}
+    {{/* priority {{.VIPPriorityId}} forwarding-threshold lower 1 upper 150 */ -}}
+    ip {{.VIPAddress}}
   {{ end -}}
-  {{- end}}
+{{- end}}
 {{ end -}}
 {{ end -}}

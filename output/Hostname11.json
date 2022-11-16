@@ -1,0 +1,68 @@
+{
+ "Switch": {
+  "Make": "Cisco",
+  "Model": "9348GC-FXP",
+  "Type": "BMC",
+  "Hostname": "Hostname11",
+  "ASN": 64629,
+  "Firmware": "9.3(9)"
+ },
+ "SwitchPeers": null,
+ "SwitchBMC": null,
+ "Uplinks": [
+  {
+   "Make": "Cisco",
+   "Model": "93180YC-FX",
+   "Type": "TOR1",
+   "Hostname": "Hostname1",
+   "ASN": 64629,
+   "Firmware": "9.3(9)"
+  },
+  {
+   "Make": "Cisco",
+   "Model": "93180YC-FX",
+   "Type": "TOR2",
+   "Hostname": "Hostname2",
+   "ASN": 64629,
+   "Firmware": "9.3(9)"
+  }
+ ],
+ "Downlinks": null,
+ "GlobalSetting": {
+  "Username": "aszadmin-vlzxb",
+  "Password": "c2!cuh%xMC8*aRt9",
+  "TimeServer": [
+   "13.86.101.172"
+  ],
+  "SyslogServer": [
+   "10.185.192.141"
+  ],
+  "DNSForwarder": [
+   "10.50.10.50",
+   "10.50.50.50"
+  ],
+  "OOB": "vlan125"
+ },
+ "Vlans": [
+  {
+   "VlanName": "BMC",
+   "VlanID": 125,
+   "GroupID": "BMC",
+   "IPAddress": "100.100.113.196",
+   "MTU": 1500,
+   "VIPAddress": "",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Unused",
+   "VlanID": 2,
+   "GroupID": "Unused",
+   "IPAddress": "",
+   "MTU": 1500,
+   "VIPAddress": "",
+   "VIPPriorityId": 0,
+   "Shutdown": true
+  }
+ ]
+}

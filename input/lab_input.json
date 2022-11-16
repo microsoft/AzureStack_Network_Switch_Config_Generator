@@ -41,18 +41,12 @@
                 "ASN": 64626
             },
             {
-                "Make": "Border",
-                "Model": null,
-                "Type": "Border2",
-                "ASN": 64626
-            },
-            {
                 "Make": "Cisco",
                 "Model": "93180YC-FX",
                 "Type": "TOR1",
                 "Hostname": "Hostname1",
                 "ASN": 64629,
-                "Firmware": ""
+                "Firmware": "9.3(9)"
             },
             {
                 "Make": "Cisco",
@@ -60,15 +54,15 @@
                 "Type": "TOR2",
                 "Hostname": "Hostname2",
                 "ASN": 64629,
-                "Firmware": ""
+                "Firmware": "9.3(9)"
             },
             {
                 "Make": "Cisco",
                 "Model": "9348GC-FXP",
                 "Type": "BMC",
-                "Hostname": "Hostname3",
+                "Hostname": "Hostname11",
                 "ASN": 64629,
-                "Firmware": ""
+                "Firmware": "9.3(9)"
             },
             {
                 "Make": "Microsoft",
@@ -556,6 +550,18 @@
                 },
                 "IPv6": {}
             }
-        ]
+        ],
+        "Setting": {
+            "TimeServer": [
+                "13.86.101.172"
+            ],
+            "SyslogServer": [
+                "10.185.192.141"
+            ],
+            "DNSForwarder": [
+                "10.50.10.50",
+                "10.50.50.50"
+            ]
+        }
     }
 }
