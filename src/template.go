@@ -33,9 +33,8 @@ func (o *OutputType) parseTemplate(templateFolder, outputFolder string) {
 	t, err := template.ParseFiles(
 		templateFolder+"/AllConfig.go.tmpl",
 		templateFolder+"/hostname.go.tmpl",
-		templateFolder+"/fips.go.tmpl",
+		templateFolder+"/stig.go.tmpl",
 		templateFolder+"/vlan.go.tmpl",
-		templateFolder+"/default.go.tmpl",
 		templateFolder+"/settings.go.tmpl",
 	)
 	if err != nil {

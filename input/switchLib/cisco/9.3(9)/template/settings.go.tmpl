@@ -30,3 +30,38 @@ logging level vpc 7
 logging level netstack 7
 logging level bgp 7
 {{ end }}
+
+{{ define "set_errdisable_setting"}}
+! settings.go.tmpl-set_errdisable_setting
+errdisable recovery interval 600
+errdisable recovery cause link-flap
+errdisable recovery cause udld
+errdisable recovery cause bpduguard
+system default switchport shutdown
+switching-mode store-forward
+{{ end }}
+
+{{ define "set_rmon"}}
+! settings.go.tmpl-set_rmon
+rmon event 1 description FATAL(1) owner PMON@FATAL
+rmon event 2 description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 description ERROR(3) owner PMON@ERROR
+rmon event 4 description WARNING(4) owner PMON@WARNING
+rmon event 5 description INFORMATION(5) owner PMON@INFO
+{{ end }}
+
+{{ define "set_snmp"}}
+! settings.go.tmpl-set_snmp
+snmp-server globalEnforcePriv
+no snmp-server protocol enable
+{{ end }}
+
+{{ define "set_console_vty"}}
+! settings.go.tmpl-set_console_vty
+line console
+  exec-timeout 10
+line vty
+  exec-timeout 10
+  access-class ssh-only in
+  session-limit 3
+{{ end }}

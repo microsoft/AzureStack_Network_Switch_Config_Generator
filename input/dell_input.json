@@ -1,0 +1,567 @@
+{
+    "Version": "1.0.0",
+    "Description": "Template for ASZ Rack",
+    "InputData": {
+        "Cloud": [
+            {
+                "Id": "CL01",
+                "NodeCount": 0,
+                "NamingPrefix": "B42TCA3",
+                "PhysicalNamingPrefix": "B42TCA3",
+                "CompanyName": "Microsoft",
+                "RegionName": "Redmond",
+                "DomainFQDN": "B42TCA3.masd.stbtest.microsoft.com",
+                "ExternalDomainFQDN": "Ext-B42TCA3.masd.stbtest.microsoft.com",
+                "InfraAzureEnvironment": "AzureCloud",
+                "InfraAzureDirectoryTenantName": "msazurestack.microsoft.com",
+                "ConnectToAzure": "Azure Active Directory",
+                "TimeServer": [
+                    "13.86.101.172"
+                ],
+                "SyslogServerIPv4Address": "10.185.192.141",
+                "DNSForwarder": [
+                    "10.50.10.50",
+                    "10.50.50.50"
+                ],
+                "ScaleUnits": [
+                    {
+                        "Name": "SU01",
+                        "NodeCount": 4,
+                        "RackId": "Rack01",
+                        "Index": 1
+                    }
+                ]
+            }
+        ],
+        "Switches": [
+            {
+                "Make": "Border",
+                "Model": null,
+                "Type": "Border1",
+                "ASN": 64626
+            },
+            {
+                "Make": "DellEMC",
+                "Model": "S5248-ON",
+                "Type": "TOR1",
+                "Hostname": "Hostname1",
+                "ASN": 64629,
+                "Firmware": "10.5(3.4)"
+            },
+            {
+                "Make": "DellEMC",
+                "Model": "S5248-ON",
+                "Type": "TOR2",
+                "Hostname": "Hostname2",
+                "ASN": 64629,
+                "Firmware": "10.5(3.4)"
+            },
+            {
+                "Make": "DellEMC",
+                "Model": "N3248TE-ON",
+                "Type": "BMC",
+                "Hostname": "Hostname11",
+                "ASN": 64629,
+                "Firmware": "10.5(3.4)"
+            },
+            {
+                "Make": "Microsoft",
+                "Model": null,
+                "Type": "MUX",
+                "ASN": 64630
+            }
+        ],
+        "SwitchUplink": "[BGP|Static]",
+        "HostConnectivity": "[L2|BGP|Static]",
+        "Supernets": [
+            {
+                "GroupID": "P2P_Border1_TOR1",
+                "Name": "P2P_Border1_TOR1",
+                "Description": "Uplink to Boarder1, GroupID naming convention P2P_{$Type}_{$Type}",
+                "IPv4": {
+                    "Cidr": 31,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "100.100.113.128"
+                        },
+                        {
+                            "Name": "Border1",
+                            "IP": "100.100.113.128"
+                        },
+                        {
+                            "Name": "TOR1",
+                            "IP": "100.100.113.129"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "P2P_Border2_TOR1",
+                "Name": "P2P_Border2_TOR1",
+                "Description": "Uplink to Boarder2, GroupID naming convention P2P_{$Type}_{$Type}",
+                "IPv4": {
+                    "Cidr": 31,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "100.100.113.130"
+                        },
+                        {
+                            "Name": "Border2",
+                            "IP": "100.100.113.130"
+                        },
+                        {
+                            "Name": "TOR1",
+                            "IP": "100.100.113.131"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "P2P_Border1_TOR2",
+                "Name": "P2P_Border1_TOR2",
+                "Description": "Uplink to Boarder1, GroupID naming convention P2P_{$Type}_{$Type}",
+                "IPv4": {
+                    "Cidr": 31,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "100.100.113.132"
+                        },
+                        {
+                            "Name": "Border1",
+                            "IP": "100.100.113.132"
+                        },
+                        {
+                            "Name": "TOR2",
+                            "IP": "100.100.113.133"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "P2P_Border2_TOR2",
+                "Name": "P2P_Border2_TOR2",
+                "Description": "Uplink to Boarder2, GroupID naming convention P2P_{$Type}_{$Type}",
+                "IPv4": {
+                    "Cidr": 31,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "100.100.113.134"
+                        },
+                        {
+                            "Name": "Border2",
+                            "IP": "100.100.113.134"
+                        },
+                        {
+                            "Name": "TOR2",
+                            "IP": "100.100.113.135"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "P2P_TOR1_TOR2",
+                "Name": "P2P_IBGP",
+                "Description": "iBGP Link, GroupID naming convention P2P_{$Type}_{$Type}",
+                "IPv4": {
+                    "Cidr": 31,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "100.100.113.136"
+                        },
+                        {
+                            "Name": "TOR1",
+                            "IP": "100.100.113.136"
+                        },
+                        {
+                            "Name": "TOR2",
+                            "IP": "100.100.113.137"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "Loopback0",
+                "Name": "Loopback0",
+                "Description": "Switch Loopback assignment",
+                "IPv4": {
+                    "Cidr": 32,
+                    "Assignment": [
+                        {
+                            "Name": "TOR1",
+                            "IP": "100.100.113.138"
+                        },
+                        {
+                            "Name": "TOR2",
+                            "IP": "100.100.113.139"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "BMC",
+                "Name": "BMC",
+                "VlanID": 125,
+                "Description": "BMC Network. GroupID is unique key.",
+                "IPv4": {
+                    "SwitchSVI": true,
+                    "Cidr": 26,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "100.100.113.192"
+                        },
+                        {
+                            "Name": "Gateway",
+                            "IP": "100.100.113.193"
+                        },
+                        {
+                            "Name": "TOR1",
+                            "IP": "100.100.113.194"
+                        },
+                        {
+                            "Name": "TOR2",
+                            "IP": "100.100.113.195"
+                        },
+                        {
+                            "Name": "BMC",
+                            "IP": "100.100.113.196"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "L3FORWARD",
+                "Name": "L3FORWARD",
+                "VlanID": 501,
+                "Description": "L3FORWARD Network. GroupID is unique key.",
+                "IPv4": {
+                    "SwitchSVI": true,
+                    "Cidr": 29,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "100.100.111.192"
+                        },
+                        {
+                            "Name": "Gateway",
+                            "IP": "100.100.111.193"
+                        },
+                        {
+                            "Name": "TOR1",
+                            "IP": "100.100.111.194"
+                        },
+                        {
+                            "Name": "TOR2",
+                            "IP": "100.100.111.195"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "MANAGEMENT",
+                "Name": "MANAGEMENT7",
+                "VlanID": 7,
+                "Description": "MANAGEMENT Network. GroupID is unique key.",
+                "IPv4": {
+                    "SwitchSVI": true,
+                    "Cidr": 24,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "100.101.108.0"
+                        },
+                        {
+                            "Name": "Gateway",
+                            "IP": "100.101.108.1"
+                        },
+                        {
+                            "Name": "TOR1",
+                            "IP": "100.101.108.2"
+                        },
+                        {
+                            "Name": "TOR2",
+                            "IP": "100.101.108.3"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "HVNPA",
+                "Name": "HVNPA6",
+                "VlanID": 6,
+                "Description": "HVNPA Network. GroupID is unique key.",
+                "IPv4": {
+                    "SwitchSVI": true,
+                    "Cidr": 25,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "100.101.111.0"
+                        },
+                        {
+                            "Name": "Gateway",
+                            "IP": "100.101.111.1"
+                        },
+                        {
+                            "Name": "TOR1",
+                            "IP": "100.101.111.2"
+                        },
+                        {
+                            "Name": "TOR2",
+                            "IP": "100.101.111.3"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "TENANT",
+                "Name": "TENANT201",
+                "VlanID": 201,
+                "Description": "TENANT Network. GroupID is unique key.",
+                "IPv4": {
+                    "SwitchSVI": true,
+                    "Cidr": 24,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "100.101.109.0"
+                        },
+                        {
+                            "Name": "Gateway",
+                            "IP": "100.101.109.1"
+                        },
+                        {
+                            "Name": "TOR1",
+                            "IP": "100.101.109.2"
+                        },
+                        {
+                            "Name": "TOR2",
+                            "IP": "100.101.109.3"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "TENANT",
+                "Name": "TENANT301",
+                "VlanID": 301,
+                "Description": "TENANT Network. GroupID is unique key.",
+                "IPv4": {
+                    "SwitchSVI": true,
+                    "Cidr": 24,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "100.101.110.0"
+                        },
+                        {
+                            "Name": "Gateway",
+                            "IP": "100.101.110.1"
+                        },
+                        {
+                            "Name": "TOR1",
+                            "IP": "100.101.110.2"
+                        },
+                        {
+                            "Name": "TOR2",
+                            "IP": "100.101.110.3"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "ExternalIP",
+                "Name": "GRE",
+                "VlanID": 0,
+                "Description": "ExternalIP Network, no config on switch. GroupID is unique key.",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 26,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "100.101.111.128"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "StorageIP",
+                "Name": "Storage711",
+                "VlanID": 711,
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "10.71.1.0"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "StorageIP",
+                "Name": "Storage712",
+                "VlanID": 712,
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "10.71.2.0"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "StorageIP",
+                "Name": "Storage713",
+                "VlanID": 713,
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "10.71.3.0"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "StorageIP",
+                "Name": "Storage714",
+                "VlanID": 714,
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "10.71.4.0"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "StorageIP",
+                "Name": "Storage715",
+                "VlanID": 715,
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "10.71.5.0"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "StorageIP",
+                "Name": "Storage716",
+                "VlanID": 716,
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "10.71.6.0"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "StorageIP",
+                "Name": "Storage717",
+                "VlanID": 717,
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "10.71.7.0"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "StorageIP",
+                "Name": "Storage718",
+                "VlanID": 718,
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
+                "IPv4": {
+                    "SwitchSVI": false,
+                    "Cidr": 24,
+                    "Assignment": [
+                        {
+                            "Name": "Network",
+                            "IP": "10.71.8.0"
+                        }
+                    ]
+                },
+                "IPv6": {}
+            },
+            {
+                "GroupID": "Unused",
+                "Name": "Unused",
+                "VlanID": 2,
+                "Description": "Unused Vlan for non used interfaces.",
+                "ShutDown": true,
+                "IPv4": {
+                    "SwitchSVI": false
+                },
+                "IPv6": {}
+            }
+        ],
+        "Setting": {
+            "TimeServer": [
+                "13.86.101.172"
+            ],
+            "SyslogServer": [
+                "10.185.192.141"
+            ],
+            "DNSForwarder": [
+                "10.50.10.50",
+                "10.50.50.50"
+            ]
+        }
+    }
+}

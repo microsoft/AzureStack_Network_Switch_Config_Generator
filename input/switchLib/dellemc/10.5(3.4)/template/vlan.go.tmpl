@@ -1,0 +1,30 @@
+{{ define "define_vlan"}}
+! vlan.go.tmpl-define_vlan
+{{ range . -}}    
+interface vlan {{.VlanID}}
+  description {{.VlanName}}
+{{ end }}
+{{ end }}
+
+{{ define "interface_vlan"}}
+! vlan.go.tmpl-interface_vlan
+{{ range . -}}
+{{ if .IPAddress -}} 
+interface vlan {{.VlanID}}
+  description {{.VlanName}}
+  mtu {{.Mtu}}
+  {{if .Shutdown -}} 
+  shutdown 
+  {{ else -}} 
+  no shutdown
+  {{ end -}}
+  ip address {{ .IPAddress }}
+  {{ if .VIPAddress -}}
+  vrrp-group {{.VlanID}}
+    virtual-address {{.VIPAddress}}
+    no preempt
+    {{/* priority {{.VIPPriorityId}} */ -}}
+  {{ end -}}
+{{- end}}
+{{ end -}}
+{{ end -}}

@@ -1,30 +1,30 @@
 {
  "Switch": {
-  "Make": "Cisco",
-  "Model": "9348GC-FXP",
+  "Make": "DellEMC",
+  "Model": "N3248TE-ON",
   "Type": "BMC",
   "Hostname": "Hostname11",
   "ASN": 64629,
-  "Firmware": "9.3(9)"
+  "Firmware": "10.5(3.4)"
  },
  "SwitchPeers": null,
  "SwitchBMC": null,
  "Uplinks": [
   {
-   "Make": "Cisco",
-   "Model": "93180YC-FX",
+   "Make": "DellEMC",
+   "Model": "S5248-ON",
    "Type": "TOR1",
    "Hostname": "Hostname1",
    "ASN": 64629,
-   "Firmware": "9.3(9)"
+   "Firmware": "10.5(3.4)"
   },
   {
-   "Make": "Cisco",
-   "Model": "93180YC-FX",
+   "Make": "DellEMC",
+   "Model": "S5248-ON",
    "Type": "TOR2",
    "Hostname": "Hostname2",
    "ASN": 64629,
-   "Firmware": "9.3(9)"
+   "Firmware": "10.5(3.4)"
   }
  ],
  "Downlinks": null,
