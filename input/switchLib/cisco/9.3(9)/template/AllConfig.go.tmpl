@@ -4,10 +4,10 @@
 {{ template "stig_feature" . -}}
 {{ template "define_vlan" .Vlans -}}
 {{ template "interface_vlan" .Vlans -}}
-{{ template "default_snmp" -}}
-{{ template "default_errdisable_setting" -}}
-{{ template "default_rmon" -}}
-{{ template "default_console_vty" -}}
+{{ template "set_snmp" -}}
+{{ template "set_errdisable_setting" -}}
+{{ template "set_rmon" -}}
+{{ template "set_console_vty" -}}
 {{ template "set_ntp" .GlobalSetting -}}
 {{ template "set_syslog" .GlobalSetting -}}
 {{- /* {{ template "define_vlan" .Vlans -}}

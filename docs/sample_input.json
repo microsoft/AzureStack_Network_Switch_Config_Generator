@@ -1,38 +1,5 @@
 {
-    "Version": "1.0.0",
-    "Description": "Template for ASZ Rack",
     "InputData": {
-        "Cloud": [
-            {
-                "Id": "CL01",
-                "NodeCount": 0,
-                "NamingPrefix": "B42TCA3",
-                "PhysicalNamingPrefix": "B42TCA3",
-                "CompanyName": "Microsoft",
-                "RegionName": "Redmond",
-                "DomainFQDN": "B42TCA3.masd.stbtest.microsoft.com",
-                "ExternalDomainFQDN": "Ext-B42TCA3.masd.stbtest.microsoft.com",
-                "InfraAzureEnvironment": "AzureCloud",
-                "InfraAzureDirectoryTenantName": "msazurestack.microsoft.com",
-                "ConnectToAzure": "Azure Active Directory",
-                "TimeServer": [
-                    "13.86.101.172"
-                ],
-                "SyslogServerIPv4Address": "10.185.192.141",
-                "DNSForwarder": [
-                    "10.50.10.50",
-                    "10.50.50.50"
-                ],
-                "ScaleUnits": [
-                    {
-                        "Name": "SU01",
-                        "NodeCount": 4,
-                        "RackId": "Rack01",
-                        "Index": 1
-                    }
-                ]
-            }
-        ],
         "Switches": [
             {
                 "Make": "Border",
@@ -242,7 +209,7 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "COMPUTE",
+                "GroupID": "L3FORWARD",
                 "Name": "L3FORWARD",
                 "VlanID": 501,
                 "Description": "L3FORWARD Network. GroupID is unique key.",
@@ -300,10 +267,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "COMPUTE",
-                "Name": "HNVPA6",
+                "GroupID": "HVNPA",
+                "Name": "HVNPA6",
                 "VlanID": 6,
-                "Description": "HNVPA Network. GroupID is unique key.",
+                "Description": "HVNPA Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Cidr": 25,
@@ -329,7 +296,7 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "COMPUTE",
+                "GroupID": "TENANT",
                 "Name": "TENANT201",
                 "VlanID": 201,
                 "Description": "TENANT Network. GroupID is unique key.",
@@ -358,7 +325,7 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "COMPUTE",
+                "GroupID": "TENANT",
                 "Name": "TENANT301",
                 "VlanID": 301,
                 "Description": "TENANT Network. GroupID is unique key.",
@@ -404,10 +371,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "STORAGE",
+                "GroupID": "StorageIP",
                 "Name": "Storage711",
                 "VlanID": 711,
-                "Description": "STORAGE Network, no config on switch. GroupID is unique key.",
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Cidr": 24,
@@ -421,10 +388,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "STORAGE",
+                "GroupID": "StorageIP",
                 "Name": "Storage712",
                 "VlanID": 712,
-                "Description": "STORAGE Network, no config on switch. GroupID is unique key.",
+                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Cidr": 24,
@@ -438,58 +405,7 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "STORAGE",
-                "Name": "Storage713",
-                "VlanID": 713,
-                "Description": "STORAGE Network, no config on switch. GroupID is unique key.",
-                "IPv4": {
-                    "SwitchSVI": false,
-                    "Cidr": 24,
-                    "Assignment": [
-                        {
-                            "Name": "Network",
-                            "IP": "10.71.3.0"
-                        }
-                    ]
-                },
-                "IPv6": {}
-            },
-            {
-                "GroupID": "STORAGE",
-                "Name": "Storage714",
-                "VlanID": 714,
-                "Description": "STORAGE Network, no config on switch. GroupID is unique key.",
-                "IPv4": {
-                    "SwitchSVI": false,
-                    "Cidr": 24,
-                    "Assignment": [
-                        {
-                            "Name": "Network",
-                            "IP": "10.71.4.0"
-                        }
-                    ]
-                },
-                "IPv6": {}
-            },
-            {
-                "GroupID": "STORAGE",
-                "Name": "Storage715",
-                "VlanID": 715,
-                "Description": "STORAGE Network, no config on switch. GroupID is unique key.",
-                "IPv4": {
-                    "SwitchSVI": false,
-                    "Cidr": 24,
-                    "Assignment": [
-                        {
-                            "Name": "Network",
-                            "IP": "10.71.5.0"
-                        }
-                    ]
-                },
-                "IPv6": {}
-            },
-            {
-                "GroupID": "UnusedVlan",
+                "GroupID": "Unused",
                 "Name": "Unused",
                 "VlanID": 2,
                 "Description": "Unused Vlan for non used interfaces.",

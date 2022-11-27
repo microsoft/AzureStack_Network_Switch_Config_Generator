@@ -20,13 +20,14 @@ type InputData struct {
 }
 
 type OutputType struct {
-	Switch         SwitchType        `json:"Switch"`
-	SwitchPeers    []SwitchType      `json:"SwitchPeers"`
-	SwitchBMC      []SwitchType      `json:"SwitchBMC"`
-	SwitchUplink   []SwitchType      `json:"Uplinks"`
-	SwitchDownlink []SwitchType      `json:"Downlinks"`
-	GlobalSetting  GlobalSettingType `json:"GlobalSetting"`
-	Vlans          []VlanType        `json:"Vlans"`
+	Switch         SwitchType                 `json:"Switch"`
+	SwitchPeers    []SwitchType               `json:"SwitchPeers"`
+	SwitchBMC      []SwitchType               `json:"SwitchBMC"`
+	SwitchUplink   []SwitchType               `json:"Uplinks"`
+	SwitchDownlink []SwitchType               `json:"Downlinks"`
+	GlobalSetting  GlobalSettingType          `json:"GlobalSetting"`
+	Vlans          []VlanType                 `json:"Vlans"`
+	Interfaces     []map[string]InterfaceType `json:"Interfaces"`
 }
 
 type GlobalSettingType struct {
@@ -83,4 +84,32 @@ type Supernet struct {
 type IPv4Unit struct {
 	Name string `json:"Name"`
 	IP   string `json:"IP"`
+}
+
+type InterfaceJson struct {
+	Model           string `json:"Model"`
+	Type            string `json:"Type"`
+	SupportNoBmc    bool   `json:"SupportNoBmc"`
+	FirmwareVersion string `json:"FirmwareVersion"`
+	Maxmtu          string `json:"MaxMTU"`
+	Function        []struct {
+		Function string   `json:"Function"`
+		Port     []string `json:"Port"`
+	} `json:"Function"`
+	Port []struct {
+		Port string `json:"Port"`
+		Type string `json:"Type"`
+	} `json:"Port"`
+}
+
+type InterfaceType struct {
+	Port        string            `json:"Port"`
+	Type        string            `json:"Type"`
+	Description string            `json:"Description"`
+	UntagVlan   int               `json:"UntagVlan"`
+	TagVlan     []int             `json:"TagVlan"`
+	IPAddress   string            `json:"IPAddress"`
+	Mtu         int               `json:"MTU"`
+	Shutdown    bool              `json:"Shutdown"`
+	Others      map[string]string `json:"Others"`
 }

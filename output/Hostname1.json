@@ -1,30 +1,30 @@
 {
  "Switch": {
-  "Make": "DellEMC",
-  "Model": "S5248-ON",
+  "Make": "Cisco",
+  "Model": "93180YC-FX",
   "Type": "TOR1",
   "Hostname": "Hostname1",
   "ASN": 64629,
-  "Firmware": "10.5(3.4)"
+  "Firmware": "9.3(9)"
  },
  "SwitchPeers": [
   {
-   "Make": "DellEMC",
-   "Model": "S5248-ON",
+   "Make": "Cisco",
+   "Model": "93180YC-FX",
    "Type": "TOR2",
    "Hostname": "Hostname2",
    "ASN": 64629,
-   "Firmware": "10.5(3.4)"
+   "Firmware": "9.3(9)"
   }
  ],
  "SwitchBMC": [
   {
-   "Make": "DellEMC",
-   "Model": "N3248TE-ON",
+   "Make": "Cisco",
+   "Model": "9348GC-FXP",
    "Type": "BMC",
    "Hostname": "Hostname11",
    "ASN": 64629,
-   "Firmware": "10.5(3.4)"
+   "Firmware": "9.3(9)"
   }
  ],
  "Uplinks": [
@@ -76,7 +76,7 @@
   {
    "VlanName": "L3FORWARD",
    "VlanID": 501,
-   "GroupID": "L3FORWARD",
+   "GroupID": "COMPUTE",
    "IPAddress": "100.100.111.194",
    "MTU": 9216,
    "VIPAddress": "100.100.111.193",
@@ -94,9 +94,9 @@
    "Shutdown": false
   },
   {
-   "VlanName": "HVNPA6",
+   "VlanName": "HNVPA6",
    "VlanID": 6,
-   "GroupID": "HVNPA",
+   "GroupID": "COMPUTE",
    "IPAddress": "100.101.111.2",
    "MTU": 9216,
    "VIPAddress": "100.101.111.1",
@@ -106,7 +106,7 @@
   {
    "VlanName": "TENANT201",
    "VlanID": 201,
-   "GroupID": "TENANT",
+   "GroupID": "COMPUTE",
    "IPAddress": "100.101.109.2",
    "MTU": 9216,
    "VIPAddress": "100.101.109.1",
@@ -116,7 +116,7 @@
   {
    "VlanName": "TENANT301",
    "VlanID": 301,
-   "GroupID": "TENANT",
+   "GroupID": "COMPUTE",
    "IPAddress": "100.101.110.2",
    "MTU": 9216,
    "VIPAddress": "100.101.110.1",
@@ -126,7 +126,7 @@
   {
    "VlanName": "Storage711",
    "VlanID": 711,
-   "GroupID": "StorageIP",
+   "GroupID": "STORAGE",
    "IPAddress": "",
    "MTU": 9216,
    "VIPAddress": "",
@@ -136,7 +136,7 @@
   {
    "VlanName": "Storage712",
    "VlanID": 712,
-   "GroupID": "StorageIP",
+   "GroupID": "STORAGE",
    "IPAddress": "",
    "MTU": 9216,
    "VIPAddress": "",
@@ -146,7 +146,7 @@
   {
    "VlanName": "Storage713",
    "VlanID": 713,
-   "GroupID": "StorageIP",
+   "GroupID": "STORAGE",
    "IPAddress": "",
    "MTU": 9216,
    "VIPAddress": "",
@@ -156,7 +156,7 @@
   {
    "VlanName": "Storage714",
    "VlanID": 714,
-   "GroupID": "StorageIP",
+   "GroupID": "STORAGE",
    "IPAddress": "",
    "MTU": 9216,
    "VIPAddress": "",
@@ -166,37 +166,7 @@
   {
    "VlanName": "Storage715",
    "VlanID": 715,
-   "GroupID": "StorageIP",
-   "IPAddress": "",
-   "MTU": 9216,
-   "VIPAddress": "",
-   "VIPPriorityId": 0,
-   "Shutdown": false
-  },
-  {
-   "VlanName": "Storage716",
-   "VlanID": 716,
-   "GroupID": "StorageIP",
-   "IPAddress": "",
-   "MTU": 9216,
-   "VIPAddress": "",
-   "VIPPriorityId": 0,
-   "Shutdown": false
-  },
-  {
-   "VlanName": "Storage717",
-   "VlanID": 717,
-   "GroupID": "StorageIP",
-   "IPAddress": "",
-   "MTU": 9216,
-   "VIPAddress": "",
-   "VIPPriorityId": 0,
-   "Shutdown": false
-  },
-  {
-   "VlanName": "Storage718",
-   "VlanID": 718,
-   "GroupID": "StorageIP",
+   "GroupID": "STORAGE",
    "IPAddress": "",
    "MTU": 9216,
    "VIPAddress": "",
@@ -206,12 +176,729 @@
   {
    "VlanName": "Unused",
    "VlanID": 2,
-   "GroupID": "Unused",
+   "GroupID": "UnusedVlan",
    "IPAddress": "",
    "MTU": 9216,
    "VIPAddress": "",
    "VIPPriorityId": 0,
    "Shutdown": true
+  }
+ ],
+ "Interfaces": [
+  {
+   "1/1": {
+    "Port": "1/1",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/2": {
+    "Port": "1/2",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/3": {
+    "Port": "1/3",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/4": {
+    "Port": "1/4",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/5": {
+    "Port": "1/5",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/6": {
+    "Port": "1/6",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/7": {
+    "Port": "1/7",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/8": {
+    "Port": "1/8",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/9": {
+    "Port": "1/9",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/10": {
+    "Port": "1/10",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/11": {
+    "Port": "1/11",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/12": {
+    "Port": "1/12",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/13": {
+    "Port": "1/13",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/14": {
+    "Port": "1/14",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/15": {
+    "Port": "1/15",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/16": {
+    "Port": "1/16",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/17": {
+    "Port": "1/17",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/18": {
+    "Port": "1/18",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/19": {
+    "Port": "1/19",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/20": {
+    "Port": "1/20",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/21": {
+    "Port": "1/21",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/22": {
+    "Port": "1/22",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/23": {
+    "Port": "1/23",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/24": {
+    "Port": "1/24",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/25": {
+    "Port": "1/25",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/26": {
+    "Port": "1/26",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/27": {
+    "Port": "1/27",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/28": {
+    "Port": "1/28",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/29": {
+    "Port": "1/29",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/30": {
+    "Port": "1/30",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/31": {
+    "Port": "1/31",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/32": {
+    "Port": "1/32",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/33": {
+    "Port": "1/33",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/34": {
+    "Port": "1/34",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/35": {
+    "Port": "1/35",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/36": {
+    "Port": "1/36",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/37": {
+    "Port": "1/37",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/38": {
+    "Port": "1/38",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/39": {
+    "Port": "1/39",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/40": {
+    "Port": "1/40",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/41": {
+    "Port": "1/41",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/42": {
+    "Port": "1/42",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/43": {
+    "Port": "1/43",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/44": {
+    "Port": "1/44",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/45": {
+    "Port": "1/45",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/46": {
+    "Port": "1/46",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/47": {
+    "Port": "1/47",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/48": {
+    "Port": "1/48",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/49": {
+    "Port": "1/49",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/50": {
+    "Port": "1/50",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/51": {
+    "Port": "1/51",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/52": {
+    "Port": "1/52",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/53": {
+    "Port": "1/53",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "1/54": {
+    "Port": "1/54",
+    "Type": "Ethernet",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
+  },
+  {
+   "mgmt0": {
+    "Port": "mgmt0",
+    "Type": "mgmt",
+    "Description": "",
+    "UntagVlan": 0,
+    "TagVlan": null,
+    "IPAddress": "",
+    "MTU": 0,
+    "Shutdown": false,
+    "Others": null
+   }
   }
  ]
 }

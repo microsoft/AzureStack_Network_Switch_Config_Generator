@@ -55,5 +55,12 @@ func (o *OutputType) UpdateVlan(inputData InputData) {
 			}
 		}
 	}
+
+	// Convert Vlan List to Map
+	// vlanMap := map[string][]VlanType{}
+	// for _, vlanObj := range vlanList {
+	// 	groupId := vlanObj.GroupID
+	// 	vlanMap[groupId] = append(vlanMap[groupId], vlanObj)
+	// }
 	o.Vlans = vlanList
 }

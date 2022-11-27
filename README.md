@@ -1,23 +1,20 @@
 # Switch Configuration Generator
 
 - [Switch Configuration Generator](#switch-configuration-generator)
-  - [Project Design](#project-design)
-    - [Overall Design](#overall-design)
-      - [Logic Diagram](#logic-diagram)
+- [Project Design](#project-design)
+    - [Logic Diagram](#logic-diagram)
+    - [Input JSON Sample](#input-json-sample)
+    - [SwitchLib Hierachy Sample](#switchlib-hierachy-sample)
       - [User Input Template](#user-input-template)
       - [Switch Framework JSON](#switch-framework-json)
       - [Switch Go Template](#switch-go-template)
-      - [Resource Hierachy](#resource-hierachy)
     - [User Input Design](#user-input-design)
       - [Code Structure](#code-structure)
     - [Switch Framework and Template](#switch-framework-and-template)
     - [Switch JSON Object](#switch-json-object)
       - [Output Object Model](#output-object-model)
-      - [IP Caculator Logic of Network Assignment](#ip-caculator-logic-of-network-assignment)
-        - [Logic Diagram](#logic-diagram-1)
-          - [Segment and Position Logic](#segment-and-position-logic)
     - [Switch Configuration Files](#switch-configuration-files)
-      - [Logic Diagram](#logic-diagram-2)
+      - [Logic Diagram](#logic-diagram-1)
       - [Template Structure](#template-structure)
   - [Concerns and Thoughts](#concerns-and-thoughts)
   - [MileStone Plan](#milestone-plan)
@@ -33,15 +30,13 @@
   - [To DO](#to-do)
     - [Design](#design)
 
-## Project Design
+# Project Design
 
-### Overall Design
-
-#### Logic Diagram
+### Logic Diagram
 
 ```mermaid
 flowchart TD
-    A[Switch Framework + Go Template]
+    A[SwitchLib: Framework JSON + Go Template]
     B[User Input Template]
     C(Generator Tool)
     D(Switch Output Object)
@@ -53,6 +48,42 @@ flowchart TD
     D -.-> |For Debug| E
     D --> |For Deploy| F
 ```
+
+### Input JSON Sample
+[sample_input.json](docs/sample_input.json)
+
+### SwitchLib Hierachy Sample
+
+```
+.
+├── cisco
+│   └── 9.3(9)
+│       ├── 93180yc-fx
+│       │   └── interface.json
+│       ├── 9348gc-fxp
+│       │   └── interface.json
+│       └── template
+│           ├── AllConfig.go.tmpl
+│           ├── hostname.go.tmpl
+│           ├── port.go.tmpl
+│           ├── settings.go.tmpl
+│           ├── stig.go.tmpl
+│           └── vlan.go.tmpl
+└── dellemc
+    └── 10.5(3.4)
+        ├── n3248te-on
+        │   └── interface.json
+        ├── s5248-on
+        │   └── interface.json
+        └── template
+            ├── AllConfig.go.tmpl
+            ├── hostname.go.tmpl
+            ├── port.go.tmpl
+            ├── settings.go.tmpl
+            ├── stig.go.tmpl
+            └── vlan.go.tmpl
+```
+
 
 #### User Input Template
 
@@ -160,46 +191,8 @@ router bgp {{.BGPAsn}}
 {{end}}
 ```
 
-#### Resource Hierachy
 
-Example:
 
-```
-.
-└── cisco
-    ├── 93180yc-fx
-    │   └── 9.39
-    │       ├── framework
-    │       │   ├── NotInUse
-    │       │   │   ├── tor_nobmc_interface_lab.json
-    │       │   │   └── tor_qos.json
-    │       │   ├── tor_interface_hasbmc.json
-    │       │   ├── tor_interface_nobmc.json
-    │       │   └── tor_routing.json
-    │       └── tor_mlap_po.config
-    ├── 9348gc-fxp
-    │   └── 9.39
-    │       ├── bmc_mlap_po.config
-    │       └── framework
-    │           ├── bmc_interface_hasbmc.json
-    │           └── bmc_routing.json
-    └── template
-        ├── bgp.go.tmpl
-        ├── bmcConfig.go.tmpl
-        ├── bmcStatic.go.tmpl
-        ├── default.go.tmpl
-        ├── header.go.tmpl
-        ├── portchannel.go.tmpl
-        ├── port.go.tmpl
-        ├── qos.go.tmpl
-        ├── settings.go.tmpl
-        ├── stig.go.tmpl
-        ├── stp.go.tmpl
-        ├── torConfig.go.tmpl
-        ├── torStatic.go.tmpl
-        ├── vlan.go.tmpl
-        └── vpc.go.tmpl
-```
 
 ### User Input Design
 
@@ -324,100 +317,6 @@ type OutputType struct {
 }
 ```
 
-#### IP Caculator Logic of Network Assignment
-
-##### Logic Diagram
-
-```mermaid
-flowchart TD
-    A[InputObj.Network.Subnet]
-    B[InputObj.Network.SubnetAssignment]
-    C(All IPAddress in the Subnet)
-    D(Position Index in the IP List)
-    E[OutputObj.Network.IPAssignments]
-    A -.-> |Create IP List| C
-    B --> |Segment and Position| D
-    C <-.-> |Index the IP List| D
-    D --> |Generate| E
-```
-
-###### Segment and Position Logic
-
-The IP Assignment will be sorted by assigned netmask in **descend order** and then assigned by assgined position.
-Example:
-
-- Given Input:
-
-```json
-{
-  "VlanID": null,
-  "Type": "IP",
-  "Name": "SwitchMgmt",
-  "Subnet": "192.168.1.0/28",
-  "Shutdown": false,
-  "SubnetAssignment": [
-    {
-      "Name": "P2P_TOR1_To_Border1",
-      "Netmask": 31,
-      "IPSize": 2,
-      "IPAssignment": [
-        {
-          "Name": "TOR1_Loopback0",
-          "Netmask": 32,
-          "IPSize": 1,
-          "IPAssignment": [
-            {
-              "Name": "TOR1_Loopback0",
-              "Position": 0
-            }
-          ]
-        },
-        {
-          "Name": "P2P_TOR1_To_Border1",
-          "Netmask": 31,
-          "IPSize": 2,
-          "IPAssignment": [
-            {
-              "Name": "TOR1",
-              "Position": 0
-            },
-            {
-              "Name": "Border1",
-              "Position": 1
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
-```
-
-- Get Output:
-
-```json
-{
-  "VlanID": 0,
-  "Type": "IP",
-  "Name": "SwitchMgmt",
-  "Subnet": "192.168.1.0/28",
-  "Shutdown": false,
-  "IPAssignment": [
-    {
-      "Name": "P2P_TOR1_To_Border1/TOR1",
-      "IPAddress": "192.168.1.0/31"
-    },
-    {
-      "Name": "P2P_TOR1_To_Border1/Border1",
-      "IPAddress": "192.168.1.1/31"
-    },
-    {
-      "Name": "TOR1_Loopback0/TOR1_Loopback0",
-      "IPAddress": "192.168.1.2/32"
-    }
-  ]
-}
-```
 
 ### Switch Configuration Files
 

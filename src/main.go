@@ -18,6 +18,7 @@ var (
 	VIPGATEWAY          = "Gateway"
 	UNUSED              = "Unused"
 	TEMPLATE            = "template"
+	INTERFACEJSON       = "interface.json"
 	JUMBOMTU            = 9216
 	DefaultMTU          = 1500
 	NO_Valid_TOR_Switch = "NO Valid TOR Switch Founded"
@@ -59,8 +60,8 @@ func main() {
 			torOutput.UpdateVlan(inputData)
 			torOutput.UpdateGlobalSetting(inputData)
 			templateFolder, frameworkFolder := torOutput.parseFrameworkPath(*switchLibFolder)
+			torOutput.ParseSwitchInterface(frameworkFolder)
 			// Output JSON File for Debug
-			fmt.Println(templateFolder, frameworkFolder)
 			torOutput.writeToJson(*outputFolder)
 			torOutput.parseTemplate(templateFolder, *outputFolder)
 		}
@@ -75,8 +76,8 @@ func main() {
 			bmcOutput.UpdateVlan(inputData)
 			bmcOutput.UpdateGlobalSetting(inputData)
 			templateFolder, frameworkFolder := bmcOutput.parseFrameworkPath(*switchLibFolder)
+			bmcOutput.ParseSwitchInterface(frameworkFolder)
 			// Output JSON File for Debug
-			fmt.Println(templateFolder, frameworkFolder)
 			bmcOutput.writeToJson(*outputFolder)
 			bmcOutput.parseTemplate(templateFolder, *outputFolder)
 		}
