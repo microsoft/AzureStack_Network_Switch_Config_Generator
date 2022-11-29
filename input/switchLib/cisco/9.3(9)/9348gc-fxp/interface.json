@@ -21,14 +21,14 @@
             ]
         },
         {
-            "Function": "HLH-10GIG_NIC",
+            "Function": "HLH-OS",
             "Port": [
                 "1/49",
                 "1/50"
             ]
         },
         {
-            "Function": "PortChannel102",
+            "Function": "TOR_BMC",
             "Port": [
                 "1/51",
                 "1/52"

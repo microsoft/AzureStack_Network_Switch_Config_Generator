@@ -24,6 +24,9 @@ var (
 	NO_Valid_TOR_Switch = "NO Valid TOR Switch Founded"
 	JSONExtension       = ".json"
 	CONFIGExtension     = ".config"
+	IBGP_PEER           = "PortChannel50"
+	MLAG_PEER           = "PortChannel101"
+	TOR_BMC             = "PortChannel102"
 	Username, Password  string
 )
 

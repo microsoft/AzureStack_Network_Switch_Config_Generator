@@ -2,37 +2,6 @@
     "Version": "1.0.0",
     "Description": "Template for ASZ Rack",
     "InputData": {
-        "Cloud": [
-            {
-                "Id": "CL01",
-                "NodeCount": 0,
-                "NamingPrefix": "B42TCA3",
-                "PhysicalNamingPrefix": "B42TCA3",
-                "CompanyName": "Microsoft",
-                "RegionName": "Redmond",
-                "DomainFQDN": "B42TCA3.masd.stbtest.microsoft.com",
-                "ExternalDomainFQDN": "Ext-B42TCA3.masd.stbtest.microsoft.com",
-                "InfraAzureEnvironment": "AzureCloud",
-                "InfraAzureDirectoryTenantName": "msazurestack.microsoft.com",
-                "ConnectToAzure": "Azure Active Directory",
-                "TimeServer": [
-                    "13.86.101.172"
-                ],
-                "SyslogServerIPv4Address": "10.185.192.141",
-                "DNSForwarder": [
-                    "10.50.10.50",
-                    "10.50.50.50"
-                ],
-                "ScaleUnits": [
-                    {
-                        "Name": "SU01",
-                        "NodeCount": 4,
-                        "RackId": "Rack01",
-                        "Index": 1
-                    }
-                ]
-            }
-        ],
         "Switches": [
             {
                 "Make": "Border",
