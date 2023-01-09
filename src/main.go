@@ -37,7 +37,7 @@ func init() {
 
 func main() {
 	// Input Variables
-	inputJsonFile := flag.String("inputJsonFile", "../input/lab_input.json", "File path of switch deploy input.json")
+	inputJsonFile := flag.String("inputJsonFile", "../input/sample_input.json", "File path of switch deploy input.json")
 	outputFolder := flag.String("outputFolder", "../output", "Folder path of switch configurations")
 	switchLibFolder := flag.String("switchLib", "../input/switchLib", "Folder path of switch frameworks and templates")
 	flag.StringVar(&Username, "username", "", "Username for switch configuration")
