@@ -1,179 +1,78 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
 	"reflect"
+	"strings"
 	"testing"
 )
 
-// Two group unit tests: 1. Json Object Unit Testing (Verify core functions logic); 2. Template Configuration Unit Test (Verify go templates)
-// JSON Object Unit Testing
-func TestOutputNetwork(t *testing.T) {
+var (
+	switchLibFolder  = "/workspaces/AzureStack_Network_Switch_Framework/input/switchLib/"
+	testInputFolder  = "/workspaces/AzureStack_Network_Switch_Framework/src/test/testInput/"
+	testOutputFolder = "/workspaces/AzureStack_Network_Switch_Framework/src/test/testOutput/"
+	testGoldenFolder = "/workspaces/AzureStack_Network_Switch_Framework/src/test/goldenConfig/"
+)
+
+func TestMain(t *testing.T) {
+
 	type test struct {
-		inputJsonFile  string
-		outputJsonFile string
+		inputTestFileName string
 	}
-	testFolder := "./testcases/"
 	testCases := map[string]test{
-		"cisco93180yc-fx_nobmc_bgp": {
-			testFolder + "cisco93180yc-fx_nobmc_bgp/input_nobmc_bgp.json",
-			testFolder + "cisco93180yc-fx_nobmc_bgp/S31R28-TOR1.json",
-		},
-		"cisco93180yc-fx_nobmc_static": {
-			testFolder + "cisco93180yc-fx_nobmc_static/input_nobmc_static.json",
-			testFolder + "cisco93180yc-fx_nobmc_static/S31R28-TOR1.json",
-		},
-		"cisco93180yc-fx_hasbmc_bgp": {
-			testFolder + "cisco93180yc-fx_hasbmc_bgp/input_hasbmc_bgp.json",
-			testFolder + "cisco93180yc-fx_hasbmc_bgp/S31R28-TOR1.json",
-		},
-		"cisco93180yc-fx_hasbmc_static": {
-			testFolder + "cisco93180yc-fx_hasbmc_static/input_hasbmc_static.json",
-			testFolder + "cisco93180yc-fx_hasbmc_static/S31R28-TOR1.json",
+		"cisco_bgp_nobmc": {
+			inputTestFileName: "cisco_bgp_input.json",
 		},
 	}
 
 	for name, tc := range testCases {
 		t.Run(name, func(t *testing.T) {
-			inputObj := parseInputJSON(tc.inputJsonFile)
-			outputObj := parseOutputJSON(tc.outputJsonFile)
-
-			got := inputObj.parseSupernets()
-			want := outputObj.Supernets
-			if !reflect.DeepEqual(*got, *want) {
-				t.Errorf("[Failed] name: %s \n want: %#v \n got: %#v", name, want, got)
-			}
-		})
-	}
-}
-
-func TestParseInterfaceObj(t *testing.T) {
-	type test struct {
-		frameworkPath string
-		outputJson    []string
-	}
-	testFolder := "./testcases/"
-	testCases := map[string]test{
-		"cisco93180yc-fx_nobmc_bgp": {
-			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
-			outputJson: []string{
-				testFolder + "cisco93180yc-fx_nobmc_bgp/S31R28-TOR1.json",
-				testFolder + "cisco93180yc-fx_nobmc_bgp/S31R28-TOR2.json"},
-		},
-		"cisco93180yc-fx_nobmc_static": {
-			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
-			outputJson: []string{
-				testFolder + "cisco93180yc-fx_nobmc_static/S31R28-TOR1.json",
-				testFolder + "cisco93180yc-fx_nobmc_static/S31R28-TOR2.json"},
-		},
-		"cisco93180yc-fx_hasbmc_bgp": {
-			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
-			outputJson: []string{
-				testFolder + "cisco93180yc-fx_hasbmc_bgp/S31R28-TOR1.json",
-				testFolder + "cisco93180yc-fx_hasbmc_bgp/S31R28-TOR2.json"},
-		},
-		"cisco93180yc-fx_hasbmc_static": {
-			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
-			outputJson: []string{
-				testFolder + "cisco93180yc-fx_hasbmc_static/S31R28-TOR1.json",
-				testFolder + "cisco93180yc-fx_hasbmc_static/S31R28-TOR2.json"},
-		},
-	}
-
-	for name, tc := range testCases {
-		t.Run(name, func(t *testing.T) {
-			for _, v := range tc.outputJson {
-				wantoutputObj := parseOutputJSON(v)
-				gotoutputObj := parseOutputJSON(v)
-				gotoutputObj.Vlan = nil
-				gotoutputObj.Port = nil
-				if gotoutputObj.Device.Type == DeviceType_BMC {
-					gotoutputObj.parseInterfaceObj(tc.frameworkPath, DeviceType_BMC)
-				} else {
-					gotoutputObj.parseInterfaceObj(tc.frameworkPath, DeviceType_TOR)
-				}
-				// Vlan Unit Test
-				wantVlan := wantoutputObj.Vlan
-				gotVlan := gotoutputObj.Vlan
-				if !reflect.DeepEqual(gotVlan, wantVlan) {
-					t.Errorf("[Failed] name: %s - VLAN Test \n got: %#v \n want: %#v", wantoutputObj.Device.Hostname, gotVlan, wantVlan)
-				}
-
-				// InBondPort Unit Test
-				wantPort := wantoutputObj.Port
-				gotPort := gotoutputObj.Port
-				if !reflect.DeepEqual(gotPort, wantPort) {
-					t.Errorf("[Failed] name: %s - InBondPort Test \n got: %#v \n want: %#v", wantoutputObj.Device.Hostname, gotPort, wantPort)
+			testInputData := parseInputJson(testInputFolder + tc.inputTestFileName)
+			testDeviceTypeMap := testInputData.createDeviceTypeMap()
+			generateSwitchConfig(testInputData, switchLibFolder, testOutputFolder+tc.inputTestFileName, testDeviceTypeMap)
+			outputFiles := getFilesInFolder(testOutputFolder + tc.inputTestFileName)
+			fmt.Println(outputFiles)
+			for _, file := range outputFiles {
+				if strings.Contains(file, ".json") {
+					relativePath := fmt.Sprintf("%s/%s", tc.inputTestFileName, file)
+					goldenConfigObj := parseOutputJson(testGoldenFolder + relativePath)
+					testOutputObj := parseOutputJson(testOutputFolder + relativePath)
+					if !reflect.DeepEqual(goldenConfigObj.Vlans, testOutputObj.Vlans) {
+						t.Errorf("name: %s vlan failed \n want: %#v \n got: %#v", name, goldenConfigObj.Vlans, testOutputObj.Vlans)
+					}
+					if !reflect.DeepEqual(goldenConfigObj.Interfaces, testOutputObj.Interfaces) {
+						t.Errorf("name: %s interface failed \n want: %#v \n got: %#v", name, goldenConfigObj.Interfaces, testOutputObj.Interfaces)
+					}
 				}
 			}
 		})
 	}
 }
 
-func TestParseBGPFramework(t *testing.T) {
-	type test struct {
-		inputJson     string
-		frameworkPath string
-		outputJson    []string
+func getFilesInFolder(foldername string) []string {
+	fileList := []string{}
+	files, err := ioutil.ReadDir(foldername)
+	if err != nil {
+		fmt.Println(err)
 	}
-	testFolder := "./testcases/"
-	testCases := map[string]test{
-		"cisco93180yc-fx_nobmc_bgp": {
-			inputJson:     testFolder + "cisco93180yc-fx_nobmc_bgp/input_nobmc_bgp.json",
-			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
-			outputJson: []string{
-				testFolder + "cisco93180yc-fx_nobmc_bgp/S31R28-TOR1.json",
-				testFolder + "cisco93180yc-fx_nobmc_bgp/S31R28-TOR2.json"},
-		},
-		"cisco93180yc-fx_nobmc_static": {
-			inputJson:     testFolder + "cisco93180yc-fx_nobmc_static/input_nobmc_static.json",
-			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
-			outputJson: []string{
-				testFolder + "cisco93180yc-fx_nobmc_static/S31R28-TOR1.json",
-				testFolder + "cisco93180yc-fx_nobmc_static/S31R28-TOR2.json"},
-		},
-		"cisco93180yc-fx_hasbmc_bgp": {
-			inputJson:     testFolder + "cisco93180yc-fx_hasbmc_bgp/input_hasbmc_bgp.json",
-			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
-			outputJson: []string{
-				testFolder + "cisco93180yc-fx_hasbmc_bgp/S31R28-TOR1.json",
-				testFolder + "cisco93180yc-fx_hasbmc_bgp/S31R28-TOR2.json"},
-		},
-		"cisco93180yc-fx_hasbmc_static": {
-			inputJson:     testFolder + "cisco93180yc-fx_hasbmc_static/input_hasbmc_static.json",
-			frameworkPath: "../input/switchfolder/cisco/93180yc-fx/9.39/framework",
-			outputJson: []string{
-				testFolder + "cisco93180yc-fx_hasbmc_static/S31R28-TOR1.json",
-				testFolder + "cisco93180yc-fx_hasbmc_static/S31R28-TOR2.json"},
-		},
+	for _, file := range files {
+		fileList = append(fileList, file.Name())
 	}
-
-	for name, tc := range testCases {
-		t.Run(name, func(t *testing.T) {
-			for _, v := range tc.outputJson {
-				inputObj := parseInputJSON(tc.inputJson)
-				wantoutputObj := parseOutputJSON(v)
-				gotoutputObj := parseOutputJSON(v)
-				gotoutputObj.Routing = nil
-				deviceType := gotoutputObj.Device.Type
-				if deviceType == TOR1 {
-					TORX, TORY = TOR1, TOR2
-				} else {
-					TORX, TORY = TOR2, TOR1
-				}
-				// Routing Unit Test
-				if deviceType == DeviceType_BMC {
-					gotoutputObj.parseRoutingFramework(tc.frameworkPath, DeviceType_BMC, inputObj)
-				} else {
-					gotoutputObj.parseRoutingFramework(tc.frameworkPath, DeviceType_TOR, inputObj)
-				}
-				wantBGP := wantoutputObj.Routing
-				gotBGP := gotoutputObj.Routing
-				if !reflect.DeepEqual(gotBGP, wantBGP) {
-					t.Errorf("[Failed] name: %s - BGP Test \n got: %#v \n want: %#v", wantoutputObj.Device.Hostname, gotBGP, wantBGP)
-				}
-			}
-		})
-	}
+	return fileList
 }
 
-// Template Configuration Unit Test
+func parseOutputJson(outputJsonFile string) *OutputType {
+	outputObj := &OutputType{}
+	bytes, err := ioutil.ReadFile(outputJsonFile)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	err = json.Unmarshal(bytes, outputObj)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return outputObj
+}

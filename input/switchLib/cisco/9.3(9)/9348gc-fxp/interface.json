@@ -1,0 +1,260 @@
+{
+    "Model": "9348GC-FXP",
+    "Type": "BMC",
+    "SupportNoBmc": true,
+    "FirmwareVersion": "9.3(9)",
+    "MaxMTU": "1500",
+    "Function": [
+        {
+            "Function": "Reserved_For_PDU",
+            "Port": [
+                "1/41",
+                "1/42",
+                "1/43",
+                "1/44"
+            ]
+        },
+        {
+            "Function": "HLH-BMC",
+            "Port": [
+                "1/46"
+            ]
+        },
+        {
+            "Function": "HLH-OS",
+            "Port": [
+                "1/49",
+                "1/50"
+            ]
+        },
+        {
+            "Function": "TOR_BMC",
+            "Port": [
+                "1/51",
+                "1/52"
+            ]
+        }
+    ],
+    "Port": [
+        {
+            "Port": "1/1",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/2",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/3",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/4",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/5",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/6",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/7",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/8",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/9",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/10",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/11",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/12",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/13",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/14",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/15",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/16",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/17",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/18",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/19",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/20",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/21",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/22",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/23",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/24",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/25",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/26",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/27",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/28",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/29",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/30",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/31",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/32",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/33",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/34",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/35",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/36",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/37",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/38",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/39",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/40",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/41",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/42",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/43",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/44",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/45",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/46",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/47",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/48",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/49",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/50",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/51",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/52",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/53",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "1/54",
+            "Type": "Ethernet"
+        },
+        {
+            "Port": "mgmt0",
+            "Type": "mgmt"
+        }
+    ]
+}

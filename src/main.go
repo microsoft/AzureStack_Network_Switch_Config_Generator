@@ -8,118 +8,105 @@ import (
 	"strings"
 )
 
-const (
-	// Global
-	FRAMEWORK = "framework"
-	TEMPLATE  = "template"
-	// Device Type
-	DeviceType_TOR = "TOR"
-	DeviceType_BMC = "BMC"
-	TOR1           = "TOR1"
-	TOR2           = "TOR2"
-	// No BMC Framework
-	NOBMC = "nobmc"
-	// Has BMC Framework
-	HASBMC = "hasbmc"
-	// PortType Name
-	BMC_MGMT    = "BMCMgmt"
-	IP          = "IP"
-	ACCESS      = "Access"
-	TRUNK       = "Trunk"
-	INFRA_MGMT  = "InfraMgmt"
-	SWITCH_MGMT = "SwitchMgmt"
-	// Framework Module Name
-	INTERFACE = "interface"
-	ROUTING   = "routing"
-	// File Extension
-	JSON = "json"
-	// Settings
-	VPC               = "VPC"
-	IBGP_PO           = "PO50"
-	CHANNEL_GROUP     = "channel_group"
-	CISCO_NATIVE_VLAN = "99"
-)
-
 var (
-	TORX, TORY string
+	TOR                 = "TOR"
+	BMC                 = "BMC"
+	BORDER              = "BORDER"
+	MUX                 = "MUX"
+	UPLINK              = "UPLINK"
+	DOWNLINK            = "DOWNLINK"
+	VIPGATEWAY          = "Gateway"
+	UNUSED              = "Unused"
+	TEMPLATE            = "template"
+	INTERFACEJSON       = "interface.json"
+	JUMBOMTU            = 9216
+	DefaultMTU          = 1500
+	NO_Valid_TOR_Switch = "NO Valid TOR Switch Founded"
+	JSONExtension       = ".json"
+	CONFIGExtension     = ".config"
+	IBGP_PEER           = "PortChannel50"
+	MLAG_PEER           = "PortChannel101"
+	TOR_BMC             = "PortChannel102"
+	Username, Password  string
+	DeviceTypeMap       map[string][]SwitchType
 )
 
-// Logic: Input.json -> Object -Modify-> NewObject -> Output.json -> Template -> Config
+func init() {
+	// Set Log Output Options - example: 2022/08/24 21:51:10 main.go:58:
+	log.SetFlags(log.Lshortfile | log.Ldate | log.Ltime)
+}
 
 func main() {
-	// Set Log Output Options - 2022/08/24 21:51:10 main.go:58:
-	log.SetFlags(log.Lshortfile | log.Ldate | log.Ltime)
 	// Input Variables
-	inputJsonFile := flag.String("inputJsonFile", "../input/input_hasbmc.json", "File path of switch deploy input.json")
-	switchFolder := flag.String("switchFolder", "../input/switchfolder", "Folder path of switch frameworks and templates")
+	inputJsonFile := flag.String("inputJsonFile", "../input/cisco_sample_input1.json", "File path of switch deploy input.json")
 	outputFolder := flag.String("outputFolder", "../output", "Folder path of switch configurations")
+	switchLibFolder := flag.String("switchLib", "../input/switchLib", "Folder path of switch frameworks and templates")
+	flag.StringVar(&Username, "username", "", "Username for switch configuration")
+	flag.StringVar(&Password, "password", "", "Password for switch configuration")
+	flag.Parse()
+	// Covert input.json to Go Object, structs are defined in model.go
+	inputData := parseInputJson(*inputJsonFile)
+	// Create random credential for switch config if no input values
+	if Username == "" || Password == "" {
+		Username = "aszadmin-" + generateRandomString(5, 0, 0, 0)
+		Password = generateRandomString(16, 3, 3, 3)
+	}
 
-	// Covert input.json to Go Object
-	inputObj := parseInputJSON(*inputJsonFile)
+	// Create device categrory map: Border, TOR, BMC, MUX based on Type
+	DeviceTypeMap = inputData.createDeviceTypeMap()
+	generateSwitchConfig(inputData, *switchLibFolder, *outputFolder, DeviceTypeMap)
+}
 
-	// Decode Network section. (Pass the raw bytes instead of Obj, because trying to detach the ipcaculator function for future open source.)
-	outputSupernets := inputObj.parseSupernets()
-	// Create random credential for switch config
-	randomUsername := "aszadmin-" + generateRandomString(5, 0, 0, 0)
-	randomPassword := generateRandomString(16, 3, 3, 3)
+func (o *OutputType) parseFrameworkPath(switchLibFolder string) (string, string) {
+	makeLow := strings.ToLower(o.Switch.Make)
+	modelLow := strings.ToLower(o.Switch.Model)
+	// Template Folder Path
+	templateFolder := fmt.Sprintf("%s/%s/%s/%s", switchLibFolder, makeLow, o.Switch.Firmware, TEMPLATE)
+	_, err := os.Stat(templateFolder)
+	if err != nil {
+		log.Println(err)
+	}
+	// Framework Folder Path
+	frameworkFolder := fmt.Sprintf("%s/%s/%s/%s", switchLibFolder, makeLow, o.Switch.Firmware, modelLow)
+	_, err = os.Stat(frameworkFolder)
+	if err != nil {
+		log.Println(err)
+	}
+	return templateFolder, frameworkFolder
+}
 
-	// Decode the Device section
-	for _, deviceItem := range inputObj.Devices {
-		// Key GenerateDeviceConfig for further processing, otherwise will skip.
-		if deviceItem.GenerateDeviceConfig {
-			outputObj := newOutputObj()
-			// Determine the switch category based on Device info.
-			frameworkPath := deviceItem.validateFrameworkPath(*switchFolder)
-			templatePath := deviceItem.validateTemplatePath(*switchFolder)
-			log.Println(deviceItem.Hostname, frameworkPath, templatePath)
-			outputObj.Supernets = outputSupernets
-			outputObj.Device = deviceItem
-			outputObj.Device.Username = randomUsername
-			outputObj.Device.Password = randomPassword
-			outputObj.IsNoBMC = inputObj.IsNoBMC
-			deviceType := deviceItem.Type
-			if deviceType == TOR1 {
-				TORX, TORY = TOR1, TOR2
-			} else {
-				TORX, TORY = TOR2, TOR1
-			}
-
-			// Dynamic updating output object based on switch framework.
-			outputObj.updateOutputObj(frameworkPath, inputObj)
-
-			// Update External Section
-			outputObj.updateSettings(inputObj)
-
-			// Generate JSON Output for Debug
-			createFolder(*outputFolder)
-			outputJsonName := *outputFolder + "/" + outputObj.Device.Hostname + ".json"
-			writeToJson(outputJsonName, outputObj)
-
-			// Generate Generic Configuration Output for Deployment
-			outputConfigName := *outputFolder + "/" + outputObj.Device.Hostname + ".config"
-			outputObj.parseTemplate(templatePath, outputConfigName)
+func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFolder string, DeviceTypeMap map[string][]SwitchType) {
+	// TOR Switch
+	if len(DeviceTypeMap[TOR]) > 0 {
+		for _, torItem := range DeviceTypeMap[TOR] {
+			torOutput := &OutputType{}
+			// Function sequence matters, because the object construct phase by phase
+			torOutput.UpdateSwitch(torItem, TOR, DeviceTypeMap)
+			// fmt.Printf("%#v\n%#v\n", torOutput, inputData)
+			torOutput.UpdateVlan(inputData)
+			// fmt.Printf("%#v\n", torOutput)
+			torOutput.UpdateGlobalSetting(inputData)
+			templateFolder, frameworkFolder := torOutput.parseFrameworkPath(switchLibFolder)
+			torOutput.ParseSwitchInterface(frameworkFolder)
+			// Output JSON File for Debug
+			torOutput.writeToJson(outputFolder)
+			torOutput.parseTemplate(templateFolder, outputFolder)
+		}
+	} else {
+		log.Fatalln(NO_Valid_TOR_Switch)
+	}
+	// BMC Switch
+	if len(DeviceTypeMap[BMC]) > 0 {
+		for _, bmdItem := range DeviceTypeMap[BMC] {
+			bmcOutput := &OutputType{}
+			bmcOutput.UpdateSwitch(bmdItem, BMC, DeviceTypeMap)
+			bmcOutput.UpdateVlan(inputData)
+			bmcOutput.UpdateGlobalSetting(inputData)
+			templateFolder, frameworkFolder := bmcOutput.parseFrameworkPath(switchLibFolder)
+			bmcOutput.ParseSwitchInterface(frameworkFolder)
+			// Output JSON File for Debug
+			bmcOutput.writeToJson(outputFolder)
+			bmcOutput.parseTemplate(templateFolder, outputFolder)
 		}
 	}
-}
-
-func (d *DeviceType) validateTemplatePath(switchFolder string) string {
-	templatePath := fmt.Sprintf("%s/%s/%s", switchFolder, d.Make, TEMPLATE)
-	templatePath = strings.ToLower(templatePath)
-
-	_, err := os.Stat(templatePath)
-	if err != nil {
-		log.Println(err)
-	}
-	return templatePath
-}
-
-func (d *DeviceType) validateFrameworkPath(switchFolder string) string {
-	frameworkPath := fmt.Sprintf("%s/%s/%s/%s/%s", switchFolder, d.Make, d.Model, d.Firmware, FRAMEWORK)
-	frameworkPath = strings.ToLower(frameworkPath)
-
-	_, err := os.Stat(frameworkPath)
-	if err != nil {
-		log.Println(err)
-	}
-	return frameworkPath
 }
