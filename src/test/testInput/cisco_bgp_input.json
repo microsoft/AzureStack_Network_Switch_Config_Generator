@@ -82,14 +82,14 @@
             {
                 "Make": "Cisco",
                 "Model": "C3132Q-XL",
-                "Hostname": "rr1-s35-r01-x32ssp-1a",
+                "Hostname": "border-1a",
                 "Type": "Border1",
                 "ASN": 64846
             },
             {
                 "Make": "Cisco",
                 "Model": "C3132Q-XL",
-                "Hostname": "rr1-s35-r01-x32ssp-1b",
+                "Hostname": "border-1b",
                 "Type": "Border2",
                 "ASN": 64846
             },
@@ -97,7 +97,7 @@
                 "Make": "Cisco",
                 "Model": "93180YC-FX",
                 "Type": "TOR1",
-                "Hostname": "rr1-s35-r21-93180hl-24-1a",
+                "Hostname": "tor-2a",
                 "ASN": 65243,
                 "Firmware": "9.3(9)"
             },
@@ -105,29 +105,21 @@
                 "Make": "Cisco",
                 "Model": "93180YC-FX",
                 "Type": "TOR2",
-                "Hostname": "rr1-s35-r21-93180hl-24-1b",
+                "Hostname": "tor-2b",
                 "ASN": 65243,
-                "Firmware": "9.3(9)"
-            },
-            {
-                "Make": "Cisco",
-                "Model": "9348GC-FXP",
-                "Type": "BMC",
-                "Hostname": "rr1-s35-r21-9348bmc-24-1",
-                "ASN": null,
                 "Firmware": "9.3(9)"
             },
             {
                 "Make": "Microsoft",
                 "Model": null,
                 "Type": "MUX",
-                "Hostname": "rr1-s35-r21-MUX-1",
+                "Hostname": "MUX-1",
                 "ASN": 64630,
                 "Firmware": null
             }
         ],
-        "SwitchUplink": "[BGP|Static]",
-        "HostConnectivity": "[L2|BGP|Static]",
+        "SwitchUplink": "BGP",
+        "HostConnectivity": "BGP",
         "Supernets": [
             {
                 "GroupID": "P2P_Border1_Tor1",

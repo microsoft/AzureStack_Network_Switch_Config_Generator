@@ -23,7 +23,7 @@ interface vlan{{.VlanID}}
   no ipv6 redirects
   {{ if .VIPAddress -}}
   hsrp version 2
-    hsrp {{.VlanID}}
+  hsrp {{.VlanID}}
     {{/* priority {{.VIPPriorityId}} forwarding-threshold lower 1 upper 150 */ -}}
     ip {{.VIPAddress}}
   {{ end -}}

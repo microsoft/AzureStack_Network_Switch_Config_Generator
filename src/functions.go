@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func parseInputJson(inputJsonFile string) *InputType {
+func parseInputJson(inputJsonFile string) InputData {
 	inputObj := &InputType{}
 	bytes, err := ioutil.ReadFile(inputJsonFile)
 	if err != nil {
@@ -20,7 +20,7 @@ func parseInputJson(inputJsonFile string) *InputType {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	return inputObj
+	return inputObj.InputData
 }
 
 func generateRandomString(stringLength, minUpperChar, minNum, minSpecialChar int) string {

@@ -28,6 +28,7 @@ var (
 	MLAG_PEER           = "PortChannel101"
 	TOR_BMC             = "PortChannel102"
 	Username, Password  string
+	DeviceTypeMap       map[string][]SwitchType
 )
 
 func init() {
@@ -37,15 +38,14 @@ func init() {
 
 func main() {
 	// Input Variables
-	inputJsonFile := flag.String("inputJsonFile", "../input/sample_input.json", "File path of switch deploy input.json")
+	inputJsonFile := flag.String("inputJsonFile", "../input/cisco_sample_input1.json", "File path of switch deploy input.json")
 	outputFolder := flag.String("outputFolder", "../output", "Folder path of switch configurations")
 	switchLibFolder := flag.String("switchLib", "../input/switchLib", "Folder path of switch frameworks and templates")
 	flag.StringVar(&Username, "username", "", "Username for switch configuration")
 	flag.StringVar(&Password, "password", "", "Password for switch configuration")
 	flag.Parse()
 	// Covert input.json to Go Object, structs are defined in model.go
-	inputObj := parseInputJson(*inputJsonFile)
-	inputData := inputObj.InputData
+	inputData := parseInputJson(*inputJsonFile)
 	// Create random credential for switch config if no input values
 	if Username == "" || Password == "" {
 		Username = "aszadmin-" + generateRandomString(5, 0, 0, 0)
@@ -53,38 +53,8 @@ func main() {
 	}
 
 	// Create device categrory map: Border, TOR, BMC, MUX based on Type
-	DeviceTypeMap := inputData.createDeviceTypeMap()
-	// TOR Switch
-	if len(DeviceTypeMap[TOR]) > 0 {
-		for _, torItem := range DeviceTypeMap[TOR] {
-			torOutput := &OutputType{}
-			// Function sequence matters, because the object construct phase by phase
-			torOutput.UpdateSwitch(torItem, TOR, DeviceTypeMap)
-			torOutput.UpdateVlan(inputData)
-			torOutput.UpdateGlobalSetting(inputData)
-			templateFolder, frameworkFolder := torOutput.parseFrameworkPath(*switchLibFolder)
-			torOutput.ParseSwitchInterface(frameworkFolder)
-			// Output JSON File for Debug
-			torOutput.writeToJson(*outputFolder)
-			torOutput.parseTemplate(templateFolder, *outputFolder)
-		}
-	} else {
-		log.Fatalln(NO_Valid_TOR_Switch)
-	}
-	// BMC Switch
-	if len(DeviceTypeMap[BMC]) > 0 {
-		for _, bmdItem := range DeviceTypeMap[BMC] {
-			bmcOutput := &OutputType{}
-			bmcOutput.UpdateSwitch(bmdItem, BMC, DeviceTypeMap)
-			bmcOutput.UpdateVlan(inputData)
-			bmcOutput.UpdateGlobalSetting(inputData)
-			templateFolder, frameworkFolder := bmcOutput.parseFrameworkPath(*switchLibFolder)
-			bmcOutput.ParseSwitchInterface(frameworkFolder)
-			// Output JSON File for Debug
-			bmcOutput.writeToJson(*outputFolder)
-			bmcOutput.parseTemplate(templateFolder, *outputFolder)
-		}
-	}
+	DeviceTypeMap = inputData.createDeviceTypeMap()
+	generateSwitchConfig(inputData, *switchLibFolder, *outputFolder, DeviceTypeMap)
 }
 
 func (o *OutputType) parseFrameworkPath(switchLibFolder string) (string, string) {
@@ -103,4 +73,40 @@ func (o *OutputType) parseFrameworkPath(switchLibFolder string) (string, string)
 		log.Println(err)
 	}
 	return templateFolder, frameworkFolder
+}
+
+func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFolder string, DeviceTypeMap map[string][]SwitchType) {
+	// TOR Switch
+	if len(DeviceTypeMap[TOR]) > 0 {
+		for _, torItem := range DeviceTypeMap[TOR] {
+			torOutput := &OutputType{}
+			// Function sequence matters, because the object construct phase by phase
+			torOutput.UpdateSwitch(torItem, TOR, DeviceTypeMap)
+			// fmt.Printf("%#v\n%#v\n", torOutput, inputData)
+			torOutput.UpdateVlan(inputData)
+			// fmt.Printf("%#v\n", torOutput)
+			torOutput.UpdateGlobalSetting(inputData)
+			templateFolder, frameworkFolder := torOutput.parseFrameworkPath(switchLibFolder)
+			torOutput.ParseSwitchInterface(frameworkFolder)
+			// Output JSON File for Debug
+			torOutput.writeToJson(outputFolder)
+			torOutput.parseTemplate(templateFolder, outputFolder)
+		}
+	} else {
+		log.Fatalln(NO_Valid_TOR_Switch)
+	}
+	// BMC Switch
+	if len(DeviceTypeMap[BMC]) > 0 {
+		for _, bmdItem := range DeviceTypeMap[BMC] {
+			bmcOutput := &OutputType{}
+			bmcOutput.UpdateSwitch(bmdItem, BMC, DeviceTypeMap)
+			bmcOutput.UpdateVlan(inputData)
+			bmcOutput.UpdateGlobalSetting(inputData)
+			templateFolder, frameworkFolder := bmcOutput.parseFrameworkPath(switchLibFolder)
+			bmcOutput.ParseSwitchInterface(frameworkFolder)
+			// Output JSON File for Debug
+			bmcOutput.writeToJson(outputFolder)
+			bmcOutput.parseTemplate(templateFolder, outputFolder)
+		}
+	}
 }

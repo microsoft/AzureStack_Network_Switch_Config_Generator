@@ -34,4 +34,8 @@ flowchart TD
 
 ## Get Start
 
+### Preparation
+
+### Use Cases
+
 - [Generate Vlan Configuration](docs/Generate_Vlan_Config.md)
