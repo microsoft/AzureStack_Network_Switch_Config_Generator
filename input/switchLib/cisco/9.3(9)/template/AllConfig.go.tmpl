@@ -2,8 +2,11 @@
 {{ template "stig_user" .GlobalSetting -}}
 {{ template "stig_ssh" . -}}
 {{ template "stig_feature" . -}}
+{{ template "qos" . -}}
 {{ template "define_vlan" .Vlans -}}
 {{ template "interface_vlan" .Vlans -}}
+{{ template "portchannel" .PortChannel -}}
+{{ template "port" .Ports -}}
 {{ template "set_snmp" -}}
 {{ template "set_errdisable_setting" -}}
 {{ template "set_rmon" -}}

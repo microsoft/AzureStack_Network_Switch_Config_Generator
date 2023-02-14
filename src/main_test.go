@@ -26,6 +26,9 @@ func TestMain(t *testing.T) {
 		"cisco_bgp_nobmc": {
 			inputTestFileName: "cisco_bgp_input.json",
 		},
+		"cisco_bgp_bmc": {
+			inputTestFileName: "cisco_bmc_bgp_input.json",
+		},
 	}
 
 	for name, tc := range testCases {
@@ -34,7 +37,6 @@ func TestMain(t *testing.T) {
 			testDeviceTypeMap := testInputData.createDeviceTypeMap()
 			generateSwitchConfig(testInputData, switchLibFolder, testOutputFolder+tc.inputTestFileName, testDeviceTypeMap)
 			outputFiles := getFilesInFolder(testOutputFolder + tc.inputTestFileName)
-			fmt.Println(outputFiles)
 			for _, file := range outputFiles {
 				if strings.Contains(file, ".json") {
 					relativePath := fmt.Sprintf("%s/%s", tc.inputTestFileName, file)
@@ -43,8 +45,8 @@ func TestMain(t *testing.T) {
 					if !reflect.DeepEqual(goldenConfigObj.Vlans, testOutputObj.Vlans) {
 						t.Errorf("name: %s vlan failed \n want: %#v \n got: %#v", name, goldenConfigObj.Vlans, testOutputObj.Vlans)
 					}
-					if !reflect.DeepEqual(goldenConfigObj.Interfaces, testOutputObj.Interfaces) {
-						t.Errorf("name: %s interface failed \n want: %#v \n got: %#v", name, goldenConfigObj.Interfaces, testOutputObj.Interfaces)
+					if !reflect.DeepEqual(goldenConfigObj.Ports, testOutputObj.Ports) {
+						t.Errorf("name: %s interface failed \n want: %#v \n got: %#v", name, goldenConfigObj.Ports, testOutputObj.Ports)
 					}
 				}
 			}

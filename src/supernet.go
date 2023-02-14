@@ -4,13 +4,20 @@ import (
 	"strings"
 )
 
-func (o *OutputType) UpdateVlan(inputData InputData) {
+func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 	vlanList := []VlanType{}
+	l3IntfMap := map[string]L3IntfType{}
 	if strings.Contains(o.Switch.Type, TOR) {
 		// TOR Switch with all matched vlans
 		for _, supernet := range inputData.Supernets {
 			vlanItem := VlanType{}
+			l3IntfItem := L3IntfType{}
 			if supernet.VlanID != 0 {
+				if strings.Contains(supernet.GroupID, BMC) {
+					BMC_VlanID = supernet.VlanID
+				} else if strings.Contains(supernet.GroupID, Infra_GroupID) {
+					Infra_VlanID = supernet.VlanID
+				}
 				vlanItem.VlanName = supernet.Name
 				vlanItem.VlanID = supernet.VlanID
 				vlanItem.GroupID = supernet.GroupID
@@ -29,6 +36,20 @@ func (o *OutputType) UpdateVlan(inputData InputData) {
 					}
 				}
 				vlanList = append(vlanList, vlanItem)
+			} else {
+				// L3 Interface Object
+				for _, ipv4 := range supernet.IPv4.Assignment {
+					if ipv4.Name == o.Switch.Type {
+						// Assignment Type binds with Switch.Type
+						l3IntfItem.IPAddress = ipv4.IP
+					}
+				}
+				if len(l3IntfItem.IPAddress) != 0 {
+					l3IntfItem.Function = supernet.IPv4.Name
+					l3IntfItem.Cidr = supernet.IPv4.Cidr
+					l3IntfItem.Mtu = JUMBOMTU
+					l3IntfMap[supernet.IPv4.Name] = l3IntfItem
+				}
 			}
 		}
 	} else if strings.Contains(o.Switch.Type, BMC) {
@@ -56,11 +77,6 @@ func (o *OutputType) UpdateVlan(inputData InputData) {
 		}
 	}
 
-	// Convert Vlan List to Map
-	// vlanMap := map[string][]VlanType{}
-	// for _, vlanObj := range vlanList {
-	// 	groupId := vlanObj.GroupID
-	// 	vlanMap[groupId] = append(vlanMap[groupId], vlanObj)
-	// }
 	o.Vlans = vlanList
+	o.L3Interfaces = l3IntfMap
 }

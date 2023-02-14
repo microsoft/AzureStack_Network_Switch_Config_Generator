@@ -20,14 +20,16 @@ type InputData struct {
 }
 
 type OutputType struct {
-	Switch         SwitchType               `json:"Switch"`
-	SwitchPeers    []SwitchType             `json:"SwitchPeers"`
-	SwitchBMC      []SwitchType             `json:"SwitchBMC"`
-	SwitchUplink   []SwitchType             `json:"Uplinks"`
-	SwitchDownlink []SwitchType             `json:"Downlinks"`
-	GlobalSetting  GlobalSettingType        `json:"GlobalSetting"`
-	Vlans          []VlanType               `json:"Vlans"`
-	Interfaces     map[string]InterfaceType `json:"Interfaces"`
+	Switch         SwitchType                 `json:"Switch"`
+	SwitchPeers    []SwitchType               `json:"SwitchPeers"`
+	SwitchBMC      []SwitchType               `json:"SwitchBMC"`
+	SwitchUplink   []SwitchType               `json:"Uplinks"`
+	SwitchDownlink []SwitchType               `json:"Downlinks"`
+	GlobalSetting  GlobalSettingType          `json:"GlobalSetting"`
+	Vlans          []VlanType                 `json:"Vlans"`
+	L3Interfaces   map[string]L3IntfType      `json:"L3Interfaces"`
+	PortChannel    map[string]PortChannelType `json:"PortChannel"`
+	Ports          []PortType                 `json:"Ports"`
 }
 
 type GlobalSettingType struct {
@@ -48,6 +50,25 @@ type VlanType struct {
 	VIPAddress    string `json:"VIPAddress"`
 	VIPPriorityId int    `json:"VIPPriorityId"`
 	Shutdown      bool   `json:"Shutdown"`
+}
+
+type PortChannelType struct {
+	Description   string `json:"Description"`
+	Function      string `json:"Function"`
+	UntagVlan     int    `json:"UntagVlan"`
+	TagVlans      int    `json:"TagVlans"`
+	IPAddress     string `json:"IPAddress"`
+	PortChannelID string `json:"PortChannelID"`
+	VPC           string `json:"VPC"`
+	Shutdown      bool   `json:"Shutdown"`
+}
+
+type L3IntfType struct {
+	Function  string `json:"Function"`
+	IPAddress string `json:"IPAddress"`
+	Cidr      int    `json:"Cidr"`
+	Mtu       int    `json:"MTU"`
+	Shutdown  bool   `json:"Shutdown"`
 }
 
 type CloudType struct {
@@ -73,9 +94,11 @@ type Supernet struct {
 	Description string `json:"Description"`
 	Shutdown    bool   `json:"Shutdown"`
 	IPv4        struct {
-		SwitchSVI  bool       `json:"SwitchSVI"`
-		Cidr       int        `json:"Cidr"`
-		Assignment []IPv4Unit `json:"Assignment"`
+		Name        string     `json:"Name"`
+		NetworkType string     `json:"NetworkType"`
+		SwitchSVI   bool       `json:"SwitchSVI"`
+		Cidr        int        `json:"Cidr"`
+		Assignment  []IPv4Unit `json:"Assignment"`
 	} `json:"IPv4"`
 	IPv6 struct {
 	} `json:"IPv6"`
@@ -86,7 +109,7 @@ type IPv4Unit struct {
 	IP   string `json:"IP"`
 }
 
-type InterfaceJson struct {
+type PortJson struct {
 	Model           string `json:"Model"`
 	Type            string `json:"Type"`
 	SupportNoBmc    bool   `json:"SupportNoBmc"`
@@ -99,15 +122,18 @@ type InterfaceJson struct {
 	Port []struct {
 		Port string `json:"Port"`
 		Type string `json:"Type"`
+		Idx  int    `json:"Idx"`
 	} `json:"Port"`
 }
 
-type InterfaceType struct {
+type PortType struct {
 	Port        string            `json:"Port"`
+	Idx         int               `json:"Idx"`
 	Type        string            `json:"Type"`
 	Description string            `json:"Description"`
+	Function    string            `json:"Function"`
 	UntagVlan   int               `json:"UntagVlan"`
-	TagVlan     []int             `json:"TagVlan"`
+	TagVlans    []int             `json:"TagVlans"`
 	IPAddress   string            `json:"IPAddress"`
 	Mtu         int               `json:"MTU"`
 	Shutdown    bool              `json:"Shutdown"`
