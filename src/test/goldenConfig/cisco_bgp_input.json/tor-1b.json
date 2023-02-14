@@ -17,16 +17,7 @@
    "Firmware": "9.3(9)"
   }
  ],
- "SwitchBMC": [
-  {
-   "Make": "Cisco",
-   "Model": "9348GC-FXP",
-   "Type": "BMC",
-   "Hostname": "bmc-1",
-   "ASN": 0,
-   "Firmware": "9.3(9)"
-  }
- ],
+ "SwitchBMC": null,
  "Uplinks": [
   {
    "Make": "Cisco",

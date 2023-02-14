@@ -34,7 +34,10 @@ func (o *OutputType) parseTemplate(templateFolder, outputFolder string) {
 		templateFolder+"/AllConfig.go.tmpl",
 		templateFolder+"/hostname.go.tmpl",
 		templateFolder+"/stig.go.tmpl",
+		templateFolder+"/qos.go.tmpl",
 		templateFolder+"/vlan.go.tmpl",
+		templateFolder+"/portchannel.go.tmpl",
+		templateFolder+"/port.go.tmpl",
 		templateFolder+"/settings.go.tmpl",
 	)
 	if err != nil {

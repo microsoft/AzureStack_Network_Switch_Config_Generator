@@ -24,11 +24,21 @@ var (
 	NO_Valid_TOR_Switch = "NO Valid TOR Switch Founded"
 	JSONExtension       = ".json"
 	CONFIGExtension     = ".config"
-	IBGP_PEER           = "PortChannel50"
-	MLAG_PEER           = "PortChannel101"
-	TOR_BMC             = "PortChannel102"
+	P2P_IBGP            = "P2P_IBGP"
+	MLAG_PEER           = "MLAG_PEER"
+	TOR_BMC             = "TOR_BMC"
+	POID_P2P_IBGP       = "50"
+	POID_MLAG_PEER      = "101"
+	POID_TOR_BMC        = "102"
+	UNUSED_VLANID       = 2
+	Native_VLANID       = 99
+	BMC_VlanID          int
+	Infra_GroupID       = "MANAGEMENT"
+	Infra_VlanID        int
 	Username, Password  string
 	DeviceTypeMap       map[string][]SwitchType
+	STORAGEGroupName    = []string{"Storage"}
+	COMPUTEGroupName    = []string{"HNVPA", "MANAGEMENT", "TENANT", "L3FORWARD"}
 )
 
 func init() {
@@ -83,11 +93,13 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 			// Function sequence matters, because the object construct phase by phase
 			torOutput.UpdateSwitch(torItem, TOR, DeviceTypeMap)
 			// fmt.Printf("%#v\n%#v\n", torOutput, inputData)
-			torOutput.UpdateVlan(inputData)
+			torOutput.UpdateVlanAndL3Intf(inputData)
+			torOutput.UpdatePortChannel(inputData)
 			// fmt.Printf("%#v\n", torOutput)
 			torOutput.UpdateGlobalSetting(inputData)
 			templateFolder, frameworkFolder := torOutput.parseFrameworkPath(switchLibFolder)
-			torOutput.ParseSwitchInterface(frameworkFolder)
+			torOutput.ParseSwitchPort(frameworkFolder)
+			torOutput.UpdateSwitchPortByFunction()
 			// Output JSON File for Debug
 			torOutput.writeToJson(outputFolder)
 			torOutput.parseTemplate(templateFolder, outputFolder)
@@ -100,10 +112,12 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 		for _, bmdItem := range DeviceTypeMap[BMC] {
 			bmcOutput := &OutputType{}
 			bmcOutput.UpdateSwitch(bmdItem, BMC, DeviceTypeMap)
-			bmcOutput.UpdateVlan(inputData)
+			bmcOutput.UpdateVlanAndL3Intf(inputData)
+			bmcOutput.UpdatePortChannel(inputData)
 			bmcOutput.UpdateGlobalSetting(inputData)
 			templateFolder, frameworkFolder := bmcOutput.parseFrameworkPath(switchLibFolder)
-			bmcOutput.ParseSwitchInterface(frameworkFolder)
+			bmcOutput.ParseSwitchPort(frameworkFolder)
+			bmcOutput.UpdateSwitchPortByFunction()
 			// Output JSON File for Debug
 			bmcOutput.writeToJson(outputFolder)
 			bmcOutput.parseTemplate(templateFolder, outputFolder)

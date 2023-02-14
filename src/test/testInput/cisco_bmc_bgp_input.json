@@ -130,12 +130,12 @@
         "HostConnectivity": "BGP",
         "Supernets": [
             {
-                "GroupID": "P2P_Border1_Tor1",
-                "Name": "P2P_Border1_Tor1",
+                "GroupID": "P2P_Border1_TOR1",
+                "Name": "P2P_Border1_TOR1",
                 "VlanId": 0,
                 "Description": "Uplink to Boarder1, GroupID naming convention P2P_{$Type}_{$Type}",
                 "IPv4": {
-                    "Name": "P2P_Border1_Tor1",
+                    "Name": "P2P_Border1_TOR1",
                     "VlanId": 0,
                     "Cidr": 30,
                     "TORGroup": "",
@@ -165,12 +165,12 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "P2P_Border1_Tor2",
-                "Name": "P2P_Border1_Tor2",
+                "GroupID": "P2P_Border1_TOR2",
+                "Name": "P2P_Border1_TOR2",
                 "VlanId": 0,
                 "Description": "Uplink to Boarder2, GroupID naming convention P2P_{$Type}_{$Type}",
                 "IPv4": {
-                    "Name": "P2P_Border1_Tor2",
+                    "Name": "P2P_Border1_TOR2",
                     "VlanId": 0,
                     "Cidr": 30,
                     "TORGroup": "",
@@ -200,12 +200,12 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "P2P_Border2_Tor1",
-                "Name": "P2P_Border2_Tor1",
+                "GroupID": "P2P_Border2_TOR1",
+                "Name": "P2P_Border2_TOR1",
                 "VlanId": 0,
                 "Description": "Uplink to Boarder1, GroupID naming convention P2P_{$Type}_{$Type}",
                 "IPv4": {
-                    "Name": "P2P_Border2_Tor1",
+                    "Name": "P2P_Border2_TOR1",
                     "VlanId": 0,
                     "Cidr": 30,
                     "TORGroup": "",
@@ -235,12 +235,12 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "P2P_Border2_Tor2",
-                "Name": "P2P_Border2_Tor2",
+                "GroupID": "P2P_Border2_TOR2",
+                "Name": "P2P_Border2_TOR2",
                 "VlanId": 0,
                 "Description": "Uplink to Boarder2, GroupID naming convention P2P_{$Type}_{$Type}",
                 "IPv4": {
-                    "Name": "P2P_Border2_Tor2",
+                    "Name": "P2P_Border2_TOR2",
                     "VlanId": 0,
                     "Cidr": 30,
                     "TORGroup": "",
@@ -270,12 +270,12 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "P2P_Tor1_Tor2",
-                "Name": "P2P_iBGP",
+                "GroupID": "P2P_TOR1_TOR2",
+                "Name": "P2P_IBGP",
                 "VlanId": 0,
-                "Description": "iBGP Link, GroupID naming convention P2P_{$Type}_{$Type}",
+                "Description": "IBGP Link, GroupID naming convention P2P_{$Type}_{$Type}",
                 "IPv4": {
-                    "Name": "P2P_iBGP",
+                    "Name": "P2P_IBGP",
                     "VlanId": 0,
                     "Cidr": 30,
                     "TORGroup": "",
@@ -306,11 +306,11 @@
             },
             {
                 "GroupID": "Loopback0",
-                "Name": "Loopback0_Tor1",
+                "Name": "Loopback0_TOR1",
                 "VlanId": 0,
                 "Description": "Switch Loopback assignment",
                 "IPv4": {
-                    "Name": "Loopback0_Tor1",
+                    "Name": "Loopback0_TOR1",
                     "VlanId": 0,
                     "Cidr": 32,
                     "TORGroup": "",
@@ -333,11 +333,11 @@
             },
             {
                 "GroupID": "Loopback0",
-                "Name": "Loopback0_Tor2",
+                "Name": "Loopback0_TOR2",
                 "VlanId": 0,
                 "Description": "Switch Loopback assignment",
                 "IPv4": {
-                    "Name": "Loopback0_Tor2",
+                    "Name": "Loopback0_TOR2",
                     "VlanId": 0,
                     "Cidr": 32,
                     "TORGroup": "",
