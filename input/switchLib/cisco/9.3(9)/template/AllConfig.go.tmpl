@@ -13,5 +13,7 @@
 {{ template "set_console_vty" -}}
 {{ template "set_ntp" .GlobalSetting -}}
 {{ template "set_syslog" .GlobalSetting -}}
+{{ template "prefixlist" .Routing.PrefixList -}}
+{{ template "bgp" .Routing.BGP -}}
 {{- /* {{ template "define_vlan" .Vlans -}}
 {{ template "interface_vlan" .Vlans -}} */ -}}

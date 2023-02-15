@@ -1,0 +1,9 @@
+{{ define "prefixlist"}}
+! prefixlist.go.tmpl-prefixlist
+{{ range . -}}  
+{{- $prefixlistname := .Name -}}
+{{ range .Config -}}  
+ip prefix-list {{ $prefixlistname }} {{ .Action }} {{ .Network }} le 32
+{{ end }}
+{{ end -}}
+{{ end -}}

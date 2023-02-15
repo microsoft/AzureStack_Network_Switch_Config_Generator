@@ -1,0 +1,27 @@
+{{ define "bgp"}}
+! bgp.go.tmpl-bgp
+router bgp {{ .BGPAsn }}
+  router-id {{ .RouterID }}
+  bestpath as-path multipath-relax
+  log-neighbor-changes
+  address-family ipv4 unicast
+  {{ range .IPv4NetworkGroupIDs -}}  
+    network {{.}}
+  {{ end -}}
+  maximum-paths 8
+  maximum-paths ibgp 8
+  {{ range .IPv4Neighbor -}}  
+  neighbor {{ .NeighborIPAddress }}
+    description {{ .Description }}
+    remote-as {{ .NeighborAsn }}
+    address-family ipv4 unicast
+      {{ range .PrefixList -}}
+      prefix-list {{.Name}} {{.Direction}}
+      {{ end -}}
+      maximum-prefix 12000 warning-only
+    {{ if .RemovePrivateAS }}remove-private-as {{ end -}}
+    {{ if ne .UpdateSource "" }}update-source {{.UpdateSource}} {{ end }}
+    {{ if ne .LocalAS "" }}local-as {{.LocalAS}} {{ end }}
+    {{ if ne .EBGPMultiHop 0 }}ebgp-multihop {{.EBGPMultiHop}} {{ end }}
+  {{ end }}
+{{ end -}}

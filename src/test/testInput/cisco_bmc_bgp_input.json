@@ -139,7 +139,7 @@
                     "VlanId": 0,
                     "Cidr": 30,
                     "TORGroup": "",
-                    "NetworkType": "P2P Link",
+                    "NetworkType": "P2P_Border",
                     "Subnet": "10.71.85.0/30",
                     "Network": "10.71.85.0",
                     "Netmask": "255.255.255.252",
@@ -174,7 +174,7 @@
                     "VlanId": 0,
                     "Cidr": 30,
                     "TORGroup": "",
-                    "NetworkType": "P2P Link",
+                    "NetworkType": "P2P_Border",
                     "Subnet": "10.71.85.4/30",
                     "Network": "10.71.85.4",
                     "Netmask": "255.255.255.252",
@@ -209,7 +209,7 @@
                     "VlanId": 0,
                     "Cidr": 30,
                     "TORGroup": "",
-                    "NetworkType": "P2P Link",
+                    "NetworkType": "P2P_Border",
                     "Subnet": "10.71.85.8/30",
                     "Network": "10.71.85.8",
                     "Netmask": "255.255.255.252",
@@ -244,7 +244,7 @@
                     "VlanId": 0,
                     "Cidr": 30,
                     "TORGroup": "",
-                    "NetworkType": "P2P Link",
+                    "NetworkType": "P2P_Border",
                     "Subnet": "10.71.85.12/30",
                     "Network": "10.71.85.12",
                     "Netmask": "255.255.255.252",
@@ -279,7 +279,7 @@
                     "VlanId": 0,
                     "Cidr": 30,
                     "TORGroup": "",
-                    "NetworkType": "P2P Link",
+                    "NetworkType": "P2P_Border",
                     "Subnet": "10.71.85.16/30",
                     "Network": "10.71.85.16",
                     "Netmask": "255.255.255.252",
@@ -533,7 +533,7 @@
                     "VLANID": 6,
                     "Cidr": 25,
                     "TORGroup": "",
-                    "NetworkType": "PA",
+                    "NetworkType": "HNVPA",
                     "Subnet": "10.71.131.0/25",
                     "Network": "10.71.131.0",
                     "Netmask": "255.255.255.128",
@@ -719,10 +719,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "TENANT",
+                "GroupID": "Tenant",
                 "Name": "Tenant_201",
                 "VLANID": 201,
-                "Description": "TENANT Network. GroupID is unique key.",
+                "Description": "Tenant Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "Tenant_201",
@@ -785,10 +785,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "TENANT",
+                "GroupID": "Tenant",
                 "Name": "LogicalTenant_301",
                 "VLANID": 301,
-                "Description": "TENANT Network. GroupID is unique key.",
+                "Description": "Tenant Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "LogicalTenant_301",
@@ -851,10 +851,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "TENANT",
+                "GroupID": "Tenant",
                 "Name": "DhcpTenant_401",
                 "VLANID": 401,
-                "Description": "TENANT Network. GroupID is unique key.",
+                "Description": "Tenant Network. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "DhcpTenant_401",
@@ -1631,10 +1631,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "StorageIP",
+                "GroupID": "Storage",
                 "Name": "Storage_711",
                 "VLANID": 711,
-                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
+                "Description": "Storage Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Name": "Storage_711",
@@ -1659,10 +1659,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "StorageIP",
+                "GroupID": "Storage",
                 "Name": "Storage_712",
                 "VLANID": 712,
-                "Description": "StorageIP Network, no config on switch. GroupID is unique key.",
+                "Description": "Storage Network, no config on switch. GroupID is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Name": "Storage_712",

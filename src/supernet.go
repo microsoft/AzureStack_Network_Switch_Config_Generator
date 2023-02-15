@@ -12,15 +12,17 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 		for _, supernet := range inputData.Supernets {
 			vlanItem := VlanType{}
 			l3IntfItem := L3IntfType{}
-			if supernet.VlanID != 0 {
+			if supernet.IPv4.VlanID != 0 {
 				if strings.Contains(supernet.GroupID, BMC) {
-					BMC_VlanID = supernet.VlanID
+					BMC_VlanID = supernet.IPv4.VlanID
 				} else if strings.Contains(supernet.GroupID, Infra_GroupID) {
-					Infra_VlanID = supernet.VlanID
+					Infra_VlanID = supernet.IPv4.VlanID
 				}
-				vlanItem.VlanName = supernet.Name
-				vlanItem.VlanID = supernet.VlanID
 				vlanItem.GroupID = supernet.GroupID
+				vlanItem.VlanName = supernet.IPv4.Name
+				vlanItem.VlanID = supernet.IPv4.VlanID
+				vlanItem.Cidr = supernet.IPv4.Cidr
+				vlanItem.Subnet = supernet.IPv4.Subnet
 				vlanItem.Mtu = JUMBOMTU
 				if supernet.Shutdown {
 					vlanItem.Shutdown = true
@@ -48,6 +50,7 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 					l3IntfItem.Function = supernet.IPv4.Name
 					l3IntfItem.Cidr = supernet.IPv4.Cidr
 					l3IntfItem.Mtu = JUMBOMTU
+					l3IntfItem.Subnet = supernet.IPv4.Subnet
 					l3IntfMap[supernet.IPv4.Name] = l3IntfItem
 				}
 			}
@@ -57,8 +60,8 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 		for _, supernet := range inputData.Supernets {
 			vlanItem := VlanType{}
 			if supernet.GroupID == UNUSED || supernet.GroupID == BMC {
-				vlanItem.VlanName = supernet.Name
-				vlanItem.VlanID = supernet.VlanID
+				vlanItem.VlanName = supernet.IPv4.Name
+				vlanItem.VlanID = supernet.IPv4.VlanID
 				vlanItem.GroupID = supernet.GroupID
 				vlanItem.Mtu = DefaultMTU
 				if supernet.Shutdown {

@@ -9,8 +9,8 @@ import (
 	"strings"
 )
 
-func (o *OutputType) ParseSwitchPort(templateFolder string) {
-	interfaceJsonPath := fmt.Sprintf("%s/%s", templateFolder, INTERFACEJSON)
+func (o *OutputType) ParseSwitchPort(frameworkFolder string) {
+	interfaceJsonPath := fmt.Sprintf("%s/%s", frameworkFolder, INTERFACEJSON)
 	interfaceJsonObj := parseInterfaceJson(interfaceJsonPath)
 	outputInterface := []PortType{}
 	portToIdx := map[string]int{}

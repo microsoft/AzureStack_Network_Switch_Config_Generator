@@ -1,0 +1,143 @@
+{
+    "BGP": {
+      "BGPAsn": "TORX",
+      "RouterID": "Loopback0",
+      "IPv4NetworkGroupIDs": [
+        "P2P",
+        "Loopback",
+        "BMC",
+        "HNVPA",
+        "MANAGEMENT",
+        "TENANT",
+        "L3FORWARD"
+      ],
+      "IPv4Neighbor": [
+        {
+          "Description": "P2P_Border1_TORX",
+          "NeighborAsn": "Border1",
+          "NeighborIPAddress": "P2P_Border1_TORX",
+          "PrefixList": [
+            {
+              "Name": "ExternalPrefix",
+              "Direction": "in"
+            },
+            {
+              "Name": "ExternalPrefix",
+              "Direction": "out"
+            }
+          ],
+          "RemovePrivateAS": true,
+          "Shutdown": false
+        },
+        {
+          "Description": "P2P_Border2_TORX",
+          "NeighborAsn": "Border2",
+          "NeighborIPAddress": "P2P_Border2_TORX",
+          "PrefixList": [
+            {
+              "Name": "ExternalPrefix",
+              "Direction": "in"
+            },
+            {
+              "Name": "ExternalPrefix",
+              "Direction": "out"
+            }
+          ],
+          "RemovePrivateAS": true,
+          "Shutdown": false
+        },
+        {
+          "Description": "P2P_IBGP_TORY",
+          "EnablePassword": "PASSWORD",
+          "NeighborAsn": "TORY",
+          "NeighborIPAddress": "P2P_IBGP_TORY",
+          "PrefixList": [],
+          "Shutdown": false
+        },
+        {
+          "Description": "HNVPA",
+          "NeighborAsn": "MUX",
+          "NeighborIPAddress": "HNVPA",
+          "PrefixList": [
+            {
+              "Name": "DefaultRoute",
+              "Direction": "out"
+            }
+          ],
+          "UpdateSource": "Loopback0",
+          "LocalAS": "64512",
+          "EBGPMultiHop": 3,
+          "Shutdown": false
+        }
+      ]
+    },
+    "Static": [
+      {
+        "DstIPAddress": "Tenant0",
+        "NextHop": "null 0",
+        "Name": "Tenant0"
+      },
+      {
+        "DstIPAddress": "Tenant1",
+        "NextHop": "null 0",
+        "Name": "Tenant1"
+      },
+      {
+        "DstIPAddress": "Any",
+        "NextHop": "",
+        "Name": "P2P_TORX_To_Border1/TORX"
+      },
+      {
+        "DstIPAddress": "Any",
+        "NextHop": "",
+        "Name": "P2P_TORX_To_Border2/TORX"
+      }
+    ],
+    "PrefixList": [
+      {
+        "Name": "ExternalPrefix",
+        "Config": [
+          {
+            "Idx": 1,
+            "Action": "deny",
+            "Network": "Storage",
+            "Operation": "le",
+            "Prefix": 32
+          },
+          {
+            "Idx": 2,
+            "Action": "deny",
+            "Network": "Tenant",
+            "Operation": "le",
+            "Prefix": 32
+          },
+          {
+            "Idx": 3,
+            "Action": "permit",
+            "Network": "0.0.0.0/0",
+            "Operation": "le",
+            "Prefix": 32
+          }
+        ]
+      },
+      {
+        "Name": "DefaultRoute",
+        "Config": [
+          {
+            "Idx": 1,
+            "Action": "permit",
+            "Network": "0.0.0.0/0",
+            "Operation": "",
+            "Prefix": 0
+          },
+          {
+            "Idx": 2,
+            "Action": "deny",
+            "Network": "0.0.0.0/0",
+            "Operation": "le",
+            "Prefix": 32
+          }
+        ]
+      }
+    ]
+  }

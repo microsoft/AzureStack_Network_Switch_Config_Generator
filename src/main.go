@@ -19,6 +19,7 @@ var (
 	UNUSED              = "Unused"
 	TEMPLATE            = "template"
 	INTERFACEJSON       = "interface.json"
+	BGPROUTINGJSON      = "routing.json"
 	JUMBOMTU            = 9216
 	DefaultMTU          = 1500
 	NO_Valid_TOR_Switch = "NO Valid TOR Switch Founded"
@@ -100,6 +101,7 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 			templateFolder, frameworkFolder := torOutput.parseFrameworkPath(switchLibFolder)
 			torOutput.ParseSwitchPort(frameworkFolder)
 			torOutput.UpdateSwitchPortByFunction()
+			torOutput.ParseRouting(frameworkFolder, inputData)
 			// Output JSON File for Debug
 			torOutput.writeToJson(outputFolder)
 			torOutput.parseTemplate(templateFolder, outputFolder)
