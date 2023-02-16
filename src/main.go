@@ -34,12 +34,12 @@ var (
 	UNUSED_VLANID       = 2
 	Native_VLANID       = 99
 	BMC_VlanID          int
-	Infra_GroupID       = "MANAGEMENT"
+	Infra_GroupID       = "Infrastructure"
+	ANY                 = "Any"
 	Infra_VlanID        int
 	Username, Password  string
+	COMPUTE, STORAGE    = "Compute", "Storage"
 	DeviceTypeMap       map[string][]SwitchType
-	STORAGEGroupName    = []string{"Storage"}
-	COMPUTEGroupName    = []string{"HNVPA", "MANAGEMENT", "TENANT", "L3FORWARD"}
 )
 
 func init() {
@@ -100,7 +100,6 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 			torOutput.UpdateGlobalSetting(inputData)
 			templateFolder, frameworkFolder := torOutput.parseFrameworkPath(switchLibFolder)
 			torOutput.ParseSwitchPort(frameworkFolder)
-			torOutput.UpdateSwitchPortByFunction()
 			torOutput.ParseRouting(frameworkFolder, inputData)
 			// Output JSON File for Debug
 			torOutput.writeToJson(outputFolder)
@@ -119,7 +118,6 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 			bmcOutput.UpdateGlobalSetting(inputData)
 			templateFolder, frameworkFolder := bmcOutput.parseFrameworkPath(switchLibFolder)
 			bmcOutput.ParseSwitchPort(frameworkFolder)
-			bmcOutput.UpdateSwitchPortByFunction()
 			// Output JSON File for Debug
 			bmcOutput.writeToJson(outputFolder)
 			bmcOutput.parseTemplate(templateFolder, outputFolder)

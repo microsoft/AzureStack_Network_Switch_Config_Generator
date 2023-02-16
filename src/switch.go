@@ -20,18 +20,18 @@ func (i *InputData) createDeviceTypeMap() map[string][]SwitchType {
 }
 
 func (o *OutputType) UpdateSwitch(switchItem SwitchType, switchType string, DeviceTypeMap map[string][]SwitchType) {
+	o.SwitchUplink = DeviceTypeMap[BORDER]
+
 	if switchType == TOR {
 		o.Switch = switchItem
-		o.SwitchUplink = DeviceTypeMap[BORDER]
 		o.SwitchDownlink = DeviceTypeMap[MUX]
 		o.SwitchBMC = DeviceTypeMap[BMC]
 		for _, torItem := range DeviceTypeMap[TOR] {
 			if switchItem != torItem {
-				o.SwitchPeers = append(o.SwitchPeers, torItem)
+				o.SwitchPeer = append(o.SwitchPeer, torItem)
 			}
 		}
 	} else if switchType == BMC {
 		o.Switch = switchItem
-		o.SwitchUplink = DeviceTypeMap[TOR]
 	}
 }

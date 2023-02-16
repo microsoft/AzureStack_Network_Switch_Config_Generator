@@ -5,7 +5,7 @@ router bgp {{ .BGPAsn }}
   bestpath as-path multipath-relax
   log-neighbor-changes
   address-family ipv4 unicast
-  {{ range .IPv4NetworkGroupIDs -}}  
+  {{ range .IPv4Network -}}  
     network {{.}}
   {{ end -}}
   maximum-paths 8
@@ -23,5 +23,6 @@ router bgp {{ .BGPAsn }}
     {{ if ne .UpdateSource "" }}update-source {{.UpdateSource}} {{ end }}
     {{ if ne .LocalAS "" }}local-as {{.LocalAS}} {{ end }}
     {{ if ne .EBGPMultiHop 0 }}ebgp-multihop {{.EBGPMultiHop}} {{ end }}
+    {{- if ne .NbrPassword "" }}password {{.NbrPassword}} {{ end }}
   {{ end }}
 {{ end -}}

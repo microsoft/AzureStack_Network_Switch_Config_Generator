@@ -21,10 +21,10 @@ type InputData struct {
 
 type OutputType struct {
 	Switch         SwitchType                 `json:"Switch"`
-	SwitchPeers    []SwitchType               `json:"SwitchPeers"`
+	SwitchPeer     []SwitchType               `json:"SwitchPeer"`
 	SwitchBMC      []SwitchType               `json:"SwitchBMC"`
-	SwitchUplink   []SwitchType               `json:"Uplinks"`
-	SwitchDownlink []SwitchType               `json:"Downlinks"`
+	SwitchUplink   []SwitchType               `json:"SwitchUplink"`
+	SwitchDownlink []SwitchType               `json:"SwitchDownlink"`
 	GlobalSetting  GlobalSettingType          `json:"GlobalSetting"`
 	Vlans          []VlanType                 `json:"Vlans"`
 	L3Interfaces   map[string]L3IntfType      `json:"L3Interfaces"`
@@ -123,7 +123,8 @@ type PortJson struct {
 		Function string   `json:"Function"`
 		Port     []string `json:"Port"`
 	} `json:"Function"`
-	Port []struct {
+	VlanGroup map[string][]string `json:"VlanGroup"`
+	Port      []struct {
 		Port string `json:"Port"`
 		Type string `json:"Type"`
 		Idx  int    `json:"Idx"`
@@ -151,24 +152,27 @@ type RoutingType struct {
 }
 
 type BGPType struct {
-	BGPAsn              string   `json:"BGPAsn"`
-	RouterID            string   `json:"RouterID"`
-	IPv4NetworkGroupIDs []string `json:"IPv4NetworkGroupIDs"`
-	IPv4Neighbor        []struct {
-		Description       string `json:"Description"`
-		NeighborAsn       string `json:"NeighborAsn"`
-		NeighborIPAddress string `json:"NeighborIPAddress"`
-		PrefixList        []struct {
-			Name      string `json:"Name"`
-			Direction string `json:"Direction"`
-		} `json:"PrefixList"`
-		RemovePrivateAS bool   `json:"RemovePrivateAS,omitempty"`
-		Shutdown        bool   `json:"Shutdown"`
-		EnablePassword  string `json:"EnablePassword,omitempty"`
-		UpdateSource    string `json:"UpdateSource,omitempty"`
-		LocalAS         string `json:"LocalAS,omitempty"`
-		EBGPMultiHop    int    `json:"EBGPMultiHop,omitempty"`
-	} `json:"IPv4Neighbor"`
+	BGPAsn       int                `json:"BGPAsn"`
+	RouterID     string             `json:"RouterID"`
+	IPv4Network  []string           `json:"IPv4Network"`
+	IPv4Neighbor []IPv4NeighborType `json:"IPv4Neighbor"`
+}
+
+type IPv4NeighborType struct {
+	SwitchRelation    string `json:"SwitchRelation"`
+	Description       string `json:"Description"`
+	NeighborAsn       int    `json:"NeighborAsn"`
+	NeighborIPAddress string `json:"NeighborIPAddress"`
+	PrefixList        []struct {
+		Name      string `json:"Name"`
+		Direction string `json:"Direction"`
+	} `json:"PrefixList"`
+	RemovePrivateAS bool   `json:"RemovePrivateAS,omitempty"`
+	Shutdown        bool   `json:"Shutdown"`
+	NbrPassword     string `json:"NbrPassword,omitempty"`
+	UpdateSource    string `json:"UpdateSource,omitempty"`
+	LocalAS         string `json:"LocalAS,omitempty"`
+	EBGPMultiHop    int    `json:"EBGPMultiHop,omitempty"`
 }
 
 type StaticType struct {
@@ -180,10 +184,11 @@ type StaticType struct {
 type PrefixListType struct {
 	Name   string `json:"Name"`
 	Config []struct {
-		Idx       int    `json:"Idx"`
-		Action    string `json:"Action"`
-		Network   string `json:"Network"`
-		Operation string `json:"Operation"`
-		Prefix    int    `json:"Prefix"`
+		Idx         int    `json:"Idx"`
+		Action      string `json:"Action"`
+		Description string `json:"Description"`
+		Network     string `json:"Network"`
+		Operation   string `json:"Operation"`
+		Prefix      int    `json:"Prefix"`
 	} `json:"Config"`
 }

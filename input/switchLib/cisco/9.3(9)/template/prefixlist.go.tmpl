@@ -3,7 +3,11 @@
 {{ range . -}}  
 {{- $prefixlistname := .Name -}}
 {{ range .Config -}}  
-ip prefix-list {{ $prefixlistname }} {{ .Action }} {{ .Network }} le 32
+{{ if ne .Operation "" -}}
+ip prefix-list {{ $prefixlistname }} {{ .Action }} {{ .Network }} {{ .Operation }} {{ .Prefix }}
+{{ else -}}
+ip prefix-list {{ $prefixlistname }} {{ .Action }} {{ .Network }}
+{{ end -}}
 {{ end }}
 {{ end -}}
 {{ end -}}

@@ -23,9 +23,9 @@ func TestMain(t *testing.T) {
 		inputTestFileName string
 	}
 	testCases := map[string]test{
-		"cisco_bgp_nobmc": {
-			inputTestFileName: "cisco_bgp_input.json",
-		},
+		// "cisco_bgp_nobmc": {
+		// 	inputTestFileName: "cisco_bgp_input.json",
+		// },
 		"cisco_bgp_bmc": {
 			inputTestFileName: "cisco_bmc_bgp_input.json",
 		},

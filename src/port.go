@@ -12,39 +12,9 @@ import (
 func (o *OutputType) ParseSwitchPort(frameworkFolder string) {
 	interfaceJsonPath := fmt.Sprintf("%s/%s", frameworkFolder, INTERFACEJSON)
 	interfaceJsonObj := parseInterfaceJson(interfaceJsonPath)
-	outputInterface := []PortType{}
-	portToIdx := map[string]int{}
-	for _, port := range interfaceJsonObj.Port {
-		outputInterface = append(outputInterface, PortType{
-			Port:        port.Port,
-			Idx:         port.Idx,
-			Type:        port.Type,
-			Description: UNUSED,
-			Function:    UNUSED,
-			Shutdown:    true,
-			Mtu:         JUMBOMTU,
-			UntagVlan:   UNUSED_VLANID,
-		})
-		portToIdx[port.Port] = port.Idx
-	}
-	// Initial Interface Object Map
-	maxIdx := len(outputInterface)
-	// Config Interface with Functions
-	for _, funcItem := range interfaceJsonObj.Function {
-		for _, port := range funcItem.Port {
-			idxKey := portToIdx[port]
-			if idxKey <= maxIdx {
-				portItem := outputInterface[idxKey]
-				portItem.Description = funcItem.Function
-				portItem.Function = funcItem.Function
-				portItem.Shutdown = false
-				outputInterface[idxKey] = portItem
-			} else {
-				log.Fatalf("Port %s is not found in interface.json", port)
-			}
-		}
-	}
-	o.Ports = outputInterface
+	outputSwitchPorts := initSwitchPort(interfaceJsonObj)
+	o.Ports = outputSwitchPorts
+	o.UpdateSwitchPorts(interfaceJsonObj.VlanGroup)
 }
 
 func parseInterfaceJson(interfaceJsonPath string) *PortJson {
@@ -60,27 +30,65 @@ func parseInterfaceJson(interfaceJsonPath string) *PortJson {
 	return interfaceJsonObj
 }
 
-func (o *OutputType) UpdateSwitchPortByFunction() {
+func initSwitchPort(interfaceJsonObj *PortJson) []PortType {
+	outputSwitchPorts := []PortType{}
+	portToIdx := map[string]int{}
+	for _, port := range interfaceJsonObj.Port {
+		outputSwitchPorts = append(outputSwitchPorts, PortType{
+			Port:        port.Port,
+			Idx:         port.Idx,
+			Type:        port.Type,
+			Description: UNUSED,
+			Function:    UNUSED,
+			Shutdown:    true,
+			Mtu:         JUMBOMTU,
+			UntagVlan:   UNUSED_VLANID,
+		})
+		portToIdx[port.Port] = port.Idx
+	}
+	// Initial Interface Object Map
+	maxIdx := len(outputSwitchPorts)
+	// Config Interface with Functions
+	for _, funcItem := range interfaceJsonObj.Function {
+		for _, port := range funcItem.Port {
+			idxKey := portToIdx[port]
+			if idxKey <= maxIdx {
+				portItem := outputSwitchPorts[idxKey]
+				portItem.Description = funcItem.Function
+				portItem.Function = funcItem.Function
+				portItem.Shutdown = false
+				outputSwitchPorts[idxKey] = portItem
+			} else {
+				log.Fatalf("Port %s is not found in interface.json", port)
+			}
+		}
+	}
+	return outputSwitchPorts
+}
+
+func (o *OutputType) UpdateSwitchPorts(VlanGroup map[string][]string) {
+	// Get Storage and Compute VlanList
 	STORAGE_VlanMap := map[int]string{}
 	COMPUTE_VlanMap := map[int]string{}
+
 	for _, vlanItem := range o.Vlans {
-		for _, key := range STORAGEGroupName {
+		for _, key := range VlanGroup[STORAGE] {
 			if strings.Contains(vlanItem.GroupID, key) {
 				STORAGE_VlanMap[vlanItem.VlanID] = vlanItem.GroupID
 			}
 		}
-		for _, key := range COMPUTEGroupName {
+		for _, key := range VlanGroup[COMPUTE] {
 			if strings.Contains(vlanItem.GroupID, key) {
 				COMPUTE_VlanMap[vlanItem.VlanID] = vlanItem.GroupID
 			}
 		}
 	}
-	COMPUTE_VlanList := []int{}
+
+	var STORAGE_VlanList, COMPUTE_VlanList []int
 	for COMPUTE_VlanID := range COMPUTE_VlanMap {
 		COMPUTE_VlanList = append(COMPUTE_VlanList, COMPUTE_VlanID)
 	}
 
-	STORAGE_VlanList := []int{}
 	for STORAGE_VlanID := range STORAGE_VlanMap {
 		STORAGE_VlanList = append(STORAGE_VlanList, STORAGE_VlanID)
 	}
@@ -88,10 +96,10 @@ func (o *OutputType) UpdateSwitchPortByFunction() {
 	sort.Ints(STORAGE_VlanList)
 
 	for i, portItem := range o.Ports {
-		if portItem.Function == "COMPUTE" {
+		if portItem.Function == COMPUTE {
 			o.Ports[i].UntagVlan = Infra_VlanID
 			o.Ports[i].TagVlans = COMPUTE_VlanList
-		} else if portItem.Function == "STORAGE" {
+		} else if portItem.Function == STORAGE {
 			o.Ports[i].UntagVlan = Native_VLANID
 			o.Ports[i].TagVlans = STORAGE_VlanList
 		} else if strings.Contains(portItem.Function, "P2P_Border") {
