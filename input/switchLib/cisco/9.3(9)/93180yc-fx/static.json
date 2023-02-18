@@ -11,25 +11,19 @@
         "Tenant",
         "L3Forward"
       ],
-      "IPv4Neighbor": [
+      "RouteMap": [
         {
-          "SwitchRelation": "SwitchUplink",
-          "Description": "P2P_Border",
-          "NeighborAsn": 0,
-          "NeighborIPAddress": "P2P_Border",
-          "PrefixList": [
+          "Name": "IPv4-DEFAULT",
+          "Action": "permit",
+          "Seq": 10,
+          "Rules": [
             {
-              "Name": "ExternalPrefix",
-              "Direction": "in"
-            },
-            {
-              "Name": "ExternalPrefix",
-              "Direction": "out"
+              "PrefixList":"IPv4-DEFAULT"
             }
-          ],
-          "RemovePrivateAS": true,
-          "Shutdown": false
-        },
+          ]
+        }
+      ],
+      "IPv4Neighbor": [
         {
           "SwitchRelation": "SwitchPeer",
           "Description": "P2P_IBGP",
@@ -59,53 +53,27 @@
     },
     "Static": [
       {
-        "DstIPAddress": "Tenant0",
+        "Network": "Storage",
         "NextHop": "null 0",
-        "Name": "Tenant0"
+        "Name": "Storage"
       },
       {
-        "DstIPAddress": "Tenant1",
-        "NextHop": "null 0",
-        "Name": "Tenant1"
-      },
-      {
-        "DstIPAddress": "Any",
-        "NextHop": "",
-        "Name": "P2P_TORX_To_Border1/TORX"
-      },
-      {
-        "DstIPAddress": "Any",
-        "NextHop": "",
-        "Name": "P2P_TORX_To_Border2/TORX"
+        "Network": "Any",
+        "NextHop": "SwitchUplink",
+        "Name": "SwitchUplink"
       }
     ],
     "PrefixList": [
       {
-        "Name": "ExternalPrefix",
+        "Name": "IPv4-DEFAULT",
         "Config": [
           {
             "Idx": 1,
-            "Action": "deny",
-            "Description":"Storage",
-            "Network": "Storage",
-            "Operation": "le",
-            "Prefix": 32
-          },
-          {
-            "Idx": 2,
-            "Action": "deny",
-            "Description":"Tenant",
-            "Network": "Tenant",
-            "Operation": "le",
-            "Prefix": 32
-          },
-          {
-            "Idx": 3,
             "Action": "permit",
             "Description":"Any",
             "Network": "Any",
-            "Operation": "le",
-            "Prefix": 32
+            "Operation": "",
+            "Prefix": 0
           }
         ]
       },

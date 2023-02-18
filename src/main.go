@@ -9,37 +9,41 @@ import (
 )
 
 var (
-	TOR                 = "TOR"
-	BMC                 = "BMC"
-	BORDER              = "BORDER"
-	MUX                 = "MUX"
-	UPLINK              = "UPLINK"
-	DOWNLINK            = "DOWNLINK"
-	VIPGATEWAY          = "Gateway"
-	UNUSED              = "Unused"
-	TEMPLATE            = "template"
-	INTERFACEJSON       = "interface.json"
-	BGPROUTINGJSON      = "routing.json"
-	JUMBOMTU            = 9216
-	DefaultMTU          = 1500
-	NO_Valid_TOR_Switch = "NO Valid TOR Switch Founded"
-	JSONExtension       = ".json"
-	CONFIGExtension     = ".config"
-	P2P_IBGP            = "P2P_IBGP"
-	MLAG_PEER           = "MLAG_PEER"
-	TOR_BMC             = "TOR_BMC"
-	POID_P2P_IBGP       = "50"
-	POID_MLAG_PEER      = "101"
-	POID_TOR_BMC        = "102"
-	UNUSED_VLANID       = 2
-	Native_VLANID       = 99
-	BMC_VlanID          int
-	Infra_GroupID       = "Infrastructure"
-	ANY                 = "Any"
-	Infra_VlanID        int
-	Username, Password  string
-	COMPUTE, STORAGE    = "Compute", "Storage"
-	DeviceTypeMap       map[string][]SwitchType
+	TOR                                      = "TOR"
+	BMC                                      = "BMC"
+	BORDER                                   = "BORDER"
+	MUX                                      = "MUX"
+	UPLINK                                   = "UPLINK"
+	DOWNLINK                                 = "DOWNLINK"
+	VIPGATEWAY                               = "Gateway"
+	UNUSED                                   = "Unused"
+	TEMPLATE                                 = "template"
+	INTERFACEJSON                            = "interface.json"
+	JUMBOMTU                                 = 9216
+	DefaultMTU                               = 1500
+	BGP                                      = "BGP"
+	STATIC                                   = "STATIC"
+	NO_Valid_TOR_Switch                      = "NO Valid TOR Switch Founded"
+	JSONExtension                            = ".json"
+	CONFIGExtension                          = ".config"
+	P2P_IBGP                                 = "P2P_IBGP"
+	MLAG_PEER                                = "MLAG_Peer"
+	TOR_BMC                                  = "TOR_BMC"
+	POID_P2P_IBGP                            = "50"
+	POID_MLAG_PEER                           = "101"
+	POID_TOR_BMC                             = "102"
+	UNUSED_VLANID                            = 2
+	Native_VLANID                            = 99
+	BMC_VlanID                               int
+	Infra_GroupID                            = "Infrastructure"
+	ANY                                      = "Any"
+	ANYNETWORK                               = "0.0.0.0/0"
+	Infra_VlanID                             int
+	Username, Password                       string
+	COMPUTE, STORAGE                         = "Compute", "Storage"
+	SWITCHUPLINK, SWITCHDOWNLINK, SWITCHPEER = "SwitchUplink", "SwitchDownlink", "SwitchPeer"
+	BMC_DEFAULT_ROUTE                        = "GlobalDefaultRoute"
+	DeviceTypeMap                            map[string][]SwitchType
 )
 
 func init() {
@@ -57,12 +61,6 @@ func main() {
 	flag.Parse()
 	// Covert input.json to Go Object, structs are defined in model.go
 	inputData := parseInputJson(*inputJsonFile)
-	// Create random credential for switch config if no input values
-	if Username == "" || Password == "" {
-		Username = "aszadmin-" + generateRandomString(5, 0, 0, 0)
-		Password = generateRandomString(16, 3, 3, 3)
-	}
-
 	// Create device categrory map: Border, TOR, BMC, MUX based on Type
 	DeviceTypeMap = inputData.createDeviceTypeMap()
 	generateSwitchConfig(inputData, *switchLibFolder, *outputFolder, DeviceTypeMap)
@@ -118,6 +116,7 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 			bmcOutput.UpdateGlobalSetting(inputData)
 			templateFolder, frameworkFolder := bmcOutput.parseFrameworkPath(switchLibFolder)
 			bmcOutput.ParseSwitchPort(frameworkFolder)
+			bmcOutput.ParseRouting(frameworkFolder, inputData)
 			// Output JSON File for Debug
 			bmcOutput.writeToJson(outputFolder)
 			bmcOutput.parseTemplate(templateFolder, outputFolder)

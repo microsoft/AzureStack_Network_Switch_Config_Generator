@@ -20,17 +20,17 @@ type InputData struct {
 }
 
 type OutputType struct {
-	Switch         SwitchType                 `json:"Switch"`
-	SwitchPeer     []SwitchType               `json:"SwitchPeer"`
-	SwitchBMC      []SwitchType               `json:"SwitchBMC"`
-	SwitchUplink   []SwitchType               `json:"SwitchUplink"`
-	SwitchDownlink []SwitchType               `json:"SwitchDownlink"`
-	GlobalSetting  GlobalSettingType          `json:"GlobalSetting"`
-	Vlans          []VlanType                 `json:"Vlans"`
-	L3Interfaces   map[string]L3IntfType      `json:"L3Interfaces"`
-	PortChannel    map[string]PortChannelType `json:"PortChannel"`
-	Ports          []PortType                 `json:"Ports"`
-	Routing        RoutingType                `json:"Routing"`
+	Switch         SwitchType                 `json:"Switch,omitempty"`
+	SwitchPeer     []SwitchType               `json:"SwitchPeer,omitempty"`
+	SwitchBMC      []SwitchType               `json:"SwitchBMC,omitempty"`
+	SwitchUplink   []SwitchType               `json:"SwitchUplink,omitempty"`
+	SwitchDownlink []SwitchType               `json:"SwitchDownlink,omitempty"`
+	GlobalSetting  GlobalSettingType          `json:"GlobalSetting,omitempty"`
+	Vlans          []VlanType                 `json:"Vlans,omitempty"`
+	L3Interfaces   map[string]L3IntfType      `json:"L3Interfaces,omitempty"`
+	PortChannel    map[string]PortChannelType `json:"PortChannel,omitempty"`
+	Ports          []PortType                 `json:"Ports,omitempty"`
+	Routing        RoutingType                `json:"Routing,omitempty"`
 }
 
 type GlobalSettingType struct {
@@ -67,12 +67,14 @@ type PortChannelType struct {
 }
 
 type L3IntfType struct {
-	Function  string `json:"Function"`
-	IPAddress string `json:"IPAddress"`
-	Cidr      int    `json:"Cidr"`
-	Subnet    string `json:"Subnet"`
-	Mtu       int    `json:"MTU"`
-	Shutdown  bool   `json:"Shutdown"`
+	Function     string `json:"Function"`
+	Description  string `json:"Description"`
+	IPAddress    string `json:"IPAddress"`
+	Cidr         int    `json:"Cidr"`
+	NbrIPAddress string `json:"NbrIPAddress,omitempty"`
+	Subnet       string `json:"Subnet"`
+	Mtu          int    `json:"MTU"`
+	Shutdown     bool   `json:"Shutdown"`
 }
 
 type CloudType struct {
@@ -102,6 +104,7 @@ type Supernet struct {
 		SwitchSVI   bool       `json:"SwitchSVI"`
 		Cidr        int        `json:"Cidr"`
 		Subnet      string     `json:"Subnet"`
+		Gateway     string     `json:"Gateway"`
 		Assignment  []IPv4Unit `json:"Assignment"`
 	} `json:"IPv4"`
 	IPv6 struct {
@@ -155,6 +158,7 @@ type BGPType struct {
 	BGPAsn       int                `json:"BGPAsn"`
 	RouterID     string             `json:"RouterID"`
 	IPv4Network  []string           `json:"IPv4Network"`
+	RouteMap     []RouteMapType     `json:"RouteMap,omitempty"`
 	IPv4Neighbor []IPv4NeighborType `json:"IPv4Neighbor"`
 }
 
@@ -176,9 +180,9 @@ type IPv4NeighborType struct {
 }
 
 type StaticType struct {
-	DstIPAddress string `json:"DstIPAddress"`
-	NextHop      string `json:"NextHop"`
-	Name         string `json:"Name"`
+	Network string `json:"Network"`
+	NextHop string `json:"NextHop"`
+	Name    string `json:"Name"`
 }
 
 type PrefixListType struct {
@@ -191,4 +195,13 @@ type PrefixListType struct {
 		Operation   string `json:"Operation"`
 		Prefix      int    `json:"Prefix"`
 	} `json:"Config"`
+}
+
+type RouteMapType struct {
+	Name   string `json:"Name"`
+	Action string `json:"Action"`
+	Seq    int    `json:"Seq"`
+	Rules  []struct {
+		PrefixList string `json:"PrefixList"`
+	} `json:"Rules"`
 }

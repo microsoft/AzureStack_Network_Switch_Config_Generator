@@ -110,14 +110,6 @@
                 "Firmware": "9.3(9)"
             },
             {
-                "Make": "Cisco",
-                "Model": "9348GC-FXP",
-                "Type": "BMC",
-                "Hostname": "bmc-1",
-                "ASN": null,
-                "Firmware": "9.3(9)"
-            },
-            {
                 "Make": "Microsoft",
                 "Model": null,
                 "Type": "MUX",
@@ -126,7 +118,7 @@
                 "Firmware": null
             }
         ],
-        "SwitchUplink": "BGP",
+        "SwitchUplink": "Static",
         "HostConnectivity": "BGP",
         "Supernets": [
             {

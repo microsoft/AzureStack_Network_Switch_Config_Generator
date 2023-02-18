@@ -45,9 +45,24 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 						// Assignment Type binds with Switch.Type
 						l3IntfItem.IPAddress = ipv4.IP
 					}
+					// Update NbrIPAddress for IBGP Peer
+					for _, switchObj := range o.SwitchPeer {
+						if ipv4.Name == switchObj.Type {
+							// Assignment Type binds with Switch.Type
+							l3IntfItem.NbrIPAddress = ipv4.IP
+						}
+					}
+					// Update NbrIPaddress for P2P_Border
+					for _, switchObj := range o.SwitchUplink {
+						if ipv4.Name == switchObj.Type {
+							// Assignment Type binds with Switch.Type
+							l3IntfItem.NbrIPAddress = ipv4.IP
+						}
+					}
 				}
 				if len(l3IntfItem.IPAddress) != 0 {
-					l3IntfItem.Function = supernet.IPv4.Name
+					l3IntfItem.Function = supernet.IPv4.NetworkType
+					l3IntfItem.Description = supernet.IPv4.Name
 					l3IntfItem.Cidr = supernet.IPv4.Cidr
 					l3IntfItem.Mtu = JUMBOMTU
 					l3IntfItem.Subnet = supernet.IPv4.Subnet
@@ -69,9 +84,12 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 				}
 				if supernet.IPv4.SwitchSVI {
 					for _, ipv4 := range supernet.IPv4.Assignment {
-						if ipv4.Name == o.Switch.Type {
+						if strings.Contains(ipv4.Name, o.Switch.Type) {
 							// Assignment Type binds with Switch.Type
 							vlanItem.IPAddress = ipv4.IP
+							vlanItem.Cidr = supernet.IPv4.Cidr
+							vlanItem.Subnet = supernet.IPv4.Subnet
+							vlanItem.VIPAddress = supernet.IPv4.Gateway
 						}
 					}
 				}

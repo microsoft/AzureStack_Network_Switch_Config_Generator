@@ -126,7 +126,7 @@
                 "Firmware": null
             }
         ],
-        "SwitchUplink": "BGP",
+        "SwitchUplink": "Static",
         "HostConnectivity": "BGP",
         "Supernets": [
             {

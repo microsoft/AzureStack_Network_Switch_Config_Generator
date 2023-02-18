@@ -56,7 +56,6 @@ func initSwitchPort(interfaceJsonObj *PortJson) []PortType {
 				portItem := outputSwitchPorts[idxKey]
 				portItem.Description = funcItem.Function
 				portItem.Function = funcItem.Function
-				portItem.Shutdown = false
 				outputSwitchPorts[idxKey] = portItem
 			} else {
 				log.Fatalf("Port %s is not found in interface.json", port)
@@ -99,6 +98,7 @@ func (o *OutputType) UpdateSwitchPorts(VlanGroup map[string][]string) {
 		if portItem.Function == COMPUTE {
 			o.Ports[i].UntagVlan = Infra_VlanID
 			o.Ports[i].TagVlans = COMPUTE_VlanList
+			o.Ports[i].Shutdown = false
 		} else if portItem.Function == STORAGE {
 			o.Ports[i].UntagVlan = Native_VLANID
 			o.Ports[i].TagVlans = STORAGE_VlanList
@@ -107,25 +107,36 @@ func (o *OutputType) UpdateSwitchPorts(VlanGroup map[string][]string) {
 			portIpAddress := fmt.Sprintf("%s/%d", o.L3Interfaces[l3IntfName].IPAddress, o.L3Interfaces[l3IntfName].Cidr)
 			o.Ports[i].IPAddress = portIpAddress
 			o.Ports[i].UntagVlan = 0
+			o.Ports[i].Shutdown = false
 		} else if portItem.Function == P2P_IBGP {
 			o.Ports[i].UntagVlan = 0
 			portOthers := map[string]string{
 				"ChannelGroup": o.PortChannel[P2P_IBGP].PortChannelID,
 			}
 			o.Ports[i].Others = portOthers
-		} else if portItem.Function == TOR_BMC {
+			o.Ports[i].Shutdown = false
+		} else if portItem.Function == TOR_BMC && len(o.SwitchBMC) > 0 {
+			// Has BMC
 			o.Ports[i].UntagVlan = 0
 			o.Ports[i].TagVlans = append(o.Ports[i].TagVlans, BMC_VlanID)
 			portOthers := map[string]string{
 				"ChannelGroup": o.PortChannel[TOR_BMC].PortChannelID,
 			}
 			o.Ports[i].Others = portOthers
+			o.Ports[i].Shutdown = false
+		} else if portItem.Function == TOR_BMC && len(o.SwitchBMC) == 0 {
+			// No BMC
+			o.Ports[i].UntagVlan = UNUSED_VLANID
+			o.Ports[i].TagVlans = nil
+			o.Ports[i].Description = UNUSED
+			o.Ports[i].Function = UNUSED
 		} else if portItem.Function == MLAG_PEER {
 			o.Ports[i].UntagVlan = Native_VLANID
 			portOthers := map[string]string{
 				"ChannelGroup": o.PortChannel[MLAG_PEER].PortChannelID,
 			}
 			o.Ports[i].Others = portOthers
+			o.Ports[i].Shutdown = false
 		}
 	}
 }

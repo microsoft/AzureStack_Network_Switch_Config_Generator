@@ -8,7 +8,8 @@ vlan {{.VlanID}}
 
 {{ define "interface_vlan"}}
 ! vlan.go.tmpl-interface_vlan
-{{ range . -}}
+{{- $SwitchType := .Switch.Type -}}
+{{ range .Vlans -}}
 {{ if .IPAddress -}} 
 interface vlan{{.VlanID}}
   description {{.VlanName}}
@@ -24,7 +25,11 @@ interface vlan{{.VlanID}}
   {{ if .VIPAddress -}}
   hsrp version 2
   hsrp {{.VlanID}}
-    {{/* priority {{.VIPPriorityId}} forwarding-threshold lower 1 upper 150 */ -}}
+    {{ if eq $SwitchType "TOR1" -}}
+    priority 150 forwarding-threshold lower 1 upper 150
+    {{ else if eq $SwitchType "TOR2" -}}
+    priority 140 forwarding-threshold lower 1 upper 140
+    {{ end -}}
     ip {{.VIPAddress}}
   {{ end -}}
 {{- end}}
