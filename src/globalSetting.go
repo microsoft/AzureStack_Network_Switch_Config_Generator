@@ -3,6 +3,11 @@ package main
 import "fmt"
 
 func (o *OutputType) UpdateGlobalSetting(inputData InputData) {
+	// Create random credential for switch config if no input values
+	if Username == "" || Password == "" {
+		Username = "azureadmin-" + generateRandomString(5, 0, 0, 0)
+		Password = generateRandomString(16, 3, 3, 3)
+	}
 	o.GlobalSetting.Username = Username
 	o.GlobalSetting.Password = Password
 	o.GlobalSetting.TimeServer = inputData.Setting.TimeServer

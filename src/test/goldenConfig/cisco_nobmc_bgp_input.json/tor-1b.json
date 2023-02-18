@@ -2,23 +2,23 @@
  "Switch": {
   "Make": "Cisco",
   "Model": "93180YC-FX",
-  "Type": "TOR1",
-  "Hostname": "tor-1a",
+  "Type": "TOR2",
+  "Hostname": "tor-1b",
   "ASN": 65243,
   "Firmware": "9.3(9)"
  },
- "SwitchPeers": [
+ "SwitchPeer": [
   {
    "Make": "Cisco",
    "Model": "93180YC-FX",
-   "Type": "TOR2",
-   "Hostname": "tor-1b",
+   "Type": "TOR1",
+   "Hostname": "tor-1a",
    "ASN": 65243,
    "Firmware": "9.3(9)"
   }
  ],
  "SwitchBMC": null,
- "Uplinks": [
+ "SwitchUplink": [
   {
    "Make": "Cisco",
    "Model": "C3132Q-XL",
@@ -36,7 +36,7 @@
    "Firmware": ""
   }
  ],
- "Downlinks": [
+ "SwitchDownlink": [
   {
    "Make": "Microsoft",
    "Model": "",
@@ -47,11 +47,18 @@
   }
  ],
  "GlobalSetting": {
-  "Username": "",
-  "Password": "",
-  "TimeServer": null,
-  "SyslogServer": null,
-  "DNSForwarder": null,
+  "Username": "azureadmin-vlzxb",
+  "Password": "c2!cuh%xMC8*aRt9",
+  "TimeServer": [
+   "10.10.240.20"
+  ],
+  "SyslogServer": [
+   "10.10.43.111"
+  ],
+  "DNSForwarder": [
+   "10.10.240.23",
+   "10.10.240.24"
+  ],
   "OOB": "vlan125"
  },
  "Vlans": [
@@ -60,6 +67,8 @@
    "VlanID": 125,
    "GroupID": "BMC",
    "IPAddress": "",
+   "Cidr": 26,
+   "Subnet": "10.71.85.64/26",
    "MTU": 9216,
    "VIPAddress": "10.71.85.65",
    "VIPPriorityId": 0,
@@ -69,7 +78,9 @@
    "VlanName": "HNVPA_6",
    "VlanID": 6,
    "GroupID": "HNVPA",
-   "IPAddress": "10.71.131.2",
+   "IPAddress": "10.71.131.3",
+   "Cidr": 25,
+   "Subnet": "10.71.131.0/25",
    "MTU": 9216,
    "VIPAddress": "10.71.131.1",
    "VIPPriorityId": 0,
@@ -78,8 +89,10 @@
   {
    "VlanName": "Infra_7",
    "VlanID": 7,
-   "GroupID": "MANAGEMENT",
-   "IPAddress": "10.69.176.2",
+   "GroupID": "Infrastructure",
+   "IPAddress": "10.69.176.3",
+   "Cidr": 24,
+   "Subnet": "10.69.176.0/24",
    "MTU": 9216,
    "VIPAddress": "10.69.176.1",
    "VIPPriorityId": 0,
@@ -88,8 +101,10 @@
   {
    "VlanName": "Tenant_201",
    "VlanID": 201,
-   "GroupID": "TENANT",
-   "IPAddress": "10.69.177.2",
+   "GroupID": "Tenant",
+   "IPAddress": "10.69.177.3",
+   "Cidr": 24,
+   "Subnet": "10.69.177.0/24",
    "MTU": 9216,
    "VIPAddress": "10.69.177.1",
    "VIPPriorityId": 0,
@@ -98,8 +113,10 @@
   {
    "VlanName": "LogicalTenant_301",
    "VlanID": 301,
-   "GroupID": "TENANT",
-   "IPAddress": "10.69.178.2",
+   "GroupID": "Tenant",
+   "IPAddress": "10.69.178.3",
+   "Cidr": 25,
+   "Subnet": "10.69.178.0/25",
    "MTU": 9216,
    "VIPAddress": "10.69.178.1",
    "VIPPriorityId": 0,
@@ -108,168 +125,202 @@
   {
    "VlanName": "DhcpTenant_401",
    "VlanID": 401,
-   "GroupID": "TENANT",
-   "IPAddress": "10.69.178.130",
+   "GroupID": "Tenant",
+   "IPAddress": "10.69.178.131",
+   "Cidr": 25,
+   "Subnet": "10.69.178.128/25",
    "MTU": 9216,
    "VIPAddress": "10.69.178.129",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_501",
+   "VlanName": "L3Forward_501",
    "VlanID": 501,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.2",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.3",
+   "Cidr": 28,
+   "Subnet": "10.69.179.0/28",
    "MTU": 9216,
    "VIPAddress": "10.69.179.1",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_502",
+   "VlanName": "L3Forward_502",
    "VlanID": 502,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.18",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.19",
+   "Cidr": 28,
+   "Subnet": "10.69.179.16/28",
    "MTU": 9216,
    "VIPAddress": "10.69.179.17",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_503",
+   "VlanName": "L3Forward_503",
    "VlanID": 503,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.34",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.35",
+   "Cidr": 28,
+   "Subnet": "10.69.179.32/28",
    "MTU": 9216,
    "VIPAddress": "10.69.179.33",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_504",
+   "VlanName": "L3Forward_504",
    "VlanID": 504,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.50",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.51",
+   "Cidr": 28,
+   "Subnet": "10.69.179.48/28",
    "MTU": 9216,
    "VIPAddress": "10.69.179.49",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_505",
+   "VlanName": "L3Forward_505",
    "VlanID": 505,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.66",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.67",
+   "Cidr": 28,
+   "Subnet": "10.69.179.64/28",
    "MTU": 9216,
    "VIPAddress": "10.69.179.65",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_506",
+   "VlanName": "L3Forward_506",
    "VlanID": 506,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.82",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.83",
+   "Cidr": 28,
+   "Subnet": "10.69.179.80/28",
    "MTU": 9216,
    "VIPAddress": "10.69.179.81",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_507",
+   "VlanName": "L3Forward_507",
    "VlanID": 507,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.98",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.99",
+   "Cidr": 28,
+   "Subnet": "10.69.179.96/28",
    "MTU": 9216,
    "VIPAddress": "10.69.179.97",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_508",
+   "VlanName": "L3Forward_508",
    "VlanID": 508,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.114",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.115",
+   "Cidr": 28,
+   "Subnet": "10.69.179.112/28",
    "MTU": 9216,
    "VIPAddress": "10.69.179.113",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_509",
+   "VlanName": "L3Forward_509",
    "VlanID": 509,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.130",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.131",
+   "Cidr": 28,
+   "Subnet": "10.69.179.128/28",
    "MTU": 9216,
    "VIPAddress": "10.69.179.129",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_510",
+   "VlanName": "L3Forward_510",
    "VlanID": 510,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.146",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.147",
+   "Cidr": 28,
+   "Subnet": "10.69.179.144/28",
    "MTU": 9216,
    "VIPAddress": "",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_511",
+   "VlanName": "L3Forward_511",
    "VlanID": 511,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.162",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.163",
+   "Cidr": 28,
+   "Subnet": "10.69.179.160/28",
    "MTU": 9216,
    "VIPAddress": "10.69.179.161",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_512",
+   "VlanName": "L3Forward_512",
    "VlanID": 512,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.178",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.179",
+   "Cidr": 28,
+   "Subnet": "10.69.179.176/28",
    "MTU": 9216,
    "VIPAddress": "10.69.179.177",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_513",
+   "VlanName": "L3Forward_513",
    "VlanID": 513,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.194",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.195",
+   "Cidr": 28,
+   "Subnet": "10.69.179.192/28",
    "MTU": 9216,
    "VIPAddress": "10.69.179.193",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_514",
+   "VlanName": "L3Forward_514",
    "VlanID": 514,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.210",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.211",
+   "Cidr": 28,
+   "Subnet": "10.69.179.208/28",
    "MTU": 9216,
    "VIPAddress": "10.69.179.209",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_515",
+   "VlanName": "L3Forward_515",
    "VlanID": 515,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.226",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.227",
+   "Cidr": 28,
+   "Subnet": "10.69.179.224/28",
    "MTU": 9216,
    "VIPAddress": "10.69.179.225",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
   {
-   "VlanName": "L3forward_516",
+   "VlanName": "L3Forward_516",
    "VlanID": 516,
-   "GroupID": "L3FORWARD",
-   "IPAddress": "10.69.179.242",
+   "GroupID": "L3Forward",
+   "IPAddress": "10.69.179.243",
+   "Cidr": 28,
+   "Subnet": "10.69.179.240/28",
    "MTU": 9216,
    "VIPAddress": "10.69.179.241",
    "VIPPriorityId": 0,
@@ -278,8 +329,10 @@
   {
    "VlanName": "Storage_711",
    "VlanID": 711,
-   "GroupID": "StorageIP",
+   "GroupID": "Storage",
    "IPAddress": "",
+   "Cidr": 24,
+   "Subnet": "10.71.1.0/24",
    "MTU": 9216,
    "VIPAddress": "",
    "VIPPriorityId": 0,
@@ -288,8 +341,10 @@
   {
    "VlanName": "Storage_712",
    "VlanID": 712,
-   "GroupID": "StorageIP",
+   "GroupID": "Storage",
    "IPAddress": "",
+   "Cidr": 24,
+   "Subnet": "10.71.2.0/24",
    "MTU": 9216,
    "VIPAddress": "",
    "VIPPriorityId": 0,
@@ -297,39 +352,46 @@
   }
  ],
  "L3Interfaces": {
-  "Loopback0_TOR1": {
-   "Function": "Loopback0_TOR1",
-   "IPAddress": "10.71.85.20",
+  "Loopback0_TOR2": {
+   "Function": "Loopback0_TOR2",
+   "IPAddress": "10.71.85.21",
    "Cidr": 32,
+   "Subnet": "10.71.85.21/32",
    "MTU": 9216,
    "Shutdown": false
   },
-  "P2P_Border1_TOR1": {
-   "Function": "P2P_Border1_TOR1",
-   "IPAddress": "10.71.85.2",
+  "P2P_Border1_TOR2": {
+   "Function": "P2P_Border1_TOR2",
+   "IPAddress": "10.71.85.6",
    "Cidr": 30,
+   "NbrIPAddress": "10.71.85.5",
+   "Subnet": "10.71.85.4/30",
    "MTU": 9216,
    "Shutdown": false
   },
-  "P2P_Border2_TOR1": {
-   "Function": "P2P_Border2_TOR1",
-   "IPAddress": "10.71.85.10",
+  "P2P_Border2_TOR2": {
+   "Function": "P2P_Border2_TOR2",
+   "IPAddress": "10.71.85.14",
    "Cidr": 30,
+   "NbrIPAddress": "10.71.85.13",
+   "Subnet": "10.71.85.12/30",
    "MTU": 9216,
    "Shutdown": false
   },
   "P2P_IBGP": {
    "Function": "P2P_IBGP",
-   "IPAddress": "10.71.85.17",
+   "IPAddress": "10.71.85.18",
    "Cidr": 30,
+   "NbrIPAddress": "10.71.85.17",
+   "Subnet": "10.71.85.16/30",
    "MTU": 9216,
    "Shutdown": false
   }
  },
  "PortChannel": {
-  "MLAG_PEER": {
-   "Description": "MLAG_PEER",
-   "Function": "MLAG_PEER",
+  "MLAG_Peer": {
+   "Description": "MLAG_Peer",
+   "Function": "MLAG_Peer",
    "UntagVlan": 99,
    "TagVlans": 0,
    "IPAddress": "",
@@ -342,19 +404,9 @@
    "Function": "P2P_IBGP",
    "UntagVlan": 0,
    "TagVlans": 0,
-   "IPAddress": "10.71.85.17/30",
+   "IPAddress": "10.71.85.18/30",
    "PortChannelID": "50",
    "VPC": "",
-   "Shutdown": false
-  },
-  "TOR_BMC": {
-   "Description": "TOR_BMC",
-   "Function": "TOR_BMC",
-   "UntagVlan": 0,
-   "TagVlans": 125,
-   "IPAddress": "",
-   "PortChannelID": "102",
-   "VPC": "102",
    "Shutdown": false
   }
  },
@@ -584,8 +636,8 @@
    "Port": "1/18",
    "Idx": 18,
    "Type": "Ethernet",
-   "Description": "COMPUTE",
-   "Function": "COMPUTE",
+   "Description": "Compute",
+   "Function": "Compute",
    "UntagVlan": 7,
    "TagVlans": [
     6,
@@ -619,8 +671,8 @@
    "Port": "1/19",
    "Idx": 19,
    "Type": "Ethernet",
-   "Description": "COMPUTE",
-   "Function": "COMPUTE",
+   "Description": "Compute",
+   "Function": "Compute",
    "UntagVlan": 7,
    "TagVlans": [
     6,
@@ -654,8 +706,8 @@
    "Port": "1/20",
    "Idx": 20,
    "Type": "Ethernet",
-   "Description": "COMPUTE",
-   "Function": "COMPUTE",
+   "Description": "Compute",
+   "Function": "Compute",
    "UntagVlan": 7,
    "TagVlans": [
     6,
@@ -689,8 +741,8 @@
    "Port": "1/21",
    "Idx": 21,
    "Type": "Ethernet",
-   "Description": "COMPUTE",
-   "Function": "COMPUTE",
+   "Description": "Compute",
+   "Function": "Compute",
    "UntagVlan": 7,
    "TagVlans": [
     6,
@@ -724,8 +776,8 @@
    "Port": "1/22",
    "Idx": 22,
    "Type": "Ethernet",
-   "Description": "COMPUTE",
-   "Function": "COMPUTE",
+   "Description": "Compute",
+   "Function": "Compute",
    "UntagVlan": 7,
    "TagVlans": [
     6,
@@ -759,8 +811,8 @@
    "Port": "1/23",
    "Idx": 23,
    "Type": "Ethernet",
-   "Description": "COMPUTE",
-   "Function": "COMPUTE",
+   "Description": "Compute",
+   "Function": "Compute",
    "UntagVlan": 7,
    "TagVlans": [
     6,
@@ -794,8 +846,8 @@
    "Port": "1/24",
    "Idx": 24,
    "Type": "Ethernet",
-   "Description": "COMPUTE",
-   "Function": "COMPUTE",
+   "Description": "Compute",
+   "Function": "Compute",
    "UntagVlan": 7,
    "TagVlans": [
     6,
@@ -829,8 +881,8 @@
    "Port": "1/25",
    "Idx": 25,
    "Type": "Ethernet",
-   "Description": "COMPUTE",
-   "Function": "COMPUTE",
+   "Description": "Compute",
+   "Function": "Compute",
    "UntagVlan": 7,
    "TagVlans": [
     6,
@@ -864,8 +916,8 @@
    "Port": "1/26",
    "Idx": 26,
    "Type": "Ethernet",
-   "Description": "STORAGE",
-   "Function": "STORAGE",
+   "Description": "Storage",
+   "Function": "Storage",
    "UntagVlan": 99,
    "TagVlans": [
     711,
@@ -873,15 +925,15 @@
    ],
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
+   "Shutdown": true,
    "Others": null
   },
   {
    "Port": "1/27",
    "Idx": 27,
    "Type": "Ethernet",
-   "Description": "STORAGE",
-   "Function": "STORAGE",
+   "Description": "Storage",
+   "Function": "Storage",
    "UntagVlan": 99,
    "TagVlans": [
     711,
@@ -889,15 +941,15 @@
    ],
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
+   "Shutdown": true,
    "Others": null
   },
   {
    "Port": "1/28",
    "Idx": 28,
    "Type": "Ethernet",
-   "Description": "STORAGE",
-   "Function": "STORAGE",
+   "Description": "Storage",
+   "Function": "Storage",
    "UntagVlan": 99,
    "TagVlans": [
     711,
@@ -905,15 +957,15 @@
    ],
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
+   "Shutdown": true,
    "Others": null
   },
   {
    "Port": "1/29",
    "Idx": 29,
    "Type": "Ethernet",
-   "Description": "STORAGE",
-   "Function": "STORAGE",
+   "Description": "Storage",
+   "Function": "Storage",
    "UntagVlan": 99,
    "TagVlans": [
     711,
@@ -921,15 +973,15 @@
    ],
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
+   "Shutdown": true,
    "Others": null
   },
   {
    "Port": "1/30",
    "Idx": 30,
    "Type": "Ethernet",
-   "Description": "STORAGE",
-   "Function": "STORAGE",
+   "Description": "Storage",
+   "Function": "Storage",
    "UntagVlan": 99,
    "TagVlans": [
     711,
@@ -937,15 +989,15 @@
    ],
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
+   "Shutdown": true,
    "Others": null
   },
   {
    "Port": "1/31",
    "Idx": 31,
    "Type": "Ethernet",
-   "Description": "STORAGE",
-   "Function": "STORAGE",
+   "Description": "Storage",
+   "Function": "Storage",
    "UntagVlan": 99,
    "TagVlans": [
     711,
@@ -953,15 +1005,15 @@
    ],
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
+   "Shutdown": true,
    "Others": null
   },
   {
    "Port": "1/32",
    "Idx": 32,
    "Type": "Ethernet",
-   "Description": "STORAGE",
-   "Function": "STORAGE",
+   "Description": "Storage",
+   "Function": "Storage",
    "UntagVlan": 99,
    "TagVlans": [
     711,
@@ -969,15 +1021,15 @@
    ],
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
+   "Shutdown": true,
    "Others": null
   },
   {
    "Port": "1/33",
    "Idx": 33,
    "Type": "Ethernet",
-   "Description": "STORAGE",
-   "Function": "STORAGE",
+   "Description": "Storage",
+   "Function": "Storage",
    "UntagVlan": 99,
    "TagVlans": [
     711,
@@ -985,7 +1037,7 @@
    ],
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
+   "Shutdown": true,
    "Others": null
   },
   {
@@ -1139,18 +1191,14 @@
    "Port": "1/45",
    "Idx": 45,
    "Type": "Ethernet",
-   "Description": "TOR_BMC",
-   "Function": "TOR_BMC",
-   "UntagVlan": 0,
-   "TagVlans": [
-    125
-   ],
+   "Description": "Unused",
+   "Function": "Unused",
+   "UntagVlan": 2,
+   "TagVlans": null,
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": {
-    "ChannelGroup": "102"
-   }
+   "Shutdown": true,
+   "Others": null
   },
   {
    "Port": "1/46",
@@ -1186,7 +1234,7 @@
    "Function": "P2P_Border2",
    "UntagVlan": 0,
    "TagVlans": null,
-   "IPAddress": "10.71.85.10/30",
+   "IPAddress": "10.71.85.14/30",
    "MTU": 9216,
    "Shutdown": false,
    "Others": null
@@ -1199,7 +1247,7 @@
    "Function": "P2P_Border1",
    "UntagVlan": 0,
    "TagVlans": null,
-   "IPAddress": "10.71.85.2/30",
+   "IPAddress": "10.71.85.6/30",
    "MTU": 9216,
    "Shutdown": false,
    "Others": null
@@ -1208,8 +1256,8 @@
    "Port": "1/50",
    "Idx": 50,
    "Type": "Ethernet",
-   "Description": "MLAG_PEER",
-   "Function": "MLAG_PEER",
+   "Description": "MLAG_Peer",
+   "Function": "MLAG_Peer",
    "UntagVlan": 99,
    "TagVlans": null,
    "IPAddress": "",
@@ -1223,8 +1271,8 @@
    "Port": "1/51",
    "Idx": 51,
    "Type": "Ethernet",
-   "Description": "MLAG_PEER",
-   "Function": "MLAG_PEER",
+   "Description": "MLAG_Peer",
+   "Function": "MLAG_Peer",
    "UntagVlan": 99,
    "TagVlans": null,
    "IPAddress": "",
@@ -1238,8 +1286,8 @@
    "Port": "1/52",
    "Idx": 52,
    "Type": "Ethernet",
-   "Description": "MLAG_PEER",
-   "Function": "MLAG_PEER",
+   "Description": "MLAG_Peer",
+   "Function": "MLAG_Peer",
    "UntagVlan": 99,
    "TagVlans": null,
    "IPAddress": "",
@@ -1288,5 +1336,178 @@
    "Shutdown": true,
    "Others": null
   }
- ]
+ ],
+ "Routing": {
+  "BGP": {
+   "BGPAsn": 65243,
+   "RouterID": "10.71.85.21",
+   "IPv4Network": [
+    "10.71.85.4/30",
+    "10.71.85.12/30",
+    "10.71.85.16/30",
+    "10.71.85.21/32",
+    "10.71.85.64/26",
+    "10.71.131.0/25",
+    "10.69.176.0/24",
+    "10.69.178.0/25",
+    "10.69.178.128/25",
+    "10.69.177.0/24",
+    "10.69.179.0/28",
+    "10.69.179.48/28",
+    "10.69.179.96/28",
+    "10.69.179.112/28",
+    "10.69.179.160/28",
+    "10.69.179.208/28",
+    "10.69.179.64/28",
+    "10.69.179.176/28",
+    "10.69.179.192/28",
+    "10.69.179.240/28",
+    "10.69.179.128/28",
+    "10.69.179.16/28",
+    "10.69.179.32/28",
+    "10.69.179.80/28",
+    "10.69.179.144/28",
+    "10.69.179.224/28"
+   ],
+   "IPv4Neighbor": [
+    {
+     "SwitchRelation": "SwitchUplink",
+     "Description": "To_Border1",
+     "NeighborAsn": 64846,
+     "NeighborIPAddress": "10.71.85.5",
+     "PrefixList": [
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "in"
+      },
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "out"
+      }
+     ],
+     "RemovePrivateAS": true,
+     "Shutdown": false
+    },
+    {
+     "SwitchRelation": "SwitchUplink",
+     "Description": "To_Border2",
+     "NeighborAsn": 64846,
+     "NeighborIPAddress": "10.71.85.13",
+     "PrefixList": [
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "in"
+      },
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "out"
+      }
+     ],
+     "RemovePrivateAS": true,
+     "Shutdown": false
+    },
+    {
+     "SwitchRelation": "SwitchPeer",
+     "Description": "To_TOR1",
+     "NeighborAsn": 65243,
+     "NeighborIPAddress": "10.71.85.17",
+     "PrefixList": [],
+     "Shutdown": false,
+     "NbrPassword": "zf7!*Epjp7Y4\u0026jQj"
+    },
+    {
+     "SwitchRelation": "SwitchDownlink",
+     "Description": "To_MUX",
+     "NeighborAsn": 64630,
+     "NeighborIPAddress": "10.71.131.0/25",
+     "PrefixList": [
+      {
+       "Name": "DefaultRoute",
+       "Direction": "out"
+      }
+     ],
+     "Shutdown": false,
+     "UpdateSource": "Loopback0",
+     "LocalAS": "64512",
+     "EBGPMultiHop": 3
+    }
+   ]
+  },
+  "PrefixList": [
+   {
+    "Name": "ExternalPrefix",
+    "Config": [
+     {
+      "Idx": 1,
+      "Action": "deny",
+      "Description": "Storage",
+      "Network": "10.71.1.0/24",
+      "Operation": "le",
+      "Prefix": 32
+     },
+     {
+      "Idx": 1,
+      "Action": "deny",
+      "Description": "Storage",
+      "Network": "10.71.2.0/24",
+      "Operation": "le",
+      "Prefix": 32
+     },
+     {
+      "Idx": 2,
+      "Action": "deny",
+      "Description": "Tenant",
+      "Network": "10.69.177.0/24",
+      "Operation": "le",
+      "Prefix": 32
+     },
+     {
+      "Idx": 2,
+      "Action": "deny",
+      "Description": "Tenant",
+      "Network": "10.69.178.0/25",
+      "Operation": "le",
+      "Prefix": 32
+     },
+     {
+      "Idx": 2,
+      "Action": "deny",
+      "Description": "Tenant",
+      "Network": "10.69.178.128/25",
+      "Operation": "le",
+      "Prefix": 32
+     },
+     {
+      "Idx": 3,
+      "Action": "permit",
+      "Description": "Any",
+      "Network": "0.0.0.0/0",
+      "Operation": "le",
+      "Prefix": 32
+     }
+    ]
+   },
+   {
+    "Name": "DefaultRoute",
+    "Config": [
+     {
+      "Idx": 1,
+      "Action": "permit",
+      "Description": "Any",
+      "Network": "0.0.0.0/0",
+      "Operation": "",
+      "Prefix": 0
+     },
+     {
+      "Idx": 2,
+      "Action": "deny",
+      "Description": "Any",
+      "Network": "0.0.0.0/0",
+      "Operation": "le",
+      "Prefix": 32
+     }
+    ]
+   }
+  ]
+ }
 }

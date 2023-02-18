@@ -1,0 +1,18 @@
+{{ define "vpc"}}
+! vpc.go.tmpl-vpc
+{{if eq .Switch.Type "TOR1"}}
+vpc domain 1
+  role priority 1
+  peer-keepalive destination {{.L3Interfaces.P2P_IBGP.NbrIPAddress}} source {{.L3Interfaces.P2P_IBGP.IPAddress}} vrf default
+  delay restore 150
+  peer-gateway
+  auto-recovery
+{{else if eq .Switch.Type "TOR2"}}
+vpc domain 1
+  role priority 2
+  peer-keepalive destination {{.L3Interfaces.P2P_IBGP.NbrIPAddress}} source {{.L3Interfaces.P2P_IBGP.IPAddress}} vrf default
+  delay restore 150
+  peer-gateway
+  auto-recovery
+{{ end -}}
+{{ end -}}

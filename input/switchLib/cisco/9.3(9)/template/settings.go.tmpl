@@ -50,6 +50,12 @@ rmon event 4 description WARNING(4) owner PMON@WARNING
 rmon event 5 description INFORMATION(5) owner PMON@INFO
 {{ end }}
 
+{{ define "set_dhcp"}}
+! settings.go.tmpl-set_dhcp
+service dhcp
+ip dhcp relay
+{{ end }}
+
 {{ define "set_snmp"}}
 ! settings.go.tmpl-set_snmp
 snmp-server globalEnforcePriv
@@ -64,4 +70,14 @@ line vty
   exec-timeout 10
   access-class ssh-only in
   session-limit 3
+{{ end }}
+
+{{ define "set_load_sharing"}}
+! settings.go.tmpl-set_load_sharing
+ip load-sharing address source-destination port source-destination
+{{ end }}
+
+{{ define "set_icmp_errors"}}
+! settings.go.tmpl-set_icmp_errors
+ip icmp-errors source-interface {{.OOB}}
 {{ end }}

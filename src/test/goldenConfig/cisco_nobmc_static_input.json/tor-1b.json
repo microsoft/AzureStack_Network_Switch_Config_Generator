@@ -17,16 +17,7 @@
    "Firmware": "9.3(9)"
   }
  ],
- "SwitchBMC": [
-  {
-   "Make": "Cisco",
-   "Model": "9348GC-FXP",
-   "Type": "BMC",
-   "Hostname": "bmc-1",
-   "ASN": 0,
-   "Firmware": "9.3(9)"
-  }
- ],
+ "SwitchBMC": null,
  "SwitchUplink": [
   {
    "Make": "Cisco",
@@ -416,16 +407,6 @@
    "IPAddress": "10.71.85.18/30",
    "PortChannelID": "50",
    "VPC": "",
-   "Shutdown": false
-  },
-  "TOR_BMC": {
-   "Description": "TOR_BMC",
-   "Function": "TOR_BMC",
-   "UntagVlan": 0,
-   "TagVlans": 125,
-   "IPAddress": "",
-   "PortChannelID": "102",
-   "VPC": "102",
    "Shutdown": false
   }
  },
@@ -1210,18 +1191,14 @@
    "Port": "1/45",
    "Idx": 45,
    "Type": "Ethernet",
-   "Description": "TOR_BMC",
-   "Function": "TOR_BMC",
-   "UntagVlan": 0,
-   "TagVlans": [
-    125
-   ],
+   "Description": "Unused",
+   "Function": "Unused",
+   "UntagVlan": 2,
+   "TagVlans": null,
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": {
-    "ChannelGroup": "102"
-   }
+   "Shutdown": true,
+   "Others": null
   },
   {
    "Port": "1/46",
@@ -1362,10 +1339,133 @@
  ],
  "Routing": {
   "BGP": {
-   "BGPAsn": 0,
-   "RouterID": "",
-   "IPv4Network": null,
-   "IPv4Neighbor": null
-  }
+   "BGPAsn": 65243,
+   "RouterID": "10.71.85.21",
+   "IPv4Network": [
+    "10.71.85.4/30",
+    "10.71.85.12/30",
+    "10.71.85.16/30",
+    "10.71.85.21/32",
+    "10.71.85.64/26",
+    "10.71.131.0/25",
+    "10.69.176.0/24",
+    "10.69.177.0/24",
+    "10.69.178.0/25",
+    "10.69.178.128/25",
+    "10.69.179.96/28",
+    "10.69.179.144/28",
+    "10.69.179.176/28",
+    "10.69.179.208/28",
+    "10.69.179.224/28",
+    "10.69.179.0/28",
+    "10.69.179.48/28",
+    "10.69.179.64/28",
+    "10.69.179.192/28",
+    "10.69.179.16/28",
+    "10.69.179.32/28",
+    "10.69.179.80/28",
+    "10.69.179.112/28",
+    "10.69.179.128/28",
+    "10.69.179.160/28",
+    "10.69.179.240/28"
+   ],
+   "RouteMap": [
+    {
+     "Name": "IPv4-DEFAULT",
+     "Action": "permit",
+     "Seq": 10,
+     "Rules": [
+      {
+       "PrefixList": "IPv4-DEFAULT"
+      }
+     ]
+    }
+   ],
+   "IPv4Neighbor": [
+    {
+     "SwitchRelation": "SwitchPeer",
+     "Description": "To_TOR1",
+     "NeighborAsn": 65243,
+     "NeighborIPAddress": "10.71.85.17",
+     "PrefixList": [],
+     "Shutdown": false,
+     "NbrPassword": "zf7!*Epjp7Y4\u0026jQj"
+    },
+    {
+     "SwitchRelation": "SwitchDownlink",
+     "Description": "To_MUX",
+     "NeighborAsn": 64630,
+     "NeighborIPAddress": "10.71.131.0/25",
+     "PrefixList": [
+      {
+       "Name": "DefaultRoute",
+       "Direction": "out"
+      }
+     ],
+     "Shutdown": false,
+     "UpdateSource": "Loopback0",
+     "LocalAS": "64512",
+     "EBGPMultiHop": 3
+    }
+   ]
+  },
+  "Static": [
+   {
+    "Network": "10.71.1.0/24",
+    "NextHop": "null 0",
+    "Name": "Storage_711"
+   },
+   {
+    "Network": "10.71.2.0/24",
+    "NextHop": "null 0",
+    "Name": "Storage_712"
+   },
+   {
+    "Network": "0.0.0.0/0",
+    "NextHop": "10.71.85.6",
+    "Name": "P2P_Border1_TOR2"
+   },
+   {
+    "Network": "0.0.0.0/0",
+    "NextHop": "10.71.85.14",
+    "Name": "P2P_Border2_TOR2"
+   }
+  ],
+  "PrefixList": [
+   {
+    "Name": "IPv4-DEFAULT",
+    "Config": [
+     {
+      "Idx": 1,
+      "Action": "permit",
+      "Description": "Any",
+      "Network": "0.0.0.0/0",
+      "Operation": "",
+      "Prefix": 0
+     }
+    ]
+   },
+   {
+    "Name": "DefaultRoute",
+    "Config": [
+     {
+      "Idx": 1,
+      "Action": "permit",
+      "Description": "Any",
+      "Network": "0.0.0.0/0",
+      "Operation": "",
+      "Prefix": 0
+     },
+     {
+      "Idx": 2,
+      "Action": "deny",
+      "Description": "Any",
+      "Network": "0.0.0.0/0",
+      "Operation": "le",
+      "Prefix": 32
+     }
+    ]
+   }
+  ]
  }
 }

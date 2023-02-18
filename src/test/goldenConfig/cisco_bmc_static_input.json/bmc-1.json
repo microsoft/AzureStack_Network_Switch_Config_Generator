@@ -7,6 +7,8 @@
   "ASN": 0,
   "Firmware": "9.3(9)"
  },
+ "SwitchPeer": null,
+ "SwitchBMC": null,
  "SwitchUplink": [
   {
    "Make": "Cisco",
@@ -25,6 +27,7 @@
    "Firmware": ""
   }
  ],
+ "SwitchDownlink": null,
  "GlobalSetting": {
   "Username": "azureadmin-vlzxb",
   "Password": "c2!cuh%xMC8*aRt9",
@@ -54,6 +57,8 @@
    "Shutdown": false
   }
  ],
+ "L3Interfaces": {},
+ "PortChannel": {},
  "Ports": [
   {
    "Port": "1/1",

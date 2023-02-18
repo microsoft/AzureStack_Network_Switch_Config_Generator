@@ -4,14 +4,23 @@
 {{ template "stig_feature" . -}}
 {{ template "qos" . -}}
 {{ template "define_vlan" .Vlans -}}
-{{ template "interface_vlan" .Vlans -}}
-{{ template "portchannel" .PortChannel -}}
+{{ template "interface_vlan" . -}}
+{{ template "stp" .Switch -}}
+{{ template "vpc" . -}}
+{{if .PortChannel}}{{ template "portchannel" .PortChannel -}}{{ end -}}
 {{ template "port" .Ports -}}
+{{ template "loopback" .L3Interfaces -}}
 {{ template "set_snmp" -}}
 {{ template "set_errdisable_setting" -}}
 {{ template "set_rmon" -}}
+{{ template "set_dhcp" -}}
 {{ template "set_console_vty" -}}
 {{ template "set_ntp" .GlobalSetting -}}
 {{ template "set_syslog" .GlobalSetting -}}
+{{ template "set_load_sharing" -}}
+{{ template "set_icmp_errors" .GlobalSetting -}}
+{{if .Routing.PrefixList}}{{ template "prefixlist" .Routing.PrefixList -}} {{ end -}}
+{{ template "bgp" .Routing.BGP -}}
+{{if .Routing.Static}}{{ template "static" .Routing.Static -}} {{ end -}}
 {{- /* {{ template "define_vlan" .Vlans -}}
 {{ template "interface_vlan" .Vlans -}} */ -}}
