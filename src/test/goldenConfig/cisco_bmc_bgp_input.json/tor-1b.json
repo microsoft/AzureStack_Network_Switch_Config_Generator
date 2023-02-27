@@ -74,7 +74,7 @@
   {
    "VlanName": "BMC_Mgmt_125",
    "VlanID": 125,
-   "GroupID": "BMC",
+   "GroupName": "BMC",
    "IPAddress": "",
    "Cidr": 26,
    "Subnet": "10.71.85.64/26",
@@ -86,7 +86,7 @@
   {
    "VlanName": "HNVPA_6",
    "VlanID": 6,
-   "GroupID": "HNVPA",
+   "GroupName": "HNVPA",
    "IPAddress": "10.71.131.3",
    "Cidr": 25,
    "Subnet": "10.71.131.0/25",
@@ -98,7 +98,7 @@
   {
    "VlanName": "Infra_7",
    "VlanID": 7,
-   "GroupID": "Infrastructure",
+   "GroupName": "Infrastructure",
    "IPAddress": "10.69.176.3",
    "Cidr": 24,
    "Subnet": "10.69.176.0/24",
@@ -110,7 +110,7 @@
   {
    "VlanName": "Tenant_201",
    "VlanID": 201,
-   "GroupID": "Tenant",
+   "GroupName": "Tenant",
    "IPAddress": "10.69.177.3",
    "Cidr": 24,
    "Subnet": "10.69.177.0/24",
@@ -122,7 +122,7 @@
   {
    "VlanName": "LogicalTenant_301",
    "VlanID": 301,
-   "GroupID": "Tenant",
+   "GroupName": "Tenant",
    "IPAddress": "10.69.178.3",
    "Cidr": 25,
    "Subnet": "10.69.178.0/25",
@@ -134,7 +134,7 @@
   {
    "VlanName": "DhcpTenant_401",
    "VlanID": 401,
-   "GroupID": "Tenant",
+   "GroupName": "Tenant",
    "IPAddress": "10.69.178.131",
    "Cidr": 25,
    "Subnet": "10.69.178.128/25",
@@ -146,7 +146,7 @@
   {
    "VlanName": "L3Forward_501",
    "VlanID": 501,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.3",
    "Cidr": 28,
    "Subnet": "10.69.179.0/28",
@@ -158,7 +158,7 @@
   {
    "VlanName": "L3Forward_502",
    "VlanID": 502,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.19",
    "Cidr": 28,
    "Subnet": "10.69.179.16/28",
@@ -170,7 +170,7 @@
   {
    "VlanName": "L3Forward_503",
    "VlanID": 503,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.35",
    "Cidr": 28,
    "Subnet": "10.69.179.32/28",
@@ -182,7 +182,7 @@
   {
    "VlanName": "L3Forward_504",
    "VlanID": 504,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.51",
    "Cidr": 28,
    "Subnet": "10.69.179.48/28",
@@ -194,7 +194,7 @@
   {
    "VlanName": "L3Forward_505",
    "VlanID": 505,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.67",
    "Cidr": 28,
    "Subnet": "10.69.179.64/28",
@@ -206,7 +206,7 @@
   {
    "VlanName": "L3Forward_506",
    "VlanID": 506,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.83",
    "Cidr": 28,
    "Subnet": "10.69.179.80/28",
@@ -218,7 +218,7 @@
   {
    "VlanName": "L3Forward_507",
    "VlanID": 507,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.99",
    "Cidr": 28,
    "Subnet": "10.69.179.96/28",
@@ -230,7 +230,7 @@
   {
    "VlanName": "L3Forward_508",
    "VlanID": 508,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.115",
    "Cidr": 28,
    "Subnet": "10.69.179.112/28",
@@ -242,7 +242,7 @@
   {
    "VlanName": "L3Forward_509",
    "VlanID": 509,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.131",
    "Cidr": 28,
    "Subnet": "10.69.179.128/28",
@@ -254,7 +254,7 @@
   {
    "VlanName": "L3Forward_510",
    "VlanID": 510,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.147",
    "Cidr": 28,
    "Subnet": "10.69.179.144/28",
@@ -266,7 +266,7 @@
   {
    "VlanName": "L3Forward_511",
    "VlanID": 511,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.163",
    "Cidr": 28,
    "Subnet": "10.69.179.160/28",
@@ -278,7 +278,7 @@
   {
    "VlanName": "L3Forward_512",
    "VlanID": 512,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.179",
    "Cidr": 28,
    "Subnet": "10.69.179.176/28",
@@ -290,7 +290,7 @@
   {
    "VlanName": "L3Forward_513",
    "VlanID": 513,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.195",
    "Cidr": 28,
    "Subnet": "10.69.179.192/28",
@@ -302,7 +302,7 @@
   {
    "VlanName": "L3Forward_514",
    "VlanID": 514,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.211",
    "Cidr": 28,
    "Subnet": "10.69.179.208/28",
@@ -314,7 +314,7 @@
   {
    "VlanName": "L3Forward_515",
    "VlanID": 515,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.227",
    "Cidr": 28,
    "Subnet": "10.69.179.224/28",
@@ -326,7 +326,7 @@
   {
    "VlanName": "L3Forward_516",
    "VlanID": 516,
-   "GroupID": "L3Forward",
+   "GroupName": "L3Forward",
    "IPAddress": "10.69.179.243",
    "Cidr": 28,
    "Subnet": "10.69.179.240/28",
@@ -338,7 +338,7 @@
   {
    "VlanName": "Storage_711",
    "VlanID": 711,
-   "GroupID": "Storage",
+   "GroupName": "Storage",
    "IPAddress": "",
    "Cidr": 24,
    "Subnet": "10.71.1.0/24",
@@ -350,7 +350,7 @@
   {
    "VlanName": "Storage_712",
    "VlanID": 712,
-   "GroupID": "Storage",
+   "GroupName": "Storage",
    "IPAddress": "",
    "Cidr": 24,
    "Subnet": "10.71.2.0/24",
@@ -362,7 +362,8 @@
  ],
  "L3Interfaces": {
   "Loopback0_TOR2": {
-   "Function": "Loopback0_TOR2",
+   "Function": "Loopback0",
+   "Description": "Loopback0_TOR2",
    "IPAddress": "10.71.85.21",
    "Cidr": 32,
    "Subnet": "10.71.85.21/32",
@@ -370,7 +371,8 @@
    "Shutdown": false
   },
   "P2P_Border1_TOR2": {
-   "Function": "P2P_Border1_TOR2",
+   "Function": "P2P_Border",
+   "Description": "P2P_Border1_TOR2",
    "IPAddress": "10.71.85.6",
    "Cidr": 30,
    "NbrIPAddress": "10.71.85.5",
@@ -379,7 +381,8 @@
    "Shutdown": false
   },
   "P2P_Border2_TOR2": {
-   "Function": "P2P_Border2_TOR2",
+   "Function": "P2P_Border",
+   "Description": "P2P_Border2_TOR2",
    "IPAddress": "10.71.85.14",
    "Cidr": 30,
    "NbrIPAddress": "10.71.85.13",
@@ -389,6 +392,7 @@
   },
   "P2P_IBGP": {
    "Function": "P2P_IBGP",
+   "Description": "P2P_IBGP",
    "IPAddress": "10.71.85.18",
    "Cidr": 30,
    "NbrIPAddress": "10.71.85.17",

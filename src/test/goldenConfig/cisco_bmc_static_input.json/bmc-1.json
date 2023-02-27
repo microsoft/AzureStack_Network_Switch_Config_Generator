@@ -7,8 +7,6 @@
   "ASN": 0,
   "Firmware": "9.3(9)"
  },
- "SwitchPeer": null,
- "SwitchBMC": null,
  "SwitchUplink": [
   {
    "Make": "Cisco",
@@ -27,7 +25,6 @@
    "Firmware": ""
   }
  ],
- "SwitchDownlink": null,
  "GlobalSetting": {
   "Username": "azureadmin-vlzxb",
   "Password": "c2!cuh%xMC8*aRt9",
@@ -47,7 +44,7 @@
   {
    "VlanName": "BMC_Mgmt_125",
    "VlanID": 125,
-   "GroupID": "BMC",
+   "GroupName": "BMC",
    "IPAddress": "10.71.85.125",
    "Cidr": 26,
    "Subnet": "10.71.85.64/26",
@@ -57,8 +54,6 @@
    "Shutdown": false
   }
  ],
- "L3Interfaces": {},
- "PortChannel": {},
  "Ports": [
   {
    "Port": "1/1",

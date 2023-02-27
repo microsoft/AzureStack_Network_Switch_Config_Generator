@@ -44,7 +44,7 @@
   {
    "VlanName": "BMC_Mgmt_125",
    "VlanID": 125,
-   "GroupID": "BMC",
+   "GroupName": "BMC",
    "IPAddress": "10.71.85.125",
    "Cidr": 26,
    "Subnet": "10.71.85.64/26",

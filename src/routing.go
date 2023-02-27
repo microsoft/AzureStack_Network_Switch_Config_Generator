@@ -163,7 +163,7 @@ func (o *OutputType) getSubnetByVlanGroupID(groupID string) map[string]string {
 		sunbetMap = map[string]string{ANY: ANYNETWORK}
 	} else {
 		for _, vlanItem := range o.Vlans {
-			if vlanItem.GroupID == groupID {
+			if vlanItem.GroupName == groupID {
 				sunbetMap[vlanItem.VlanName] = vlanItem.Subnet
 			}
 		}
@@ -177,7 +177,7 @@ func (o *OutputType) getVIPByVlanGroupID(groupID string) map[string]string {
 		sunbetMap = map[string]string{ANY: ANYNETWORK}
 	} else {
 		for _, vlanItem := range o.Vlans {
-			if vlanItem.GroupID == groupID {
+			if vlanItem.GroupName == groupID {
 				sunbetMap[vlanItem.VlanName] = vlanItem.VIPAddress
 			}
 		}

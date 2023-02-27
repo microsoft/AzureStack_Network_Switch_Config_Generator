@@ -13,12 +13,12 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 			vlanItem := VlanType{}
 			l3IntfItem := L3IntfType{}
 			if supernet.IPv4.VlanID != 0 {
-				if strings.Contains(supernet.GroupID, BMC) {
+				if strings.Contains(supernet.GroupName, BMC) {
 					BMC_VlanID = supernet.IPv4.VlanID
-				} else if strings.Contains(supernet.GroupID, Infra_GroupID) {
+				} else if strings.Contains(supernet.GroupName, Infra_GroupID) {
 					Infra_VlanID = supernet.IPv4.VlanID
 				}
-				vlanItem.GroupID = supernet.GroupID
+				vlanItem.GroupName = supernet.GroupName
 				vlanItem.VlanName = supernet.IPv4.Name
 				vlanItem.VlanID = supernet.IPv4.VlanID
 				vlanItem.Cidr = supernet.IPv4.Cidr
@@ -74,10 +74,10 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 		// BMC Switch only have Unused and BMC Vlan (no VIP)
 		for _, supernet := range inputData.Supernets {
 			vlanItem := VlanType{}
-			if supernet.GroupID == UNUSED || supernet.GroupID == BMC {
+			if supernet.GroupName == UNUSED || supernet.GroupName == BMC {
 				vlanItem.VlanName = supernet.IPv4.Name
 				vlanItem.VlanID = supernet.IPv4.VlanID
-				vlanItem.GroupID = supernet.GroupID
+				vlanItem.GroupName = supernet.GroupName
 				vlanItem.Mtu = DefaultMTU
 				if supernet.Shutdown {
 					vlanItem.Shutdown = true
