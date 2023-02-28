@@ -21,6 +21,7 @@ interface {{ .Type}} {{ .Port }}
   switchport
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}
+  switchport trunk allowed vlan {{ .UntagVlan }}
   {{ range .TagVlans -}}
   switchport trunk allowed vlan add {{ . }}
   {{end -}}
@@ -30,9 +31,11 @@ interface {{ .Type}} {{ .Port }}
   switchport
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}
+  switchport trunk allowed vlan {{ .UntagVlan }}
   {{ range .TagVlans -}}
   switchport trunk allowed vlan add {{ . }}
   {{end -}}
+  switchport trunk allowed vlan remove {{ .UntagVlan }}
   priority-flow-control mode on
   spanning-tree port type edge trunk
   no logging event port link-status
@@ -52,15 +55,17 @@ interface {{ .Type}} {{ .Port }}
   switchport
   switchport mode trunk
   {{ range .TagVlans -}}
-  switchport trunk allowed vlan add {{ . }}
+  switchport trunk allowed vlan {{ . }}
   {{end -}}
   logging event port link-status
   channel-group {{ .Others.ChannelGroup }} mode active
   {{else if eq .Function "P2P_Border1" -}}
+  no switchport
   no ip redirects
   ip address {{ .IPAddress }}
   no ipv6 redirects
   {{else if eq .Function "P2P_Border2" -}}
+  no switchport
   no ip redirects
   ip address {{ .IPAddress }}
   no ipv6 redirects
