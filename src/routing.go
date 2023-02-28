@@ -9,7 +9,7 @@ import (
 )
 
 func (o *OutputType) ParseRouting(frameworkFolder string, inputData InputData) {
-	if o.Switch.Type == TOR {
+	if strings.Contains(strings.ToUpper(o.Switch.Type), TOR) {
 		if strings.ToUpper(inputData.SwitchUplink) == BGP {
 			routingJsonPath := fmt.Sprintf("%s/%s.json", frameworkFolder, strings.ToLower(BGP))
 			routingJsonObj := parseRoutingJson(routingJsonPath)
@@ -22,7 +22,7 @@ func (o *OutputType) ParseRouting(frameworkFolder string, inputData InputData) {
 			o.ParsePrefixList(routingJsonObj.PrefixList)
 			o.ParseStatic(routingJsonObj.Static)
 		}
-	} else if o.Switch.Type == BMC {
+	} else if strings.Contains(strings.ToUpper(o.Switch.Type), BMC) {
 		routingJsonPath := fmt.Sprintf("%s/%s.json", frameworkFolder, strings.ToLower(STATIC))
 		routingJsonObj := parseRoutingJson(routingJsonPath)
 		o.ParseStatic(routingJsonObj.Static)
@@ -163,7 +163,7 @@ func (o *OutputType) getSubnetByVlanGroupID(groupID string) map[string]string {
 		sunbetMap = map[string]string{ANY: ANYNETWORK}
 	} else {
 		for _, vlanItem := range o.Vlans {
-			if vlanItem.GroupID == groupID {
+			if vlanItem.GroupName == groupID {
 				sunbetMap[vlanItem.VlanName] = vlanItem.Subnet
 			}
 		}
@@ -177,7 +177,7 @@ func (o *OutputType) getVIPByVlanGroupID(groupID string) map[string]string {
 		sunbetMap = map[string]string{ANY: ANYNETWORK}
 	} else {
 		for _, vlanItem := range o.Vlans {
-			if vlanItem.GroupID == groupID {
+			if vlanItem.GroupName == groupID {
 				sunbetMap[vlanItem.VlanName] = vlanItem.VIPAddress
 			}
 		}

@@ -17,7 +17,7 @@ func (o *OutputType) UpdateGlobalSetting(inputData InputData) {
 	// 	o.GlobalSetting.OOB = fmt.Sprintf("vlan%d", o.Vlans[BMC][0].VlanID)
 	// }
 	for _, v := range o.Vlans {
-		if v.GroupID == BMC {
+		if v.GroupName == BMC {
 			o.GlobalSetting.OOB = fmt.Sprintf("vlan%d", v.VlanID)
 			break
 		}

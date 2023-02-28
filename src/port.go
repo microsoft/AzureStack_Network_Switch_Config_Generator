@@ -72,13 +72,13 @@ func (o *OutputType) UpdateSwitchPorts(VlanGroup map[string][]string) {
 
 	for _, vlanItem := range o.Vlans {
 		for _, key := range VlanGroup[STORAGE] {
-			if strings.Contains(vlanItem.GroupID, key) {
-				STORAGE_VlanMap[vlanItem.VlanID] = vlanItem.GroupID
+			if strings.Contains(vlanItem.GroupName, key) {
+				STORAGE_VlanMap[vlanItem.VlanID] = vlanItem.GroupName
 			}
 		}
 		for _, key := range VlanGroup[COMPUTE] {
-			if strings.Contains(vlanItem.GroupID, key) {
-				COMPUTE_VlanMap[vlanItem.VlanID] = vlanItem.GroupID
+			if strings.Contains(vlanItem.GroupName, key) {
+				COMPUTE_VlanMap[vlanItem.VlanID] = vlanItem.GroupName
 			}
 		}
 	}

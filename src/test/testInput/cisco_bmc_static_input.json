@@ -130,10 +130,10 @@
         "HostConnectivity": "BGP",
         "Supernets": [
             {
-                "GroupID": "P2P_Border1_TOR1",
+                "GroupName": "P2P_Border",
                 "Name": "P2P_Border1_TOR1",
                 "VlanId": 0,
-                "Description": "Uplink to Boarder1, GroupID naming convention P2P_{$Type}_{$Type}",
+                "Description": "Uplink to Border1",
                 "IPv4": {
                     "Name": "P2P_Border1_TOR1",
                     "VlanId": 0,
@@ -165,10 +165,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "P2P_Border1_TOR2",
+                "GroupName": "P2P_Border",
                 "Name": "P2P_Border1_TOR2",
                 "VlanId": 0,
-                "Description": "Uplink to Boarder2, GroupID naming convention P2P_{$Type}_{$Type}",
+                "Description": "Uplink to Boarder2",
                 "IPv4": {
                     "Name": "P2P_Border1_TOR2",
                     "VlanId": 0,
@@ -200,10 +200,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "P2P_Border2_TOR1",
+                "GroupName": "P2P_Border",
                 "Name": "P2P_Border2_TOR1",
                 "VlanId": 0,
-                "Description": "Uplink to Boarder1, GroupID naming convention P2P_{$Type}_{$Type}",
+                "Description": "Uplink to Border2",
                 "IPv4": {
                     "Name": "P2P_Border2_TOR1",
                     "VlanId": 0,
@@ -235,10 +235,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "P2P_Border2_TOR2",
+                "GroupName": "P2P_Border",
                 "Name": "P2P_Border2_TOR2",
                 "VlanId": 0,
-                "Description": "Uplink to Boarder2, GroupID naming convention P2P_{$Type}_{$Type}",
+                "Description": "Uplink to Border2",
                 "IPv4": {
                     "Name": "P2P_Border2_TOR2",
                     "VlanId": 0,
@@ -270,16 +270,16 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "P2P_TOR1_TOR2",
+                "GroupName": "P2P_IBGP",
                 "Name": "P2P_IBGP",
                 "VlanId": 0,
-                "Description": "IBGP Link, GroupID naming convention P2P_{$Type}_{$Type}",
+                "Description": "IBGP Peer Link",
                 "IPv4": {
                     "Name": "P2P_IBGP",
                     "VlanId": 0,
                     "Cidr": 30,
                     "TORGroup": "",
-                    "NetworkType": "P2P_Border",
+                    "NetworkType": "P2P_IBGP",
                     "Subnet": "10.71.85.16/30",
                     "Network": "10.71.85.16",
                     "Netmask": "255.255.255.252",
@@ -305,7 +305,7 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "Loopback0",
+                "GroupName": "Loopback0",
                 "Name": "Loopback0_TOR1",
                 "VlanId": 0,
                 "Description": "Switch Loopback assignment",
@@ -332,7 +332,7 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "Loopback0",
+                "GroupName": "Loopback0",
                 "Name": "Loopback0_TOR2",
                 "VlanId": 0,
                 "Description": "Switch Loopback assignment",
@@ -359,10 +359,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "BMC",
+                "GroupName": "BMC",
                 "Name": "BMC_Mgmt_125",
                 "VLANID": 125,
-                "Description": "BMC Network. GroupID is unique key.",
+                "Description": "BMC Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "BMC_Mgmt_125",
@@ -523,10 +523,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "HNVPA",
+                "GroupName": "HNVPA",
                 "Name": "HNVPA_6",
                 "VLANID": 6,
-                "Description": "HNVPA Network. GroupID is unique key.",
+                "Description": "HNVPA Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "HNVPA_6",
@@ -589,10 +589,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "Infrastructure",
+                "GroupName": "Infrastructure",
                 "Name": "Infra_7",
                 "VLANID": 7,
-                "Description": "Infrastructure Network. GroupID is unique key.",
+                "Description": "Infrastructure Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "Infra_7",
@@ -719,10 +719,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "Tenant",
+                "GroupName": "Tenant",
                 "Name": "Tenant_201",
                 "VLANID": 201,
-                "Description": "Tenant Network. GroupID is unique key.",
+                "Description": "Tenant Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "Tenant_201",
@@ -785,10 +785,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "Tenant",
+                "GroupName": "Tenant",
                 "Name": "LogicalTenant_301",
                 "VLANID": 301,
-                "Description": "Tenant Network. GroupID is unique key.",
+                "Description": "Tenant Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "LogicalTenant_301",
@@ -851,10 +851,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "Tenant",
+                "GroupName": "Tenant",
                 "Name": "DhcpTenant_401",
                 "VLANID": 401,
-                "Description": "Tenant Network. GroupID is unique key.",
+                "Description": "Tenant Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "DhcpTenant_401",
@@ -891,10 +891,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_501",
                 "VLANID": 501,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_501",
@@ -931,10 +931,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_502",
                 "VLANID": 502,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_502",
@@ -971,10 +971,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_503",
                 "VLANID": 503,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_503",
@@ -1011,10 +1011,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_504",
                 "VLANID": 504,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_504",
@@ -1051,10 +1051,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_505",
                 "VLANID": 505,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_505",
@@ -1091,10 +1091,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_506",
                 "VLANID": 506,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_506",
@@ -1131,10 +1131,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_507",
                 "VLANID": 507,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_507",
@@ -1171,10 +1171,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_508",
                 "VLANID": 508,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_508",
@@ -1211,10 +1211,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_509",
                 "VLANID": 509,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_509",
@@ -1251,10 +1251,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_510",
                 "VLANID": 510,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_510",
@@ -1291,10 +1291,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_511",
                 "VLANID": 511,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_511",
@@ -1331,10 +1331,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_512",
                 "VLANID": 512,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_512",
@@ -1371,10 +1371,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_513",
                 "VLANID": 513,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_513",
@@ -1411,10 +1411,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_514",
                 "VLANID": 514,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_514",
@@ -1451,10 +1451,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_515",
                 "VLANID": 515,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_515",
@@ -1491,10 +1491,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "L3Forward",
+                "GroupName": "L3Forward",
                 "Name": "L3Forward_516",
                 "VLANID": 516,
-                "Description": "L3Forward Network. GroupID is unique key.",
+                "Description": "L3Forward Network. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": true,
                     "Name": "L3Forward_516",
@@ -1531,10 +1531,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "ExternalIP",
+                "GroupName": "ExternalIP",
                 "Name": "PublicVIP",
                 "VLANID": 0,
-                "Description": "ExternalIP Network, no config on switch. GroupID is unique key.",
+                "Description": "ExternalIP Network, no config on switch. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Name": "PublicVIP",
@@ -1581,10 +1581,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "ExternalIP",
+                "GroupName": "ExternalIP",
                 "Name": "GRE",
                 "VLANID": 0,
-                "Description": "ExternalIP Network, no config on switch. GroupID is unique key.",
+                "Description": "ExternalIP Network, no config on switch. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Name": "GRE",
@@ -1631,10 +1631,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "Storage",
+                "GroupName": "Storage",
                 "Name": "Storage_711",
                 "VLANID": 711,
-                "Description": "Storage Network, no config on switch. GroupID is unique key.",
+                "Description": "Storage Network, no config on switch. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Name": "Storage_711",
@@ -1659,10 +1659,10 @@
                 "IPv6": {}
             },
             {
-                "GroupID": "Storage",
+                "GroupName": "Storage",
                 "Name": "Storage_712",
                 "VLANID": 712,
-                "Description": "Storage Network, no config on switch. GroupID is unique key.",
+                "Description": "Storage Network, no config on switch. GroupName is unique key.",
                 "IPv4": {
                     "SwitchSVI": false,
                     "Name": "Storage_712",

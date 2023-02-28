@@ -23,16 +23,16 @@ func TestMain(t *testing.T) {
 		inputTestFileName string
 	}
 	testCases := map[string]test{
-		"cisco_bgp_nobmc": {
+		"cisco_nobmc_bgp": {
 			inputTestFileName: "cisco_nobmc_bgp_input.json",
 		},
-		"cisco_bgp_bmc": {
+		"cisco_bmc_bgp": {
 			inputTestFileName: "cisco_bmc_bgp_input.json",
 		},
-		"cisco_static_nobmc": {
+		"cisco_nobmc_static": {
 			inputTestFileName: "cisco_nobmc_static_input.json",
 		},
-		"cisco_static_bmc": {
+		"cisco_bmc_static": {
 			inputTestFileName: "cisco_bmc_static_input.json",
 		},
 	}
@@ -49,10 +49,16 @@ func TestMain(t *testing.T) {
 					goldenConfigObj := parseOutputJson(testGoldenFolder + relativePath)
 					testOutputObj := parseOutputJson(testOutputFolder + relativePath)
 					if !reflect.DeepEqual(goldenConfigObj.Vlans, testOutputObj.Vlans) {
-						t.Errorf("name: %s vlan failed \n want: %#v \n got: %#v", name, goldenConfigObj.Vlans, testOutputObj.Vlans)
+						t.Errorf("name: %s VLAN failed \n want: %#v \n got: %#v", name, goldenConfigObj.Vlans, testOutputObj.Vlans)
 					}
 					if !reflect.DeepEqual(goldenConfigObj.Ports, testOutputObj.Ports) {
-						t.Errorf("name: %s interface failed \n want: %#v \n got: %#v", name, goldenConfigObj.Ports, testOutputObj.Ports)
+						t.Errorf("name: %s Interface failed \n want: %#v \n got: %#v", name, goldenConfigObj.Ports, testOutputObj.Ports)
+					}
+					if len(goldenConfigObj.Routing.BGP.IPv4Network) != len(testOutputObj.Routing.BGP.IPv4Network) {
+						t.Errorf("name: %s BGP routing failed \n want: %#v \n got: %#v", name, len(goldenConfigObj.Routing.BGP.IPv4Network), len(testOutputObj.Routing.BGP.IPv4Network))
+					}
+					if len(goldenConfigObj.Routing.PrefixList) != len(testOutputObj.Routing.PrefixList) {
+						t.Errorf("name: %s Routing PrefixList failed \n want: %#v \n got: %#v", name, len(goldenConfigObj.Routing.PrefixList), len(testOutputObj.Routing.PrefixList))
 					}
 				}
 			}

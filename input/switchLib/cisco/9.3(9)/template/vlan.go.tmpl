@@ -19,7 +19,7 @@ interface vlan{{.VlanID}}
   {{ else -}} 
   no shutdown
   {{ end -}}
-  ip address {{ .IPAddress }}
+  ip address {{ .IPAddress }}/{{ .Cidr }}
   no ip redirects
   no ipv6 redirects
   {{ if .VIPAddress -}}

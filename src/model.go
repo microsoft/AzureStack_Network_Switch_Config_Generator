@@ -45,7 +45,7 @@ type GlobalSettingType struct {
 type VlanType struct {
 	VlanName      string `json:"VlanName"`
 	VlanID        int    `json:"VlanID"`
-	GroupID       string `json:"GroupID"`
+	GroupName     string `json:"GroupName"`
 	IPAddress     string `json:"IPAddress"`
 	Cidr          int    `json:"Cidr"`
 	Subnet        string `json:"Subnet"`
@@ -94,7 +94,7 @@ type SwitchType struct {
 }
 
 type Supernet struct {
-	GroupID     string `json:"GroupID"`
+	GroupName   string `json:"GroupName"`
 	Description string `json:"Description"`
 	Shutdown    bool   `json:"Shutdown"`
 	IPv4        struct {
