@@ -1366,10 +1366,175 @@
  ],
  "Routing": {
   "BGP": {
-   "BGPAsn": 0,
-   "RouterID": "",
-   "IPv4Network": null,
-   "IPv4Neighbor": null
-  }
+   "BGPAsn": 65243,
+   "RouterID": "10.71.85.21",
+   "IPv4Network": [
+    "10.71.85.4/30",
+    "10.71.85.12/30",
+    "10.71.85.16/30",
+    "10.71.85.21/32",
+    "10.71.85.64/26",
+    "10.71.131.0/25",
+    "10.69.176.0/24",
+    "10.69.177.0/24",
+    "10.69.178.0/25",
+    "10.69.178.128/25",
+    "10.69.179.16/28",
+    "10.69.179.64/28",
+    "10.69.179.144/28",
+    "10.69.179.160/28",
+    "10.69.179.176/28",
+    "10.69.179.224/28",
+    "10.69.179.48/28",
+    "10.69.179.80/28",
+    "10.69.179.192/28",
+    "10.69.179.32/28",
+    "10.69.179.112/28",
+    "10.69.179.128/28",
+    "10.69.179.240/28",
+    "10.69.179.0/28",
+    "10.69.179.96/28",
+    "10.69.179.208/28"
+   ],
+   "IPv4Neighbor": [
+    {
+     "SwitchRelation": "SwitchUplink",
+     "Description": "To_Border1",
+     "NeighborAsn": 64846,
+     "NeighborIPAddress": "10.71.85.5",
+     "PrefixList": [
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "in"
+      },
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "out"
+      }
+     ],
+     "RemovePrivateAS": true,
+     "Shutdown": false
+    },
+    {
+     "SwitchRelation": "SwitchUplink",
+     "Description": "To_Border2",
+     "NeighborAsn": 64846,
+     "NeighborIPAddress": "10.71.85.13",
+     "PrefixList": [
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "in"
+      },
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "out"
+      }
+     ],
+     "RemovePrivateAS": true,
+     "Shutdown": false
+    },
+    {
+     "SwitchRelation": "SwitchPeer",
+     "Description": "To_TOR1",
+     "NeighborAsn": 65243,
+     "NeighborIPAddress": "10.71.85.17",
+     "PrefixList": [],
+     "Shutdown": false,
+     "NbrPassword": "84nTyrM8kT!ia$%y"
+    },
+    {
+     "SwitchRelation": "SwitchDownlink",
+     "Description": "To_MUX",
+     "NeighborAsn": 64630,
+     "NeighborIPAddress": "10.71.131.0/25",
+     "PrefixList": [
+      {
+       "Name": "DefaultRoute",
+       "Direction": "out"
+      }
+     ],
+     "Shutdown": false,
+     "UpdateSource": "Loopback0",
+     "LocalAS": "64512",
+     "EBGPMultiHop": 3
+    }
+   ]
+  },
+  "PrefixList": [
+   {
+    "Name": "ExternalPrefix",
+    "Config": [
+     {
+      "Idx": 1,
+      "Action": "deny",
+      "Description": "Storage",
+      "Network": "10.71.1.0/24",
+      "Operation": "le",
+      "Prefix": 32
+     },
+     {
+      "Idx": 1,
+      "Action": "deny",
+      "Description": "Storage",
+      "Network": "10.71.2.0/24",
+      "Operation": "le",
+      "Prefix": 32
+     },
+     {
+      "Idx": 2,
+      "Action": "deny",
+      "Description": "Tenant",
+      "Network": "10.69.177.0/24",
+      "Operation": "le",
+      "Prefix": 32
+     },
+     {
+      "Idx": 2,
+      "Action": "deny",
+      "Description": "Tenant",
+      "Network": "10.69.178.0/25",
+      "Operation": "le",
+      "Prefix": 32
+     },
+     {
+      "Idx": 2,
+      "Action": "deny",
+      "Description": "Tenant",
+      "Network": "10.69.178.128/25",
+      "Operation": "le",
+      "Prefix": 32
+     },
+     {
+      "Idx": 3,
+      "Action": "permit",
+      "Description": "Any",
+      "Network": "0.0.0.0/0",
+      "Operation": "le",
+      "Prefix": 32
+     }
+    ]
+   },
+   {
+    "Name": "DefaultRoute",
+    "Config": [
+     {
+      "Idx": 1,
+      "Action": "permit",
+      "Description": "Any",
+      "Network": "0.0.0.0/0",
+      "Operation": "",
+      "Prefix": 0
+     },
+     {
+      "Idx": 2,
+      "Action": "deny",
+      "Description": "Any",
+      "Network": "0.0.0.0/0",
+      "Operation": "le",
+      "Prefix": 32
+     }
+    ]
+   }
+  ]
  }
 }

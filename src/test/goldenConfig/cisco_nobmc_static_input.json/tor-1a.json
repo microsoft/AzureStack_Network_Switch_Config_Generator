@@ -1342,10 +1342,133 @@
  ],
  "Routing": {
   "BGP": {
-   "BGPAsn": 0,
-   "RouterID": "",
-   "IPv4Network": null,
-   "IPv4Neighbor": null
-  }
+   "BGPAsn": 65243,
+   "RouterID": "10.71.85.20",
+   "IPv4Network": [
+    "10.71.85.20/32",
+    "10.71.85.0/30",
+    "10.71.85.8/30",
+    "10.71.85.16/30",
+    "10.71.85.64/26",
+    "10.71.131.0/25",
+    "10.69.176.0/24",
+    "10.69.177.0/24",
+    "10.69.178.0/25",
+    "10.69.178.128/25",
+    "10.69.179.0/28",
+    "10.69.179.128/28",
+    "10.69.179.176/28",
+    "10.69.179.240/28",
+    "10.69.179.16/28",
+    "10.69.179.144/28",
+    "10.69.179.192/28",
+    "10.69.179.32/28",
+    "10.69.179.96/28",
+    "10.69.179.112/28",
+    "10.69.179.208/28",
+    "10.69.179.224/28",
+    "10.69.179.48/28",
+    "10.69.179.64/28",
+    "10.69.179.80/28",
+    "10.69.179.160/28"
+   ],
+   "RouteMap": [
+    {
+     "Name": "IPv4-DEFAULT",
+     "Action": "permit",
+     "Seq": 10,
+     "Rules": [
+      {
+       "PrefixList": "IPv4-DEFAULT"
+      }
+     ]
+    }
+   ],
+   "IPv4Neighbor": [
+    {
+     "SwitchRelation": "SwitchPeer",
+     "Description": "To_TOR2",
+     "NeighborAsn": 65243,
+     "NeighborIPAddress": "10.71.85.18",
+     "PrefixList": [],
+     "Shutdown": false,
+     "NbrPassword": "z$@z8\u0026ofSa8m3NbY"
+    },
+    {
+     "SwitchRelation": "SwitchDownlink",
+     "Description": "To_MUX",
+     "NeighborAsn": 64630,
+     "NeighborIPAddress": "10.71.131.0/25",
+     "PrefixList": [
+      {
+       "Name": "DefaultRoute",
+       "Direction": "out"
+      }
+     ],
+     "Shutdown": false,
+     "UpdateSource": "Loopback0",
+     "LocalAS": "64512",
+     "EBGPMultiHop": 3
+    }
+   ]
+  },
+  "Static": [
+   {
+    "Network": "10.71.1.0/24",
+    "NextHop": "null 0",
+    "Name": "Storage_711"
+   },
+   {
+    "Network": "10.71.2.0/24",
+    "NextHop": "null 0",
+    "Name": "Storage_712"
+   },
+   {
+    "Network": "0.0.0.0/0",
+    "NextHop": "10.71.85.2",
+    "Name": "P2P_Border"
+   },
+   {
+    "Network": "0.0.0.0/0",
+    "NextHop": "10.71.85.10",
+    "Name": "P2P_Border"
+   }
+  ],
+  "PrefixList": [
+   {
+    "Name": "IPv4-DEFAULT",
+    "Config": [
+     {
+      "Idx": 1,
+      "Action": "permit",
+      "Description": "Any",
+      "Network": "0.0.0.0/0",
+      "Operation": "",
+      "Prefix": 0
+     }
+    ]
+   },
+   {
+    "Name": "DefaultRoute",
+    "Config": [
+     {
+      "Idx": 1,
+      "Action": "permit",
+      "Description": "Any",
+      "Network": "0.0.0.0/0",
+      "Operation": "",
+      "Prefix": 0
+     },
+     {
+      "Idx": 2,
+      "Action": "deny",
+      "Description": "Any",
+      "Network": "0.0.0.0/0",
+      "Operation": "le",
+      "Prefix": 32
+     }
+    ]
+   }
+  ]
  }
 }
