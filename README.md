@@ -34,6 +34,8 @@ flowchart TD
 
 ## Get Start
 
+- [Quick Start](docs/Quick_Start.md)
+
 ### Preparation
 
 ### Use Cases
