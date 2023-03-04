@@ -44,8 +44,8 @@ jobs:
 
       - name: Copy Essential Files
         run: |
-          cp -R ./input ./${{ matrix.ARTIFACT_DIR }}/
-          ls -R ./${{ matrix.ARTIFACT_DIR }}/
+          cp -R ./input ./src/${{ matrix.ARTIFACT_DIR }}/
+          ls ./src/${{ matrix.ARTIFACT_DIR }}/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
