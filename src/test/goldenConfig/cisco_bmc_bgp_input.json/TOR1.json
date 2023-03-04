@@ -2,18 +2,18 @@
  "Switch": {
   "Make": "Cisco",
   "Model": "93180YC-FX",
-  "Type": "TOR2",
-  "Hostname": "tor-1b",
-  "ASN": 65243,
+  "Type": "TOR1",
+  "Hostname": "TOR1",
+  "ASN": 65001,
   "Firmware": "9.3(9)"
  },
  "SwitchPeer": [
   {
    "Make": "Cisco",
    "Model": "93180YC-FX",
-   "Type": "TOR1",
-   "Hostname": "tor-1a",
-   "ASN": 65243,
+   "Type": "TOR2",
+   "Hostname": "TOR2",
+   "ASN": 65001,
    "Firmware": "9.3(9)"
   }
  ],
@@ -22,7 +22,7 @@
    "Make": "Cisco",
    "Model": "9348GC-FXP",
    "Type": "BMC",
-   "Hostname": "bmc-1",
+   "Hostname": "BMC",
    "ASN": 0,
    "Firmware": "9.3(9)"
   }
@@ -31,17 +31,17 @@
   {
    "Make": "Cisco",
    "Model": "C3132Q-XL",
-   "Type": "Border1",
-   "Hostname": "border-1a",
-   "ASN": 64846,
+   "Type": "BORDER1",
+   "Hostname": "Border1",
+   "ASN": 65000,
    "Firmware": ""
   },
   {
    "Make": "Cisco",
    "Model": "C3132Q-XL",
-   "Type": "Border2",
-   "Hostname": "border-1b",
-   "ASN": 64846,
+   "Type": "BORDER2",
+   "Hostname": "Border2",
+   "ASN": 65000,
    "Firmware": ""
   }
  ],
@@ -87,7 +87,7 @@
    "VlanName": "HNVPA_6",
    "VlanID": 6,
    "GroupName": "HNVPA",
-   "IPAddress": "10.71.131.3",
+   "IPAddress": "10.71.131.2",
    "Cidr": 25,
    "Subnet": "10.71.131.0/25",
    "MTU": 9216,
@@ -99,7 +99,7 @@
    "VlanName": "Infra_7",
    "VlanID": 7,
    "GroupName": "Infrastructure",
-   "IPAddress": "10.69.176.3",
+   "IPAddress": "10.69.176.2",
    "Cidr": 24,
    "Subnet": "10.69.176.0/24",
    "MTU": 9216,
@@ -111,7 +111,7 @@
    "VlanName": "Tenant_201",
    "VlanID": 201,
    "GroupName": "Tenant",
-   "IPAddress": "10.69.177.3",
+   "IPAddress": "10.69.177.2",
    "Cidr": 24,
    "Subnet": "10.69.177.0/24",
    "MTU": 9216,
@@ -123,7 +123,7 @@
    "VlanName": "LogicalTenant_301",
    "VlanID": 301,
    "GroupName": "Tenant",
-   "IPAddress": "10.69.178.3",
+   "IPAddress": "10.69.178.2",
    "Cidr": 25,
    "Subnet": "10.69.178.0/25",
    "MTU": 9216,
@@ -135,7 +135,7 @@
    "VlanName": "DhcpTenant_401",
    "VlanID": 401,
    "GroupName": "Tenant",
-   "IPAddress": "10.69.178.131",
+   "IPAddress": "10.69.178.130",
    "Cidr": 25,
    "Subnet": "10.69.178.128/25",
    "MTU": 9216,
@@ -147,7 +147,7 @@
    "VlanName": "L3Forward_501",
    "VlanID": 501,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.3",
+   "IPAddress": "10.69.179.2",
    "Cidr": 28,
    "Subnet": "10.69.179.0/28",
    "MTU": 9216,
@@ -159,7 +159,7 @@
    "VlanName": "L3Forward_502",
    "VlanID": 502,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.19",
+   "IPAddress": "10.69.179.18",
    "Cidr": 28,
    "Subnet": "10.69.179.16/28",
    "MTU": 9216,
@@ -171,7 +171,7 @@
    "VlanName": "L3Forward_503",
    "VlanID": 503,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.35",
+   "IPAddress": "10.69.179.34",
    "Cidr": 28,
    "Subnet": "10.69.179.32/28",
    "MTU": 9216,
@@ -183,7 +183,7 @@
    "VlanName": "L3Forward_504",
    "VlanID": 504,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.51",
+   "IPAddress": "10.69.179.50",
    "Cidr": 28,
    "Subnet": "10.69.179.48/28",
    "MTU": 9216,
@@ -195,7 +195,7 @@
    "VlanName": "L3Forward_505",
    "VlanID": 505,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.67",
+   "IPAddress": "10.69.179.66",
    "Cidr": 28,
    "Subnet": "10.69.179.64/28",
    "MTU": 9216,
@@ -207,7 +207,7 @@
    "VlanName": "L3Forward_506",
    "VlanID": 506,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.83",
+   "IPAddress": "10.69.179.82",
    "Cidr": 28,
    "Subnet": "10.69.179.80/28",
    "MTU": 9216,
@@ -219,7 +219,7 @@
    "VlanName": "L3Forward_507",
    "VlanID": 507,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.99",
+   "IPAddress": "10.69.179.98",
    "Cidr": 28,
    "Subnet": "10.69.179.96/28",
    "MTU": 9216,
@@ -231,7 +231,7 @@
    "VlanName": "L3Forward_508",
    "VlanID": 508,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.115",
+   "IPAddress": "10.69.179.114",
    "Cidr": 28,
    "Subnet": "10.69.179.112/28",
    "MTU": 9216,
@@ -243,7 +243,7 @@
    "VlanName": "L3Forward_509",
    "VlanID": 509,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.131",
+   "IPAddress": "10.69.179.130",
    "Cidr": 28,
    "Subnet": "10.69.179.128/28",
    "MTU": 9216,
@@ -255,7 +255,7 @@
    "VlanName": "L3Forward_510",
    "VlanID": 510,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.147",
+   "IPAddress": "10.69.179.146",
    "Cidr": 28,
    "Subnet": "10.69.179.144/28",
    "MTU": 9216,
@@ -267,7 +267,7 @@
    "VlanName": "L3Forward_511",
    "VlanID": 511,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.163",
+   "IPAddress": "10.69.179.162",
    "Cidr": 28,
    "Subnet": "10.69.179.160/28",
    "MTU": 9216,
@@ -279,7 +279,7 @@
    "VlanName": "L3Forward_512",
    "VlanID": 512,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.179",
+   "IPAddress": "10.69.179.178",
    "Cidr": 28,
    "Subnet": "10.69.179.176/28",
    "MTU": 9216,
@@ -291,7 +291,7 @@
    "VlanName": "L3Forward_513",
    "VlanID": 513,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.195",
+   "IPAddress": "10.69.179.194",
    "Cidr": 28,
    "Subnet": "10.69.179.192/28",
    "MTU": 9216,
@@ -303,7 +303,7 @@
    "VlanName": "L3Forward_514",
    "VlanID": 514,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.211",
+   "IPAddress": "10.69.179.210",
    "Cidr": 28,
    "Subnet": "10.69.179.208/28",
    "MTU": 9216,
@@ -315,7 +315,7 @@
    "VlanName": "L3Forward_515",
    "VlanID": 515,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.227",
+   "IPAddress": "10.69.179.226",
    "Cidr": 28,
    "Subnet": "10.69.179.224/28",
    "MTU": 9216,
@@ -327,7 +327,7 @@
    "VlanName": "L3Forward_516",
    "VlanID": 516,
    "GroupName": "L3Forward",
-   "IPAddress": "10.69.179.243",
+   "IPAddress": "10.69.179.242",
    "Cidr": 28,
    "Subnet": "10.69.179.240/28",
    "MTU": 9216,
@@ -361,41 +361,39 @@
   }
  ],
  "L3Interfaces": {
-  "Loopback0_TOR2": {
+  "Loopback0_TOR1": {
    "Function": "Loopback0",
-   "Description": "Loopback0_TOR2",
-   "IPAddress": "10.71.85.21",
+   "Description": "Loopback0_TOR1",
+   "IPAddress": "10.71.85.20",
    "Cidr": 32,
-   "Subnet": "10.71.85.21/32",
+   "Subnet": "10.71.85.20/32",
    "MTU": 9216,
    "Shutdown": false
   },
-  "P2P_Border1_TOR2": {
+  "P2P_Border1_TOR1": {
    "Function": "P2P_Border",
-   "Description": "P2P_Border1_TOR2",
-   "IPAddress": "10.71.85.6",
+   "Description": "P2P_Border1_TOR1",
+   "IPAddress": "10.71.85.2",
    "Cidr": 30,
-   "NbrIPAddress": "10.71.85.5",
-   "Subnet": "10.71.85.4/30",
+   "Subnet": "10.71.85.0/30",
    "MTU": 9216,
    "Shutdown": false
   },
-  "P2P_Border2_TOR2": {
+  "P2P_Border2_TOR1": {
    "Function": "P2P_Border",
-   "Description": "P2P_Border2_TOR2",
-   "IPAddress": "10.71.85.14",
+   "Description": "P2P_Border2_TOR1",
+   "IPAddress": "10.71.85.10",
    "Cidr": 30,
-   "NbrIPAddress": "10.71.85.13",
-   "Subnet": "10.71.85.12/30",
+   "Subnet": "10.71.85.8/30",
    "MTU": 9216,
    "Shutdown": false
   },
   "P2P_IBGP": {
    "Function": "P2P_IBGP",
    "Description": "P2P_IBGP",
-   "IPAddress": "10.71.85.18",
+   "IPAddress": "10.71.85.17",
    "Cidr": 30,
-   "NbrIPAddress": "10.71.85.17",
+   "NbrIPAddress": "10.71.85.18",
    "Subnet": "10.71.85.16/30",
    "MTU": 9216,
    "Shutdown": false
@@ -417,7 +415,7 @@
    "Function": "P2P_IBGP",
    "UntagVlan": 0,
    "TagVlans": 0,
-   "IPAddress": "10.71.85.18/30",
+   "IPAddress": "10.71.85.17/30",
    "PortChannelID": "50",
    "VPC": "",
    "Shutdown": false
@@ -1261,7 +1259,7 @@
    "Function": "P2P_Border2",
    "UntagVlan": 0,
    "TagVlans": null,
-   "IPAddress": "10.71.85.14/30",
+   "IPAddress": "10.71.85.10/30",
    "MTU": 9216,
    "Shutdown": false,
    "Others": null
@@ -1274,7 +1272,7 @@
    "Function": "P2P_Border1",
    "UntagVlan": 0,
    "TagVlans": null,
-   "IPAddress": "10.71.85.6/30",
+   "IPAddress": "10.71.85.2/30",
    "MTU": 9216,
    "Shutdown": false,
    "Others": null
@@ -1366,57 +1364,81 @@
  ],
  "Routing": {
   "BGP": {
-   "BGPAsn": 65243,
-   "RouterID": "10.71.85.21",
+   "BGPAsn": 65001,
+   "RouterID": "10.71.85.20",
    "IPv4Network": [
-    "10.71.85.4/30",
-    "10.71.85.12/30",
+    "10.71.85.20/32",
+    "10.71.85.0/30",
+    "10.71.85.8/30",
     "10.71.85.16/30",
-    "10.71.85.21/32",
     "10.71.85.64/26",
     "10.71.131.0/25",
     "10.69.176.0/24",
     "10.69.177.0/24",
     "10.69.178.0/25",
     "10.69.178.128/25",
-    "10.69.179.96/28",
-    "10.69.179.240/28",
-    "10.69.179.0/28",
-    "10.69.179.64/28",
     "10.69.179.16/28",
-    "10.69.179.32/28",
+    "10.69.179.112/28",
+    "10.69.179.48/28",
+    "10.69.179.128/28",
+    "10.69.179.160/28",
+    "10.69.179.64/28",
+    "10.69.179.144/28",
     "10.69.179.176/28",
     "10.69.179.192/28",
     "10.69.179.208/28",
-    "10.69.179.224/28",
-    "10.69.179.48/28",
+    "10.69.179.0/28",
+    "10.69.179.32/28",
     "10.69.179.80/28",
-    "10.69.179.144/28",
-    "10.69.179.160/28",
-    "10.69.179.112/28",
-    "10.69.179.128/28"
-   ],
-   "RouteMap": [
-    {
-     "Name": "IPv4-DEFAULT",
-     "Action": "permit",
-     "Seq": 10,
-     "Rules": [
-      {
-       "PrefixList": "IPv4-DEFAULT"
-      }
-     ]
-    }
+    "10.69.179.96/28",
+    "10.69.179.224/28",
+    "10.69.179.240/28"
    ],
    "IPv4Neighbor": [
     {
+     "SwitchRelation": "SwitchUplink",
+     "Description": "To_BORDER1",
+     "NeighborAsn": 65000,
+     "NeighborIPAddress": "",
+     "PrefixList": [
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "in"
+      },
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "out"
+      }
+     ],
+     "RemovePrivateAS": true,
+     "Shutdown": false
+    },
+    {
+     "SwitchRelation": "SwitchUplink",
+     "Description": "To_BORDER2",
+     "NeighborAsn": 65000,
+     "NeighborIPAddress": "",
+     "PrefixList": [
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "in"
+      },
+      {
+       "Name": "ExternalPrefix",
+       "Direction": "out"
+      }
+     ],
+     "RemovePrivateAS": true,
+     "Shutdown": false
+    },
+    {
      "SwitchRelation": "SwitchPeer",
-     "Description": "To_TOR1",
-     "NeighborAsn": 65243,
-     "NeighborIPAddress": "10.71.85.17",
+     "Description": "To_TOR2",
+     "NeighborAsn": 65001,
+     "NeighborIPAddress": "10.71.85.18",
      "PrefixList": [],
      "Shutdown": false,
-     "NbrPassword": "Edom3G%ic54%Mqy#"
+     "NbrPassword": "%deb00mJ5XrR\u0026!zf"
     },
     {
      "SwitchRelation": "SwitchDownlink",
@@ -1436,39 +1458,57 @@
     }
    ]
   },
-  "Static": [
-   {
-    "Network": "10.71.2.0/24",
-    "NextHop": "null 0",
-    "Name": "Storage_712"
-   },
-   {
-    "Network": "10.71.1.0/24",
-    "NextHop": "null 0",
-    "Name": "Storage_711"
-   },
-   {
-    "Network": "0.0.0.0/0",
-    "NextHop": "10.71.85.6",
-    "Name": "P2P_Border"
-   },
-   {
-    "Network": "0.0.0.0/0",
-    "NextHop": "10.71.85.14",
-    "Name": "P2P_Border"
-   }
-  ],
   "PrefixList": [
    {
-    "Name": "IPv4-DEFAULT",
+    "Name": "ExternalPrefix",
     "Config": [
      {
       "Idx": 1,
+      "Action": "deny",
+      "Description": "Storage",
+      "Network": "10.71.1.0/24",
+      "Operation": "le",
+      "Prefix": 32
+     },
+     {
+      "Idx": 1,
+      "Action": "deny",
+      "Description": "Storage",
+      "Network": "10.71.2.0/24",
+      "Operation": "le",
+      "Prefix": 32
+     },
+     {
+      "Idx": 2,
+      "Action": "deny",
+      "Description": "Tenant",
+      "Network": "10.69.177.0/24",
+      "Operation": "le",
+      "Prefix": 32
+     },
+     {
+      "Idx": 2,
+      "Action": "deny",
+      "Description": "Tenant",
+      "Network": "10.69.178.0/25",
+      "Operation": "le",
+      "Prefix": 32
+     },
+     {
+      "Idx": 2,
+      "Action": "deny",
+      "Description": "Tenant",
+      "Network": "10.69.178.128/25",
+      "Operation": "le",
+      "Prefix": 32
+     },
+     {
+      "Idx": 3,
       "Action": "permit",
       "Description": "Any",
       "Network": "0.0.0.0/0",
-      "Operation": "",
-      "Prefix": 0
+      "Operation": "le",
+      "Prefix": 32
      }
     ]
    },

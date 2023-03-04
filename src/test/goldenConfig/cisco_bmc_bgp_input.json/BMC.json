@@ -3,7 +3,7 @@
   "Make": "Cisco",
   "Model": "9348GC-FXP",
   "Type": "BMC",
-  "Hostname": "bmc-1",
+  "Hostname": "BMC",
   "ASN": 0,
   "Firmware": "9.3(9)"
  },
@@ -11,17 +11,17 @@
   {
    "Make": "Cisco",
    "Model": "C3132Q-XL",
-   "Type": "Border1",
-   "Hostname": "border-1a",
-   "ASN": 64846,
+   "Type": "BORDER1",
+   "Hostname": "Border1",
+   "ASN": 65000,
    "Firmware": ""
   },
   {
    "Make": "Cisco",
    "Model": "C3132Q-XL",
-   "Type": "Border2",
-   "Hostname": "border-1b",
-   "ASN": 64846,
+   "Type": "BORDER2",
+   "Hostname": "Border2",
+   "ASN": 65000,
    "Firmware": ""
   }
  ],
