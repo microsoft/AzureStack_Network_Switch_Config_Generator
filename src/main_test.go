@@ -5,19 +5,26 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"reflect"
 	"strings"
 	"testing"
 )
 
-var (
-	switchLibFolder  = "/workspaces/AzureStack_Network_Switch_Framework/input/switchLib/"
-	testInputFolder  = "/workspaces/AzureStack_Network_Switch_Framework/src/test/testInput/"
-	testOutputFolder = "/workspaces/AzureStack_Network_Switch_Framework/src/test/testOutput/"
-	testGoldenFolder = "/workspaces/AzureStack_Network_Switch_Framework/src/test/goldenConfig/"
-)
+var ()
 
 func TestMain(t *testing.T) {
+
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Println(cwd)
+
+	switchLibFolder := "../input/switchLib/"
+	testInputFolder := cwd + "/test/testInput/"
+	testOutputFolder := cwd + "/test/testOutput/"
+	testGoldenFolder := cwd + "/test/goldenConfig/"
 
 	type test struct {
 		inputTestFileName string
