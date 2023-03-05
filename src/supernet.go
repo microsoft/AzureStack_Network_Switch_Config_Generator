@@ -41,20 +41,20 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 			} else {
 				// L3 Interface Object
 				for _, ipv4 := range supernet.IPv4.Assignment {
-					if ipv4.Name == o.Switch.Type {
+					if strings.EqualFold(ipv4.Name, o.Switch.Type) {
 						// Assignment Type binds with Switch.Type
 						l3IntfItem.IPAddress = ipv4.IP
 					}
 					// Update NbrIPAddress for IBGP Peer
 					for _, switchObj := range o.SwitchPeer {
-						if ipv4.Name == switchObj.Type {
+						if strings.EqualFold(ipv4.Name, switchObj.Type) {
 							// Assignment Type binds with Switch.Type
 							l3IntfItem.NbrIPAddress = ipv4.IP
 						}
 					}
 					// Update NbrIPaddress for P2P_Border
 					for _, switchObj := range o.SwitchUplink {
-						if ipv4.Name == switchObj.Type {
+						if strings.EqualFold(ipv4.Name, switchObj.Type) {
 							// Assignment Type binds with Switch.Type
 							l3IntfItem.NbrIPAddress = ipv4.IP
 						}

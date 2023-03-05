@@ -69,7 +69,7 @@ func (o *OutputType) ParseBGP(BGPObj BGPType) {
 		if ipv4NbrItem.SwitchRelation == SWITCHUPLINK {
 			for _, switchItem := range o.SwitchUplink {
 				newBGPIPv4NbrItem := ipv4NbrItem
-				newBGPIPv4NbrItem.Description = fmt.Sprintf("To_%s", switchItem.Type)
+				newBGPIPv4NbrItem.Description = fmt.Sprintf("TO_%s", switchItem.Type)
 				newBGPIPv4NbrItem.NeighborAsn = switchItem.Asn
 				newBGPIPv4NbrItem.NeighborIPAddress = o.getL3IntfObjByName(switchItem.Type).NbrIPAddress
 				newBGPIPv4Nbrs = append(newBGPIPv4Nbrs, newBGPIPv4NbrItem)
@@ -77,7 +77,7 @@ func (o *OutputType) ParseBGP(BGPObj BGPType) {
 		} else if ipv4NbrItem.SwitchRelation == SWITCHPEER {
 			for _, switchItem := range o.SwitchPeer {
 				newBGPIPv4NbrItem := ipv4NbrItem
-				newBGPIPv4NbrItem.Description = fmt.Sprintf("To_%s", switchItem.Type)
+				newBGPIPv4NbrItem.Description = fmt.Sprintf("TO_%s", switchItem.Type)
 				newBGPIPv4NbrItem.NeighborAsn = switchItem.Asn
 				newBGPIPv4NbrItem.NbrPassword = generateRandomString(16, 3, 3, 3)
 				newBGPIPv4NbrItem.NeighborIPAddress = o.getL3IntfObjByName(ipv4NbrItem.NeighborIPAddress).NbrIPAddress
@@ -86,7 +86,7 @@ func (o *OutputType) ParseBGP(BGPObj BGPType) {
 		} else if ipv4NbrItem.SwitchRelation == SWITCHDOWNLINK {
 			for _, switchItem := range o.SwitchDownlink {
 				newBGPIPv4NbrItem := ipv4NbrItem
-				newBGPIPv4NbrItem.Description = fmt.Sprintf("To_%s", switchItem.Type)
+				newBGPIPv4NbrItem.Description = fmt.Sprintf("TO_%s", switchItem.Type)
 				newBGPIPv4NbrItem.NeighborAsn = switchItem.Asn
 				for _, subnetValue := range o.getSubnetByVlanGroupID(ipv4NbrItem.NeighborIPAddress) {
 					newBGPIPv4NbrItem.NeighborIPAddress = subnetValue
@@ -188,7 +188,7 @@ func (o *OutputType) getVIPByVlanGroupID(groupID string) map[string]string {
 func (o *OutputType) getL3IntfObjByName(networkName string) L3IntfType {
 	var L3IntfObj L3IntfType
 	for key, l3inftItem := range o.L3Interfaces {
-		if strings.Contains(key, networkName) {
+		if strings.Contains(strings.ToUpper(key), strings.ToUpper(networkName)) {
 			L3IntfObj = l3inftItem
 		}
 	}
