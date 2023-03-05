@@ -4,6 +4,7 @@
 interface port-channel{{ .PortChannelID }}
   description VPC:{{ .Description }}
   {{if ne .IPAddress "" -}}
+  no switchport
   priority-flow-control mode on
   ip address {{ .IPAddress }}
   logging event port link-status
