@@ -51,7 +51,8 @@ func initSwitchPort(interfaceJsonObj *PortJson) []PortType {
 	// Config Interface with Functions
 	for _, funcItem := range interfaceJsonObj.Function {
 		for _, port := range funcItem.Port {
-			idxKey := portToIdx[port]
+			// port index starts at 1, so -1 to set index to 0
+			idxKey := portToIdx[port] - 1
 			if idxKey <= maxIdx {
 				portItem := outputSwitchPorts[idxKey]
 				portItem.Description = funcItem.Function
@@ -95,48 +96,51 @@ func (o *OutputType) UpdateSwitchPorts(VlanGroup map[string][]string) {
 	sort.Ints(STORAGE_VlanList)
 
 	for i, portItem := range o.Ports {
+		tmpPortObj := portItem
 		if portItem.Function == COMPUTE {
-			o.Ports[i].UntagVlan = Infra_VlanID
-			o.Ports[i].TagVlans = COMPUTE_VlanList
-			o.Ports[i].Shutdown = false
+			tmpPortObj.UntagVlan = Infra_VlanID
+			tmpPortObj.TagVlans = COMPUTE_VlanList
+			tmpPortObj.Shutdown = false
 		} else if portItem.Function == STORAGE {
-			o.Ports[i].UntagVlan = Native_VLANID
-			o.Ports[i].TagVlans = STORAGE_VlanList
+			tmpPortObj.UntagVlan = Native_VLANID
+			tmpPortObj.TagVlans = STORAGE_VlanList
 		} else if strings.Contains(portItem.Function, "P2P_Border") {
+
 			l3IntfName := fmt.Sprintf("%s_%s", portItem.Function, o.Switch.Type)
 			portIpAddress := fmt.Sprintf("%s/%d", o.L3Interfaces[l3IntfName].IPAddress, o.L3Interfaces[l3IntfName].Cidr)
-			o.Ports[i].IPAddress = portIpAddress
-			o.Ports[i].UntagVlan = 0
-			o.Ports[i].Shutdown = false
+			tmpPortObj.IPAddress = portIpAddress
+			tmpPortObj.UntagVlan = 0
+			tmpPortObj.Shutdown = false
 		} else if portItem.Function == P2P_IBGP {
-			o.Ports[i].UntagVlan = 0
+			tmpPortObj.UntagVlan = 0
 			portOthers := map[string]string{
 				"ChannelGroup": o.PortChannel[P2P_IBGP].PortChannelID,
 			}
-			o.Ports[i].Others = portOthers
-			o.Ports[i].Shutdown = false
+			tmpPortObj.Others = portOthers
+			tmpPortObj.Shutdown = false
 		} else if portItem.Function == TOR_BMC && len(o.SwitchBMC) > 0 {
 			// Has BMC
-			o.Ports[i].UntagVlan = 0
-			o.Ports[i].TagVlans = append(o.Ports[i].TagVlans, BMC_VlanID)
+			tmpPortObj.UntagVlan = 0
+			tmpPortObj.TagVlans = append(tmpPortObj.TagVlans, BMC_VlanID)
 			portOthers := map[string]string{
 				"ChannelGroup": o.PortChannel[TOR_BMC].PortChannelID,
 			}
-			o.Ports[i].Others = portOthers
-			o.Ports[i].Shutdown = false
+			tmpPortObj.Others = portOthers
+			tmpPortObj.Shutdown = false
 		} else if portItem.Function == TOR_BMC && len(o.SwitchBMC) == 0 {
 			// No BMC
-			o.Ports[i].UntagVlan = UNUSED_VLANID
-			o.Ports[i].TagVlans = nil
-			o.Ports[i].Description = UNUSED
-			o.Ports[i].Function = UNUSED
+			tmpPortObj.UntagVlan = UNUSED_VLANID
+			tmpPortObj.TagVlans = nil
+			tmpPortObj.Description = UNUSED
+			tmpPortObj.Function = UNUSED
 		} else if portItem.Function == MLAG_PEER {
-			o.Ports[i].UntagVlan = Native_VLANID
+			tmpPortObj.UntagVlan = Native_VLANID
 			portOthers := map[string]string{
 				"ChannelGroup": o.PortChannel[MLAG_PEER].PortChannelID,
 			}
-			o.Ports[i].Others = portOthers
-			o.Ports[i].Shutdown = false
+			tmpPortObj.Others = portOthers
+			tmpPortObj.Shutdown = false
 		}
+		o.Ports[i] = tmpPortObj
 	}
 }
