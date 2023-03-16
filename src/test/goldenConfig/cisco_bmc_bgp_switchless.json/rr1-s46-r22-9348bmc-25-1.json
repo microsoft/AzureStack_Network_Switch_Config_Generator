@@ -3,25 +3,26 @@
   "Make": "Cisco",
   "Model": "9348GC-FXP",
   "Type": "BMC",
-  "Hostname": "BMC",
+  "Hostname": "rr1-s46-r22-9348bmc-25-1",
   "ASN": 0,
   "Firmware": "9.3(9)"
  },
+ "DeploymentPattern": "Switchless",
  "SwitchUplink": [
   {
    "Make": "Cisco",
    "Model": "C3132Q-XL",
-   "Type": "BORDER1",
-   "Hostname": "Border1",
-   "ASN": 65000,
+   "Type": "Border1",
+   "Hostname": "rr1-s46-r01-x32ssp-1a",
+   "ASN": 64846,
    "Firmware": ""
   },
   {
    "Make": "Cisco",
    "Model": "C3132Q-XL",
-   "Type": "BORDER2",
-   "Hostname": "Border2",
-   "ASN": 65000,
+   "Type": "Border2",
+   "Hostname": "rr1-s46-r01-x32ssp-1b",
+   "ASN": 64846,
    "Firmware": ""
   }
  ],
@@ -45,11 +46,11 @@
    "VlanName": "BMC_Mgmt_125",
    "VlanID": 125,
    "GroupName": "BMC",
-   "IPAddress": "10.71.85.125",
+   "IPAddress": "100.71.85.253",
    "Cidr": 26,
-   "Subnet": "10.71.85.64/26",
+   "Subnet": "100.71.85.192/26",
    "MTU": 1500,
-   "VIPAddress": "10.71.85.65",
+   "VIPAddress": "100.71.85.193",
    "VIPPriorityId": 0,
    "Shutdown": false
   }
@@ -781,7 +782,7 @@
   "Static": [
    {
     "Network": "0.0.0.0/0",
-    "NextHop": "10.71.85.65",
+    "NextHop": "100.71.85.193",
     "Name": "GlobalDefaultRoute"
    }
   ]

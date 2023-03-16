@@ -7,7 +7,7 @@
 This is a tool to generate network switch deployment configuration for Azure Stack, which:
 
 - Offers Network Switch Deployment Automation to Deployment Engineer
-- Supports Multiple ASZ Network Design Use Cases by Customized Input Template Variables.
+- Supports Multiple Azure Stack Network Design Use Cases by Customized Input Template Variables.
 
 ### Workflow
 

@@ -8,6 +8,7 @@ interface port-channel{{ .PortChannelID }}
   priority-flow-control mode on
   ip address {{ .IPAddress }}
   logging event port link-status
+  mtu 9216
   service-policy type qos input AZS_SERVICES
   {{else if ne .UntagVlan 0 -}}
   switchport

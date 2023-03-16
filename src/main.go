@@ -9,41 +9,42 @@ import (
 )
 
 var (
-	TOR                                      = "TOR"
-	BMC                                      = "BMC"
-	BORDER                                   = "BORDER"
-	MUX                                      = "MUX"
-	UPLINK                                   = "UPLINK"
-	DOWNLINK                                 = "DOWNLINK"
-	VIPGATEWAY                               = "Gateway"
-	UNUSED                                   = "Unused"
-	TEMPLATE                                 = "template"
-	INTERFACEJSON                            = "interface.json"
-	JUMBOMTU                                 = 9216
-	DefaultMTU                               = 1500
-	BGP                                      = "BGP"
-	STATIC                                   = "STATIC"
-	NO_Valid_TOR_Switch                      = "NO Valid TOR Switch Founded"
-	JSONExtension                            = ".json"
-	CONFIGExtension                          = ".config"
-	P2P_IBGP                                 = "P2P_IBGP"
-	MLAG_PEER                                = "MLAG_Peer"
-	TOR_BMC                                  = "TOR_BMC"
-	POID_P2P_IBGP                            = "50"
-	POID_MLAG_PEER                           = "101"
-	POID_TOR_BMC                             = "102"
-	UNUSED_VLANID                            = 2
-	Native_VLANID                            = 99
-	BMC_VlanID                               int
-	Infra_GroupID                            = "Infrastructure"
-	ANY                                      = "Any"
-	ANYNETWORK                               = "0.0.0.0/0"
-	Infra_VlanID                             int
-	Username, Password                       string
+	TOR, BMC, BORDER, MUX = "TOR", "BMC", "BORDER", "MUX"
+	UPLINK, DOWNLINK      = "UPLINK", "DOWNLINK"
+	VIPGATEWAY            = "Gateway"
+	UNUSED                = "Unused"
+	TEMPLATE              = "template"
+	INTERFACEJSON         = "interface.json"
+	JUMBOMTU              = 9216
+	DefaultMTU            = 1500
+	BGP, STATIC           = "BGP", "STATIC"
+	Username, Password    string
+
+	JSONExtension            = ".json"
+	CONFIGExtension          = ".config"
+	P2P_IBGP                 = "P2P_IBGP"
+	MLAG_PEER                = "MLAG_Peer"
+	TOR_BMC                  = "TOR_BMC"
+	POID_P2P_IBGP            = "50"
+	POID_MLAG_PEER           = "101"
+	POID_TOR_BMC             = "102"
+	UNUSED_VLANName          = "UNUSED_VLAN"
+	UNUSED_VLANID            int
+	CISCOMLAG_NATIVEVLANNAME = "Cisco_MLAG_NativeVlan"
+	CISCOMLAG_NATIVEVLANID   int
+	BMC_VlanID               int
+	Compute_NativeVlanName   = "Management"
+	Compute_NativeVlanID     int
+	ANY                      = "Any"
+	ANYNETWORK               = "0.0.0.0/0"
+
 	COMPUTE, STORAGE                         = "Compute", "Storage"
+	SWITCHED, SWITCHLESS, HYPERCONVERGED     = "Switched", "Switchless", "Hyperconverged"
 	SWITCHUPLINK, SWITCHDOWNLINK, SWITCHPEER = "SwitchUplink", "SwitchDownlink", "SwitchPeer"
 	BMC_DEFAULT_ROUTE                        = "GlobalDefaultRoute"
 	DeviceTypeMap                            map[string][]SwitchType
+
+	NO_Valid_TOR_Switch = "NO Valid TOR Switch Founded"
 )
 
 func init() {
