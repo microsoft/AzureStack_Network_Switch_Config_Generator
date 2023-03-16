@@ -7,12 +7,13 @@ type InputType struct {
 }
 
 type InputData struct {
-	Cloud            []CloudType  `json:"Cloud"`
-	Switches         []SwitchType `json:"Switches"`
-	SwitchUplink     string       `json:"SwitchUplink"`
-	HostConnectivity string       `json:"HostConnectivity"`
-	Supernets        []Supernet   `json:"Supernets"`
-	Setting          struct {
+	Cloud             []CloudType  `json:"Cloud"`
+	Switches          []SwitchType `json:"Switches"`
+	SwitchUplink      string       `json:"SwitchUplink"`
+	DeploymentPattern string       `json:"DeploymentPattern"`
+	HostConnectivity  string       `json:"HostConnectivity"`
+	Supernets         []Supernet   `json:"Supernets"`
+	Setting           struct {
 		TimeServer   []string `json:"TimeServer"`
 		SyslogServer []string `json:"SyslogServer"`
 		DNSForwarder []string `json:"DNSForwarder"`
@@ -20,17 +21,18 @@ type InputData struct {
 }
 
 type OutputType struct {
-	Switch         SwitchType                 `json:"Switch,omitempty"`
-	SwitchPeer     []SwitchType               `json:"SwitchPeer,omitempty"`
-	SwitchBMC      []SwitchType               `json:"SwitchBMC,omitempty"`
-	SwitchUplink   []SwitchType               `json:"SwitchUplink,omitempty"`
-	SwitchDownlink []SwitchType               `json:"SwitchDownlink,omitempty"`
-	GlobalSetting  GlobalSettingType          `json:"GlobalSetting,omitempty"`
-	Vlans          []VlanType                 `json:"Vlans,omitempty"`
-	L3Interfaces   map[string]L3IntfType      `json:"L3Interfaces,omitempty"`
-	PortChannel    map[string]PortChannelType `json:"PortChannel,omitempty"`
-	Ports          []PortType                 `json:"Ports,omitempty"`
-	Routing        RoutingType                `json:"Routing,omitempty"`
+	Switch            SwitchType                 `json:"Switch,omitempty"`
+	DeploymentPattern string                     `json:"DeploymentPattern"`
+	SwitchPeer        []SwitchType               `json:"SwitchPeer,omitempty"`
+	SwitchBMC         []SwitchType               `json:"SwitchBMC,omitempty"`
+	SwitchUplink      []SwitchType               `json:"SwitchUplink,omitempty"`
+	SwitchDownlink    []SwitchType               `json:"SwitchDownlink,omitempty"`
+	GlobalSetting     GlobalSettingType          `json:"GlobalSetting,omitempty"`
+	Vlans             []VlanType                 `json:"Vlans,omitempty"`
+	L3Interfaces      map[string]L3IntfType      `json:"L3Interfaces,omitempty"`
+	PortChannel       map[string]PortChannelType `json:"PortChannel,omitempty"`
+	Ports             []PortType                 `json:"Ports,omitempty"`
+	Routing           RoutingType                `json:"Routing,omitempty"`
 }
 
 type GlobalSettingType struct {

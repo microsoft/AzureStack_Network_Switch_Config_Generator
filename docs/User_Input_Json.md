@@ -33,6 +33,18 @@ This section is used for switch framework *switchLib*selection and the directory
 | ASN      | Int, 65000           | BGP AS number, can be null/0 if no BGP used                                                                                            |
 | Firmware | String, "9.3(9)"     | Switch firmware version, has to be **exact** matched with switchLib folder name                                                        |
 
+### InputData.DeploymentPattern
+
+This value defines the deployment pattern, and value will be used for generating configuration. Here are option values:
+
+| Value          | Comment                              |
+| -------------- | ------------------------------------ |
+| Hyperconverged | Storage switched and fully converged |
+| Switched       | Storage switched but non-converged   |
+| Switchless     | Storage switchless                   |
+
+Note: Check [this link](https://learn.microsoft.com/en-us/azure-stack/hci/plan/choose-network-pattern) for more deployment detail.
+
 ### InputData.SwitchUplink
 
 This value defines the routing between Border and TOR switches, and value will be used for generating configuration. Here are option values:

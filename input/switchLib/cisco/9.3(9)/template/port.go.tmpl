@@ -17,7 +17,7 @@ interface {{ .Type}} {{ .Port }}
   switchport access vlan {{ .UntagVlan }}
   spanning-tree port type edge
   no logging event port link-status
-  {{else if eq .Function "Compute" -}}
+  {{else if or (eq .Function "Compute") (eq .Function "Hyperconverged") -}}
   switchport
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}

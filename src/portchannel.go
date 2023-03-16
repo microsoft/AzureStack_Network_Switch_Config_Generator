@@ -20,7 +20,7 @@ func (o *OutputType) UpdatePortChannel(inputData InputData) {
 		PO_MLAG_PEER := PortChannelType{
 			Description:   MLAG_PEER,
 			Function:      MLAG_PEER,
-			UntagVlan:     Native_VLANID,
+			UntagVlan:     CISCOMLAG_NATIVEVLANID,
 			PortChannelID: POID_MLAG_PEER,
 			VPC:           "peer-link",
 			Shutdown:      false,

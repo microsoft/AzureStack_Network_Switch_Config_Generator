@@ -12,12 +12,22 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 		for _, supernet := range inputData.Supernets {
 			vlanItem := VlanType{}
 			l3IntfItem := L3IntfType{}
+			// Update Vlan ID but Switchless Deployment Skip Storage Vlan
 			if supernet.IPv4.VlanID != 0 {
-				if strings.Contains(supernet.GroupName, BMC) {
+				if strings.Contains(strings.ToUpper(supernet.GroupName), strings.ToUpper(BMC)) {
+					// BMC Vlan
 					BMC_VlanID = supernet.IPv4.VlanID
-				} else if strings.Contains(supernet.GroupName, Infra_GroupID) {
-					Infra_VlanID = supernet.IPv4.VlanID
+				} else if strings.Contains(strings.ToUpper(supernet.GroupName), strings.ToUpper(Compute_NativeVlanName)) {
+					// Management/Infra Vlan
+					Compute_NativeVlanID = supernet.IPv4.VlanID
+				} else if strings.Contains(strings.ToUpper(supernet.GroupName), strings.ToUpper(UNUSED_VLANName)) {
+					// Unused Vlan defined in input json
+					UNUSED_VLANID = supernet.IPv4.VlanID
+				} else if strings.Contains(strings.ToUpper(supernet.GroupName), strings.ToUpper(CISCOMLAG_NATIVEVLANNAME)) {
+					// Cisco Native Vlan 99
+					CISCOMLAG_NATIVEVLANID = supernet.IPv4.VlanID
 				}
+				// Assign the value
 				vlanItem.GroupName = supernet.GroupName
 				vlanItem.VlanName = supernet.IPv4.Name
 				vlanItem.VlanID = supernet.IPv4.VlanID
@@ -29,15 +39,17 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 				}
 				if supernet.IPv4.SwitchSVI {
 					for _, ipv4 := range supernet.IPv4.Assignment {
-						if ipv4.Name == VIPGATEWAY {
+						if strings.Contains(strings.ToUpper(ipv4.Name), strings.ToUpper(VIPGATEWAY)) {
 							vlanItem.VIPAddress = ipv4.IP
-						} else if ipv4.Name == o.Switch.Type {
+						} else if strings.Contains(strings.ToUpper(ipv4.Name), strings.ToUpper(o.Switch.Type)) {
 							// Assignment Type binds with Switch.Type
 							vlanItem.IPAddress = ipv4.IP
 						}
 					}
 				}
-				vlanList = append(vlanList, vlanItem)
+				if !(strings.EqualFold(supernet.GroupName, STORAGE) && strings.EqualFold(inputData.DeploymentPattern, SWITCHLESS)) {
+					vlanList = append(vlanList, vlanItem)
+				}
 			} else {
 				// L3 Interface Object
 				for _, ipv4 := range supernet.IPv4.Assignment {
@@ -84,7 +96,7 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 				}
 				if supernet.IPv4.SwitchSVI {
 					for _, ipv4 := range supernet.IPv4.Assignment {
-						if strings.Contains(ipv4.Name, o.Switch.Type) {
+						if strings.Contains(strings.ToUpper(ipv4.Name), strings.ToUpper(o.Switch.Type)) {
 							// Assignment Type binds with Switch.Type
 							vlanItem.IPAddress = ipv4.IP
 							vlanItem.Cidr = supernet.IPv4.Cidr

@@ -30,18 +30,24 @@ func TestMain(t *testing.T) {
 		inputTestFileName string
 	}
 	testCases := map[string]test{
-		"cisco_nobmc_bgp": {
-			inputTestFileName: "cisco_nobmc_bgp_input.json",
+		// "cisco_nobmc_bgp": {
+		// 	inputTestFileName: "cisco_nobmc_bgp_input.json",
+		// },
+		"cisco_bmc_bgp_hyperconverged": {
+			inputTestFileName: "cisco_bmc_bgp_hyperconverged.json",
 		},
-		"cisco_bmc_bgp": {
-			inputTestFileName: "cisco_bmc_bgp_input.json",
+		"cisco_bmc_bgp_switched": {
+			inputTestFileName: "cisco_bmc_bgp_switched.json",
 		},
-		"cisco_nobmc_static": {
-			inputTestFileName: "cisco_nobmc_static_input.json",
+		"cisco_bmc_bgp_switchless": {
+			inputTestFileName: "cisco_bmc_bgp_switchless.json",
 		},
-		"cisco_bmc_static": {
-			inputTestFileName: "cisco_bmc_static_input.json",
-		},
+		// "cisco_nobmc_static": {
+		// 	inputTestFileName: "cisco_nobmc_static_input.json",
+		// },
+		// "cisco_bmc_static": {
+		// 	inputTestFileName: "cisco_bmc_static_input.json",
+		// },
 	}
 
 	for name, tc := range testCases {

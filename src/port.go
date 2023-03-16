@@ -38,9 +38,9 @@ func initSwitchPort(interfaceJsonObj *PortJson) []PortType {
 			Port:        port.Port,
 			Idx:         port.Idx,
 			Type:        port.Type,
+			Shutdown:    true,
 			Description: UNUSED,
 			Function:    UNUSED,
-			Shutdown:    true,
 			Mtu:         JUMBOMTU,
 			UntagVlan:   UNUSED_VLANID,
 		})
@@ -73,12 +73,12 @@ func (o *OutputType) UpdateSwitchPorts(VlanGroup map[string][]string) {
 
 	for _, vlanItem := range o.Vlans {
 		for _, key := range VlanGroup[STORAGE] {
-			if strings.Contains(vlanItem.GroupName, key) {
+			if strings.Contains(strings.ToUpper(vlanItem.GroupName), strings.ToUpper(key)) {
 				STORAGE_VlanMap[vlanItem.VlanID] = vlanItem.GroupName
 			}
 		}
 		for _, key := range VlanGroup[COMPUTE] {
-			if strings.Contains(vlanItem.GroupName, key) {
+			if strings.Contains(strings.ToUpper(vlanItem.GroupName), strings.ToUpper(key)) {
 				COMPUTE_VlanMap[vlanItem.VlanID] = vlanItem.GroupName
 			}
 		}
@@ -97,13 +97,38 @@ func (o *OutputType) UpdateSwitchPorts(VlanGroup map[string][]string) {
 
 	for i, portItem := range o.Ports {
 		tmpPortObj := portItem
-		if portItem.Function == COMPUTE {
-			tmpPortObj.UntagVlan = Infra_VlanID
+		if strings.EqualFold(portItem.Function, COMPUTE) && strings.EqualFold(o.DeploymentPattern, SWITCHLESS) {
+			// Switched Non Converged use both Compute and Storage Port Assignment
+			tmpPortObj.UntagVlan = Compute_NativeVlanID
 			tmpPortObj.TagVlans = COMPUTE_VlanList
 			tmpPortObj.Shutdown = false
-		} else if portItem.Function == STORAGE {
-			tmpPortObj.UntagVlan = Native_VLANID
+			tmpPortObj.Description = COMPUTE
+			tmpPortObj.Function = COMPUTE
+		} else if strings.EqualFold(portItem.Function, COMPUTE) && strings.EqualFold(o.DeploymentPattern, HYPERCONVERGED) {
+			// Switched Non Converged use both Compute and Storage Port Assignment
+			tmpPortObj.UntagVlan = Compute_NativeVlanID
+			tmpPortObj.TagVlans = append(COMPUTE_VlanList, STORAGE_VlanList...)
+			tmpPortObj.Shutdown = false
+			tmpPortObj.Description = o.DeploymentPattern
+			tmpPortObj.Function = o.DeploymentPattern
+		} else if strings.EqualFold(portItem.Function, STORAGE) && (strings.EqualFold(o.DeploymentPattern, HYPERCONVERGED) || strings.EqualFold(o.DeploymentPattern, SWITCHLESS)) {
+			// Remove the
+			tmpPortObj.Shutdown = true
+			tmpPortObj.Description = UNUSED
+			tmpPortObj.Function = UNUSED
+		} else if strings.EqualFold(portItem.Function, COMPUTE) && strings.EqualFold(o.DeploymentPattern, SWITCHED) {
+			// Switched Non Converged use both Compute and Storage Port Assignment
+			tmpPortObj.UntagVlan = Compute_NativeVlanID
+			tmpPortObj.TagVlans = COMPUTE_VlanList
+			tmpPortObj.Shutdown = false
+			tmpPortObj.Description = fmt.Sprintf("%s-%s", o.DeploymentPattern, COMPUTE)
+			tmpPortObj.Function = COMPUTE
+		} else if strings.EqualFold(portItem.Function, STORAGE) && strings.EqualFold(o.DeploymentPattern, SWITCHED) {
+			// Switched Non Converged use Compute and Storage Port Assignment
+			tmpPortObj.UntagVlan = CISCOMLAG_NATIVEVLANID
 			tmpPortObj.TagVlans = STORAGE_VlanList
+			tmpPortObj.Description = fmt.Sprintf("%s-%s", o.DeploymentPattern, STORAGE)
+			tmpPortObj.Function = STORAGE
 		} else if strings.Contains(portItem.Function, "P2P_Border") {
 
 			l3IntfName := fmt.Sprintf("%s_%s", portItem.Function, o.Switch.Type)
@@ -134,7 +159,7 @@ func (o *OutputType) UpdateSwitchPorts(VlanGroup map[string][]string) {
 			tmpPortObj.Description = UNUSED
 			tmpPortObj.Function = UNUSED
 		} else if portItem.Function == MLAG_PEER {
-			tmpPortObj.UntagVlan = Native_VLANID
+			tmpPortObj.UntagVlan = CISCOMLAG_NATIVEVLANID
 			portOthers := map[string]string{
 				"ChannelGroup": o.PortChannel[MLAG_PEER].PortChannelID,
 			}
