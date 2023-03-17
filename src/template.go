@@ -30,25 +30,8 @@ func (o *OutputType) writeToJson(outputFolder string) {
 
 func (o *OutputType) parseTemplate(templateFolder, outputFolder string) {
 	configFilePath := outputFolder + "/" + o.Switch.Hostname + CONFIGExtension
-	t, err := template.ParseFiles(
-		templateFolder+"/AllConfig.go.tmpl",
-		templateFolder+"/hostname.go.tmpl",
-		templateFolder+"/stig.go.tmpl",
-		templateFolder+"/qos.go.tmpl",
-		templateFolder+"/vlan.go.tmpl",
-		templateFolder+"/stp.go.tmpl",
-		templateFolder+"/vpc.go.tmpl",
-		templateFolder+"/portchannel.go.tmpl",
-		templateFolder+"/port.go.tmpl",
-		templateFolder+"/loopback.go.tmpl",
-		templateFolder+"/settings.go.tmpl",
-		templateFolder+"/prefixlist.go.tmpl",
-		templateFolder+"/bgp.go.tmpl",
-		templateFolder+"/static.go.tmpl",
-	)
-	if err != nil {
-		log.Fatalln(err)
-	}
+	// Parse the whole template folder based on .go.tmpl files
+	t := template.Must(template.ParseGlob(templateFolder + "/*.go.tmpl"))
 
 	f, err := os.OpenFile(configFilePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {

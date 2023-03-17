@@ -1,128 +1,52 @@
 {
     "Version": "1.0.0",
-    "Description": "Template for Cisco Rack",
+    "Description": "Template for Dell Rack",
     "InputData": {
-      "MainEnvData": [
-        {
-          "Id": "Env01",
-          "Site": "rr1",
-          "EnvironmentName": "s46r22",
-          "NodeCount": 16,
-          "ConnectType": "connected",
-          "TimeZone": "Pacific Standard Time",
-          "TimeServer": [
-            "10.10.240.20"
-          ],
-          "SyslogServerIP": "10.10.43.111",
-          "DNSForwarder": [
-            "10.10.240.23",
-            "10.10.240.24"
-          ],
-          "ClusterUnits": [
-            {
-              "Name": "Cl01",
-              "NodeCount": 4,
-              "RackId": "Rack01",
-              "NamingPrefix": "s46r2201",
-              "PhysicalNamingPrefix": "s46r2201",
-              "Topology": "Hyper-Converged",
-              "CompanyName": "Microsoft",
-              "RegionName": "Redmond",
-              "DomainFQDN": "s46r2201.masd.stbtest.microsoft.com",
-              "ExternalDomainFQDN": "Ext-s46r2201.masd.stbtest.microsoft.com",
-              "InfraAzureEnvironment": "AzureCloud",
-              "InfraAzureDirectoryTenantName": "msazurestack.microsoft.com"
-            },
-            {
-              "Name": "Cl02",
-              "NodeCount": 4,
-              "RackId": "Rack01",
-              "NamingPrefix": "s46r2202",
-              "PhysicalNamingPrefix": "s46r2202",
-              "Topology": "Hyper-Converged",
-              "CompanyName": "Microsoft",
-              "RegionName": "Redmond",
-              "DomainFQDN": "s46r2202.masd.stbtest.microsoft.com",
-              "ExternalDomainFQDN": "Ext-s46r2202.masd.stbtest.microsoft.com",
-              "InfraAzureEnvironment": "AzureCloud",
-              "InfraAzureDirectoryTenantName": "msazurestack.microsoft.com"
-            },
-            {
-              "Name": "Cl03",
-              "NodeCount": 4,
-              "RackId": "Rack01",
-              "NamingPrefix": "s46r2203",
-              "PhysicalNamingPrefix": "s46r2203",
-              "Topology": "Hyper-Converged",
-              "CompanyName": "Microsoft",
-              "RegionName": "Redmond",
-              "DomainFQDN": "s46r2203.masd.stbtest.microsoft.com",
-              "ExternalDomainFQDN": "Ext-s46r2203.masd.stbtest.microsoft.com",
-              "InfraAzureEnvironment": "AzureCloud",
-              "InfraAzureDirectoryTenantName": "msazurestack.microsoft.com"
-            },
-            {
-              "Name": "Cl04",
-              "NodeCount": 4,
-              "RackId": "Rack01",
-              "NamingPrefix": "s46r2204",
-              "PhysicalNamingPrefix": "s46r2204",
-              "Topology": "Hyper-Converged",
-              "CompanyName": "Microsoft",
-              "RegionName": "Redmond",
-              "DomainFQDN": "s46r2204.masd.stbtest.microsoft.com",
-              "ExternalDomainFQDN": "Ext-s46r2204.masd.stbtest.microsoft.com",
-              "InfraAzureEnvironment": "AzureCloud",
-              "InfraAzureDirectoryTenantName": "msazurestack.microsoft.com"
-            }
-          ]
-        }
-      ],
       "Switches": [
         {
-          "Make": "Cisco",
-          "Model": "C3132Q-XL",
-          "Hostname": "rr1-s46-r01-x32ssp-1a",
+          "Make": "Border",
+          "Model": "",
+          "Hostname": "b88-1501-J09-9336ssp-2a",
           "Type": "Border1",
-          "ASN": 64846
+          "ASN": 64805
         },
         {
-          "Make": "Cisco",
-          "Model": "C3132Q-XL",
-          "Hostname": "rr1-s46-r01-x32ssp-1b",
+          "Make": "Border",
+          "Model": "",
+          "Hostname": "b88-1501-J09-9336ssp-2b",
           "Type": "Border2",
-          "ASN": 64846
+          "ASN": 64805
         },
         {
-          "Make": "Cisco",
-          "Model": "93180YC-FX",
+          "Make": "DellEMC",
+          "Model": "S5248-ON",
           "Type": "TOR1",
-          "Hostname": "rr1-s46-r22-93180hl-25-1a",
-          "ASN": 65243,
-          "Firmware": "9.3(9)"
+          "Hostname": "B88-C01-5248hl-1-1a",
+          "ASN": 65341,
+          "Firmware": "10.5(2.7)"
         },
         {
-          "Make": "Cisco",
-          "Model": "93180YC-FX",
+          "Make": "DellEMC",
+          "Model": "S5248-ON",
           "Type": "TOR2",
-          "Hostname": "rr1-s46-r22-93180hl-25-1b",
-          "ASN": 65243,
-          "Firmware": "9.3(9)"
+          "Hostname": "B88-C01-5248hl-1-1b",
+          "ASN": 65341,
+          "Firmware": "10.5(2.7)"
         },
         {
-          "Make": "Cisco",
-          "Model": "9348GC-FXP",
+          "Make": "DellEMC",
+          "Model": "N3248TE-ON",
           "Type": "BMC",
-          "Hostname": "rr1-s46-r22-9348bmc-25-1",
+          "Hostname": "B88-C01-3248bmc-1-1",
           "ASN": null,
-          "Firmware": "9.3(9)"
+          "Firmware": "10.5(2.7)"
         },
         {
           "Make": "Microsoft",
           "Model": null,
           "Type": "MUX",
-          "Hostname": "rr1-s46-r22-MUX-1",
-          "ASN": 65113,
+          "Hostname": "B88-C01-MUX-1",
+          "ASN": 65033,
           "Firmware": null
         }
       ],
@@ -1673,18 +1597,6 @@
             "Name": "UNUSED_VLAN",
             "VLANID": 2,
             "NetworkType": "UNUSED_VLAN"
-          }
-        },
-        {
-          "GroupName": "Cisco_MLAG_NativeVlan",
-          "Name": "Cisco_MLAG_NativeVlan",
-          "VLANID": 99,
-          "Description": "Cisco_MLAG_NativeVlan",
-          "IPv4": {
-            "SwitchSVI": false,
-            "Name": "Cisco_MLAG_NativeVlan",
-            "VLANID": 99,
-            "NetworkType": "Cisco_MLAG_NativeVlan"
           }
         }
       ],

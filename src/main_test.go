@@ -19,7 +19,6 @@ func TestMain(t *testing.T) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println(cwd)
 
 	switchLibFolder := "../input/switchLib/"
 	testInputFolder := cwd + "/test/testInput/"
@@ -30,9 +29,6 @@ func TestMain(t *testing.T) {
 		inputTestFileName string
 	}
 	testCases := map[string]test{
-		// "cisco_nobmc_bgp": {
-		// 	inputTestFileName: "cisco_nobmc_bgp_input.json",
-		// },
 		"cisco_bmc_bgp_hyperconverged": {
 			inputTestFileName: "cisco_bmc_bgp_hyperconverged.json",
 		},
@@ -42,12 +38,9 @@ func TestMain(t *testing.T) {
 		"cisco_bmc_bgp_switchless": {
 			inputTestFileName: "cisco_bmc_bgp_switchless.json",
 		},
-		// "cisco_nobmc_static": {
-		// 	inputTestFileName: "cisco_nobmc_static_input.json",
-		// },
-		// "cisco_bmc_static": {
-		// 	inputTestFileName: "cisco_bmc_static_input.json",
-		// },
+		"dellemc_bmc_bgp_switched": {
+			inputTestFileName: "dellemc_bmc_bgp_switched.json",
+		},
 	}
 
 	for name, tc := range testCases {
