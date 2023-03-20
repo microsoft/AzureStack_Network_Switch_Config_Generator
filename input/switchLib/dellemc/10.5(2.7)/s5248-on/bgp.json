@@ -86,27 +86,6 @@
             "Prefix": 32
           }
         ]
-      },
-      {
-        "Name": "DefaultRoute",
-        "Config": [
-          {
-            "Idx": 1,
-            "Action": "permit",
-            "Description":"Any",
-            "Network": "Any",
-            "Operation": "",
-            "Prefix": 0
-          },
-          {
-            "Idx": 2,
-            "Action": "deny",
-            "Description":"Any",
-            "Network": "Any",
-            "Operation": "le",
-            "Prefix": 32
-          }
-        ]
       }
     ]
   }

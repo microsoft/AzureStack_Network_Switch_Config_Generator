@@ -30,3 +30,25 @@ logging level vpc 7
 logging level netstack 7
 logging level bgp 7
 {{ end }}
+
+{{ define "set_lldp"}}
+! stig.go.tmpl-stig_lldp
+lldp enable
+{{ end }}
+
+{{ define "set_dhcp"}}
+! stig.go.tmpl-stig_dhcp
+no ip dhcp-relay information-option
+no ip dhcp snooping
+{{ end }}
+
+{{ define "set_vrrp"}}
+! stig.go.tmpl-stig_vrrp
+vrrp version 3
+vrrp delay reload 180
+{{ end }}
+
+{{ define "set_load_sharing"}}
+! settings.go.tmpl-set_load_sharing
+ip load-sharing address source-destination port source-destination
+{{ end }}

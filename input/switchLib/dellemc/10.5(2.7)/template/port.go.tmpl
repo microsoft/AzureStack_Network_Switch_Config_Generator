@@ -1,62 +1,76 @@
 {{ define "port"}}
 ! port.go.tmpl-port
-{{ range . -}} 
-{{ if .Others.channel_group }} 
-interface {{ .PortName }} {{ .Port }}
-  description {{ .Description }}
-  no cdp enable
-  mtu {{ .Mtu }}
-  {{if eq .PortType "Trunk" -}}
-  switchport
-  switchport mode trunk
-  switchport trunk allowed vlan {{.TagVlan}}
-  {{end -}}
-  logging event port link-status
-  channel-group {{.Others.channel_group}} mode active
-  {{if .Shutdown -}} shutdown {{else -}} no shutdown {{end}}
-{{else -}}
-{{if eq .PortType "BMCMgmt" -}} 
-interface {{ .PortName }}
-  description {{ .Description }}
+{{ range . -}}
+{{ if eq .Type "mgmt" -}}
+interface {{ .Port }}
+  description use the BMCMgmt switch virtual interface
   no ip redirects
   no ipv6 redirects
-  ip address {{ .IPAddress }}
-  {{if .Shutdown -}} shutdown {{else -}} no shutdown {{end}}
-{{else -}}
-interface {{ .PortName }} {{ .Port }}
+  shutdown
+{{ else -}}
+interface {{ .Type}} {{ .Port }}
   description {{ .Description }}
   no cdp enable
   mtu {{ .Mtu }}
-  {{if eq .PortType "IP" -}} 
-  no switchport
-  ip address {{ .IPAddress }}
-  {{end -}}
-  {{- /*Access Port*/ -}}
-  {{if eq .PortType "Access" -}} 
+  {{if eq .Function "Unused" -}} 
   switchport
   switchport access vlan {{ .UntagVlan }}
   spanning-tree port type edge
   no logging event port link-status
-  {{end -}}{{- /*Access Port*/ -}}
-  {{- /*Trunk Port*/ -}}
-  {{if eq .PortType "Trunk" -}} 
+  {{else if or (eq .Function "Compute") (eq .Function "Hyperconverged") -}}
   switchport
   switchport mode trunk
-  {{if .UntagVlan -}}
   switchport trunk native vlan {{ .UntagVlan }}
+  switchport trunk allowed vlan {{ .UntagVlan }}
+  {{ range .TagVlans -}}
+  switchport trunk allowed vlan add {{ . }}
   {{end -}}
-  {{if .TagVlan -}}
-  switchport trunk allowed vlan {{.TagVlan}}
-  {{end -}}
-  no logging event port link-status
   spanning-tree port type edge trunk
-  {{if .Others.ServicePolicyInput -}}
-  service-policy type qos input {{.Others.ServicePolicyInput}}
-  {{end  -}}
+  no logging event port link-status
+  {{else if eq .Function "Storage" -}}
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan {{ .UntagVlan }}
+  switchport trunk allowed vlan {{ .UntagVlan }}
+  {{ range .TagVlans -}}
+  switchport trunk allowed vlan add {{ . }}
+  {{end -}}
+  switchport trunk allowed vlan remove {{ .UntagVlan }}
   priority-flow-control mode on
-  {{end -}}{{- /*Trunk Port*/ -}}
+  spanning-tree port type edge trunk
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  {{else if eq .Function "MLAG_Peer" -}}
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan {{ .UntagVlan }}
+  priority-flow-control mode on
+  logging event port link-status
+  channel-group {{ .Others.ChannelGroup }} mode active
+  {{else if eq .Function "P2P_IBGP" -}}
+  priority-flow-control mode on
+  logging event port link-status
+  channel-group {{ .Others.ChannelGroup }} mode active
+  {{else if eq .Function "TOR_BMC" -}}
+  switchport
+  switchport mode trunk
+  {{ range .TagVlans -}}
+  switchport trunk allowed vlan {{ . }}
+  {{end -}}
+  logging event port link-status
+  channel-group {{ .Others.ChannelGroup }} mode active
+  {{else if eq .Function "P2P_Border1" -}}
+  no switchport
+  no ip redirects
+  ip address {{ .IPAddress }}
+  no ipv6 redirects
+  {{else if eq .Function "P2P_Border2" -}}
+  no switchport
+  no ip redirects
+  ip address {{ .IPAddress }}
+  no ipv6 redirects
+  {{end -}}
   {{if .Shutdown -}} shutdown {{else -}} no shutdown {{end}}
-{{end }}
-{{end -}}
-{{end -}}
-{{ end }}
+  {{ end }}
+{{ end -}}
+{{ end -}}

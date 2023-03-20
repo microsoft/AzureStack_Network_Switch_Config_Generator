@@ -8,7 +8,8 @@ interface vlan {{.VlanID}}
 
 {{ define "interface_vlan"}}
 ! vlan.go.tmpl-interface_vlan
-{{ range . -}}
+{{- $SwitchType := .Switch.Type -}}
+{{ range .Vlans  -}}
 {{ if .IPAddress -}} 
 interface vlan {{.VlanID}}
   description {{.VlanName}}
@@ -23,7 +24,11 @@ interface vlan {{.VlanID}}
   vrrp-group {{.VlanID}}
     virtual-address {{.VIPAddress}}
     no preempt
-    {{/* priority {{.VIPPriorityId}} */ -}}
+    {{ if eq $SwitchType "TOR1" -}}
+    priority 150
+    {{ else if eq $SwitchType "TOR2" -}}
+    priority 140
+    {{ end -}}
   {{ end -}}
 {{- end}}
 {{ end -}}
