@@ -78,7 +78,8 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 					l3IntfItem.Cidr = supernet.IPv4.Cidr
 					l3IntfItem.Mtu = JUMBOMTU
 					l3IntfItem.Subnet = supernet.IPv4.Subnet
-					l3IntfMap[supernet.IPv4.Name] = l3IntfItem
+					// Upper case the key Name
+					l3IntfMap[strings.ToUpper(supernet.IPv4.Name)] = l3IntfItem
 				}
 			}
 		}

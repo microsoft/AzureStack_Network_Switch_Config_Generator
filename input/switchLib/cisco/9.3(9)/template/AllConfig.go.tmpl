@@ -8,7 +8,11 @@
 {{ template "stp" .Switch -}}
 {{ template "vpc" . -}}
 {{if .PortChannel}}{{ template "portchannel" .PortChannel -}}{{ end -}}
-{{ template "port" .Ports -}}
+{{if eq .Switch.Type "BMC"}}
+{{ template "bmcport" .Ports -}}
+{{ else }}
+{{ template "torport" .Ports -}}
+{{ end }}
 {{ template "loopback" .L3Interfaces -}}
 {{ template "set_snmp" -}}
 {{ template "set_errdisable_setting" -}}

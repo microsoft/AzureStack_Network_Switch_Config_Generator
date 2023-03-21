@@ -1,24 +1,21 @@
 {{ define "define_vlan"}}
 ! vlan.go.tmpl-define_vlan
-{{ range . -}}    
+{{ range . }}    
 interface vlan {{.VlanID}}
   description {{.VlanName}}
+  {{if .Shutdown }}shutdown{{ end -}} 
 {{ end }}
 {{ end }}
 
 {{ define "interface_vlan"}}
 ! vlan.go.tmpl-interface_vlan
 {{- $SwitchType := .Switch.Type -}}
-{{ range .Vlans  -}}
-{{ if .IPAddress -}} 
+{{ range .Vlans }}
+{{ if .IPAddress }} 
 interface vlan {{.VlanID}}
   description {{.VlanName}}
   mtu {{.Mtu}}
-  {{if .Shutdown -}} 
-  shutdown 
-  {{ else -}} 
-  no shutdown
-  {{ end -}}
+  {{if .Shutdown -}}shutdown{{ else }}no shutdown{{ end }}
   ip address {{ .IPAddress }}
   {{ if .VIPAddress -}}
   vrrp-group {{.VlanID}}
@@ -30,6 +27,6 @@ interface vlan {{.VlanID}}
     priority 140
     {{ end -}}
   {{ end -}}
-{{- end}}
+{{- end -}}
 {{ end -}}
 {{ end -}}

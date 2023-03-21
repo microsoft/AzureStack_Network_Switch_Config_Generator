@@ -13,7 +13,8 @@
 {{ template "set_vrrp" -}}
 {{ template "set_load_sharing" -}}
 {{if .Routing.PrefixList}}{{ template "prefixlist" .Routing.PrefixList -}} {{ end -}}
-{{ template "vpc" . -}}
+{{ template "portgroup" -}}
+{{ template "vlt" . -}}
 {{if .PortChannel}}{{ template "portchannel" .PortChannel -}}{{ end -}}
 {{ template "loopback" .L3Interfaces -}}
 {{ template "port" .Ports -}}

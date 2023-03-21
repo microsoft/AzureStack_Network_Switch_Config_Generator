@@ -1,5 +1,5 @@
-{{ define "port"}}
-! port.go.tmpl-port
+{{ define "torport"}}
+! torport.go.tmpl-torport
 {{ range . -}}
 {{ if eq .Type "mgmt" -}}
 interface {{ .Port }}
@@ -69,8 +69,8 @@ interface {{ .Type}} {{ .Port }}
   no ip redirects
   ip address {{ .IPAddress }}
   no ipv6 redirects
-  {{end -}}
-  {{if .Shutdown -}} shutdown {{else -}} no shutdown {{end}}
+  {{ end }}
+  {{- if .Shutdown }}shutdown{{ else }}no shutdown{{ end }}
   {{ end }}
 {{ end -}}
 {{ end -}}

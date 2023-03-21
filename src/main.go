@@ -23,7 +23,8 @@ var (
 	JSONExtension            = ".json"
 	CONFIGExtension          = ".config"
 	P2P_IBGP                 = "P2P_IBGP"
-	MLAG_PEER                = "MLAG_Peer"
+	P2P_BORDER               = "P2P_BORDER"
+	MLAG_PEER                = "MLAG_PEER"
 	TOR_BMC                  = "TOR_BMC"
 	POID_P2P_IBGP            = "50"
 	POID_MLAG_PEER           = "101"
@@ -40,6 +41,7 @@ var (
 
 	COMPUTE, STORAGE                         = "Compute", "Storage"
 	SWITCHED, SWITCHLESS, HYPERCONVERGED     = "Switched", "Switchless", "Hyperconverged"
+	HLHBMC, HLHOS, RESERVEDPDU               = "HLH-BMC", "HLH-OS", "Reserved_For_PDU"
 	SWITCHUPLINK, SWITCHDOWNLINK, SWITCHPEER = "SwitchUplink", "SwitchDownlink", "SwitchPeer"
 	BMC_DEFAULT_ROUTE                        = "GlobalDefaultRoute"
 	DeviceTypeMap                            map[string][]SwitchType

@@ -1592,6 +1592,7 @@
           "Name": "UNUSED_VLAN",
           "VLANID": 2,
           "Description": "UNUSED_VLAN",
+          "Shutdown": true,
           "IPv4": {
             "SwitchSVI": false,
             "Name": "UNUSED_VLAN",
