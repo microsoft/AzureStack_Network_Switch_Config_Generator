@@ -41,7 +41,7 @@ var (
 
 	COMPUTE, STORAGE                         = "Compute", "Storage"
 	SWITCHED, SWITCHLESS, HYPERCONVERGED     = "Switched", "Switchless", "Hyperconverged"
-	HLHBMC, HLHOS, RESERVEDPDU               = "HLH-BMC", "HLH-OS", "Reserved_For_PDU"
+	HLHBMC, HLHOS, RESERVEDPDU               = "HLH_BMC", "HLH_OS", "Reserved_For_PDU"
 	SWITCHUPLINK, SWITCHDOWNLINK, SWITCHPEER = "SwitchUplink", "SwitchDownlink", "SwitchPeer"
 	BMC_DEFAULT_ROUTE                        = "GlobalDefaultRoute"
 	DeviceTypeMap                            map[string][]SwitchType

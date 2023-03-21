@@ -1542,10 +1542,10 @@
    "BGPAsn": 65243,
    "RouterID": "100.71.85.150",
    "IPv4Network": [
+    "100.71.85.140/30",
     "100.71.85.144/30",
     "100.71.85.150/32",
     "100.71.85.132/30",
-    "100.71.85.140/30",
     "100.71.85.192/26",
     "100.71.131.128/25"
    ],
@@ -1593,7 +1593,7 @@
      "NeighborIPAddress": "100.71.85.145",
      "PrefixList": [],
      "Shutdown": false,
-     "NbrPassword": "u0Vp9eOu\u0026k%Md!6o"
+     "NbrPassword": "zf7!*Epjp7Y4\u0026jQj"
     },
     {
      "SwitchRelation": "SwitchDownlink",
@@ -1621,7 +1621,7 @@
       "Idx": 1,
       "Action": "deny",
       "Description": "Storage",
-      "Network": "10.71.1.0/24",
+      "Network": "10.71.2.0/24",
       "Operation": "le",
       "Prefix": 32
      },
@@ -1629,7 +1629,7 @@
       "Idx": 1,
       "Action": "deny",
       "Description": "Storage",
-      "Network": "10.71.2.0/24",
+      "Network": "10.71.1.0/24",
       "Operation": "le",
       "Prefix": 32
      },

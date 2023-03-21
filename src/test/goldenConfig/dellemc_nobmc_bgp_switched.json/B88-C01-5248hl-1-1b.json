@@ -408,7 +408,7 @@
   "MLAG_PEER": {
    "Description": "MLAG_PEER",
    "Function": "MLAG_PEER",
-   "UntagVlan": 0,
+   "UntagVlan": 99,
    "TagVlans": 0,
    "IPAddress": "",
    "PortChannelID": "101",
@@ -423,6 +423,16 @@
    "IPAddress": "100.71.85.146/30",
    "PortChannelID": "50",
    "VPC": "",
+   "Shutdown": false
+  },
+  "TOR_BMC": {
+   "Description": "TOR_BMC",
+   "Function": "TOR_BMC",
+   "UntagVlan": 0,
+   "TagVlans": 125,
+   "IPAddress": "",
+   "PortChannelID": "102",
+   "VPC": "102",
    "Shutdown": false
   }
  },
@@ -1274,10 +1284,10 @@
    "BGPAsn": 65341,
    "RouterID": "100.71.85.150",
    "IPv4Network": [
-    "100.71.85.132/30",
     "100.71.85.140/30",
     "100.71.85.144/30",
     "100.71.85.150/32",
+    "100.71.85.132/30",
     "100.71.85.192/26",
     "100.71.131.128/25"
    ],
@@ -1325,7 +1335,7 @@
      "NeighborIPAddress": "100.71.85.145",
      "PrefixList": [],
      "Shutdown": false,
-     "NbrPassword": "zf7!*Epjp7Y4\u0026jQj"
+     "NbrPassword": "u0Vp9eOu\u0026k%Md!6o"
     },
     {
      "SwitchRelation": "SwitchDownlink",

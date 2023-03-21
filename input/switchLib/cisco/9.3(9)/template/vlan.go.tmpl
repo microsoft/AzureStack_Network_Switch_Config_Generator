@@ -8,7 +8,7 @@ vlan {{.VlanID}}
 
 {{ define "interface_vlan"}}
 ! vlan.go.tmpl-interface_vlan
-{{- $SwitchType := .Switch.Type -}}
+{{ $SwitchType := .Switch.Type }}
 {{ range .Vlans -}}
 {{ if .IPAddress -}} 
 interface vlan{{.VlanID}}

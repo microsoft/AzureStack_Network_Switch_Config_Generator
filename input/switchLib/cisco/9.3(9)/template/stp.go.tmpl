@@ -1,4 +1,5 @@
 {{ define "stp"}}
+! stp.go.tmpl-stp
 {{if eq .Type "TOR1"}}
 spanning-tree mode mst
 spanning-tree port type edge bpduguard default
@@ -14,6 +15,16 @@ spanning-tree mode mst
 spanning-tree port type edge bpduguard default
 spanning-tree mst 0-1 priority 16384
 spanning-tree mst 2 priority 8192
+spanning-tree mst configuration
+  name AzureStack
+  revision 1
+  instance 1 vlan 1-1999
+  instance 2 vlan 2000-4094
+{{else if eq .Type "BMC"}}
+spanning-tree mode mst
+spanning-tree port type edge bpduguard default
+spanning-tree mst 0-1 priority 32768
+spanning-tree mst 2 priority 28672
 spanning-tree mst configuration
   name AzureStack
   revision 1

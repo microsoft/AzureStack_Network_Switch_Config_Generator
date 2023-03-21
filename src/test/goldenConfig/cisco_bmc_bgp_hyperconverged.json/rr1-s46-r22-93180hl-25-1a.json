@@ -1556,10 +1556,10 @@
    "BGPAsn": 65243,
    "RouterID": "100.71.85.149",
    "IPv4Network": [
-    "100.71.85.149/32",
     "100.71.85.128/30",
     "100.71.85.136/30",
     "100.71.85.144/30",
+    "100.71.85.149/32",
     "100.71.85.192/26",
     "100.71.131.128/25"
    ],
@@ -1607,7 +1607,7 @@
      "NeighborIPAddress": "100.71.85.146",
      "PrefixList": [],
      "Shutdown": false,
-     "NbrPassword": "%deb00mJ5XrR\u0026!zf"
+     "NbrPassword": "%Xpnj7EO@o*d3bl3"
     },
     {
      "SwitchRelation": "SwitchDownlink",

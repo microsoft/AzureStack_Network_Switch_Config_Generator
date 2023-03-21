@@ -50,11 +50,23 @@
    "Cidr": 26,
    "Subnet": "100.71.85.192/26",
    "MTU": 1500,
-   "VIPAddress": "100.71.85.193",
+   "VIPAddress": "",
    "VIPPriorityId": 0,
    "Shutdown": false
   }
  ],
+ "PortChannel": {
+  "TOR_BMC": {
+   "Description": "TOR_BMC",
+   "Function": "TOR_BMC",
+   "UntagVlan": 0,
+   "TagVlans": 125,
+   "IPAddress": "",
+   "PortChannelID": "102",
+   "VPC": "102",
+   "Shutdown": false
+  }
+ },
  "Ports": [
   {
    "Port": "1/1",
@@ -582,7 +594,7 @@
    "Type": "Ethernet",
    "Description": "Reserved_For_PDU",
    "Function": "Reserved_For_PDU",
-   "UntagVlan": 2,
+   "UntagVlan": 125,
    "TagVlans": null,
    "IPAddress": "",
    "MTU": 9216,
@@ -595,7 +607,7 @@
    "Type": "Ethernet",
    "Description": "Reserved_For_PDU",
    "Function": "Reserved_For_PDU",
-   "UntagVlan": 2,
+   "UntagVlan": 125,
    "TagVlans": null,
    "IPAddress": "",
    "MTU": 9216,
@@ -608,7 +620,7 @@
    "Type": "Ethernet",
    "Description": "Reserved_For_PDU",
    "Function": "Reserved_For_PDU",
-   "UntagVlan": 2,
+   "UntagVlan": 125,
    "TagVlans": null,
    "IPAddress": "",
    "MTU": 9216,
@@ -621,7 +633,7 @@
    "Type": "Ethernet",
    "Description": "Reserved_For_PDU",
    "Function": "Reserved_For_PDU",
-   "UntagVlan": 2,
+   "UntagVlan": 125,
    "TagVlans": null,
    "IPAddress": "",
    "MTU": 9216,
@@ -645,13 +657,13 @@
    "Port": "1/46",
    "Idx": 46,
    "Type": "Ethernet",
-   "Description": "HLH-BMC",
-   "Function": "HLH-BMC",
-   "UntagVlan": 2,
+   "Description": "HLH_BMC",
+   "Function": "HLH_BMC",
+   "UntagVlan": 125,
    "TagVlans": null,
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
+   "Shutdown": false,
    "Others": null
   },
   {
@@ -684,53 +696,61 @@
    "Port": "1/49",
    "Idx": 49,
    "Type": "Ethernet",
-   "Description": "HLH-OS",
-   "Function": "HLH-OS",
-   "UntagVlan": 2,
+   "Description": "HLH_OS",
+   "Function": "HLH_OS",
+   "UntagVlan": 125,
    "TagVlans": null,
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
+   "Shutdown": false,
    "Others": null
   },
   {
    "Port": "1/50",
    "Idx": 50,
    "Type": "Ethernet",
-   "Description": "HLH-OS",
-   "Function": "HLH-OS",
-   "UntagVlan": 2,
+   "Description": "HLH_OS",
+   "Function": "HLH_OS",
+   "UntagVlan": 125,
    "TagVlans": null,
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
+   "Shutdown": false,
    "Others": null
   },
   {
    "Port": "1/51",
    "Idx": 51,
    "Type": "Ethernet",
-   "Description": "Unused",
-   "Function": "Unused",
-   "UntagVlan": 2,
-   "TagVlans": null,
+   "Description": "TOR_BMC",
+   "Function": "TOR_BMC",
+   "UntagVlan": 0,
+   "TagVlans": [
+    125
+   ],
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": false,
+   "Others": {
+    "ChannelGroup": "102"
+   }
   },
   {
    "Port": "1/52",
    "Idx": 52,
    "Type": "Ethernet",
-   "Description": "Unused",
-   "Function": "Unused",
-   "UntagVlan": 2,
-   "TagVlans": null,
+   "Description": "TOR_BMC",
+   "Function": "TOR_BMC",
+   "UntagVlan": 0,
+   "TagVlans": [
+    125
+   ],
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": false,
+   "Others": {
+    "ChannelGroup": "102"
+   }
   },
   {
    "Port": "1/53",
@@ -782,7 +802,7 @@
   "Static": [
    {
     "Network": "0.0.0.0/0",
-    "NextHop": "100.71.85.193",
+    "NextHop": "",
     "Name": "GlobalDefaultRoute"
    }
   ]

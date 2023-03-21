@@ -48,9 +48,9 @@ func (o *OutputType) UpdatePortChannel(inputData InputData) {
 		portChannelMap[TOR_BMC] = PO_TOR_BMC
 	}
 
-	if len(o.SwitchBMC) == 0 {
-		delete(portChannelMap, TOR_BMC)
-	}
+	// if strings.Contains(o.Switch.Type, TOR) && len(o.SwitchBMC) == 0 {
+	// 	delete(portChannelMap, TOR_BMC)
+	// }
 
 	o.PortChannel = portChannelMap
 }
