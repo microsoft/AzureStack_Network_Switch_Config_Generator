@@ -2,12 +2,23 @@
 
 ## Overall Design Flow
 
+### Nuget CI
+
+```mermaid
+flowchart TD
+
+    C[(Switch Config Tool GitHub Repo)] --> |CI Pull Remote Repo| D[Build Tool.exe and save folder SwitchLib]
+    D --> |CI Build| E[Sign and Package Nuget]
+    E --> |CI Push| B[(Nuget Feed)]
+
+```
+
+### Switch Deploy CI
+
 ```mermaid
 flowchart TD
     A[New Switch Input.json] --> |CI Integrate| B{{Invoke Generate Switch Config}}
-    C[Switch Config Tool GitHub Repo] --> |CI Pull Remote Repo| D[Build Tool.exe and save folder SwitchLib]
-    D --> |CI Build| E[Sign and Package Nuget]
-    E --> |CI Integrate| B
+    E[Pull the SwitchConfigGen Nuget] --> |CI Integrate| B
     B --> |CI Execute and Log| F[Switch Configuration Files]
     F --> |Copy to HLH| G[Optional - For Debug Use]
     F --> |Copy to Lab TFTP| H[For Switch Deployment Use]
