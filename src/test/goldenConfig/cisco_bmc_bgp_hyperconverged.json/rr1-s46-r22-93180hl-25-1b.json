@@ -1635,7 +1635,7 @@
       "Idx": 1,
       "Action": "deny",
       "Description": "Storage",
-      "Network": "10.71.1.0/24",
+      "Network": "10.71.2.0/24",
       "Operation": "le",
       "Prefix": 32
      },
@@ -1643,7 +1643,7 @@
       "Idx": 1,
       "Action": "deny",
       "Description": "Storage",
-      "Network": "10.71.2.0/24",
+      "Network": "10.71.1.0/24",
       "Operation": "le",
       "Prefix": 32
      },

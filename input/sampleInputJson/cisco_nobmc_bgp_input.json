@@ -97,7 +97,7 @@
                 "Make": "Cisco",
                 "Model": "93180YC-FX",
                 "Type": "TOR1",
-                "Hostname": "TOR1",
+                "Hostname": "CiscoNXOSTest-TOR1",
                 "ASN": 65001,
                 "Firmware": "9.3(9)"
             },
@@ -105,7 +105,7 @@
                 "Make": "Cisco",
                 "Model": "93180YC-FX",
                 "Type": "TOR2",
-                "Hostname": "TOR2",
+                "Hostname": "CiscoNXOSTest-TOR2",
                 "ASN": 65001,
                 "Firmware": "9.3(9)"
             },

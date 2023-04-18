@@ -1,57 +1,8 @@
 {{ define "portgroup"}}
 ! portgroup.go.tmpl-portgroup
 !
-port-group 1/1/1
- mode Eth 25g-4x
-!
-port-group 1/1/2
- mode Eth 25g-4x
-!
-port-group 1/1/3
- mode Eth 25g-4x
-!
-port-group 1/1/4
- mode Eth 25g-4x
-!
-port-group 1/1/5
- mode Eth 25g-4x
-!
-port-group 1/1/6
- mode Eth 25g-4x
-!
-port-group 1/1/7
- mode Eth 10g-4x
-!
-port-group 1/1/8
- mode Eth 10g-4x
-!
-port-group 1/1/9
- mode Eth 25g-4x
-!
-port-group 1/1/10
- mode Eth 25g-4x
-!
-port-group 1/1/11
- mode Eth 10g-4x
-!
-port-group 1/1/12
- mode Eth 10g-4x
-!
-port-group 1/1/13
- mode Eth 100g-2x
-!
-port-group 1/1/14
- mode Eth 100g-2x
-!
-port-group 1/1/15
- mode Eth 100g-1x
-!
-port-group 1/1/16
- mode Eth 100g-1x
-!
-port-group 1/1/17
- mode Eth 100g-1x
-!
-port-group 1/1/18
- mode Eth 100g-1x
+{{ range . }}
+port-group {{ .PortGroup }}
+{{ if eq .Type "ethernet" }} mode Eth {{ .Mode }}{{ end }}
+{{ end -}}
 {{ end -}}

@@ -17,10 +17,11 @@ flowchart TD
 
 ```mermaid
 flowchart TD
+    L[Lab Repo] --> |Copy to CI| A[New Switch Input.json]
     A[New Switch Input.json] --> |CI Integrate| B{{Invoke Generate Switch Config}}
-    E[Pull the SwitchConfigGen Nuget] --> |CI Integrate| B
+    E[Pull the SwitchConfigGen Artifact] --> |CI Integrate| B
     B --> |CI Execute and Log| F[Switch Configuration Files]
-    F --> |Copy to HLH| G[Optional - For Debug Use]
+    F --> |Copy to azlabslogs Server| G[For Debug Use]
     F --> |Copy to Lab TFTP| H[For Switch Deployment Use]
 ```
 
@@ -30,8 +31,4 @@ flowchart TD
 - Figure out where to put the tool as well as input.json file on CI.
 - Update the CI script to trigger the tool run
 
-
 ### MileStone2: Push the configuration to the Switch and validate
-
-
-

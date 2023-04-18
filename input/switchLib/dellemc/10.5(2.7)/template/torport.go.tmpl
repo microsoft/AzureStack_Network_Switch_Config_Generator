@@ -1,76 +1,76 @@
 {{ define "torport"}}
-! torport.go.tmpl-torport
+! port.go.tmpl-port
 {{ range . -}}
 {{ if eq .Type "mgmt" -}}
 interface {{ .Port }}
   description use the BMCMgmt switch virtual interface
-  no ip redirects
-  no ipv6 redirects
+  no ip address
   shutdown
 {{ else -}}
 interface {{ .Type}} {{ .Port }}
   description {{ .Description }}
-  no cdp enable
   mtu {{ .Mtu }}
-  {{if eq .Function "Unused" -}} 
-  switchport
+  {{if or (eq .Function "Unused") (eq .Function "RESERVED") -}} 
+  switchport mode access
   switchport access vlan {{ .UntagVlan }}
-  spanning-tree port type edge
-  no logging event port link-status
+  spanning-tree bpduguard enable
+  spanning-tree guard root
   {{else if or (eq .Function "Compute") (eq .Function "Hyperconverged") -}}
-  switchport
+  no switchport
   switchport mode trunk
-  switchport trunk native vlan {{ .UntagVlan }}
-  switchport trunk allowed vlan {{ .UntagVlan }}
-  {{ range .TagVlans -}}
-  switchport trunk allowed vlan add {{ . }}
-  {{end -}}
-  spanning-tree port type edge trunk
-  no logging event port link-status
-  {{else if eq .Function "Storage" -}}
-  switchport
-  switchport mode trunk
-  switchport trunk native vlan {{ .UntagVlan }}
-  switchport trunk allowed vlan {{ .UntagVlan }}
-  {{ range .TagVlans -}}
-  switchport trunk allowed vlan add {{ . }}
-  {{end -}}
-  switchport trunk allowed vlan remove {{ .UntagVlan }}
-  priority-flow-control mode on
-  spanning-tree port type edge trunk
-  no logging event port link-status
-  service-policy type qos input AZS_SERVICES
-  {{else if eq .Function "MLAG_Peer" -}}
-  switchport
-  switchport mode trunk
-  switchport trunk native vlan {{ .UntagVlan }}
-  priority-flow-control mode on
-  logging event port link-status
-  channel-group {{ .Others.ChannelGroup }} mode active
-  {{else if eq .Function "P2P_IBGP" -}}
-  priority-flow-control mode on
-  logging event port link-status
-  channel-group {{ .Others.ChannelGroup }} mode active
-  {{else if eq .Function "TOR_BMC" -}}
-  switchport
-  switchport mode trunk
+  switchport access vlan {{ .UntagVlan }}
   {{ range .TagVlans -}}
   switchport trunk allowed vlan {{ . }}
   {{end -}}
-  logging event port link-status
+  priority-flow-control mode on
+  service-policy input type network-qos AZS_SERVICES_pfc
+  service-policy output type queuing AZS_SERVICES_ets
+  qos-map traffic-class AZS_SERVICES_Que
+  ets mode on
+  spanning-tree bpduguard enable
+  spanning-tree guard root
+  spanning-tree port type edge
+  {{else if eq .Function "Storage" -}}
+  no switchport
+  switchport mode trunk
+  switchport access vlan {{ .UntagVlan }}
+  {{ range .TagVlans -}}
+  switchport trunk allowed vlan {{ . }}
+  {{end -}}
+  priority-flow-control mode on
+  service-policy input type network-qos AZS_SERVICES_pfc
+  service-policy output type queuing AZS_SERVICES_ets
+  qos-map traffic-class AZS_SERVICES_Que
+  ets mode on
+  spanning-tree bpduguard enable
+  spanning-tree guard root
+  spanning-tree port type edge
+  {{else if eq .Function "MLAG_PEER" -}}
+  no switchport
+  no ip address
+  flowcontrol receive off
+  priority-flow-control mode on
+  service-policy input type network-qos AZS_SERVICES_pfc
+  service-policy output type queuing AZS_SERVICES_ets
+  qos-map traffic-class AZS_SERVICES_Que
+  ets mode on
+  {{else if eq .Function "P2P_IBGP" -}}
+  priority-flow-control mode on
+  service-policy input type network-qos AZS_SERVICES_pfc
+  service-policy output type queuing AZS_SERVICES_ets
+  qos-map traffic-class AZS_SERVICES_Que
+  ets mode on
+  channel-group {{ .Others.ChannelGroup }} mode active
+  {{else if eq .Function "TOR_BMC" -}}
   channel-group {{ .Others.ChannelGroup }} mode active
   {{else if eq .Function "P2P_Border1" -}}
   no switchport
-  no ip redirects
   ip address {{ .IPAddress }}
-  no ipv6 redirects
   {{else if eq .Function "P2P_Border2" -}}
   no switchport
-  no ip redirects
   ip address {{ .IPAddress }}
-  no ipv6 redirects
-  {{ end }}
-  {{- if .Shutdown }}shutdown{{ else }}no shutdown{{ end }}
+  {{end -}}
+  {{if .Shutdown }}shutdown{{ else }}no shutdown{{ end }}
   {{ end }}
 {{ end -}}
 {{ end -}}

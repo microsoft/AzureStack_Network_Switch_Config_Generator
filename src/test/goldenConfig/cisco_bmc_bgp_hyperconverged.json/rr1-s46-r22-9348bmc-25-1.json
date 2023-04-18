@@ -50,7 +50,7 @@
    "Cidr": 26,
    "Subnet": "100.71.85.192/26",
    "MTU": 1500,
-   "VIPAddress": "",
+   "VIPAddress": "100.71.85.193",
    "VIPPriorityId": 0,
    "Shutdown": false
   }
@@ -802,7 +802,7 @@
   "Static": [
    {
     "Network": "0.0.0.0/0",
-    "NextHop": "",
+    "NextHop": "100.71.85.193",
     "Name": "GlobalDefaultRoute"
    }
   ]

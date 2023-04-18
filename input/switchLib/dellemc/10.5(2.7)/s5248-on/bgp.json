@@ -38,18 +38,14 @@
           "NeighborIPAddress": "P2P_IBGP",
           "PrefixList": [],
           "Shutdown": false
-        },
+        }
+      ],
+      "TemplateNeigbor":[
         {
           "SwitchRelation": "SwitchDownlink",
           "Description": "MUX",
           "NeighborAsn": 0,
           "NeighborIPAddress": "HNVPA",
-          "PrefixList": [
-            {
-              "Name": "DefaultRoute",
-              "Direction": "out"
-            }
-          ],
           "UpdateSource": "Loopback0",
           "LocalAS": "64512",
           "EBGPMultiHop": 3,

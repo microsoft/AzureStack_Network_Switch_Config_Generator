@@ -12,14 +12,14 @@ import (
 func (o *OutputType) ParseSwitchPort(frameworkFolder string) {
 	interfaceJsonPath := fmt.Sprintf("%s/%s", frameworkFolder, INTERFACEJSON)
 	interfaceJsonObj := parseInterfaceJson(interfaceJsonPath)
-	outputSwitchPorts := initSwitchPort(interfaceJsonObj)
+	o.updateDellPortGroup(interfaceJsonObj)
+	outputSwitchPorts := initSwitchPort(interfaceJsonObj, o.Switch.Make)
 	o.Ports = outputSwitchPorts
 	if strings.Contains(o.Switch.Type, TOR) {
 		o.UpdateTORSwitchPorts(interfaceJsonObj.VlanGroup)
 	} else if strings.Contains(o.Switch.Type, BMC) {
 		o.UpdateBMCSwitchPorts(interfaceJsonObj.VlanGroup)
 	}
-
 }
 
 func parseInterfaceJson(interfaceJsonPath string) *PortJson {
@@ -35,20 +35,51 @@ func parseInterfaceJson(interfaceJsonPath string) *PortJson {
 	return interfaceJsonObj
 }
 
-func initSwitchPort(interfaceJsonObj *PortJson) []PortType {
+func initSwitchPort(interfaceJsonObj *PortJson, switchMake string) []PortType {
 	outputSwitchPorts := []PortType{}
 	portToIdx := map[string]int{}
 	for _, port := range interfaceJsonObj.Port {
-		outputSwitchPorts = append(outputSwitchPorts, PortType{
-			Port:        port.Port,
-			Idx:         port.Idx,
-			Type:        port.Type,
-			Shutdown:    true,
-			Description: UNUSED,
-			Function:    UNUSED,
-			Mtu:         JUMBOMTU,
-			UntagVlan:   UNUSED_VLANID,
-		})
+		if strings.Contains(switchMake, "Dell") {
+			if strings.Contains(port.Mode, "10g-4x") {
+				// 10g-4x port need to add ":1" while defining interface config
+				outputSwitchPorts = append(outputSwitchPorts, PortType{
+					Port:        port.Port + ":1",
+					Idx:         port.Idx,
+					Type:        port.Type,
+					Shutdown:    true,
+					Description: UNUSED,
+					Function:    UNUSED,
+					Mtu:         JUMBOMTU,
+					UntagVlan:   UNUSED_VLANID,
+					Mode:        port.Mode,
+					PortGroup:   port.PortGroup,
+				})
+			} else {
+				outputSwitchPorts = append(outputSwitchPorts, PortType{
+					Port:        port.Port,
+					Idx:         port.Idx,
+					Type:        port.Type,
+					Shutdown:    true,
+					Description: UNUSED,
+					Function:    UNUSED,
+					Mtu:         JUMBOMTU,
+					UntagVlan:   UNUSED_VLANID,
+					Mode:        port.Mode,
+					PortGroup:   port.PortGroup,
+				})
+			}
+		} else {
+			outputSwitchPorts = append(outputSwitchPorts, PortType{
+				Port:        port.Port,
+				Idx:         port.Idx,
+				Type:        port.Type,
+				Shutdown:    true,
+				Description: UNUSED,
+				Function:    UNUSED,
+				Mtu:         JUMBOMTU,
+				UntagVlan:   UNUSED_VLANID,
+			})
+		}
 		portToIdx[port.Port] = port.Idx
 	}
 	// Initial Interface Object Map
@@ -206,4 +237,26 @@ func (o *OutputType) UpdateBMCSwitchPorts(VlanGroup map[string][]string) {
 		}
 		o.Ports[i] = tmpPortObj
 	}
+}
+
+func (o *OutputType) updateDellPortGroup(interfaceJsonObj *PortJson) {
+	tmpPortGroup := []PortGroupType{}
+	tmpPortGroupMap := map[string]PortGroupType{}
+	for _, port := range interfaceJsonObj.Port {
+		if len(port.PortGroup) > 0 {
+			tmpPortGroupMap[port.PortGroup] = PortGroupType{
+				PortGroup: port.PortGroup,
+				Mode:      port.Mode,
+				Type:      port.Type,
+				Idx:       port.Idx,
+			}
+		}
+	}
+	for _, v := range tmpPortGroupMap {
+		tmpPortGroup = append(tmpPortGroup, v)
+	}
+	sort.Slice(tmpPortGroup, func(i, j int) bool {
+		return tmpPortGroup[i].Idx < tmpPortGroup[j].Idx
+	})
+	o.PortGroup = tmpPortGroup
 }

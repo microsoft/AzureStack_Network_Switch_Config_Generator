@@ -15,7 +15,7 @@
 {{ template "set_syslog" .GlobalSetting -}}
 {{ template "set_load_sharing" -}}
 {{if .Routing.PrefixList}}{{ template "prefixlist" .Routing.PrefixList -}} {{ end -}}
-{{ template "portgroup" -}}
+{{ template "portgroup" .PortGroup -}}
 {{ template "vlt" . -}}
 {{if .PortChannel}}{{ template "portchannel" .PortChannel -}}{{ end -}}
 {{ template "loopback" .L3Interfaces -}}

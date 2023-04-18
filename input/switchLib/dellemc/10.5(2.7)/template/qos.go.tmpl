@@ -4,17 +4,17 @@
 ! QOS AZS_SERVICES
 !
 trust dot1p-map AZS_SERVICES_Dot1p
-qos-group 0 dot1p 0-2,4,6-7
+qos-group 0 dot1p 0-2,4-6
 qos-group 3 dot1p 3
-qos-group 5 dot1p 5
+qos-group 5 dot1p 7
 !
 qos-map traffic-class AZS_SERVICES_Que
-queue 0 qos-group 0-2,4,6-7
+queue 0 qos-group 0-2,4-6
 queue 3 qos-group 3
-queue 5 qos-group 5
+queue 5 qos-group 7
 !
-class-map type network-qos AZS_SERVICES_Dot1p_5
-match qos-group 5
+class-map type network-qos AZS_SERVICES_Dot1p_7
+match qos-group 7
 !
 class-map type network-qos AZS_SERVICES_Dot1p_3
 match qos-group 3
@@ -25,8 +25,8 @@ match queue 0
 class-map type queuing AZS_SERVICES_EtsQue_3
 match queue 3 
  !
-class-map type queuing AZS_SERVICES_EtsQue_5
-match queue 5 
+class-map type queuing AZS_SERVICES_EtsQue_7
+match queue 7 
 !
 policy-map type network-qos AZS_SERVICES_pfc
 !
@@ -42,7 +42,7 @@ class AZS_SERVICES_EtsQue_0
 class AZS_SERVICES_EtsQue_3
   bandwidth percent 50
   !
-class AZS_SERVICES_EtsQue_5
+class AZS_SERVICES_EtsQue_7
   bandwidth percent 2
 !
 dcbx enable
