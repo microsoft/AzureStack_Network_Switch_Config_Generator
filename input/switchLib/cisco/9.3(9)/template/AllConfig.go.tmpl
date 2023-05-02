@@ -2,14 +2,18 @@
 {{ template "banner" .ToolBuildVersion -}}
 {{ template "stig_feature" . -}}
 {{ template "stig_user" .GlobalSetting -}}
-{{ template "stig_ssh" . -}}
-{{ template "qos" . -}}
+{{ template "stig_ssh" -}}
+{{ template "qos" -}}
 {{ template "define_vlan" .Vlans -}}
 {{ template "interface_vlan" . -}}
 {{ template "stp" .Switch -}}
-{{ template "vpc" . -}}
-{{if .PortChannel}}{{ template "portchannel" .PortChannel -}}{{ end -}}
-{{ template "port" .Ports -}}
+{{ template "vpc" .L3Interfaces -}}
+{{if .PortChannel}}{{ template "portchannel" . -}}{{ end -}}
+{{if eq .Switch.Type "BMC"}}
+{{ template "bmcport" .Ports -}}
+{{ else }}
+{{ template "torport" .Ports -}}
+{{ end }}
 {{ template "loopback" .L3Interfaces -}}
 {{ template "set_snmp" -}}
 {{ template "set_errdisable_setting" -}}
@@ -21,7 +25,7 @@
 {{ template "set_load_sharing" -}}
 {{ template "set_icmp_errors" .GlobalSetting -}}
 {{if .Routing.PrefixList}}{{ template "prefixlist" .Routing.PrefixList -}} {{ end -}}
-{{ template "bgp" .Routing.BGP -}}
+{{if ne .Routing.BGP.BGPAsn 0 }}{{ template "bgp" .Routing.BGP -}}{{ end -}}
 {{if .Routing.Static}}{{ template "static" .Routing.Static -}} {{ end -}}
 {{- /* {{ template "define_vlan" .Vlans -}}
 {{ template "interface_vlan" .Vlans -}} */ -}}

@@ -12,9 +12,14 @@ import (
 func (o *OutputType) ParseSwitchPort(frameworkFolder string) {
 	interfaceJsonPath := fmt.Sprintf("%s/%s", frameworkFolder, INTERFACEJSON)
 	interfaceJsonObj := parseInterfaceJson(interfaceJsonPath)
-	outputSwitchPorts := initSwitchPort(interfaceJsonObj)
+	o.updateDellPortGroup(interfaceJsonObj)
+	outputSwitchPorts := initSwitchPort(interfaceJsonObj, o.Switch.Make)
 	o.Ports = outputSwitchPorts
-	o.UpdateSwitchPorts(interfaceJsonObj.VlanGroup)
+	if strings.Contains(o.Switch.Type, TOR) {
+		o.UpdateTORSwitchPorts(interfaceJsonObj.VlanGroup)
+	} else if strings.Contains(o.Switch.Type, BMC) {
+		o.UpdateBMCSwitchPorts(interfaceJsonObj.VlanGroup)
+	}
 }
 
 func parseInterfaceJson(interfaceJsonPath string) *PortJson {
@@ -30,20 +35,51 @@ func parseInterfaceJson(interfaceJsonPath string) *PortJson {
 	return interfaceJsonObj
 }
 
-func initSwitchPort(interfaceJsonObj *PortJson) []PortType {
+func initSwitchPort(interfaceJsonObj *PortJson, switchMake string) []PortType {
 	outputSwitchPorts := []PortType{}
 	portToIdx := map[string]int{}
 	for _, port := range interfaceJsonObj.Port {
-		outputSwitchPorts = append(outputSwitchPorts, PortType{
-			Port:        port.Port,
-			Idx:         port.Idx,
-			Type:        port.Type,
-			Shutdown:    true,
-			Description: UNUSED,
-			Function:    UNUSED,
-			Mtu:         JUMBOMTU,
-			UntagVlan:   UNUSED_VLANID,
-		})
+		if strings.Contains(switchMake, "Dell") {
+			if strings.Contains(port.Mode, "10g-4x") {
+				// 10g-4x port need to add ":1" while defining interface config
+				outputSwitchPorts = append(outputSwitchPorts, PortType{
+					Port:        port.Port + ":1",
+					Idx:         port.Idx,
+					Type:        port.Type,
+					Shutdown:    true,
+					Description: UNUSED,
+					Function:    UNUSED,
+					Mtu:         JUMBOMTU,
+					UntagVlan:   UNUSED_VLANID,
+					Mode:        port.Mode,
+					PortGroup:   port.PortGroup,
+				})
+			} else {
+				outputSwitchPorts = append(outputSwitchPorts, PortType{
+					Port:        port.Port,
+					Idx:         port.Idx,
+					Type:        port.Type,
+					Shutdown:    true,
+					Description: UNUSED,
+					Function:    UNUSED,
+					Mtu:         JUMBOMTU,
+					UntagVlan:   UNUSED_VLANID,
+					Mode:        port.Mode,
+					PortGroup:   port.PortGroup,
+				})
+			}
+		} else {
+			outputSwitchPorts = append(outputSwitchPorts, PortType{
+				Port:        port.Port,
+				Idx:         port.Idx,
+				Type:        port.Type,
+				Shutdown:    true,
+				Description: UNUSED,
+				Function:    UNUSED,
+				Mtu:         JUMBOMTU,
+				UntagVlan:   UNUSED_VLANID,
+			})
+		}
 		portToIdx[port.Port] = port.Idx
 	}
 	// Initial Interface Object Map
@@ -66,7 +102,7 @@ func initSwitchPort(interfaceJsonObj *PortJson) []PortType {
 	return outputSwitchPorts
 }
 
-func (o *OutputType) UpdateSwitchPorts(VlanGroup map[string][]string) {
+func (o *OutputType) UpdateTORSwitchPorts(VlanGroup map[string][]string) {
 	// Get Storage and Compute VlanList
 	STORAGE_VlanMap := map[int]string{}
 	COMPUTE_VlanMap := map[int]string{}
@@ -117,21 +153,27 @@ func (o *OutputType) UpdateSwitchPorts(VlanGroup map[string][]string) {
 			tmpPortObj.Description = UNUSED
 			tmpPortObj.Function = UNUSED
 		} else if strings.EqualFold(portItem.Function, COMPUTE) && strings.EqualFold(o.DeploymentPattern, SWITCHED) {
-			// Switched Non Converged use both Compute and Storage Port Assignment
+			// Switched Non Converged use Compute Port Assignment
 			tmpPortObj.UntagVlan = Compute_NativeVlanID
 			tmpPortObj.TagVlans = COMPUTE_VlanList
 			tmpPortObj.Shutdown = false
 			tmpPortObj.Description = fmt.Sprintf("%s-%s", o.DeploymentPattern, COMPUTE)
 			tmpPortObj.Function = COMPUTE
 		} else if strings.EqualFold(portItem.Function, STORAGE) && strings.EqualFold(o.DeploymentPattern, SWITCHED) {
-			// Switched Non Converged use Compute and Storage Port Assignment
-			tmpPortObj.UntagVlan = CISCOMLAG_NATIVEVLANID
+			// Switched Non Converged use Storage Port Assignment
+			if strings.EqualFold(o.Switch.Make, "Cisco") {
+				// Cisco NXOS Storage Native Vlan is dummy vlan 99
+				tmpPortObj.UntagVlan = CISCOMLAG_NATIVEVLANID
+			} else if strings.EqualFold(o.Switch.Make, "DellEMC") {
+				// DellEMC Storage Native Vlan is shutdonw and unused
+				tmpPortObj.UntagVlan = UNUSED_VLANID
+			}
 			tmpPortObj.TagVlans = STORAGE_VlanList
 			tmpPortObj.Description = fmt.Sprintf("%s-%s", o.DeploymentPattern, STORAGE)
 			tmpPortObj.Function = STORAGE
-		} else if strings.Contains(portItem.Function, "P2P_Border") {
-
-			l3IntfName := fmt.Sprintf("%s_%s", portItem.Function, o.Switch.Type)
+		} else if strings.Contains(strings.ToUpper(portItem.Function), P2P_BORDER) {
+			// Uplink to Border
+			l3IntfName := strings.ToUpper(fmt.Sprintf("%s_%s", portItem.Function, o.Switch.Type))
 			portIpAddress := fmt.Sprintf("%s/%d", o.L3Interfaces[l3IntfName].IPAddress, o.L3Interfaces[l3IntfName].Cidr)
 			tmpPortObj.IPAddress = portIpAddress
 			tmpPortObj.UntagVlan = 0
@@ -168,4 +210,53 @@ func (o *OutputType) UpdateSwitchPorts(VlanGroup map[string][]string) {
 		}
 		o.Ports[i] = tmpPortObj
 	}
+}
+
+func (o *OutputType) UpdateBMCSwitchPorts(VlanGroup map[string][]string) {
+	for i, portItem := range o.Ports {
+		tmpPortObj := portItem
+		if strings.EqualFold(portItem.Function, HLHBMC) || strings.EqualFold(portItem.Function, HLHOS) {
+			tmpPortObj.UntagVlan = BMC_VlanID
+			tmpPortObj.Shutdown = false
+			tmpPortObj.Description = portItem.Function
+			tmpPortObj.Function = portItem.Function
+		} else if strings.EqualFold(portItem.Function, RESERVEDPDU) {
+			tmpPortObj.UntagVlan = BMC_VlanID
+			tmpPortObj.Shutdown = true
+			tmpPortObj.Description = portItem.Function
+			tmpPortObj.Function = portItem.Function
+		} else if strings.EqualFold(portItem.Function, TOR_BMC) {
+			// Has BMC to TOR
+			tmpPortObj.UntagVlan = 0
+			tmpPortObj.TagVlans = append(tmpPortObj.TagVlans, BMC_VlanID)
+			portOthers := map[string]string{
+				"ChannelGroup": o.PortChannel[TOR_BMC].PortChannelID,
+			}
+			tmpPortObj.Others = portOthers
+			tmpPortObj.Shutdown = false
+		}
+		o.Ports[i] = tmpPortObj
+	}
+}
+
+func (o *OutputType) updateDellPortGroup(interfaceJsonObj *PortJson) {
+	tmpPortGroup := []PortGroupType{}
+	tmpPortGroupMap := map[string]PortGroupType{}
+	for _, port := range interfaceJsonObj.Port {
+		if len(port.PortGroup) > 0 {
+			tmpPortGroupMap[port.PortGroup] = PortGroupType{
+				PortGroup: port.PortGroup,
+				Mode:      port.Mode,
+				Type:      port.Type,
+				Idx:       port.Idx,
+			}
+		}
+	}
+	for _, v := range tmpPortGroupMap {
+		tmpPortGroup = append(tmpPortGroup, v)
+	}
+	sort.Slice(tmpPortGroup, func(i, j int) bool {
+		return tmpPortGroup[i].Idx < tmpPortGroup[j].Idx
+	})
+	o.PortGroup = tmpPortGroup
 }

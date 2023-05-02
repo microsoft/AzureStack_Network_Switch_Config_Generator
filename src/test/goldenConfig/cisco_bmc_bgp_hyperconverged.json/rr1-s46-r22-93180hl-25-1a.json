@@ -386,7 +386,7 @@
   }
  ],
  "L3Interfaces": {
-  "Loopback0_Tor1": {
+  "LOOPBACK0_TOR1": {
    "Function": "Loopback0",
    "Description": "Loopback0_Tor1",
    "IPAddress": "100.71.85.149",
@@ -395,7 +395,7 @@
    "MTU": 9216,
    "Shutdown": false
   },
-  "P2P_Border1_Tor1": {
+  "P2P_BORDER1_TOR1": {
    "Function": "P2P_Border",
    "Description": "P2P_Border1_Tor1",
    "IPAddress": "100.71.85.130",
@@ -405,7 +405,7 @@
    "MTU": 9216,
    "Shutdown": false
   },
-  "P2P_Border2_Tor1": {
+  "P2P_BORDER2_TOR1": {
    "Function": "P2P_Border",
    "Description": "P2P_Border2_Tor1",
    "IPAddress": "100.71.85.138",
@@ -427,9 +427,9 @@
   }
  },
  "PortChannel": {
-  "MLAG_Peer": {
-   "Description": "MLAG_Peer",
-   "Function": "MLAG_Peer",
+  "MLAG_PEER": {
+   "Description": "MLAG_PEER",
+   "Function": "MLAG_PEER",
    "UntagVlan": 99,
    "TagVlans": 0,
    "IPAddress": "",
@@ -1441,7 +1441,7 @@
    "Function": "P2P_Border2",
    "UntagVlan": 0,
    "TagVlans": null,
-   "IPAddress": "/0",
+   "IPAddress": "100.71.85.138/30",
    "MTU": 9216,
    "Shutdown": false,
    "Others": null
@@ -1454,7 +1454,7 @@
    "Function": "P2P_Border1",
    "UntagVlan": 0,
    "TagVlans": null,
-   "IPAddress": "/0",
+   "IPAddress": "100.71.85.130/30",
    "MTU": 9216,
    "Shutdown": false,
    "Others": null
@@ -1465,14 +1465,12 @@
    "Type": "Ethernet",
    "Description": "MLAG_Peer",
    "Function": "MLAG_Peer",
-   "UntagVlan": 99,
+   "UntagVlan": 2,
    "TagVlans": null,
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": {
-    "ChannelGroup": "101"
-   }
+   "Shutdown": true,
+   "Others": null
   },
   {
    "Port": "1/50",
@@ -1480,14 +1478,12 @@
    "Type": "Ethernet",
    "Description": "MLAG_Peer",
    "Function": "MLAG_Peer",
-   "UntagVlan": 99,
+   "UntagVlan": 2,
    "TagVlans": null,
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": {
-    "ChannelGroup": "101"
-   }
+   "Shutdown": true,
+   "Others": null
   },
   {
    "Port": "1/51",
@@ -1495,14 +1491,12 @@
    "Type": "Ethernet",
    "Description": "MLAG_Peer",
    "Function": "MLAG_Peer",
-   "UntagVlan": 99,
+   "UntagVlan": 2,
    "TagVlans": null,
    "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": {
-    "ChannelGroup": "101"
-   }
+   "Shutdown": true,
+   "Others": null
   },
   {
    "Port": "1/52",
@@ -1562,10 +1556,10 @@
    "BGPAsn": 65243,
    "RouterID": "100.71.85.149",
    "IPv4Network": [
+    "100.71.85.136/30",
     "100.71.85.144/30",
     "100.71.85.149/32",
     "100.71.85.128/30",
-    "100.71.85.136/30",
     "100.71.85.192/26",
     "100.71.131.128/25"
    ],
@@ -1641,7 +1635,7 @@
       "Idx": 1,
       "Action": "deny",
       "Description": "Storage",
-      "Network": "10.71.1.0/24",
+      "Network": "10.71.2.0/24",
       "Operation": "le",
       "Prefix": 32
      },
@@ -1649,7 +1643,7 @@
       "Idx": 1,
       "Action": "deny",
       "Description": "Storage",
-      "Network": "10.71.2.0/24",
+      "Network": "10.71.1.0/24",
       "Operation": "le",
       "Prefix": 32
      },

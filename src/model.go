@@ -33,6 +33,7 @@ type OutputType struct {
 	L3Interfaces      map[string]L3IntfType      `json:"L3Interfaces,omitempty"`
 	PortChannel       map[string]PortChannelType `json:"PortChannel,omitempty"`
 	Ports             []PortType                 `json:"Ports,omitempty"`
+	PortGroup         []PortGroupType            `json:"PortGroup,omitempty"`
 	Routing           RoutingType                `json:"Routing,omitempty"`
 }
 
@@ -131,9 +132,11 @@ type PortJson struct {
 	} `json:"Function"`
 	VlanGroup map[string][]string `json:"VlanGroup"`
 	Port      []struct {
-		Port string `json:"Port"`
-		Type string `json:"Type"`
-		Idx  int    `json:"Idx"`
+		Port      string `json:"Port"`
+		Type      string `json:"Type"`
+		Idx       int    `json:"Idx"`
+		PortGroup string `json:"PortGroup,omitempty"`
+		Mode      string `json:"Mode,omitempty"`
 	} `json:"Port"`
 }
 
@@ -143,12 +146,14 @@ type PortType struct {
 	Type        string            `json:"Type"`
 	Description string            `json:"Description"`
 	Function    string            `json:"Function"`
-	UntagVlan   int               `json:"UntagVlan"`
-	TagVlans    []int             `json:"TagVlans"`
-	IPAddress   string            `json:"IPAddress"`
+	UntagVlan   int               `json:"UntagVlan,omitempty"`
+	TagVlans    []int             `json:"TagVlans,omitempty"`
+	IPAddress   string            `json:"IPAddress,omitempty"`
 	Mtu         int               `json:"MTU"`
 	Shutdown    bool              `json:"Shutdown"`
-	Others      map[string]string `json:"Others"`
+	Others      map[string]string `json:"Others,omitempty"`
+	Mode        string            `json:"Mode,omitempty"`
+	PortGroup   string            `json:"PortGroup,omitempty"`
 }
 
 type RoutingType struct {
@@ -158,11 +163,12 @@ type RoutingType struct {
 }
 
 type BGPType struct {
-	BGPAsn       int                `json:"BGPAsn"`
-	RouterID     string             `json:"RouterID"`
-	IPv4Network  []string           `json:"IPv4Network"`
-	RouteMap     []RouteMapType     `json:"RouteMap,omitempty"`
-	IPv4Neighbor []IPv4NeighborType `json:"IPv4Neighbor"`
+	BGPAsn          int                `json:"BGPAsn"`
+	RouterID        string             `json:"RouterID"`
+	IPv4Network     []string           `json:"IPv4Network"`
+	RouteMap        []RouteMapType     `json:"RouteMap,omitempty"`
+	IPv4Neighbor    []IPv4NeighborType `json:"IPv4Neighbor"`
+	TemplateNeigbor []IPv4NeighborType `json:"TemplateNeigbor,omitempty"`
 }
 
 type IPv4NeighborType struct {
@@ -173,7 +179,7 @@ type IPv4NeighborType struct {
 	PrefixList        []struct {
 		Name      string `json:"Name"`
 		Direction string `json:"Direction"`
-	} `json:"PrefixList"`
+	} `json:"PrefixList,omitempty"`
 	RemovePrivateAS bool   `json:"RemovePrivateAS,omitempty"`
 	Shutdown        bool   `json:"Shutdown"`
 	NbrPassword     string `json:"NbrPassword,omitempty"`
@@ -206,5 +212,13 @@ type RouteMapType struct {
 	Seq    int    `json:"Seq"`
 	Rules  []struct {
 		PrefixList string `json:"PrefixList"`
-	} `json:"Rules"`
+	} `json:"Rules,omitempty"`
+}
+
+// For Dell Port-Group
+type PortGroupType struct {
+	PortGroup string `json:"PortGroup,omitempty"`
+	Mode      string `json:"Mode,omitempty"`
+	Type      string `json:"Type,omitempty"`
+	Idx       int    `json:"Idx,omitempty"`
 }

@@ -95,7 +95,23 @@ func (o *OutputType) ParseBGP(BGPObj BGPType) {
 			}
 		}
 	}
+	// Dell Template SDN for Mux BGP
+	newTemplateNeigbor := []IPv4NeighborType{}
+	for _, ipv4NbrItem := range BGPObj.TemplateNeigbor {
+		if ipv4NbrItem.SwitchRelation == SWITCHDOWNLINK {
+			for _, switchItem := range o.SwitchDownlink {
+				newBGPIPv4NbrItem := ipv4NbrItem
+				newBGPIPv4NbrItem.Description = fmt.Sprintf("TO_%s", switchItem.Type)
+				newBGPIPv4NbrItem.NeighborAsn = switchItem.Asn
+				for _, subnetValue := range o.getSubnetByVlanGroupID(ipv4NbrItem.NeighborIPAddress) {
+					newBGPIPv4NbrItem.NeighborIPAddress = subnetValue
+				}
+				newTemplateNeigbor = append(newTemplateNeigbor, newBGPIPv4NbrItem)
+			}
+		}
+	}
 	newBGPObj.IPv4Neighbor = newBGPIPv4Nbrs
+	newBGPObj.TemplateNeigbor = newTemplateNeigbor
 	// Assign back to final json Object
 	o.Routing.BGP = newBGPObj
 

@@ -1,0 +1,40 @@
+{{ define "bmcport"}}
+! bmcport.go.tmpl-bmcport
+{{ range . -}}
+{{ if eq .Type "mgmt" -}}
+interface {{ .Port }}
+  vrf member management
+  shutdown
+{{ else -}}
+interface {{ .Type}} {{ .Port }}
+  description {{ .Description }}
+  {{ if eq .Function "Unused" -}} 
+  switchport
+  switchport access vlan {{ .UntagVlan }}
+  mtu {{ .Mtu }}
+  flowcontrol receive off
+  spanning-tree bpduguard enable
+  spanning-tree guard root
+  {{ else if or (eq .Function "HLH_BMC") (eq .Function "HLH_OS") -}}
+  switchport
+  switchport access vlan {{ .UntagVlan }}
+  spanning-tree port type edge
+  no logging event port link-status
+  {{ else if eq .Function "Reserved_For_PDU" -}}
+  switchport
+  switchport access vlan {{ .UntagVlan }}
+  spanning-tree port type edge
+  no logging event port link-status
+  {{ else if eq .Function "TOR_BMC" -}}
+  switchport
+  switchport mode trunk
+  {{ range .TagVlans -}}
+  switchport trunk allowed vlan {{ . }}
+  {{end -}}
+  logging event port link-status
+  channel-group 102
+  {{ end }}
+  {{- if .Shutdown }}shutdown{{ else }}no shutdown{{ end }}
+  {{ end }}
+{{ end -}}
+{{ end -}}

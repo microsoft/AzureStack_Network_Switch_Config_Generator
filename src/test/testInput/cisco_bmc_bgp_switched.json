@@ -1,6 +1,6 @@
 {
     "Version": "1.0.0",
-    "Description": "Template for ASZ Rack",
+    "Description": "Template for Cisco Rack",
     "InputData": {
       "MainEnvData": [
         {

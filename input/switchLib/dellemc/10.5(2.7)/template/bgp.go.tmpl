@@ -1,0 +1,55 @@
+{{ define "bgp"}}
+{{ if ne .BGPAsn 0 }}
+! bgp.go.tmpl-bgp
+router bgp {{ .BGPAsn }}
+  router-id {{ .RouterID }}
+  bestpath as-path multipath-relax
+  maximum-paths 8
+  maximum-paths ibgp 8
+  address-family ipv4 unicast
+    {{ range .IPv4Network -}}  
+      network {{.}}
+    {{ end -}}
+    {{- if .RouteMap }}
+    default-information originate
+    {{ range .RouteMap -}} 
+    redistribute static route-map {{.Name}}
+    {{ end -}}
+    {{ end }}
+  !
+  {{ range .TemplateNeigbor -}}
+  template {{ .Description }}
+    ebgp-multihop {{ .EBGPMultiHop }}
+    listen {{ .NeighborIPAddress }} limit 5
+    remote-as {{ .NeighborAsn }}
+    update-source {{ .UpdateSource }}
+  {{ end -}}
+  !
+  {{ range .IPv4Neighbor -}}
+  neighbor {{ .NeighborIPAddress }}
+    description {{ .Description }}
+    remote-as {{ .NeighborAsn }}
+    no shutdown
+    {{ if .RemovePrivateAS }}remove-private-as{{ else }}!{{ end }}
+    {{ if ne .NbrPassword "" }}password {{.NbrPassword}}{{ else }}!{{ end }}
+    {{ if ne .UpdateSource "" }}update-source {{.UpdateSource}}{{ else }}!{{ end }}
+    {{ if ne .LocalAS "" }}local-as {{.LocalAS}}{{ else }}!{{ end }}
+    {{ if ne .EBGPMultiHop 0 }}ebgp-multihop {{.EBGPMultiHop}}{{ else }}!{{ end }}
+    address-family ipv4 unicast
+      activate
+      sender-side-loop-detection
+      {{ range .PrefixList -}}
+      distribute-list {{.Name}} {{.Direction}}
+      {{ end }}
+  {{ end -}}
+!
+{{ if .RouteMap }}
+{{ range .RouteMap -}} 
+route-map {{.Name}} {{.Action}} {{.Seq}}
+  {{ range .Rules -}} 
+  match ip address prefix-list {{.PrefixList}}
+  {{ end -}}
+{{ end -}}
+{{ end -}}
+{{ end -}}
+{{ end -}}

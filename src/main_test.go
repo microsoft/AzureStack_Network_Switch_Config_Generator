@@ -19,9 +19,8 @@ func TestMain(t *testing.T) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println(cwd)
 
-	switchLibFolder := "../input/switchLib/"
+	switchLibFolder := "../input/switchLib"
 	testInputFolder := cwd + "/test/testInput/"
 	testOutputFolder := cwd + "/test/testOutput/"
 	testGoldenFolder := cwd + "/test/goldenConfig/"
@@ -30,24 +29,21 @@ func TestMain(t *testing.T) {
 		inputTestFileName string
 	}
 	testCases := map[string]test{
-		// "cisco_nobmc_bgp": {
-		// 	inputTestFileName: "cisco_nobmc_bgp_input.json",
-		// },
 		"cisco_bmc_bgp_hyperconverged": {
 			inputTestFileName: "cisco_bmc_bgp_hyperconverged.json",
 		},
-		"cisco_bmc_bgp_switched": {
-			inputTestFileName: "cisco_bmc_bgp_switched.json",
-		},
-		"cisco_bmc_bgp_switchless": {
-			inputTestFileName: "cisco_bmc_bgp_switchless.json",
-		},
-		// "cisco_nobmc_static": {
-		// 	inputTestFileName: "cisco_nobmc_static_input.json",
+		// "cisco_bmc_bgp_switched": {
+		// 	inputTestFileName: "cisco_bmc_bgp_switched.json",
 		// },
-		// "cisco_bmc_static": {
-		// 	inputTestFileName: "cisco_bmc_static_input.json",
+		// "cisco_bmc_bgp_switchless": {
+		// 	inputTestFileName: "cisco_bmc_bgp_switchless.json",
 		// },
+		// "dellemc_nobmc_bgp_switched": {
+		// 	inputTestFileName: "dellemc_nobmc_bgp_switched.json",
+		// },
+		"dellemc_bmc_bgp_switched": {
+			inputTestFileName: "dellemc_bmc_bgp_switched.json",
+		},
 	}
 
 	for name, tc := range testCases {

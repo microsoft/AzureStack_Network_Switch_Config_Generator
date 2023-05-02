@@ -15,13 +15,13 @@
             ]
         },
         {
-            "Function": "HLH-BMC",
+            "Function": "HLH_BMC",
             "Port": [
                 "1/46"
             ]
         },
         {
-            "Function": "HLH-OS",
+            "Function": "HLH_OS",
             "Port": [
                 "1/49",
                 "1/50"
