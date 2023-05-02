@@ -1,5 +1,6 @@
 {{ template "hostname" .Switch -}}
-{{ template "stig_feature" -}}
+{{ template "banner" .ToolBuildVersion -}}
+{{ template "stig_feature" . -}}
 {{ template "stig_user" .GlobalSetting -}}
 {{ template "stig_ssh" -}}
 {{ template "qos" -}}

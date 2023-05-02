@@ -21,6 +21,7 @@ type InputData struct {
 }
 
 type OutputType struct {
+	ToolBuildVersion  string                     `json:"ToolBuildVersion"`
 	Switch            SwitchType                 `json:"Switch,omitempty"`
 	DeploymentPattern string                     `json:"DeploymentPattern"`
 	SwitchPeer        []SwitchType               `json:"SwitchPeer,omitempty"`
