@@ -9,6 +9,7 @@ import (
 )
 
 var (
+	ToolBuildVersion      = "1.2305.01"
 	TOR, BMC, BORDER, MUX = "TOR", "BMC", "BORDER", "MUX"
 	UPLINK, DOWNLINK      = "UPLINK", "DOWNLINK"
 	VIPGATEWAY            = "Gateway"
@@ -91,6 +92,8 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 		for _, torItem := range DeviceTypeMap[TOR] {
 			torOutput := &OutputType{}
 			// Function sequence matters, because the object construct phase by phase
+			// Add Build Version
+			torOutput.ToolBuildVersion = ToolBuildVersion
 			torOutput.UpdateSwitch(torItem, TOR, DeviceTypeMap)
 			// fmt.Printf("%#v\n%#v\n", torOutput, inputData)
 			torOutput.UpdateVlanAndL3Intf(inputData)
@@ -111,6 +114,8 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 	if len(DeviceTypeMap[BMC]) > 0 {
 		for _, bmdItem := range DeviceTypeMap[BMC] {
 			bmcOutput := &OutputType{}
+			// Add Build Version
+			bmcOutput.ToolBuildVersion = ToolBuildVersion
 			bmcOutput.UpdateSwitch(bmdItem, BMC, DeviceTypeMap)
 			bmcOutput.UpdateVlanAndL3Intf(inputData)
 			bmcOutput.UpdatePortChannel(inputData)
