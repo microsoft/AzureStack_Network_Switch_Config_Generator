@@ -3,7 +3,7 @@
 {{ range . }}    
 interface vlan {{.VlanID}}
   description {{.VlanName}}
-  {{if .Shutdown }}shutdown{{ end -}} 
+  {{if .Shutdown -}}shutdown{{ else }}no shutdown{{ end }} 
 {{ end }}
 {{ end }}
 

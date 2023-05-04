@@ -1,6 +1,7 @@
 package main
 
 import (
+	"sort"
 	"strings"
 )
 
@@ -110,6 +111,10 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 			}
 		}
 	}
+
+	sort.Slice(vlanList, func(i, j int) bool {
+		return vlanList[i].VlanID < vlanList[j].VlanID
+	})
 
 	o.Vlans = vlanList
 	o.L3Interfaces = l3IntfMap

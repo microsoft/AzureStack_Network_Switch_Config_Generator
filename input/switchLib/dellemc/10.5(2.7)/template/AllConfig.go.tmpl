@@ -1,13 +1,15 @@
 {{ template "hostname" .Switch -}}
+{{ template "banner" .ToolBuildVersion -}}
 {{ template "stig_user" .GlobalSetting -}}
 {{ template "stig_ssh" -}}
 {{ template "stig_login" -}}
 {{ template "stig_ztd" -}}
 {{ template "stig_mac" -}}
 {{ template "stig_logging" -}}
+{{ template "qos" -}}
+{{ template "portgroup" .PortGroup -}}
 {{ template "define_vlan" .Vlans -}}
 {{ template "interface_vlan" . -}}
-{{ template "qos" -}}
 {{ template "set_lldp" -}}
 {{ template "set_dhcp" -}}
 {{ template "set_vrrp" -}}
@@ -15,7 +17,6 @@
 {{ template "set_syslog" .GlobalSetting -}}
 {{ template "set_load_sharing" -}}
 {{if .Routing.PrefixList}}{{ template "prefixlist" .Routing.PrefixList -}} {{ end -}}
-{{ template "portgroup" .PortGroup -}}
 {{ template "vlt" . -}}
 {{if .PortChannel}}{{ template "portchannel" .PortChannel -}}{{ end -}}
 {{ template "loopback" .L3Interfaces -}}
