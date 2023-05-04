@@ -1,4 +1,5 @@
 {
+ "ToolBuildVersion": "1.2305.01",
  "Switch": {
   "Make": "DellEMC",
   "Model": "S5248-ON",
@@ -63,16 +64,16 @@
  },
  "Vlans": [
   {
-   "VlanName": "BMC_Mgmt_125",
-   "VlanID": 125,
-   "GroupName": "BMC",
-   "IPAddress": "100.71.85.251",
-   "Cidr": 26,
-   "Subnet": "100.71.85.192/26",
+   "VlanName": "UNUSED_VLAN",
+   "VlanID": 2,
+   "GroupName": "UNUSED_VLAN",
+   "IPAddress": "",
+   "Cidr": 0,
+   "Subnet": "",
    "MTU": 9216,
-   "VIPAddress": "100.71.85.193",
+   "VIPAddress": "",
    "VIPPriorityId": 0,
-   "Shutdown": false
+   "Shutdown": true
   },
   {
    "VlanName": "HNVPA_6",
@@ -95,6 +96,18 @@
    "Subnet": "100.69.180.0/24",
    "MTU": 9216,
    "VIPAddress": "100.69.180.1",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "BMC_Mgmt_125",
+   "VlanID": 125,
+   "GroupName": "BMC",
+   "IPAddress": "100.71.85.251",
+   "Cidr": 26,
+   "Subnet": "100.71.85.192/26",
+   "MTU": 9216,
+   "VIPAddress": "100.71.85.193",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
@@ -349,18 +362,6 @@
    "VIPAddress": "",
    "VIPPriorityId": 0,
    "Shutdown": false
-  },
-  {
-   "VlanName": "UNUSED_VLAN",
-   "VlanID": 2,
-   "GroupName": "UNUSED_VLAN",
-   "IPAddress": "",
-   "Cidr": 0,
-   "Subnet": "",
-   "MTU": 9216,
-   "VIPAddress": "",
-   "VIPPriorityId": 0,
-   "Shutdown": true
   }
  ],
  "L3Interfaces": {
@@ -466,10 +467,10 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": false,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/1"
   },
   {
    "Port": "1/1/2",
@@ -500,10 +501,10 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": false,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/1"
   },
   {
    "Port": "1/1/3",
@@ -534,10 +535,10 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": false,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/1"
   },
   {
    "Port": "1/1/4",
@@ -568,10 +569,10 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": false,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/1"
   },
   {
    "Port": "1/1/5",
@@ -584,10 +585,10 @@
     711,
     712
    ],
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/2"
   },
   {
    "Port": "1/1/6",
@@ -600,10 +601,10 @@
     711,
     712
    ],
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/2"
   },
   {
    "Port": "1/1/7",
@@ -616,10 +617,10 @@
     711,
     712
    ],
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/2"
   },
   {
    "Port": "1/1/8",
@@ -632,10 +633,10 @@
     711,
     712
    ],
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/2"
   },
   {
    "Port": "1/1/9",
@@ -644,11 +645,10 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/3"
   },
   {
    "Port": "1/1/10",
@@ -657,11 +657,10 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/3"
   },
   {
    "Port": "1/1/11",
@@ -670,11 +669,10 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/3"
   },
   {
    "Port": "1/1/12",
@@ -683,11 +681,10 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/3"
   },
   {
    "Port": "1/1/13",
@@ -696,11 +693,10 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/4"
   },
   {
    "Port": "1/1/14",
@@ -709,11 +705,10 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/4"
   },
   {
    "Port": "1/1/15",
@@ -722,11 +717,10 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/4"
   },
   {
    "Port": "1/1/16",
@@ -735,219 +729,202 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/4"
   },
   {
-   "Port": "1/1/17",
+   "Port": "1/1/17:1",
    "Idx": 17,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/5"
   },
   {
-   "Port": "1/1/18",
+   "Port": "1/1/18:1",
    "Idx": 18,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/5"
   },
   {
-   "Port": "1/1/19",
+   "Port": "1/1/19:1",
    "Idx": 19,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/5"
   },
   {
-   "Port": "1/1/20",
+   "Port": "1/1/20:1",
    "Idx": 20,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/5"
   },
   {
-   "Port": "1/1/21",
+   "Port": "1/1/21:1",
    "Idx": 21,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/6"
   },
   {
-   "Port": "1/1/22",
+   "Port": "1/1/22:1",
    "Idx": 22,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/6"
   },
   {
-   "Port": "1/1/23",
+   "Port": "1/1/23:1",
    "Idx": 23,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/6"
   },
   {
-   "Port": "1/1/24",
+   "Port": "1/1/24:1",
    "Idx": 24,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/6"
   },
   {
-   "Port": "1/1/25",
+   "Port": "1/1/25:1",
    "Idx": 25,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/7"
   },
   {
-   "Port": "1/1/26",
+   "Port": "1/1/26:1",
    "Idx": 26,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/7"
   },
   {
-   "Port": "1/1/27",
+   "Port": "1/1/27:1",
    "Idx": 27,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/7"
   },
   {
-   "Port": "1/1/28",
+   "Port": "1/1/28:1",
    "Idx": 28,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/7"
   },
   {
-   "Port": "1/1/29",
+   "Port": "1/1/29:1",
    "Idx": 29,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/8"
   },
   {
-   "Port": "1/1/30",
+   "Port": "1/1/30:1",
    "Idx": 30,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/8"
   },
   {
-   "Port": "1/1/31",
+   "Port": "1/1/31:1",
    "Idx": 31,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/8"
   },
   {
-   "Port": "1/1/32",
+   "Port": "1/1/32:1",
    "Idx": 32,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/8"
   },
   {
    "Port": "1/1/33",
@@ -956,11 +933,10 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/9"
   },
   {
    "Port": "1/1/34",
@@ -969,11 +945,10 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/9"
   },
   {
    "Port": "1/1/35",
@@ -982,11 +957,10 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/9"
   },
   {
    "Port": "1/1/36",
@@ -995,11 +969,10 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/9"
   },
   {
    "Port": "1/1/37",
@@ -1008,11 +981,10 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/10"
   },
   {
    "Port": "1/1/38",
@@ -1021,11 +993,10 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/10"
   },
   {
    "Port": "1/1/39",
@@ -1033,14 +1004,13 @@
    "Type": "ethernet",
    "Description": "P2P_IBGP",
    "Function": "P2P_IBGP",
-   "UntagVlan": 0,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": false,
    "Others": {
     "ChannelGroup": "50"
-   }
+   },
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/10"
   },
   {
    "Port": "1/1/40",
@@ -1048,118 +1018,109 @@
    "Type": "ethernet",
    "Description": "P2P_IBGP",
    "Function": "P2P_IBGP",
-   "UntagVlan": 0,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": false,
    "Others": {
     "ChannelGroup": "50"
-   }
+   },
+   "Mode": "25g-4x",
+   "PortGroup": "1/1/10"
   },
   {
-   "Port": "1/1/41",
+   "Port": "1/1/41:1",
    "Idx": 41,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/11"
   },
   {
-   "Port": "1/1/42",
+   "Port": "1/1/42:1",
    "Idx": 42,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/11"
   },
   {
-   "Port": "1/1/43",
+   "Port": "1/1/43:1",
    "Idx": 43,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/11"
   },
   {
-   "Port": "1/1/44",
+   "Port": "1/1/44:1",
    "Idx": 44,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/11"
   },
   {
-   "Port": "1/1/45",
+   "Port": "1/1/45:1",
    "Idx": 45,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/12"
   },
   {
-   "Port": "1/1/46",
+   "Port": "1/1/46:1",
    "Idx": 46,
    "Type": "ethernet",
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/12"
   },
   {
-   "Port": "1/1/47",
+   "Port": "1/1/47:1",
    "Idx": 47,
    "Type": "ethernet",
    "Description": "P2P_Border2",
    "Function": "P2P_Border2",
-   "UntagVlan": 0,
-   "TagVlans": null,
    "IPAddress": "100.71.85.138/30",
    "MTU": 9216,
    "Shutdown": false,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/12"
   },
   {
-   "Port": "1/1/48",
+   "Port": "1/1/48:1",
    "Idx": 48,
    "Type": "ethernet",
    "Description": "P2P_Border1",
    "Function": "P2P_Border1",
-   "UntagVlan": 0,
-   "TagVlans": null,
    "IPAddress": "100.71.85.130/30",
    "MTU": 9216,
    "Shutdown": false,
-   "Others": null
+   "Mode": "10g-4x",
+   "PortGroup": "1/1/12"
   },
   {
    "Port": "1/1/49",
@@ -1168,11 +1129,10 @@
    "Description": "MLAG_Peer",
    "Function": "MLAG_Peer",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "100g-2x",
+   "PortGroup": "1/1/13"
   },
   {
    "Port": "1/1/50",
@@ -1181,11 +1141,10 @@
    "Description": "MLAG_Peer",
    "Function": "MLAG_Peer",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "100g-2x",
+   "PortGroup": "1/1/13"
   },
   {
    "Port": "1/1/51",
@@ -1194,11 +1153,10 @@
    "Description": "MLAG_Peer",
    "Function": "MLAG_Peer",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "100g-2x",
+   "PortGroup": "1/1/14"
   },
   {
    "Port": "1/1/52",
@@ -1207,11 +1165,10 @@
    "Description": "MLAG_Peer",
    "Function": "MLAG_Peer",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "100g-2x",
+   "PortGroup": "1/1/14"
   },
   {
    "Port": "1/1/53",
@@ -1220,11 +1177,10 @@
    "Description": "RESERVED",
    "Function": "RESERVED",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "100g-1x",
+   "PortGroup": "1/1/15"
   },
   {
    "Port": "1/1/54",
@@ -1233,11 +1189,10 @@
    "Description": "RESERVED",
    "Function": "RESERVED",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "100g-1x",
+   "PortGroup": "1/1/16"
   },
   {
    "Port": "1/1/55",
@@ -1246,11 +1201,10 @@
    "Description": "RESERVED",
    "Function": "RESERVED",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "100g-1x",
+   "PortGroup": "1/1/17"
   },
   {
    "Port": "1/1/56",
@@ -1259,11 +1213,10 @@
    "Description": "RESERVED",
    "Function": "RESERVED",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": true,
-   "Others": null
+   "Mode": "100g-1x",
+   "PortGroup": "1/1/18"
   },
   {
    "Port": "mgmt 1/1/1",
@@ -1272,11 +1225,118 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
+  }
+ ],
+ "PortGroup": [
+  {
+   "PortGroup": "1/1/1",
+   "Mode": "25g-4x",
+   "Type": "ethernet",
+   "Idx": 4
+  },
+  {
+   "PortGroup": "1/1/2",
+   "Mode": "25g-4x",
+   "Type": "ethernet",
+   "Idx": 8
+  },
+  {
+   "PortGroup": "1/1/3",
+   "Mode": "25g-4x",
+   "Type": "ethernet",
+   "Idx": 12
+  },
+  {
+   "PortGroup": "1/1/4",
+   "Mode": "25g-4x",
+   "Type": "ethernet",
+   "Idx": 16
+  },
+  {
+   "PortGroup": "1/1/5",
+   "Mode": "10g-4x",
+   "Type": "ethernet",
+   "Idx": 20
+  },
+  {
+   "PortGroup": "1/1/6",
+   "Mode": "10g-4x",
+   "Type": "ethernet",
+   "Idx": 24
+  },
+  {
+   "PortGroup": "1/1/7",
+   "Mode": "10g-4x",
+   "Type": "ethernet",
+   "Idx": 28
+  },
+  {
+   "PortGroup": "1/1/8",
+   "Mode": "10g-4x",
+   "Type": "ethernet",
+   "Idx": 32
+  },
+  {
+   "PortGroup": "1/1/9",
+   "Mode": "25g-4x",
+   "Type": "ethernet",
+   "Idx": 36
+  },
+  {
+   "PortGroup": "1/1/10",
+   "Mode": "25g-4x",
+   "Type": "ethernet",
+   "Idx": 40
+  },
+  {
+   "PortGroup": "1/1/11",
+   "Mode": "10g-4x",
+   "Type": "ethernet",
+   "Idx": 44
+  },
+  {
+   "PortGroup": "1/1/12",
+   "Mode": "10g-4x",
+   "Type": "ethernet",
+   "Idx": 48
+  },
+  {
+   "PortGroup": "1/1/13",
+   "Mode": "100g-2x",
+   "Type": "ethernet",
+   "Idx": 50
+  },
+  {
+   "PortGroup": "1/1/14",
+   "Mode": "100g-2x",
+   "Type": "ethernet",
+   "Idx": 52
+  },
+  {
+   "PortGroup": "1/1/15",
+   "Mode": "100g-1x",
+   "Type": "ethernet",
+   "Idx": 53
+  },
+  {
+   "PortGroup": "1/1/16",
+   "Mode": "100g-1x",
+   "Type": "ethernet",
+   "Idx": 54
+  },
+  {
+   "PortGroup": "1/1/17",
+   "Mode": "100g-1x",
+   "Type": "ethernet",
+   "Idx": 55
+  },
+  {
+   "PortGroup": "1/1/18",
+   "Mode": "100g-1x",
+   "Type": "ethernet",
+   "Idx": 56
   }
  ],
  "Routing": {
@@ -1284,10 +1344,10 @@
    "BGPAsn": 65341,
    "RouterID": "100.71.85.149",
    "IPv4Network": [
-    "100.71.85.149/32",
     "100.71.85.128/30",
     "100.71.85.136/30",
     "100.71.85.144/30",
+    "100.71.85.149/32",
     "100.71.85.192/26",
     "100.71.131.128/25"
    ],
@@ -1333,21 +1393,16 @@
      "Description": "TO_TOR2",
      "NeighborAsn": 65341,
      "NeighborIPAddress": "100.71.85.146",
-     "PrefixList": [],
      "Shutdown": false,
-     "NbrPassword": "%deb00mJ5XrR\u0026!zf"
-    },
+     "NbrPassword": "Uyro02%m0Yb$g%aE"
+    }
+   ],
+   "TemplateNeigbor": [
     {
      "SwitchRelation": "SwitchDownlink",
      "Description": "TO_MUX",
      "NeighborAsn": 65033,
      "NeighborIPAddress": "100.71.131.128/25",
-     "PrefixList": [
-      {
-       "Name": "DefaultRoute",
-       "Direction": "out"
-      }
-     ],
      "Shutdown": false,
      "UpdateSource": "Loopback0",
      "LocalAS": "64512",

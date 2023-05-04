@@ -1,4 +1,5 @@
 {
+ "ToolBuildVersion": "1.2305.01",
  "Switch": {
   "Make": "Cisco",
   "Model": "93180YC-FX",
@@ -73,14 +74,14 @@
  },
  "Vlans": [
   {
-   "VlanName": "BMC_Mgmt_125",
-   "VlanID": 125,
-   "GroupName": "BMC",
-   "IPAddress": "100.71.85.252",
-   "Cidr": 26,
-   "Subnet": "100.71.85.192/26",
+   "VlanName": "UNUSED_VLAN",
+   "VlanID": 2,
+   "GroupName": "UNUSED_VLAN",
+   "IPAddress": "",
+   "Cidr": 0,
+   "Subnet": "",
    "MTU": 9216,
-   "VIPAddress": "100.71.85.193",
+   "VIPAddress": "",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
@@ -105,6 +106,30 @@
    "Subnet": "100.69.180.0/24",
    "MTU": 9216,
    "VIPAddress": "100.69.180.1",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "Cisco_MLAG_NativeVlan",
+   "VlanID": 99,
+   "GroupName": "Cisco_MLAG_NativeVlan",
+   "IPAddress": "",
+   "Cidr": 0,
+   "Subnet": "",
+   "MTU": 9216,
+   "VIPAddress": "",
+   "VIPPriorityId": 0,
+   "Shutdown": false
+  },
+  {
+   "VlanName": "BMC_Mgmt_125",
+   "VlanID": 125,
+   "GroupName": "BMC",
+   "IPAddress": "100.71.85.252",
+   "Cidr": 26,
+   "Subnet": "100.71.85.192/26",
+   "MTU": 9216,
+   "VIPAddress": "100.71.85.193",
    "VIPPriorityId": 0,
    "Shutdown": false
   },
@@ -335,30 +360,6 @@
    "VIPAddress": "100.69.183.241",
    "VIPPriorityId": 0,
    "Shutdown": false
-  },
-  {
-   "VlanName": "UNUSED_VLAN",
-   "VlanID": 2,
-   "GroupName": "UNUSED_VLAN",
-   "IPAddress": "",
-   "Cidr": 0,
-   "Subnet": "",
-   "MTU": 9216,
-   "VIPAddress": "",
-   "VIPPriorityId": 0,
-   "Shutdown": false
-  },
-  {
-   "VlanName": "Cisco_MLAG_NativeVlan",
-   "VlanID": 99,
-   "GroupName": "Cisco_MLAG_NativeVlan",
-   "IPAddress": "",
-   "Cidr": 0,
-   "Subnet": "",
-   "MTU": 9216,
-   "VIPAddress": "",
-   "VIPPriorityId": 0,
-   "Shutdown": false
   }
  ],
  "L3Interfaces": {
@@ -464,10 +465,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/2",
@@ -498,10 +497,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/3",
@@ -532,10 +529,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/4",
@@ -566,10 +561,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/5",
@@ -600,10 +593,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/6",
@@ -634,10 +625,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/7",
@@ -668,10 +657,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/8",
@@ -702,10 +689,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/9",
@@ -736,10 +721,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/10",
@@ -770,10 +753,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/11",
@@ -804,10 +785,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/12",
@@ -838,10 +817,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/13",
@@ -872,10 +849,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/14",
@@ -906,10 +881,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/15",
@@ -940,10 +913,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/16",
@@ -974,10 +945,8 @@
     515,
     516
    ],
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/17",
@@ -986,11 +955,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/18",
@@ -999,11 +965,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/19",
@@ -1012,11 +975,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/20",
@@ -1025,11 +985,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/21",
@@ -1038,11 +995,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/22",
@@ -1051,11 +1005,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/23",
@@ -1064,11 +1015,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/24",
@@ -1077,11 +1025,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/25",
@@ -1090,11 +1035,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/26",
@@ -1103,11 +1045,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/27",
@@ -1116,11 +1055,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/28",
@@ -1129,11 +1065,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/29",
@@ -1142,11 +1075,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/30",
@@ -1155,11 +1085,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/31",
@@ -1168,11 +1095,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/32",
@@ -1181,11 +1105,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/33",
@@ -1194,11 +1115,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/34",
@@ -1207,11 +1125,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/35",
@@ -1220,11 +1135,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/36",
@@ -1233,11 +1145,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/37",
@@ -1246,11 +1155,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/38",
@@ -1259,11 +1165,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/39",
@@ -1272,11 +1175,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/40",
@@ -1285,11 +1185,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/41",
@@ -1297,9 +1194,6 @@
    "Type": "Ethernet",
    "Description": "P2P_IBGP",
    "Function": "P2P_IBGP",
-   "UntagVlan": 0,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": false,
    "Others": {
@@ -1312,9 +1206,6 @@
    "Type": "Ethernet",
    "Description": "P2P_IBGP",
    "Function": "P2P_IBGP",
-   "UntagVlan": 0,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": false,
    "Others": {
@@ -1328,11 +1219,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/44",
@@ -1340,11 +1228,9 @@
    "Type": "Ethernet",
    "Description": "TOR_BMC",
    "Function": "TOR_BMC",
-   "UntagVlan": 0,
    "TagVlans": [
     125
    ],
-   "IPAddress": "",
    "MTU": 9216,
    "Shutdown": false,
    "Others": {
@@ -1358,11 +1244,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/46",
@@ -1371,11 +1254,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/47",
@@ -1383,12 +1263,9 @@
    "Type": "Ethernet",
    "Description": "P2P_Border2",
    "Function": "P2P_Border2",
-   "UntagVlan": 0,
-   "TagVlans": null,
    "IPAddress": "100.71.85.142/30",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/48",
@@ -1396,12 +1273,9 @@
    "Type": "Ethernet",
    "Description": "P2P_Border1",
    "Function": "P2P_Border1",
-   "UntagVlan": 0,
-   "TagVlans": null,
    "IPAddress": "100.71.85.134/30",
    "MTU": 9216,
-   "Shutdown": false,
-   "Others": null
+   "Shutdown": false
   },
   {
    "Port": "1/49",
@@ -1410,11 +1284,8 @@
    "Description": "MLAG_Peer",
    "Function": "MLAG_Peer",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/50",
@@ -1423,11 +1294,8 @@
    "Description": "MLAG_Peer",
    "Function": "MLAG_Peer",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/51",
@@ -1436,11 +1304,8 @@
    "Description": "MLAG_Peer",
    "Function": "MLAG_Peer",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/52",
@@ -1449,11 +1314,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/53",
@@ -1462,11 +1324,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "1/54",
@@ -1475,11 +1334,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   },
   {
    "Port": "mgmt0",
@@ -1488,11 +1344,8 @@
    "Description": "Unused",
    "Function": "Unused",
    "UntagVlan": 2,
-   "TagVlans": null,
-   "IPAddress": "",
    "MTU": 9216,
-   "Shutdown": true,
-   "Others": null
+   "Shutdown": true
   }
  ],
  "Routing": {
@@ -1500,10 +1353,10 @@
    "BGPAsn": 65243,
    "RouterID": "100.71.85.150",
    "IPv4Network": [
+    "100.71.85.132/30",
     "100.71.85.140/30",
     "100.71.85.144/30",
     "100.71.85.150/32",
-    "100.71.85.132/30",
     "100.71.85.192/26",
     "100.71.131.128/25"
    ],
@@ -1549,7 +1402,6 @@
      "Description": "TO_TOR1",
      "NeighborAsn": 65243,
      "NeighborIPAddress": "100.71.85.145",
-     "PrefixList": [],
      "Shutdown": false,
      "NbrPassword": "u0Vp9eOu\u0026k%Md!6o"
     },
