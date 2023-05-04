@@ -1,4 +1,4 @@
-# Azure Stack Switch Configuration Generator
+# Azure Stack Switch Config Generator
 
 ## Project Overview
 
