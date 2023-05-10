@@ -1,0 +1,56 @@
+{{ define "qos"}}
+! qos.go.tmpl-qos
+!
+class-map type application class-iscsi
+!
+class-map type queuing Q0
+ match queue 0 
+!
+class-map type queuing Q3
+ match queue 3 
+!
+class-map type queuing Q5
+ match queue 5 
+!
+class-map type network-qos S2DManagement
+ match qos-group 0 
+!
+class-map type network-qos SmbStorage
+ match qos-group 3 
+!
+class-map type network-qos NodeHeartBeat
+ match qos-group 5 
+!
+qos-map traffic-class queue-map
+ queue 5 qos-group 5
+ queue 0 qos-group 0-2,4,6-7
+ queue 3 qos-group 3
+!
+policy-map type application policy-iscsi
+!
+policy-map type queuing ets-policy
+ !
+ class Q0
+  bandwidth percent 48
+ !
+ class Q3
+  bandwidth percent 50
+ !
+ class Q5
+  bandwidth percent 2
+!
+policy-map type network-qos pfc-policy
+ !
+ class SmbStorage
+  pause
+  pfc-cos 3 
+ !
+ class NodeHeartBeat
+  pause
+  pfc-cos 5 
+!
+system qos
+ trust-map dot1p default
+ ets mode on
+!
+{{ end }}

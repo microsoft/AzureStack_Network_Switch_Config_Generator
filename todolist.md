@@ -35,3 +35,16 @@
 - Support more user cases based on demand
 
 #### Target Date: TBD
+
+
+
+
+BMC
+1. comment stig
+2. no vlt for po102
+3. Port assignment
+4. no qos
+
+TOR
+1. ip-helper, DVM ip list
+2. Native vlan 99
