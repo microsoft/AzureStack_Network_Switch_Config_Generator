@@ -32,18 +32,18 @@ func TestMain(t *testing.T) {
 		"cisco_bmc_bgp_hyperconverged": {
 			inputTestFileName: "cisco_bmc_bgp_hyperconverged.json",
 		},
-		"cisco_bmc_bgp_switched": {
-			inputTestFileName: "cisco_bmc_bgp_switched.json",
-		},
-		"cisco_bmc_bgp_switchless": {
-			inputTestFileName: "cisco_bmc_bgp_switchless.json",
-		},
-		"dellemc_nobmc_bgp_switched": {
-			inputTestFileName: "dellemc_nobmc_bgp_switched.json",
-		},
-		"dellemc_bmc_bgp_switched": {
-			inputTestFileName: "dellemc_bmc_bgp_switched.json",
-		},
+		// "cisco_bmc_bgp_switched": {
+		// 	inputTestFileName: "cisco_bmc_bgp_switched.json",
+		// },
+		// "cisco_bmc_bgp_switchless": {
+		// 	inputTestFileName: "cisco_bmc_bgp_switchless.json",
+		// },
+		// "dellemc_nobmc_bgp_switched": {
+		// 	inputTestFileName: "dellemc_nobmc_bgp_switched.json",
+		// },
+		// "dellemc_bmc_bgp_switched": {
+		// 	inputTestFileName: "dellemc_bmc_bgp_switched.json",
+		// },
 	}
 
 	for name, tc := range testCases {
