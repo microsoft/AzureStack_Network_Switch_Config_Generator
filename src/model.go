@@ -1,224 +1,224 @@
 package main
 
 type InputType struct {
-	Version     string    `json:"Version"`
-	Description string    `json:"Description"`
-	InputData   InputData `json:"InputData"`
+	Version     string    `yaml:"Version"`
+	Description string    `yaml:"Description"`
+	InputData   InputData `yaml:"InputData"`
 }
 
 type InputData struct {
-	Cloud             []CloudType  `json:"Cloud"`
-	Switches          []SwitchType `json:"Switches"`
-	SwitchUplink      string       `json:"SwitchUplink"`
-	DeploymentPattern string       `json:"DeploymentPattern"`
-	HostConnectivity  string       `json:"HostConnectivity"`
-	Supernets         []Supernet   `json:"Supernets"`
+	Cloud             []CloudType  `yaml:"Cloud"`
+	Switches          []SwitchType `yaml:"Switches"`
+	SwitchUplink      string       `yaml:"SwitchUplink"`
+	DeploymentPattern string       `yaml:"DeploymentPattern"`
+	HostConnectivity  string       `yaml:"HostConnectivity"`
+	Supernets         []Supernet   `yaml:"Supernets"`
 	Setting           struct {
-		TimeServer   []string `json:"TimeServer"`
-		SyslogServer []string `json:"SyslogServer"`
-		DNSForwarder []string `json:"DNSForwarder"`
+		TimeServer   []string `yaml:"TimeServer"`
+		SyslogServer []string `yaml:"SyslogServer"`
+		DNSForwarder []string `yaml:"DNSForwarder"`
 	}
 }
 
 type OutputType struct {
-	ToolBuildVersion  string                     `json:"ToolBuildVersion"`
-	Switch            SwitchType                 `json:"Switch,omitempty"`
-	DeploymentPattern string                     `json:"DeploymentPattern"`
-	SwitchPeer        []SwitchType               `json:"SwitchPeer,omitempty"`
-	SwitchBMC         []SwitchType               `json:"SwitchBMC,omitempty"`
-	SwitchUplink      []SwitchType               `json:"SwitchUplink,omitempty"`
-	SwitchDownlink    []SwitchType               `json:"SwitchDownlink,omitempty"`
-	GlobalSetting     GlobalSettingType          `json:"GlobalSetting,omitempty"`
-	Vlans             []VlanType                 `json:"Vlans,omitempty"`
-	L3Interfaces      map[string]L3IntfType      `json:"L3Interfaces,omitempty"`
-	PortChannel       map[string]PortChannelType `json:"PortChannel,omitempty"`
-	Ports             []PortType                 `json:"Ports,omitempty"`
-	PortGroup         []PortGroupType            `json:"PortGroup,omitempty"`
-	Routing           RoutingType                `json:"Routing,omitempty"`
+	ToolBuildVersion  string                     `yaml:"ToolBuildVersion"`
+	Switch            SwitchType                 `yaml:"Switch,omitempty"`
+	DeploymentPattern string                     `yaml:"DeploymentPattern"`
+	SwitchPeer        []SwitchType               `yaml:"SwitchPeer,omitempty"`
+	SwitchBMC         []SwitchType               `yaml:"SwitchBMC,omitempty"`
+	SwitchUplink      []SwitchType               `yaml:"SwitchUplink,omitempty"`
+	SwitchDownlink    []SwitchType               `yaml:"SwitchDownlink,omitempty"`
+	GlobalSetting     GlobalSettingType          `yaml:"GlobalSetting,omitempty"`
+	Vlans             []VlanType                 `yaml:"Vlans,omitempty"`
+	L3Interfaces      map[string]L3IntfType      `yaml:"L3Interfaces,omitempty"`
+	PortChannel       map[string]PortChannelType `yaml:"PortChannel,omitempty"`
+	Ports             []PortType                 `yaml:"Ports,omitempty"`
+	PortGroup         []PortGroupType            `yaml:"PortGroup,omitempty"`
+	Routing           RoutingType                `yaml:"Routing,omitempty"`
 }
 
 type GlobalSettingType struct {
-	Username     string   `json:"Username"`
-	Password     string   `json:"Password"`
-	TimeServer   []string `json:"TimeServer"`
-	SyslogServer []string `json:"SyslogServer"`
-	DNSForwarder []string `json:"DNSForwarder"`
-	OOB          string   `json:"OOB"`
+	Username     string   `yaml:"Username"`
+	Password     string   `yaml:"Password"`
+	TimeServer   []string `yaml:"TimeServer"`
+	SyslogServer []string `yaml:"SyslogServer"`
+	DNSForwarder []string `yaml:"DNSForwarder"`
+	OOB          string   `yaml:"OOB"`
 }
 
 type VlanType struct {
-	VlanName      string `json:"VlanName"`
-	VlanID        int    `json:"VlanID"`
-	GroupName     string `json:"GroupName"`
-	IPAddress     string `json:"IPAddress"`
-	Cidr          int    `json:"Cidr"`
-	Subnet        string `json:"Subnet"`
-	Mtu           int    `json:"MTU"`
-	VIPAddress    string `json:"VIPAddress"`
-	VIPPriorityId int    `json:"VIPPriorityId"`
-	Shutdown      bool   `json:"Shutdown"`
+	VlanName      string `yaml:"VlanName"`
+	VlanID        int    `yaml:"VlanID"`
+	GroupName     string `yaml:"GroupName"`
+	IPAddress     string `yaml:"IPAddress"`
+	Cidr          int    `yaml:"Cidr"`
+	Subnet        string `yaml:"Subnet"`
+	Mtu           int    `yaml:"MTU"`
+	VIPAddress    string `yaml:"VIPAddress"`
+	VIPPriorityId int    `yaml:"VIPPriorityId"`
+	Shutdown      bool   `yaml:"Shutdown"`
 }
 
 type PortChannelType struct {
-	Description   string `json:"Description"`
-	Function      string `json:"Function"`
-	UntagVlan     int    `json:"UntagVlan"`
-	TagVlans      int    `json:"TagVlans"`
-	IPAddress     string `json:"IPAddress"`
-	PortChannelID string `json:"PortChannelID"`
-	VPC           string `json:"VPC"`
-	Shutdown      bool   `json:"Shutdown"`
+	Description   string `yaml:"Description"`
+	Function      string `yaml:"Function"`
+	UntagVlan     int    `yaml:"UntagVlan"`
+	TagVlans      int    `yaml:"TagVlans"`
+	IPAddress     string `yaml:"IPAddress"`
+	PortChannelID string `yaml:"PortChannelID"`
+	VPC           string `yaml:"VPC"`
+	Shutdown      bool   `yaml:"Shutdown"`
 }
 
 type L3IntfType struct {
-	Function     string `json:"Function"`
-	Description  string `json:"Description"`
-	IPAddress    string `json:"IPAddress"`
-	Cidr         int    `json:"Cidr"`
-	NbrIPAddress string `json:"NbrIPAddress,omitempty"`
-	Subnet       string `json:"Subnet"`
-	Mtu          int    `json:"MTU"`
-	Shutdown     bool   `json:"Shutdown"`
+	Function     string `yaml:"Function"`
+	Description  string `yaml:"Description"`
+	IPAddress    string `yaml:"IPAddress"`
+	Cidr         int    `yaml:"Cidr"`
+	NbrIPAddress string `yaml:"NbrIPAddress,omitempty"`
+	Subnet       string `yaml:"Subnet"`
+	Mtu          int    `yaml:"MTU"`
+	Shutdown     bool   `yaml:"Shutdown"`
 }
 
 type CloudType struct {
-	ID                      string   `json:"Id"`
-	TimeServer              []string `json:"TimeServer"`
-	SyslogServerIPv4Address string   `json:"SyslogServerIPv4Address"`
-	DNSForwarder            []string `json:"DNSForwarder"`
+	ID                      string   `yaml:"Id"`
+	TimeServer              []string `yaml:"TimeServer"`
+	SyslogServerIPv4Address string   `yaml:"SyslogServerIPv4Address"`
+	DNSForwarder            []string `yaml:"DNSForwarder"`
 }
 
 type SwitchType struct {
-	Make     string `json:"Make"`
-	Model    string `json:"Model"`
-	Type     string `json:"Type"`
-	Hostname string `json:"Hostname"`
-	Asn      int    `json:"ASN"`
-	Firmware string `json:"Firmware"`
+	Make     string `yaml:"Make"`
+	Model    string `yaml:"Model"`
+	Type     string `yaml:"Type"`
+	Hostname string `yaml:"Hostname"`
+	Asn      int    `yaml:"ASN"`
+	Firmware string `yaml:"Firmware"`
 }
 
 type Supernet struct {
-	GroupName   string `json:"GroupName"`
-	Description string `json:"Description"`
-	Shutdown    bool   `json:"Shutdown"`
+	GroupName   string `yaml:"GroupName"`
+	Description string `yaml:"Description"`
+	Shutdown    bool   `yaml:"Shutdown"`
 	IPv4        struct {
-		Name        string     `json:"Name"`
-		VlanID      int        `json:"VLANID"`
-		NetworkType string     `json:"NetworkType"`
-		SwitchSVI   bool       `json:"SwitchSVI"`
-		Cidr        int        `json:"Cidr"`
-		Subnet      string     `json:"Subnet"`
-		Gateway     string     `json:"Gateway"`
-		Assignment  []IPv4Unit `json:"Assignment"`
-	} `json:"IPv4"`
+		Name        string     `yaml:"Name"`
+		VlanID      int        `yaml:"VLANID"`
+		NetworkType string     `yaml:"NetworkType"`
+		SwitchSVI   bool       `yaml:"SwitchSVI"`
+		Cidr        int        `yaml:"Cidr"`
+		Subnet      string     `yaml:"Subnet"`
+		Gateway     string     `yaml:"Gateway"`
+		Assignment  []IPv4Unit `yaml:"Assignment"`
+	} `yaml:"IPv4"`
 	IPv6 struct {
-	} `json:"IPv6"`
+	} `yaml:"IPv6"`
 }
 
 type IPv4Unit struct {
-	Name string `json:"Name"`
-	IP   string `json:"IP"`
+	Name string `yaml:"Name"`
+	IP   string `yaml:"IP"`
 }
 
 type PortJson struct {
-	Model           string `json:"Model"`
-	Type            string `json:"Type"`
-	SupportNoBmc    bool   `json:"SupportNoBmc"`
-	FirmwareVersion string `json:"FirmwareVersion"`
-	Maxmtu          string `json:"MaxMTU"`
+	Model           string `yaml:"Model"`
+	Type            string `yaml:"Type"`
+	SupportNoBmc    bool   `yaml:"SupportNoBmc"`
+	FirmwareVersion string `yaml:"FirmwareVersion"`
+	Maxmtu          string `yaml:"MaxMTU"`
 	Function        []struct {
-		Function string   `json:"Function"`
-		Port     []string `json:"Port"`
-	} `json:"Function"`
-	VlanGroup map[string][]string `json:"VlanGroup"`
+		Function string   `yaml:"Function"`
+		Port     []string `yaml:"Port"`
+	} `yaml:"Function"`
+	VlanGroup map[string][]string `yaml:"VlanGroup"`
 	Port      []struct {
-		Port      string `json:"Port"`
-		Type      string `json:"Type"`
-		Idx       int    `json:"Idx"`
-		PortGroup string `json:"PortGroup,omitempty"`
-		Mode      string `json:"Mode,omitempty"`
-	} `json:"Port"`
+		Port      string `yaml:"Port"`
+		Type      string `yaml:"Type"`
+		Idx       int    `yaml:"Idx"`
+		PortGroup string `yaml:"PortGroup,omitempty"`
+		Mode      string `yaml:"Mode,omitempty"`
+	} `yaml:"Port"`
 }
 
 type PortType struct {
-	Port        string            `json:"Port"`
-	Idx         int               `json:"Idx"`
-	Type        string            `json:"Type"`
-	Description string            `json:"Description"`
-	Function    string            `json:"Function"`
-	UntagVlan   int               `json:"UntagVlan,omitempty"`
-	TagVlans    []int             `json:"TagVlans,omitempty"`
-	IPAddress   string            `json:"IPAddress,omitempty"`
-	Mtu         int               `json:"MTU"`
-	Shutdown    bool              `json:"Shutdown"`
-	Others      map[string]string `json:"Others,omitempty"`
-	Mode        string            `json:"Mode,omitempty"`
-	PortGroup   string            `json:"PortGroup,omitempty"`
+	Port        string            `yaml:"Port"`
+	Idx         int               `yaml:"Idx"`
+	Type        string            `yaml:"Type"`
+	Description string            `yaml:"Description"`
+	Function    string            `yaml:"Function"`
+	UntagVlan   int               `yaml:"UntagVlan,omitempty"`
+	TagVlans    []int             `yaml:"TagVlans,omitempty"`
+	IPAddress   string            `yaml:"IPAddress,omitempty"`
+	Mtu         int               `yaml:"MTU"`
+	Shutdown    bool              `yaml:"Shutdown"`
+	Others      map[string]string `yaml:"Others,omitempty"`
+	Mode        string            `yaml:"Mode,omitempty"`
+	PortGroup   string            `yaml:"PortGroup,omitempty"`
 }
 
 type RoutingType struct {
-	BGP        BGPType          `json:"BGP,omitempty"`
-	Static     []StaticType     `json:"Static,omitempty"`
-	PrefixList []PrefixListType `json:"PrefixList,omitempty"`
+	BGP        BGPType          `yaml:"BGP,omitempty"`
+	Static     []StaticType     `yaml:"Static,omitempty"`
+	PrefixList []PrefixListType `yaml:"PrefixList,omitempty"`
 }
 
 type BGPType struct {
-	BGPAsn          int                `json:"BGPAsn"`
-	RouterID        string             `json:"RouterID"`
-	IPv4Network     []string           `json:"IPv4Network"`
-	RouteMap        []RouteMapType     `json:"RouteMap,omitempty"`
-	IPv4Neighbor    []IPv4NeighborType `json:"IPv4Neighbor"`
-	TemplateNeigbor []IPv4NeighborType `json:"TemplateNeigbor,omitempty"`
+	BGPAsn          int                `yaml:"BGPAsn"`
+	RouterID        string             `yaml:"RouterID"`
+	IPv4Network     []string           `yaml:"IPv4Network"`
+	RouteMap        []RouteMapType     `yaml:"RouteMap,omitempty"`
+	IPv4Neighbor    []IPv4NeighborType `yaml:"IPv4Neighbor"`
+	TemplateNeigbor []IPv4NeighborType `yaml:"TemplateNeigbor,omitempty"`
 }
 
 type IPv4NeighborType struct {
-	SwitchRelation    string `json:"SwitchRelation"`
-	Description       string `json:"Description"`
-	NeighborAsn       int    `json:"NeighborAsn"`
-	NeighborIPAddress string `json:"NeighborIPAddress"`
+	SwitchRelation    string `yaml:"SwitchRelation"`
+	Description       string `yaml:"Description"`
+	NeighborAsn       int    `yaml:"NeighborAsn"`
+	NeighborIPAddress string `yaml:"NeighborIPAddress"`
 	PrefixList        []struct {
-		Name      string `json:"Name"`
-		Direction string `json:"Direction"`
-	} `json:"PrefixList,omitempty"`
-	RemovePrivateAS bool   `json:"RemovePrivateAS,omitempty"`
-	Shutdown        bool   `json:"Shutdown"`
-	NbrPassword     string `json:"NbrPassword,omitempty"`
-	UpdateSource    string `json:"UpdateSource,omitempty"`
-	LocalAS         string `json:"LocalAS,omitempty"`
-	EBGPMultiHop    int    `json:"EBGPMultiHop,omitempty"`
+		Name      string `yaml:"Name"`
+		Direction string `yaml:"Direction"`
+	} `yaml:"PrefixList,omitempty"`
+	RemovePrivateAS bool   `yaml:"RemovePrivateAS,omitempty"`
+	Shutdown        bool   `yaml:"Shutdown"`
+	NbrPassword     string `yaml:"NbrPassword,omitempty"`
+	UpdateSource    string `yaml:"UpdateSource,omitempty"`
+	LocalAS         string `yaml:"LocalAS,omitempty"`
+	EBGPMultiHop    int    `yaml:"EBGPMultiHop,omitempty"`
 }
 
 type StaticType struct {
-	Network string `json:"Network"`
-	NextHop string `json:"NextHop"`
-	Name    string `json:"Name"`
+	Network string `yaml:"Network"`
+	NextHop string `yaml:"NextHop"`
+	Name    string `yaml:"Name"`
 }
 
 type PrefixListType struct {
-	Name   string `json:"Name"`
+	Name   string `yaml:"Name"`
 	Config []struct {
-		Idx         int    `json:"Idx"`
-		Action      string `json:"Action"`
-		Description string `json:"Description"`
-		Network     string `json:"Network"`
-		Operation   string `json:"Operation"`
-		Prefix      int    `json:"Prefix"`
-	} `json:"Config"`
+		Idx         int    `yaml:"Idx"`
+		Action      string `yaml:"Action"`
+		Description string `yaml:"Description"`
+		Network     string `yaml:"Network"`
+		Operation   string `yaml:"Operation"`
+		Prefix      int    `yaml:"Prefix"`
+	} `yaml:"Config"`
 }
 
 type RouteMapType struct {
-	Name   string `json:"Name"`
-	Action string `json:"Action"`
-	Seq    int    `json:"Seq"`
+	Name   string `yaml:"Name"`
+	Action string `yaml:"Action"`
+	Seq    int    `yaml:"Seq"`
 	Rules  []struct {
-		PrefixList string `json:"PrefixList"`
-	} `json:"Rules,omitempty"`
+		PrefixList string `yaml:"PrefixList"`
+	} `yaml:"Rules,omitempty"`
 }
 
 // For Dell Port-Group
 type PortGroupType struct {
-	PortGroup string `json:"PortGroup,omitempty"`
-	Mode      string `json:"Mode,omitempty"`
-	Type      string `json:"Type,omitempty"`
-	Idx       int    `json:"Idx,omitempty"`
+	PortGroup string `yaml:"PortGroup,omitempty"`
+	Mode      string `yaml:"Mode,omitempty"`
+	Type      string `yaml:"Type,omitempty"`
+	Idx       int    `yaml:"Idx,omitempty"`
 }
