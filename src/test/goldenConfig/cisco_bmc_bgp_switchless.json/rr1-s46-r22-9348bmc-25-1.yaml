@@ -6,7 +6,7 @@ Switch:
   Hostname: rr1-s46-r22-9348bmc-25-1
   ASN: 0
   Firmware: 9.3(9)
-DeploymentPattern: Hyperconverged
+DeploymentPattern: Switchless
 SwitchUplink:
 - Make: Cisco
   Model: C3132Q-XL

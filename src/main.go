@@ -20,6 +20,7 @@ var (
 	DefaultMTU            = 1500
 	BGP, STATIC           = "BGP", "STATIC"
 	Username, Password    string
+	CRED_SCAN_PLACEHOLDER = "$CREDENTIAL_PLACEHOLDER$"
 
 	JSONExtension            = ".json"
 	YAMLExtension            = ".yaml"
