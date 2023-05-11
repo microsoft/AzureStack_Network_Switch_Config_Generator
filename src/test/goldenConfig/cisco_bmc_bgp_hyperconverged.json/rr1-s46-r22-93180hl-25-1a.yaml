@@ -1196,17 +1196,10 @@ Routing:
     BGPAsn: 65243
     RouterID: 100.71.85.149
     IPv4Network:
-<<<<<<< HEAD
-    - 100.71.85.136/30
-    - 100.71.85.144/30
-    - 100.71.85.149/32
-    - 100.71.85.128/30
-=======
-    - 100.71.85.149/32
     - 100.71.85.128/30
     - 100.71.85.136/30
     - 100.71.85.144/30
->>>>>>> main
+    - 100.71.85.149/32
     - 100.71.85.192/26
     - 100.71.131.128/25
     IPv4Neighbor:
@@ -1237,11 +1230,7 @@ Routing:
       NeighborAsn: 65243
       NeighborIPAddress: 100.71.85.146
       Shutdown: false
-<<<<<<< HEAD
       NbrPassword: Xj$mVw%r&89aLcw1
-=======
-      NbrPassword: "<credential>"   #[SuppressMessage("Microsoft.Security", "CS001:SecretInline", Justification="Random text, not confidential"))]
->>>>>>> main
     - SwitchRelation: SwitchDownlink
       Description: TO_MUX
       NeighborAsn: 65113

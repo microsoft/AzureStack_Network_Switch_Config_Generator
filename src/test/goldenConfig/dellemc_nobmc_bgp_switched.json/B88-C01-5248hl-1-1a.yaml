@@ -1105,10 +1105,10 @@ Routing:
     BGPAsn: 65341
     RouterID: 100.71.85.149
     IPv4Network:
+    - 100.71.85.128/30
     - 100.71.85.136/30
     - 100.71.85.144/30
     - 100.71.85.149/32
-    - 100.71.85.128/30
     - 100.71.85.192/26
     - 100.71.131.128/25
     IPv4Neighbor:
@@ -1155,13 +1155,13 @@ Routing:
     - Idx: 1
       Action: deny
       Description: Storage
-      Network: 10.71.1.0/24
+      Network: 10.71.2.0/24
       Operation: le
       Prefix: 32
     - Idx: 1
       Action: deny
       Description: Storage
-      Network: 10.71.2.0/24
+      Network: 10.71.1.0/24
       Operation: le
       Prefix: 32
     - Idx: 3
