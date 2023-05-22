@@ -1,5 +1,6 @@
 {{ template "hostname" .Switch -}}
 {{ template "banner" .ToolBuildVersion -}}
+{{if .Routing.PrefixList}}{{ template "prefixlist" .Routing.PrefixList -}} {{ end -}}
 {{ template "stig_user" .GlobalSetting -}}
 {{ template "stig_ssh" -}}
 {{ template "stig_login" -}}
@@ -16,7 +17,6 @@
 {{ template "set_ntp" .GlobalSetting -}}
 {{ template "set_syslog" .GlobalSetting -}}
 {{ template "set_load_sharing" -}}
-{{if .Routing.PrefixList}}{{ template "prefixlist" .Routing.PrefixList -}} {{ end -}}
 {{ template "vlt" . -}}
 {{if .PortChannel}}{{ template "portchannel" .PortChannel -}}{{ end -}}
 {{ template "loopback" .L3Interfaces -}}
