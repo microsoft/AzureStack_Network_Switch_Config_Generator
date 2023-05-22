@@ -20,8 +20,10 @@ var (
 	DefaultMTU            = 1500
 	BGP, STATIC           = "BGP", "STATIC"
 	Username, Password    string
+	CRED_SCAN_PLACEHOLDER = "$CREDENTIAL_PLACEHOLDER$"
 
 	JSONExtension            = ".json"
+	YAMLExtension            = ".yaml"
 	CONFIGExtension          = ".config"
 	P2P_IBGP                 = "P2P_IBGP"
 	P2P_BORDER               = "P2P_BORDER"
@@ -105,8 +107,7 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 			templateFolder, frameworkFolder := torOutput.parseFrameworkPath(switchLibFolder)
 			torOutput.ParseSwitchPort(frameworkFolder)
 			torOutput.ParseRouting(frameworkFolder, inputData)
-			// Output JSON File for Debug
-			torOutput.writeToJson(outputFolder)
+			torOutput.writeToYaml(outputFolder)
 			torOutput.parseTemplate(templateFolder, outputFolder)
 		}
 	} else {
@@ -125,8 +126,7 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 			templateFolder, frameworkFolder := bmcOutput.parseFrameworkPath(switchLibFolder)
 			bmcOutput.ParseSwitchPort(frameworkFolder)
 			bmcOutput.ParseRouting(frameworkFolder, inputData)
-			// Output JSON File for Debug
-			bmcOutput.writeToJson(outputFolder)
+			bmcOutput.writeToYaml(outputFolder)
 			bmcOutput.parseTemplate(templateFolder, outputFolder)
 		}
 	}

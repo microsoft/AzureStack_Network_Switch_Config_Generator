@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -9,6 +8,8 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"gopkg.in/yaml.v2"
 )
 
 var ()
@@ -56,10 +57,10 @@ func TestMain(t *testing.T) {
 			generateSwitchConfig(testInputData, switchLibFolder, testOutputFolder+tc.inputTestFileName, testDeviceTypeMap)
 			outputFiles := getFilesInFolder(testOutputFolder + tc.inputTestFileName)
 			for _, file := range outputFiles {
-				if strings.Contains(file, ".json") {
+				if strings.Contains(file, YAMLExtension) {
 					relativePath := fmt.Sprintf("%s/%s", tc.inputTestFileName, file)
-					goldenConfigObj := parseOutputJson(testGoldenFolder + relativePath)
-					testOutputObj := parseOutputJson(testOutputFolder + relativePath)
+					goldenConfigObj := parseOutputYaml(testGoldenFolder + relativePath)
+					testOutputObj := parseOutputYaml(testOutputFolder + relativePath)
 					if !reflect.DeepEqual(goldenConfigObj.Vlans, testOutputObj.Vlans) {
 						t.Errorf("name: %s VLAN failed \n want: %#v \n got: %#v", name, goldenConfigObj.Vlans, testOutputObj.Vlans)
 					}
@@ -90,13 +91,13 @@ func getFilesInFolder(foldername string) []string {
 	return fileList
 }
 
-func parseOutputJson(outputJsonFile string) *OutputType {
+func parseOutputYaml(outputFile string) *OutputType {
 	outputObj := &OutputType{}
-	bytes, err := ioutil.ReadFile(outputJsonFile)
+	bytes, err := ioutil.ReadFile(outputFile)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	err = json.Unmarshal(bytes, outputObj)
+	err = yaml.Unmarshal(bytes, outputObj)
 	if err != nil {
 		log.Fatalln(err)
 	}

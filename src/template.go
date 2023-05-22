@@ -1,22 +1,23 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 	"os"
 	"text/template"
+
+	"gopkg.in/yaml.v2"
 )
 
-func (o *OutputType) writeToJson(outputFolder string) {
+func (o *OutputType) writeToYaml(outputFolder string) {
 	// Create folder if not existing
 	createFolder(outputFolder)
-	jsonFile := outputFolder + "/" + o.Switch.Hostname + JSONExtension
-	b, err := json.MarshalIndent(o, "", " ")
+	yamlFile := outputFolder + "/" + o.Switch.Hostname + YAMLExtension
+	b, err := yaml.Marshal(o)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	f, err := os.OpenFile(jsonFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
+	f, err := os.OpenFile(yamlFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
 	if err != nil {
 		log.Fatalln(err)
 	}
