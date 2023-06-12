@@ -11,15 +11,15 @@ interface vlan{{.VlanID}}
 ! vlan.go.tmpl-interface_vlan
 {{- $SwitchType := .Switch.Type -}}
 {{ range .Vlans -}}
-{{ if .IPAddress }} 
+{{ if .Subnet }} 
 interface vlan{{.VlanID}}
   description {{.VlanName}}
   {{if .Shutdown -}}shutdown{{ else }}no shutdown{{ end }}
   mtu {{.Mtu}}
-  ip address {{ .IPAddress }}
+  ip address {{ .Subnet }}
   {{ if .VIPAddress -}}
   !
-  vrrp-group {{.VlanID}}
+  vrrp-group {{.VirtualGroupID}}
     {{ if eq $SwitchType "TOR1" -}}
     priority 150
     {{ else if eq $SwitchType "TOR2" -}}

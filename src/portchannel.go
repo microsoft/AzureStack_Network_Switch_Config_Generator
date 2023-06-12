@@ -27,7 +27,7 @@ func (o *OutputType) UpdatePortChannel(inputData InputData) {
 		}
 		var P2P_IBGP_IP string
 		for _, l3IntfItem := range o.L3Interfaces {
-			if strings.Contains(l3IntfItem.Function, P2P_IBGP) {
+			if strings.EqualFold(l3IntfItem.Function, P2P_IBGP) {
 				P2P_IBGP_IP = fmt.Sprintf("%s/%d", l3IntfItem.IPAddress, l3IntfItem.Cidr)
 			}
 		}

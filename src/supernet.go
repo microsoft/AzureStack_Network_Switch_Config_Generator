@@ -10,7 +10,7 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 	l3IntfMap := map[string]L3IntfType{}
 	if strings.Contains(o.Switch.Type, TOR) {
 		// TOR Switch with all matched vlans
-		for _, supernet := range inputData.Supernets {
+		for idx, supernet := range inputData.Supernets {
 			vlanItem := VlanType{}
 			l3IntfItem := L3IntfType{}
 			// Update Vlan ID but Switchless Deployment Skip Storage Vlan
@@ -35,6 +35,7 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 				vlanItem.Cidr = supernet.IPv4.Cidr
 				vlanItem.Subnet = supernet.IPv4.Subnet
 				vlanItem.Mtu = JUMBOMTU
+
 				if supernet.Shutdown {
 					vlanItem.Shutdown = true
 				}
@@ -42,6 +43,9 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 					for _, ipv4 := range supernet.IPv4.Assignment {
 						if strings.Contains(strings.ToUpper(ipv4.Name), strings.ToUpper(VIPGATEWAY)) {
 							vlanItem.VIPAddress = ipv4.IP
+							// Caculate Virtual Group ID as limited 1~255.
+							VIDBase := 50
+							vlanItem.VirtualGroupID = idx + VIDBase
 						} else if strings.Contains(strings.ToUpper(ipv4.Name), strings.ToUpper(o.Switch.Type)) {
 							// Assignment Type binds with Switch.Type
 							vlanItem.IPAddress = ipv4.IP
@@ -74,7 +78,7 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 					}
 				}
 				if len(l3IntfItem.IPAddress) != 0 {
-					l3IntfItem.Function = supernet.IPv4.NetworkType
+					l3IntfItem.Function = supernet.IPv4.Name
 					l3IntfItem.Description = supernet.IPv4.Name
 					l3IntfItem.Cidr = supernet.IPv4.Cidr
 					l3IntfItem.Mtu = JUMBOMTU

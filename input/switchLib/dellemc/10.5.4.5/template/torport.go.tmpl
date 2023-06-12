@@ -9,7 +9,9 @@ interface {{ .Port }}
 {{ else -}}
 interface {{ .Type}} {{ .Port }}
   description {{ .Description }}
+  {{if .Shutdown }}shutdown{{ else }}no shutdown{{ end }}
   mtu {{ .Mtu }}
+  flowcontrol receive off
   {{if or (eq .Function "Unused") (eq .Function "RESERVED") -}} 
   switchport mode access
   switchport access vlan {{ .UntagVlan }}
@@ -70,7 +72,6 @@ interface {{ .Type}} {{ .Port }}
   no switchport
   ip address {{ .IPAddress }}
   {{end -}}
-  {{if .Shutdown }}shutdown{{ else }}no shutdown{{ end }}
   {{ end }}
 {{ end -}}
 {{ end -}}

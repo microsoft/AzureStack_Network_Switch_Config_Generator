@@ -34,7 +34,7 @@ var (
 	POID_TOR_BMC             = "102"
 	UNUSED_VLANName          = "UNUSED_VLAN"
 	UNUSED_VLANID            int
-	CISCOMLAG_NATIVEVLANNAME = "Cisco_MLAG_NativeVlan"
+	CISCOMLAG_NATIVEVLANNAME = "NativeVlan"
 	CISCOMLAG_NATIVEVLANID   int
 	BMC_VlanID               int
 	Compute_NativeVlanName   = "Management"
@@ -101,12 +101,11 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 			torOutput.UpdateSwitch(torItem, TOR, DeviceTypeMap)
 			// fmt.Printf("%#v\n%#v\n", torOutput, inputData)
 			torOutput.UpdateVlanAndL3Intf(inputData)
-			torOutput.UpdatePortChannel(inputData)
-			// fmt.Printf("%#v\n", torOutput)
 			torOutput.UpdateGlobalSetting(inputData)
 			templateFolder, frameworkFolder := torOutput.parseFrameworkPath(switchLibFolder)
 			torOutput.ParseSwitchPort(frameworkFolder)
 			torOutput.ParseRouting(frameworkFolder, inputData)
+			torOutput.UpdatePortChannel(inputData)
 			torOutput.writeToYaml(outputFolder)
 			torOutput.parseTemplate(templateFolder, outputFolder)
 		}
@@ -121,11 +120,11 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 			bmcOutput.ToolBuildVersion = ToolBuildVersion
 			bmcOutput.UpdateSwitch(bmdItem, BMC, DeviceTypeMap)
 			bmcOutput.UpdateVlanAndL3Intf(inputData)
-			bmcOutput.UpdatePortChannel(inputData)
 			bmcOutput.UpdateGlobalSetting(inputData)
 			templateFolder, frameworkFolder := bmcOutput.parseFrameworkPath(switchLibFolder)
 			bmcOutput.ParseSwitchPort(frameworkFolder)
 			bmcOutput.ParseRouting(frameworkFolder, inputData)
+			bmcOutput.UpdatePortChannel(inputData)
 			bmcOutput.writeToYaml(outputFolder)
 			bmcOutput.parseTemplate(templateFolder, outputFolder)
 		}

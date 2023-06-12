@@ -56,8 +56,8 @@ func (o *OutputType) ParseBGP(BGPObj BGPType) {
 	}
 	// ## Selected Vlan Subnet
 	for _, networkName := range BGPObj.IPv4Network {
-		subnetMap := o.getSubnetByVlanGroupID(networkName)
-		for _, subnet := range subnetMap {
+		_, vlanSubnetList := o.getSubnetByVlanGroupName(networkName)
+		for _, subnet := range vlanSubnetList {
 			ipv4Networks = append(ipv4Networks, subnet)
 		}
 	}
@@ -88,7 +88,8 @@ func (o *OutputType) ParseBGP(BGPObj BGPType) {
 				newBGPIPv4NbrItem := ipv4NbrItem
 				newBGPIPv4NbrItem.Description = fmt.Sprintf("TO_%s", switchItem.Type)
 				newBGPIPv4NbrItem.NeighborAsn = switchItem.Asn
-				for _, subnetValue := range o.getSubnetByVlanGroupID(ipv4NbrItem.NeighborIPAddress) {
+				_, vlanSubnetList := o.getSubnetByVlanGroupName(ipv4NbrItem.NeighborIPAddress)
+				for _, subnetValue := range vlanSubnetList {
 					newBGPIPv4NbrItem.NeighborIPAddress = subnetValue
 				}
 				newBGPIPv4Nbrs = append(newBGPIPv4Nbrs, newBGPIPv4NbrItem)
@@ -103,7 +104,8 @@ func (o *OutputType) ParseBGP(BGPObj BGPType) {
 				newBGPIPv4NbrItem := ipv4NbrItem
 				newBGPIPv4NbrItem.Description = fmt.Sprintf("TO_%s", switchItem.Type)
 				newBGPIPv4NbrItem.NeighborAsn = switchItem.Asn
-				for _, subnetValue := range o.getSubnetByVlanGroupID(ipv4NbrItem.NeighborIPAddress) {
+				_, vlanSubnetList := o.getSubnetByVlanGroupName(ipv4NbrItem.NeighborIPAddress)
+				for _, subnetValue := range vlanSubnetList {
 					newBGPIPv4NbrItem.NeighborIPAddress = subnetValue
 				}
 				newTemplateNeigbor = append(newTemplateNeigbor, newBGPIPv4NbrItem)
@@ -125,10 +127,10 @@ func (o *OutputType) ParseStatic(staticObj []StaticType) {
 	for _, staticItem := range staticObj {
 		newStaticItem := staticItem
 		if staticItem.Network != ANY {
-			subnetMap := o.getSubnetByVlanGroupID(staticItem.Network)
-			for networkName, network := range subnetMap {
-				newStaticItem.Network = network
-				newStaticItem.Name = networkName
+			vlanNameList, vlanSubnetList := o.getSubnetByVlanGroupName(staticItem.Network)
+			for index, subnet := range vlanSubnetList {
+				newStaticItem.Network = subnet
+				newStaticItem.Name = vlanNameList[index]
 				newStaticObj = append(newStaticObj, newStaticItem)
 			}
 		} else {
@@ -141,7 +143,7 @@ func (o *OutputType) ParseStatic(staticObj []StaticType) {
 					newStaticObj = append(newStaticObj, newStaticItem)
 				}
 			} else {
-				subnetMap := o.getVIPByVlanGroupID(staticItem.NextHop)
+				subnetMap := o.getVIPByVlanGroupName(staticItem.NextHop)
 				for _, network := range subnetMap {
 					newStaticItem.Network = ANYNETWORK
 					newStaticItem.NextHop = network
@@ -162,9 +164,12 @@ func (o *OutputType) ParsePrefixList(PrefixListObj []PrefixListType) {
 		prefixListObjItem.Name = prefixName
 		for _, configItemTmp := range prefixConfig {
 			newConfigItem := configItemTmp
-			subnetMap := o.getSubnetByVlanGroupID(configItemTmp.Network)
-			for _, subnet := range subnetMap {
+			baseIndex := configItemTmp.Idx
+			_, vlanSubnetList := o.getSubnetByVlanGroupName(configItemTmp.Network)
+			for idx, subnet := range vlanSubnetList {
 				newConfigItem.Network = subnet
+				// Define the interval idx 5 for each ACL
+				newConfigItem.Idx = baseIndex + idx*5
 				prefixListObjItem.Config = append(prefixListObjItem.Config, newConfigItem)
 			}
 		}
@@ -173,38 +178,42 @@ func (o *OutputType) ParsePrefixList(PrefixListObj []PrefixListType) {
 	o.Routing.PrefixList = prefixListObj
 }
 
-func (o *OutputType) getSubnetByVlanGroupID(groupID string) map[string]string {
-	sunbetMap := map[string]string{}
-	if groupID == ANY {
-		sunbetMap = map[string]string{ANY: ANYNETWORK}
+func (o *OutputType) getSubnetByVlanGroupName(GroupName string) ([]string, []string) {
+	vlanNameList, vlanSubnetList := []string{}, []string{}
+	if strings.EqualFold(GroupName, ANY) {
+		vlanNameList, vlanSubnetList = []string{ANY}, []string{ANYNETWORK}
 	} else {
 		for _, vlanItem := range o.Vlans {
-			if vlanItem.GroupName == groupID {
-				sunbetMap[vlanItem.VlanName] = vlanItem.Subnet
+			if strings.EqualFold(vlanItem.GroupName, GroupName) {
+				vlanNameList = append(vlanNameList, vlanItem.VlanName)
+				vlanSubnetList = append(vlanSubnetList, vlanItem.Subnet)
 			}
 		}
 	}
-	return sunbetMap
+	return vlanNameList, vlanSubnetList
 }
 
-func (o *OutputType) getVIPByVlanGroupID(groupID string) map[string]string {
-	sunbetMap := map[string]string{}
-	if groupID == ANY {
-		sunbetMap = map[string]string{ANY: ANYNETWORK}
+func (o *OutputType) getVIPByVlanGroupName(GroupName string) map[int]string {
+	sunbetMap := map[int]string{}
+	GroupName = strings.ToUpper(GroupName)
+	if GroupName == ANY {
+		sunbetMap = map[int]string{0: ANYNETWORK}
 	} else {
 		for _, vlanItem := range o.Vlans {
-			if vlanItem.GroupName == groupID {
-				sunbetMap[vlanItem.VlanName] = vlanItem.VIPAddress
+			if vlanItem.GroupName == GroupName {
+				sunbetMap[vlanItem.VlanID] = vlanItem.VIPAddress
 			}
 		}
 	}
+
 	return sunbetMap
 }
 
 func (o *OutputType) getL3IntfObjByName(networkName string) L3IntfType {
 	var L3IntfObj L3IntfType
+	networkName = strings.ToUpper(networkName)
 	for key, l3inftItem := range o.L3Interfaces {
-		if strings.Contains(strings.ToUpper(key), strings.ToUpper(networkName)) {
+		if strings.Contains(strings.ToUpper(key), networkName) {
 			L3IntfObj = l3inftItem
 		}
 	}

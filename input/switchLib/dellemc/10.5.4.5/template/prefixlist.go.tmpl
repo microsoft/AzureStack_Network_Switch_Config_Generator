@@ -4,9 +4,9 @@
 {{- $prefixlistname := .Name -}}
 {{ range .Config -}}  
 {{ if ne .Operation "" -}}
-ip prefix-list {{ $prefixlistname }} {{ .Action }} {{ .Network }} {{ .Operation }} {{ .Prefix }}
+ip prefix-list {{ $prefixlistname }} seq {{ .Idx }} {{ .Action }} {{ .Network }} {{ .Operation }} {{ .Prefix }}
 {{ else -}}
-ip prefix-list {{ $prefixlistname }} {{ .Action }} {{ .Network }}
+ip prefix-list {{ $prefixlistname }} seq {{ .Idx }} {{ .Action }} {{ .Network }}
 {{ end -}}
 {{ end }}
 {{ end -}}
