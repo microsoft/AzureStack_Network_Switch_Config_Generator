@@ -32,21 +32,44 @@ GlobalSetting:
   - 10.10.240.24
   OOB: vlan125
 Vlans:
-- VlanName: BMC_Mgmt_125
+- GroupName: UNUSED_VLAN
+  VlanName: UNUSED_VLAN
+  VlanID: 2
+  VirtualGroupID: 0
+  IPAddress: ""
+  Cidr: 0
+  Subnet: ""
+  MTU: 9216
+  VIPAddress: ""
+  VIPPriorityId: 0
+  Shutdown: true
+- GroupName: Cisco_MLAG_NativeVlan
+  VlanName: Cisco_MLAG_NativeVlan
+  VlanID: 99
+  VirtualGroupID: 0
+  IPAddress: ""
+  Cidr: 0
+  Subnet: ""
+  MTU: 9216
+  VIPAddress: ""
+  VIPPriorityId: 0
+  Shutdown: false
+- GroupName: BMC
+  VlanName: BMC_Mgmt_125
   VlanID: 125
-  GroupName: BMC
-  IPAddress: 100.71.85.253
+  VirtualGroupID: 0
+  IPAddress: ""
   Cidr: 26
   Subnet: 100.71.85.192/26
-  MTU: 1500
-  VIPAddress: 100.71.85.193
+  MTU: 9216
+  VIPAddress: ""
   VIPPriorityId: 0
   Shutdown: false
 PortChannel:
   TOR_BMC:
     Description: TOR_BMC
     Function: TOR_BMC
-    UntagVlan: 0
+    UntagVlan: 99
     TagVlans: 125
     IPAddress: ""
     PortChannelID: "102"
@@ -378,7 +401,7 @@ Ports:
   Type: Ethernet
   Description: Reserved_For_PDU
   Function: Reserved_For_PDU
-  UntagVlan: 125
+  UntagVlan: 2
   MTU: 9216
   Shutdown: true
 - Port: 1/42
@@ -386,7 +409,7 @@ Ports:
   Type: Ethernet
   Description: Reserved_For_PDU
   Function: Reserved_For_PDU
-  UntagVlan: 125
+  UntagVlan: 2
   MTU: 9216
   Shutdown: true
 - Port: 1/43
@@ -394,7 +417,7 @@ Ports:
   Type: Ethernet
   Description: Reserved_For_PDU
   Function: Reserved_For_PDU
-  UntagVlan: 125
+  UntagVlan: 2
   MTU: 9216
   Shutdown: true
 - Port: 1/44
@@ -402,7 +425,7 @@ Ports:
   Type: Ethernet
   Description: Reserved_For_PDU
   Function: Reserved_For_PDU
-  UntagVlan: 125
+  UntagVlan: 2
   MTU: 9216
   Shutdown: true
 - Port: 1/45
@@ -463,7 +486,7 @@ Ports:
   MTU: 9216
   Shutdown: false
   Others:
-    ChannelGroup: "102"
+    ChannelGroup: ""
 - Port: 1/52
   Idx: 52
   Type: Ethernet
@@ -474,7 +497,7 @@ Ports:
   MTU: 9216
   Shutdown: false
   Others:
-    ChannelGroup: "102"
+    ChannelGroup: ""
 - Port: 1/53
   Idx: 53
   Type: Ethernet
@@ -502,5 +525,5 @@ Ports:
 Routing:
   Static:
   - Network: 0.0.0.0/0
-    NextHop: 100.71.85.193
+    NextHop: ""
     Name: GlobalDefaultRoute

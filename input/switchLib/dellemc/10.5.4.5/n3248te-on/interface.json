@@ -1,0 +1,422 @@
+{
+        "Model": "N3248TE-ON",
+        "Type": "BMC",
+        "SupportNoBmc": true,
+        "FirmwareVersion": "10.5.4.5",
+        "MaxMTU": "9216",
+        "Function": [
+            {
+                "Function": "HOST_BMC",
+                "Port": [
+                    "1/1/1",
+                    "1/1/2",
+                    "1/1/3",
+                    "1/1/4",
+                    "1/1/5",
+                    "1/1/6",
+                    "1/1/7",
+                    "1/1/8",
+                    "1/1/9",
+                    "1/1/10",
+                    "1/1/11",
+                    "1/1/12",
+                    "1/1/13",
+                    "1/1/14",
+                    "1/1/15",
+                    "1/1/16"
+                ]
+            },
+            {
+                "Function": "HLH_BMC",
+                "Port": [
+                    "1/1/46"
+                ]
+            },
+            {
+                "Function": "HLH_OS",
+                "Port": [
+                    "1/1/49",
+                    "1/1/50"
+                ]
+            },
+            {
+                "Function": "TOR_BMC",
+                "Port": [
+                    "1/1/51",
+                    "1/1/52"
+                ]
+            }
+        ],
+        "MAXMTU": "9216",
+        "Port": [
+          {
+            "Port": "1/1/1",
+            "Type": "ethernet",
+            "Idx": 1,
+            "PortGroup": "1/1/1",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/2",
+            "Type": "ethernet",
+            "Idx": 2,
+            "PortGroup": "1/1/1",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/3",
+            "Type": "ethernet",
+            "Idx": 3,
+            "PortGroup": "1/1/1",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/4",
+            "Type": "ethernet",
+            "Idx": 4,
+            "PortGroup": "1/1/1",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/5",
+            "Type": "ethernet",
+            "Idx": 5,
+            "PortGroup": "1/1/2",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/6",
+            "Type": "ethernet",
+            "Idx": 6,
+            "PortGroup": "1/1/2",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/7",
+            "Type": "ethernet",
+            "Idx": 7,
+            "PortGroup": "1/1/2",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/8",
+            "Type": "ethernet",
+            "Idx": 8,
+            "PortGroup": "1/1/2",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/9",
+            "Type": "ethernet",
+            "Idx": 9,
+            "PortGroup": "1/1/3",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/10",
+            "Type": "ethernet",
+            "Idx": 10,
+            "PortGroup": "1/1/3",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/11",
+            "Type": "ethernet",
+            "Idx": 11,
+            "PortGroup": "1/1/3",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/12",
+            "Type": "ethernet",
+            "Idx": 12,
+            "PortGroup": "1/1/3",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/13",
+            "Type": "ethernet",
+            "Idx": 13,
+            "PortGroup": "1/1/4",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/14",
+            "Type": "ethernet",
+            "Idx": 14,
+            "PortGroup": "1/1/4",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/15",
+            "Type": "ethernet",
+            "Idx": 15,
+            "PortGroup": "1/1/4",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/16",
+            "Type": "ethernet",
+            "Idx": 16,
+            "PortGroup": "1/1/4",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/17",
+            "Type": "ethernet",
+            "Idx": 17,
+            "PortGroup": "1/1/5",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/18",
+            "Type": "ethernet",
+            "Idx": 18,
+            "PortGroup": "1/1/5",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/19",
+            "Type": "ethernet",
+            "Idx": 19,
+            "PortGroup": "1/1/5",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/20",
+            "Type": "ethernet",
+            "Idx": 20,
+            "PortGroup": "1/1/5",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/21",
+            "Type": "ethernet",
+            "Idx": 21,
+            "PortGroup": "1/1/6",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/22",
+            "Type": "ethernet",
+            "Idx": 22,
+            "PortGroup": "1/1/6",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/23",
+            "Type": "ethernet",
+            "Idx": 23,
+            "PortGroup": "1/1/6",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/24",
+            "Type": "ethernet",
+            "Idx": 24,
+            "PortGroup": "1/1/6",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/25",
+            "Type": "ethernet",
+            "Idx": 25,
+            "PortGroup": "1/1/7",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/26",
+            "Type": "ethernet",
+            "Idx": 26,
+            "PortGroup": "1/1/7",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/27",
+            "Type": "ethernet",
+            "Idx": 27,
+            "PortGroup": "1/1/7",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/28",
+            "Type": "ethernet",
+            "Idx": 28,
+            "PortGroup": "1/1/7",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/29",
+            "Type": "ethernet",
+            "Idx": 29,
+            "PortGroup": "1/1/8",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/30",
+            "Type": "ethernet",
+            "Idx": 30,
+            "PortGroup": "1/1/8",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/31",
+            "Type": "ethernet",
+            "Idx": 31,
+            "PortGroup": "1/1/8",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/32",
+            "Type": "ethernet",
+            "Idx": 32,
+            "PortGroup": "1/1/8",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/33",
+            "Type": "ethernet",
+            "Idx": 33,
+            "PortGroup": "1/1/9",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/34",
+            "Type": "ethernet",
+            "Idx": 34,
+            "PortGroup": "1/1/9",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/35",
+            "Type": "ethernet",
+            "Idx": 35,
+            "PortGroup": "1/1/9",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/36",
+            "Type": "ethernet",
+            "Idx": 36,
+            "PortGroup": "1/1/9",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/37",
+            "Type": "ethernet",
+            "Idx": 37,
+            "PortGroup": "1/1/10",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/38",
+            "Type": "ethernet",
+            "Idx": 38,
+            "PortGroup": "1/1/10",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/39",
+            "Type": "ethernet",
+            "Idx": 39,
+            "PortGroup": "1/1/10",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/40",
+            "Type": "ethernet",
+            "Idx": 40,
+            "PortGroup": "1/1/10",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/41",
+            "Type": "ethernet",
+            "Idx": 41,
+            "PortGroup": "1/1/11",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/42",
+            "Type": "ethernet",
+            "Idx": 42,
+            "PortGroup": "1/1/11",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/43",
+            "Type": "ethernet",
+            "Idx": 43,
+            "PortGroup": "1/1/11",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/44",
+            "Type": "ethernet",
+            "Idx": 44,
+            "PortGroup": "1/1/11",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/45",
+            "Type": "ethernet",
+            "Idx": 45,
+            "PortGroup": "1/1/12",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/46",
+            "Type": "ethernet",
+            "Idx": 46,
+            "PortGroup": "1/1/12",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/47",
+            "Type": "ethernet",
+            "Idx": 47,
+            "PortGroup": "1/1/12",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/48",
+            "Type": "ethernet",
+            "Idx": 48,
+            "PortGroup": "1/1/12",
+            "Mode": "1g-1x"
+          },
+          {
+            "Port": "1/1/49",
+            "Type": "ethernet",
+            "Idx": 49,
+            "PortGroup": "1/1/13",
+            "Mode": "10g-1x"
+          },
+          {
+            "Port": "1/1/50",
+            "Type": "ethernet",
+            "Idx": 50,
+            "PortGroup": "1/1/13",
+            "Mode": "10g-1x"
+          },
+          {
+            "Port": "1/1/51",
+            "Type": "ethernet",
+            "Idx": 51,
+            "PortGroup": "1/1/14",
+            "Mode": "10g-1x"
+          },
+          {
+            "Port": "1/1/52",
+            "Type": "ethernet",
+            "Idx": 52,
+            "PortGroup": "1/1/14",
+            "Mode": "10g-1x"
+          },
+          {
+            "Port": "mgmt 1/1/1",
+            "Type": "mgmt",
+            "Idx": 53
+          }
+        ]
+    }

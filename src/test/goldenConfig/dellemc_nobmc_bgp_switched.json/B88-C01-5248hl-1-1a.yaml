@@ -46,9 +46,10 @@ GlobalSetting:
   - 10.10.240.24
   OOB: vlan125
 Vlans:
-- VlanName: UNUSED_VLAN
+- GroupName: UNUSED_VLAN
+  VlanName: UNUSED_VLAN
   VlanID: 2
-  GroupName: UNUSED_VLAN
+  VirtualGroupID: 0
   IPAddress: ""
   Cidr: 0
   Subnet: ""
@@ -56,9 +57,10 @@ Vlans:
   VIPAddress: ""
   VIPPriorityId: 0
   Shutdown: true
-- VlanName: HNVPA_6
+- GroupName: HNVPA
+  VlanName: HNVPA_6
   VlanID: 6
-  GroupName: HNVPA
+  VirtualGroupID: 58
   IPAddress: 100.71.131.130
   Cidr: 25
   Subnet: 100.71.131.128/25
@@ -66,9 +68,10 @@ Vlans:
   VIPAddress: 100.71.131.129
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: Infra_7
+- GroupName: MANAGEMENT
+  VlanName: Infra_7
   VlanID: 7
-  GroupName: MANAGEMENT
+  VirtualGroupID: 59
   IPAddress: 100.69.180.2
   Cidr: 24
   Subnet: 100.69.180.0/24
@@ -76,9 +79,10 @@ Vlans:
   VIPAddress: 100.69.180.1
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: BMC_Mgmt_125
+- GroupName: BMC
+  VlanName: BMC_Mgmt_125
   VlanID: 125
-  GroupName: BMC
+  VirtualGroupID: 57
   IPAddress: 100.71.85.251
   Cidr: 26
   Subnet: 100.71.85.192/26
@@ -86,9 +90,10 @@ Vlans:
   VIPAddress: 100.71.85.193
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: Tenant_201
+- GroupName: TENANT
+  VlanName: Tenant_201
   VlanID: 201
-  GroupName: TENANT
+  VirtualGroupID: 60
   IPAddress: 100.69.181.2
   Cidr: 24
   Subnet: 100.69.181.0/24
@@ -96,9 +101,10 @@ Vlans:
   VIPAddress: 100.69.181.1
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: LogicalTenant_301
+- GroupName: TENANT
+  VlanName: LogicalTenant_301
   VlanID: 301
-  GroupName: TENANT
+  VirtualGroupID: 61
   IPAddress: 100.69.182.2
   Cidr: 25
   Subnet: 100.69.182.0/25
@@ -106,9 +112,10 @@ Vlans:
   VIPAddress: 100.69.182.1
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: DhcpTenant_401
+- GroupName: TENANT
+  VlanName: DhcpTenant_401
   VlanID: 401
-  GroupName: TENANT
+  VirtualGroupID: 62
   IPAddress: 100.69.182.130
   Cidr: 25
   Subnet: 100.69.182.128/25
@@ -116,9 +123,10 @@ Vlans:
   VIPAddress: 100.69.182.129
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_501
+- GroupName: L3FORWARD
+  VlanName: L3forward_501
   VlanID: 501
-  GroupName: L3FORWARD
+  VirtualGroupID: 63
   IPAddress: 100.69.183.2
   Cidr: 28
   Subnet: 100.69.183.0/28
@@ -126,9 +134,10 @@ Vlans:
   VIPAddress: 100.69.183.1
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_502
+- GroupName: L3FORWARD
+  VlanName: L3forward_502
   VlanID: 502
-  GroupName: L3FORWARD
+  VirtualGroupID: 64
   IPAddress: 100.69.183.18
   Cidr: 28
   Subnet: 100.69.183.16/28
@@ -136,9 +145,10 @@ Vlans:
   VIPAddress: 100.69.183.17
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_503
+- GroupName: L3FORWARD
+  VlanName: L3forward_503
   VlanID: 503
-  GroupName: L3FORWARD
+  VirtualGroupID: 65
   IPAddress: 100.69.183.34
   Cidr: 28
   Subnet: 100.69.183.32/28
@@ -146,9 +156,10 @@ Vlans:
   VIPAddress: 100.69.183.33
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_504
+- GroupName: L3FORWARD
+  VlanName: L3forward_504
   VlanID: 504
-  GroupName: L3FORWARD
+  VirtualGroupID: 66
   IPAddress: 100.69.183.50
   Cidr: 28
   Subnet: 100.69.183.48/28
@@ -156,9 +167,10 @@ Vlans:
   VIPAddress: 100.69.183.49
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_505
+- GroupName: L3FORWARD
+  VlanName: L3forward_505
   VlanID: 505
-  GroupName: L3FORWARD
+  VirtualGroupID: 67
   IPAddress: 100.69.183.66
   Cidr: 28
   Subnet: 100.69.183.64/28
@@ -166,9 +178,10 @@ Vlans:
   VIPAddress: 100.69.183.65
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_506
+- GroupName: L3FORWARD
+  VlanName: L3forward_506
   VlanID: 506
-  GroupName: L3FORWARD
+  VirtualGroupID: 68
   IPAddress: 100.69.183.82
   Cidr: 28
   Subnet: 100.69.183.80/28
@@ -176,9 +189,10 @@ Vlans:
   VIPAddress: 100.69.183.81
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_507
+- GroupName: L3FORWARD
+  VlanName: L3forward_507
   VlanID: 507
-  GroupName: L3FORWARD
+  VirtualGroupID: 69
   IPAddress: 100.69.183.98
   Cidr: 28
   Subnet: 100.69.183.96/28
@@ -186,9 +200,10 @@ Vlans:
   VIPAddress: 100.69.183.97
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_508
+- GroupName: L3FORWARD
+  VlanName: L3forward_508
   VlanID: 508
-  GroupName: L3FORWARD
+  VirtualGroupID: 70
   IPAddress: 100.69.183.114
   Cidr: 28
   Subnet: 100.69.183.112/28
@@ -196,9 +211,10 @@ Vlans:
   VIPAddress: 100.69.183.113
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_509
+- GroupName: L3FORWARD
+  VlanName: L3forward_509
   VlanID: 509
-  GroupName: L3FORWARD
+  VirtualGroupID: 71
   IPAddress: 100.69.183.130
   Cidr: 28
   Subnet: 100.69.183.128/28
@@ -206,9 +222,10 @@ Vlans:
   VIPAddress: 100.69.183.129
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_510
+- GroupName: L3FORWARD
+  VlanName: L3forward_510
   VlanID: 510
-  GroupName: L3FORWARD
+  VirtualGroupID: 0
   IPAddress: 100.69.183.145
   Cidr: 28
   Subnet: 100.69.183.144/28
@@ -216,9 +233,10 @@ Vlans:
   VIPAddress: ""
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_511
+- GroupName: L3FORWARD
+  VlanName: L3forward_511
   VlanID: 511
-  GroupName: L3FORWARD
+  VirtualGroupID: 73
   IPAddress: 100.69.183.162
   Cidr: 28
   Subnet: 100.69.183.160/28
@@ -226,9 +244,10 @@ Vlans:
   VIPAddress: 100.69.183.161
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_512
+- GroupName: L3FORWARD
+  VlanName: L3forward_512
   VlanID: 512
-  GroupName: L3FORWARD
+  VirtualGroupID: 74
   IPAddress: 100.69.183.178
   Cidr: 28
   Subnet: 100.69.183.176/28
@@ -236,9 +255,10 @@ Vlans:
   VIPAddress: 100.69.183.177
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_513
+- GroupName: L3FORWARD
+  VlanName: L3forward_513
   VlanID: 513
-  GroupName: L3FORWARD
+  VirtualGroupID: 75
   IPAddress: 100.69.183.194
   Cidr: 28
   Subnet: 100.69.183.192/28
@@ -246,9 +266,10 @@ Vlans:
   VIPAddress: 100.69.183.193
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_514
+- GroupName: L3FORWARD
+  VlanName: L3forward_514
   VlanID: 514
-  GroupName: L3FORWARD
+  VirtualGroupID: 76
   IPAddress: 100.69.183.210
   Cidr: 28
   Subnet: 100.69.183.208/28
@@ -256,9 +277,10 @@ Vlans:
   VIPAddress: 100.69.183.209
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_515
+- GroupName: L3FORWARD
+  VlanName: L3forward_515
   VlanID: 515
-  GroupName: L3FORWARD
+  VirtualGroupID: 77
   IPAddress: 100.69.183.226
   Cidr: 28
   Subnet: 100.69.183.224/28
@@ -266,9 +288,10 @@ Vlans:
   VIPAddress: 100.69.183.225
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: L3forward_516
+- GroupName: L3FORWARD
+  VlanName: L3forward_516
   VlanID: 516
-  GroupName: L3FORWARD
+  VirtualGroupID: 78
   IPAddress: 100.69.183.242
   Cidr: 28
   Subnet: 100.69.183.240/28
@@ -276,9 +299,10 @@ Vlans:
   VIPAddress: 100.69.183.241
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: Storage_711
+- GroupName: Storage
+  VlanName: Storage_711
   VlanID: 711
-  GroupName: Storage
+  VirtualGroupID: 0
   IPAddress: ""
   Cidr: 24
   Subnet: 10.71.1.0/24
@@ -286,9 +310,10 @@ Vlans:
   VIPAddress: ""
   VIPPriorityId: 0
   Shutdown: false
-- VlanName: Storage_712
+- GroupName: Storage
+  VlanName: Storage_712
   VlanID: 712
-  GroupName: Storage
+  VirtualGroupID: 0
   IPAddress: ""
   Cidr: 24
   Subnet: 10.71.2.0/24
@@ -298,7 +323,7 @@ Vlans:
   Shutdown: false
 L3Interfaces:
   LOOPBACK0_TOR1:
-    Function: Loopback0
+    Function: Loopback0_Tor1
     Description: Loopback0_Tor1
     IPAddress: 100.71.85.149
     Cidr: 32
@@ -306,7 +331,7 @@ L3Interfaces:
     MTU: 9216
     Shutdown: false
   P2P_BORDER1_TOR1:
-    Function: P2P_Border
+    Function: P2P_Border1_Tor1
     Description: P2P_Border1_Tor1
     IPAddress: 100.71.85.130
     Cidr: 30
@@ -315,7 +340,7 @@ L3Interfaces:
     MTU: 9216
     Shutdown: false
   P2P_BORDER2_TOR1:
-    Function: P2P_Border
+    Function: P2P_Border2_Tor1
     Description: P2P_Border2_Tor1
     IPAddress: 100.71.85.138
     Cidr: 30
@@ -336,7 +361,7 @@ PortChannel:
   MLAG_PEER:
     Description: MLAG_PEER
     Function: MLAG_PEER
-    UntagVlan: 99
+    UntagVlan: 0
     TagVlans: 0
     IPAddress: ""
     PortChannelID: "101"
@@ -845,7 +870,7 @@ Ports:
   MTU: 9216
   Shutdown: false
   Others:
-    ChannelGroup: "50"
+    ChannelGroup: ""
   Mode: 25g-4x
   PortGroup: 1/1/10
 - Port: 1/1/40
@@ -856,7 +881,7 @@ Ports:
   MTU: 9216
   Shutdown: false
   Others:
-    ChannelGroup: "50"
+    ChannelGroup: ""
   Mode: 25g-4x
   PortGroup: 1/1/10
 - Port: 1/1/41:1
@@ -1105,12 +1130,31 @@ Routing:
     BGPAsn: 65341
     RouterID: 100.71.85.149
     IPv4Network:
-    - 100.71.85.128/30
-    - 100.71.85.136/30
     - 100.71.85.144/30
     - 100.71.85.149/32
+    - 100.71.85.128/30
+    - 100.71.85.136/30
     - 100.71.85.192/26
     - 100.71.131.128/25
+    - 100.69.181.0/24
+    - 100.69.182.0/25
+    - 100.69.182.128/25
+    - 100.69.183.0/28
+    - 100.69.183.16/28
+    - 100.69.183.32/28
+    - 100.69.183.48/28
+    - 100.69.183.64/28
+    - 100.69.183.80/28
+    - 100.69.183.96/28
+    - 100.69.183.112/28
+    - 100.69.183.128/28
+    - 100.69.183.144/28
+    - 100.69.183.160/28
+    - 100.69.183.176/28
+    - 100.69.183.192/28
+    - 100.69.183.208/28
+    - 100.69.183.224/28
+    - 100.69.183.240/28
     IPv4Neighbor:
     - SwitchRelation: SwitchUplink
       Description: TO_Border1
@@ -1139,7 +1183,7 @@ Routing:
       NeighborAsn: 65341
       NeighborIPAddress: 100.71.85.146
       Shutdown: false
-      NbrPassword: $g#2lG5m#oZio0vQ
+      NbrPassword: Xj$mVw%r&89aLcw1
     TemplateNeigbor:
     - SwitchRelation: SwitchDownlink
       Description: TO_MUX
@@ -1155,13 +1199,31 @@ Routing:
     - Idx: 1
       Action: deny
       Description: Storage
+      Network: 10.71.1.0/24
+      Operation: le
+      Prefix: 32
+    - Idx: 6
+      Action: deny
+      Description: Storage
       Network: 10.71.2.0/24
       Operation: le
       Prefix: 32
-    - Idx: 1
+    - Idx: 2
       Action: deny
-      Description: Storage
-      Network: 10.71.1.0/24
+      Description: Tenant
+      Network: 100.69.181.0/24
+      Operation: le
+      Prefix: 32
+    - Idx: 7
+      Action: deny
+      Description: Tenant
+      Network: 100.69.182.0/25
+      Operation: le
+      Prefix: 32
+    - Idx: 12
+      Action: deny
+      Description: Tenant
+      Network: 100.69.182.128/25
       Operation: le
       Prefix: 32
     - Idx: 3

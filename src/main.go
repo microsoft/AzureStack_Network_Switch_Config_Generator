@@ -22,29 +22,29 @@ var (
 	Username, Password    string
 	CRED_SCAN_PLACEHOLDER = "$CREDENTIAL_PLACEHOLDER$"
 
-	JSONExtension            = ".json"
-	YAMLExtension            = ".yaml"
-	CONFIGExtension          = ".config"
-	P2P_IBGP                 = "P2P_IBGP"
-	P2P_BORDER               = "P2P_BORDER"
-	MLAG_PEER                = "MLAG_PEER"
-	TOR_BMC                  = "TOR_BMC"
-	POID_P2P_IBGP            = "50"
-	POID_MLAG_PEER           = "101"
-	POID_TOR_BMC             = "102"
-	UNUSED_VLANName          = "UNUSED_VLAN"
-	UNUSED_VLANID            int
-	CISCOMLAG_NATIVEVLANNAME = "Cisco_MLAG_NativeVlan"
-	CISCOMLAG_NATIVEVLANID   int
-	BMC_VlanID               int
-	Compute_NativeVlanName   = "Management"
-	Compute_NativeVlanID     int
-	ANY                      = "Any"
-	ANYNETWORK               = "0.0.0.0/0"
+	JSONExtension          = ".json"
+	YAMLExtension          = ".yaml"
+	CONFIGExtension        = ".config"
+	P2P_IBGP               = "P2P_IBGP"
+	P2P_BORDER             = "P2P_BORDER"
+	MLAG_PEER              = "MLAG_PEER"
+	TOR_BMC                = "TOR_BMC"
+	POID_P2P_IBGP          = "50"
+	POID_MLAG_PEER         = "101"
+	POID_TOR_BMC           = "102"
+	UNUSED_VLANName        = "UNUSED_VLAN"
+	UNUSED_VLANID          int
+	NATIVE_VLANName        = "NativeVlan"
+	NATIVE_VLANID          int
+	BMC_VlanID             int
+	Compute_NativeVlanName = "Management"
+	Compute_NativeVlanID   int
+	ANY                    = "Any"
+	ANYNETWORK             = "0.0.0.0/0"
 
 	COMPUTE, STORAGE                         = "Compute", "Storage"
 	SWITCHED, SWITCHLESS, HYPERCONVERGED     = "Switched", "Switchless", "Hyperconverged"
-	HLHBMC, HLHOS, RESERVEDPDU               = "HLH_BMC", "HLH_OS", "Reserved_For_PDU"
+	HLHBMC, HLHOS, HOSTBMC                   = "HLH_BMC", "HLH_OS", "HOST_BMC"
 	SWITCHUPLINK, SWITCHDOWNLINK, SWITCHPEER = "SwitchUplink", "SwitchDownlink", "SwitchPeer"
 	BMC_DEFAULT_ROUTE                        = "GlobalDefaultRoute"
 	DeviceTypeMap                            map[string][]SwitchType
@@ -101,12 +101,11 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 			torOutput.UpdateSwitch(torItem, TOR, DeviceTypeMap)
 			// fmt.Printf("%#v\n%#v\n", torOutput, inputData)
 			torOutput.UpdateVlanAndL3Intf(inputData)
-			torOutput.UpdatePortChannel(inputData)
-			// fmt.Printf("%#v\n", torOutput)
 			torOutput.UpdateGlobalSetting(inputData)
 			templateFolder, frameworkFolder := torOutput.parseFrameworkPath(switchLibFolder)
 			torOutput.ParseSwitchPort(frameworkFolder)
 			torOutput.ParseRouting(frameworkFolder, inputData)
+			torOutput.UpdatePortChannel(inputData)
 			torOutput.writeToYaml(outputFolder)
 			torOutput.parseTemplate(templateFolder, outputFolder)
 		}
@@ -121,13 +120,14 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 			bmcOutput.ToolBuildVersion = ToolBuildVersion
 			bmcOutput.UpdateSwitch(bmdItem, BMC, DeviceTypeMap)
 			bmcOutput.UpdateVlanAndL3Intf(inputData)
-			bmcOutput.UpdatePortChannel(inputData)
 			bmcOutput.UpdateGlobalSetting(inputData)
 			templateFolder, frameworkFolder := bmcOutput.parseFrameworkPath(switchLibFolder)
 			bmcOutput.ParseSwitchPort(frameworkFolder)
 			bmcOutput.ParseRouting(frameworkFolder, inputData)
+			bmcOutput.UpdatePortChannel(inputData)
 			bmcOutput.writeToYaml(outputFolder)
 			bmcOutput.parseTemplate(templateFolder, outputFolder)
+
 		}
 	}
 }

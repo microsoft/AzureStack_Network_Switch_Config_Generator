@@ -1,3 +1,4 @@
+{{if .Routing.PrefixList}}{{ template "prefixlist" .Routing.PrefixList -}} {{ end -}}
 {{ template "hostname" .Switch -}}
 {{ template "banner" .ToolBuildVersion -}}
 {{ template "stig_user" .GlobalSetting -}}

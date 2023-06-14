@@ -1,0 +1,45 @@
+{{ define "stig_user"}}
+! stig.go.tmpl-stig_user
+password-attributes character-restriction upper 1 lower 1 numeric 1 special-char 1 min-length 15 lockout-period 15 max-retry 3
+password-attributes lockout-period 5
+!
+enable password 0 {{ .Password }} priv-lvl 15
+username admin password {{ .Password }} role sysadmin
+username dellalr password {{ .Password }} role sysadmin
+username {{ .Username }} password {{ .Password }} role sysadmin
+system-user linuxadmin password {{ .Password }}
+{{ end }}
+
+{{ define "stig_ssh"}}
+! stig.go.tmpl-stig_ssh
+ip ssh server enable
+ip ssh server cipher aes256-ctr aes192-ctr aes128-ctr
+ip ssh server mac hmac-sha1 hmac-sha2-256
+ip ssh server max-auth-tries 3
+no ip telnet server enable
+line vty
+ ip access-class ssh-only
+{{ end }}
+
+{{ define "stig_login"}}
+! stig.go.tmpl-stig_login
+login concurrent-session limit 3
+!
+login statistics enable
+{{ end }}
+
+{{ define "stig_ztd"}}
+! stig.go.tmpl-stig_ztd
+ztd cancel
+{{ end }}
+
+{{ define "stig_mac"}}
+! stig.go.tmpl-stig_mac
+mac address-table aging-time 1000000
+{{ end }}
+
+{{ define "stig_logging"}}
+! stig.go.tmpl-stig_logging
+logging audit enable
+logging console disable
+{{ end }}

@@ -47,16 +47,17 @@ type GlobalSettingType struct {
 }
 
 type VlanType struct {
-	VlanName      string `yaml:"VlanName"`
-	VlanID        int    `yaml:"VlanID"`
-	GroupName     string `yaml:"GroupName"`
-	IPAddress     string `yaml:"IPAddress"`
-	Cidr          int    `yaml:"Cidr"`
-	Subnet        string `yaml:"Subnet"`
-	Mtu           int    `yaml:"MTU"`
-	VIPAddress    string `yaml:"VIPAddress"`
-	VIPPriorityId int    `yaml:"VIPPriorityId"`
-	Shutdown      bool   `yaml:"Shutdown"`
+	GroupName      string `yaml:"GroupName"`
+	VlanName       string `yaml:"VlanName"`
+	VlanID         int    `yaml:"VlanID"`
+	VirtualGroupID int    `yaml:"VirtualGroupID"`
+	IPAddress      string `yaml:"IPAddress"`
+	Cidr           int    `yaml:"Cidr"`
+	Subnet         string `yaml:"Subnet"`
+	Mtu            int    `yaml:"MTU"`
+	VIPAddress     string `yaml:"VIPAddress"`
+	VIPPriorityId  int    `yaml:"VIPPriorityId"`
+	Shutdown       bool   `yaml:"Shutdown"`
 }
 
 type PortChannelType struct {

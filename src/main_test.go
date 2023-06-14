@@ -45,6 +45,9 @@ func TestMain(t *testing.T) {
 		"dellemc_bmc_bgp_switched": {
 			inputTestFileName: "dellemc_bmc_bgp_switched.json",
 		},
+		"rr1s45r16-sw6-definition": {
+			inputTestFileName: "rr1s45r16-sw6-definition.json",
+		},
 	}
 
 	for name, tc := range testCases {

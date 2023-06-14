@@ -1,0 +1,24 @@
+{{ define "vlt"}}
+! vlt.go.tmpl-vlt
+{{if eq .Switch.Type "TOR1"}}
+vlt-domain 1 
+  backup destination {{.L3Interfaces.P2P_IBGP.NbrIPAddress}}
+  discovery-interface ethernet 1/1/49
+  discovery-interface ethernet 1/1/50
+  discovery-interface ethernet 1/1/51
+  discovery-interface ethernet 1/1/52
+  peer-routing
+  primary-priority 1
+  vlt-mac de:ad:00:be:ef:01 
+{{else if eq .Switch.Type "TOR2"}}
+vlt-domain 1 
+  backup destination {{.L3Interfaces.P2P_IBGP.NbrIPAddress}}
+  discovery-interface ethernet 1/1/49
+  discovery-interface ethernet 1/1/50
+  discovery-interface ethernet 1/1/51
+  discovery-interface ethernet 1/1/52
+  peer-routing
+  primary-priority 2
+  vlt-mac de:ad:00:be:ef:01 
+{{ end -}}
+{{ end -}}

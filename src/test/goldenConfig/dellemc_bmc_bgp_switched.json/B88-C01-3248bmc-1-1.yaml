@@ -32,21 +32,33 @@ GlobalSetting:
   - 10.10.240.24
   OOB: vlan125
 Vlans:
-- VlanName: BMC_Mgmt_125
+- GroupName: UNUSED_VLAN
+  VlanName: UNUSED_VLAN
+  VlanID: 2
+  VirtualGroupID: 0
+  IPAddress: ""
+  Cidr: 0
+  Subnet: ""
+  MTU: 9216
+  VIPAddress: ""
+  VIPPriorityId: 0
+  Shutdown: true
+- GroupName: BMC
+  VlanName: BMC_Mgmt_125
   VlanID: 125
-  GroupName: BMC
-  IPAddress: 100.71.85.253
+  VirtualGroupID: 0
+  IPAddress: ""
   Cidr: 26
   Subnet: 100.71.85.192/26
-  MTU: 1500
-  VIPAddress: 100.71.85.193
+  MTU: 9216
+  VIPAddress: ""
   VIPPriorityId: 0
   Shutdown: false
 PortChannel:
   TOR_BMC:
     Description: TOR_BMC
     Function: TOR_BMC
-    UntagVlan: 0
+    UntagVlan: 99
     TagVlans: 125
     IPAddress: ""
     PortChannelID: "102"
@@ -463,7 +475,7 @@ Ports:
   MTU: 9216
   Shutdown: false
   Others:
-    ChannelGroup: "102"
+    ChannelGroup: ""
 - Port: 1/1/52
   Idx: 52
   Type: ethernet
@@ -474,7 +486,7 @@ Ports:
   MTU: 9216
   Shutdown: false
   Others:
-    ChannelGroup: "102"
+    ChannelGroup: ""
 - Port: mgmt 1/1/1
   Idx: 53
   Type: mgmt
@@ -486,5 +498,5 @@ Ports:
 Routing:
   Static:
   - Network: 0.0.0.0/0
-    NextHop: 100.71.85.193
+    NextHop: ""
     Name: GlobalDefaultRoute
