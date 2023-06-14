@@ -12,8 +12,12 @@ import (
 func (o *OutputType) ParseSwitchPort(frameworkFolder string) {
 	interfaceJsonPath := fmt.Sprintf("%s/%s", frameworkFolder, INTERFACEJSON)
 	interfaceJsonObj := parseInterfaceJson(interfaceJsonPath)
-	o.updateDellPortGroup(interfaceJsonObj)
-	outputSwitchPorts := initSwitchPort(interfaceJsonObj, o.Switch.Make)
+
+	if strings.Contains(o.Switch.Make, "Dell") && strings.Contains(o.Switch.Type, "TOR") {
+		o.updateDellPortGroup(interfaceJsonObj)
+	}
+
+	outputSwitchPorts := initSwitchPort(interfaceJsonObj, o.Switch.Make, o.Switch.Type)
 	o.Ports = outputSwitchPorts
 	if strings.Contains(o.Switch.Type, TOR) {
 		o.UpdateTORSwitchPorts(interfaceJsonObj.VlanGroup)
@@ -35,11 +39,12 @@ func parseInterfaceJson(interfaceJsonPath string) *PortJson {
 	return interfaceJsonObj
 }
 
-func initSwitchPort(interfaceJsonObj *PortJson, switchMake string) []PortType {
+func initSwitchPort(interfaceJsonObj *PortJson, switchMake, switchType string) []PortType {
 	outputSwitchPorts := []PortType{}
 	portToIdx := map[string]int{}
+	fmt.Println(switchMake, switchType)
 	for _, port := range interfaceJsonObj.Port {
-		if strings.Contains(switchMake, "Dell") {
+		if strings.Contains(switchMake, "Dell") && strings.Contains(switchType, "TOR") {
 			if strings.Contains(port.Mode, "10g-4x") {
 				// 10g-4x port need to add ":1" while defining interface config
 				outputSwitchPorts = append(outputSwitchPorts, PortType{
@@ -163,7 +168,7 @@ func (o *OutputType) UpdateTORSwitchPorts(VlanGroup map[string][]string) {
 			// Switched Non Converged use Storage Port Assignment
 			if strings.EqualFold(o.Switch.Make, "Cisco") {
 				// Cisco NXOS Storage Native Vlan is dummy vlan 99
-				tmpPortObj.UntagVlan = CISCOMLAG_NATIVEVLANID
+				tmpPortObj.UntagVlan = NATIVE_VLANID
 			} else if strings.EqualFold(o.Switch.Make, "DellEMC") {
 				// DellEMC Storage Native Vlan is shutdonw and unused
 				tmpPortObj.UntagVlan = UNUSED_VLANID
@@ -201,7 +206,7 @@ func (o *OutputType) UpdateTORSwitchPorts(VlanGroup map[string][]string) {
 			tmpPortObj.Description = UNUSED
 			tmpPortObj.Function = UNUSED
 		} else if portItem.Function == MLAG_PEER {
-			tmpPortObj.UntagVlan = CISCOMLAG_NATIVEVLANID
+			tmpPortObj.UntagVlan = NATIVE_VLANID
 			portOthers := map[string]string{
 				"ChannelGroup": o.PortChannel[MLAG_PEER].PortChannelID,
 			}
@@ -215,16 +220,12 @@ func (o *OutputType) UpdateTORSwitchPorts(VlanGroup map[string][]string) {
 func (o *OutputType) UpdateBMCSwitchPorts(VlanGroup map[string][]string) {
 	for i, portItem := range o.Ports {
 		tmpPortObj := portItem
-		if strings.EqualFold(portItem.Function, HLHBMC) || strings.EqualFold(portItem.Function, HLHOS) {
+		if strings.EqualFold(portItem.Function, HLHBMC) || strings.EqualFold(portItem.Function, HLHOS) || strings.EqualFold(portItem.Function, HOSTBMC) {
 			tmpPortObj.UntagVlan = BMC_VlanID
 			tmpPortObj.Shutdown = false
 			tmpPortObj.Description = portItem.Function
 			tmpPortObj.Function = portItem.Function
-		} else if strings.EqualFold(portItem.Function, RESERVEDPDU) {
-			tmpPortObj.UntagVlan = BMC_VlanID
-			tmpPortObj.Shutdown = true
-			tmpPortObj.Description = portItem.Function
-			tmpPortObj.Function = portItem.Function
+			tmpPortObj.Mtu = JUMBOMTU
 		} else if strings.EqualFold(portItem.Function, TOR_BMC) {
 			// Has BMC to TOR
 			tmpPortObj.UntagVlan = 0

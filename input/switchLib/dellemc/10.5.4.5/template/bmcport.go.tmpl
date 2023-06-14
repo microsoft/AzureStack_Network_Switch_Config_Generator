@@ -9,30 +9,19 @@ interface {{ .Port }}
 interface {{ .Type}} {{ .Port }}
   description {{ .Description }}
   {{ if eq .Function "Unused" -}} 
-  switchport
   switchport access vlan {{ .UntagVlan }}
   mtu {{ .Mtu }}
   flowcontrol receive off
   spanning-tree bpduguard enable
   spanning-tree guard root
-  {{ else if or (eq .Function "HLH_BMC") (eq .Function "HLH_OS") -}}
-  switchport
+  {{ else if or (eq .Function "HLH_BMC") (eq .Function "HLH_OS") (eq .Function "HOST_BMC") -}}
   switchport access vlan {{ .UntagVlan }}
-  spanning-tree port type edge
-  no logging event port link-status
-  {{ else if eq .Function "Reserved_For_PDU" -}}
-  switchport
-  switchport access vlan {{ .UntagVlan }}
-  spanning-tree port type edge
-  no logging event port link-status
+  mtu {{ .Mtu }}
+  flowcontrol receive off
+  spanning-tree bpduguard enable
+  spanning-tree guard root
   {{ else if eq .Function "TOR_BMC" -}}
-  switchport
-  switchport mode trunk
-  {{ range .TagVlans -}}
-  switchport trunk allowed vlan {{ . }}
-  {{end -}}
-  logging event port link-status
-  channel-group 102
+  channel-group 102 mode active
   {{ end }}
   {{- if .Shutdown }}shutdown{{ else }}no shutdown{{ end }}
   {{ end }}

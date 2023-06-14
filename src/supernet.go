@@ -24,9 +24,9 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 				} else if strings.Contains(strings.ToUpper(supernet.GroupName), strings.ToUpper(UNUSED_VLANName)) {
 					// Unused Vlan defined in input json
 					UNUSED_VLANID = supernet.IPv4.VlanID
-				} else if strings.Contains(strings.ToUpper(supernet.GroupName), strings.ToUpper(CISCOMLAG_NATIVEVLANNAME)) {
-					// Cisco Native Vlan 99
-					CISCOMLAG_NATIVEVLANID = supernet.IPv4.VlanID
+				} else if strings.Contains(strings.ToUpper(supernet.GroupName), strings.ToUpper(NATIVE_VLANName)) {
+					// Native Vlan 99
+					NATIVE_VLANID = supernet.IPv4.VlanID
 				}
 				// Assign the value
 				vlanItem.GroupName = supernet.GroupName
@@ -91,27 +91,36 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 	} else if strings.Contains(o.Switch.Type, BMC) {
 		// BMC Switch only have Unused and BMC Vlan (no VIP)
 		for _, supernet := range inputData.Supernets {
-			vlanItem := VlanType{}
-			if supernet.GroupName == UNUSED || supernet.GroupName == BMC {
-				vlanItem.VlanName = supernet.IPv4.Name
-				vlanItem.VlanID = supernet.IPv4.VlanID
-				vlanItem.GroupName = supernet.GroupName
-				vlanItem.Mtu = DefaultMTU
-				if supernet.Shutdown {
+			if supernet.IPv4.VlanID != 0 {
+				vlanItem := VlanType{}
+				if strings.Contains(strings.ToUpper(supernet.GroupName), strings.ToUpper(BMC)) {
+					// BMC Vlan
+					BMC_VlanID = supernet.IPv4.VlanID
+					vlanItem.GroupName = supernet.GroupName
+					vlanItem.VlanName = supernet.IPv4.Name
+					vlanItem.VlanID = supernet.IPv4.VlanID
+					vlanItem.Cidr = supernet.IPv4.Cidr
+					vlanItem.Subnet = supernet.IPv4.Subnet
+					vlanItem.Mtu = JUMBOMTU
+					vlanItem.Shutdown = false
+					vlanList = append(vlanList, vlanItem)
+				} else if strings.Contains(strings.ToUpper(supernet.GroupName), strings.ToUpper(UNUSED_VLANName)) {
+					// Unused Vlan defined in input json
+					vlanItem.VlanID = supernet.IPv4.VlanID
+					vlanItem.GroupName = supernet.GroupName
+					vlanItem.VlanName = supernet.IPv4.Name
+					vlanItem.Mtu = JUMBOMTU
 					vlanItem.Shutdown = true
+					vlanList = append(vlanList, vlanItem)
+				} else if strings.Contains(strings.ToUpper(supernet.GroupName), strings.ToUpper(NATIVE_VLANName)) {
+					// Native Vlan 99
+					vlanItem.VlanID = supernet.IPv4.VlanID
+					vlanItem.GroupName = supernet.GroupName
+					vlanItem.VlanName = supernet.IPv4.Name
+					vlanItem.Mtu = JUMBOMTU
+					vlanItem.Shutdown = false
+					vlanList = append(vlanList, vlanItem)
 				}
-				if supernet.IPv4.SwitchSVI {
-					for _, ipv4 := range supernet.IPv4.Assignment {
-						if strings.Contains(strings.ToUpper(ipv4.Name), strings.ToUpper(o.Switch.Type)) {
-							// Assignment Type binds with Switch.Type
-							vlanItem.IPAddress = ipv4.IP
-							vlanItem.Cidr = supernet.IPv4.Cidr
-							vlanItem.Subnet = supernet.IPv4.Subnet
-							vlanItem.VIPAddress = supernet.IPv4.Gateway
-						}
-					}
-				}
-				vlanList = append(vlanList, vlanItem)
 			}
 		}
 	}

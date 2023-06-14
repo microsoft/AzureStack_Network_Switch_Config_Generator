@@ -16,8 +16,8 @@ interface vlan{{.VlanID}}
   description {{.VlanName}}
   {{if .Shutdown -}}shutdown{{ else }}no shutdown{{ end }}
   mtu {{.Mtu}}
-  ip address {{ .Subnet }}
-  {{ if .VIPAddress -}}
+  ip address {{ .IPAddress }}/{{ .Cidr }}
+  {{ if and (.VIPAddress) (ne $SwitchType "BMC") -}}
   !
   vrrp-group {{.VirtualGroupID}}
     {{ if eq $SwitchType "TOR1" -}}

@@ -10,6 +10,7 @@ func (o *OutputType) UpdatePortChannel(inputData InputData) {
 	PO_TOR_BMC := PortChannelType{
 		Description:   TOR_BMC,
 		Function:      TOR_BMC,
+		UntagVlan:     NATIVE_VLANID,
 		TagVlans:      BMC_VlanID,
 		PortChannelID: POID_TOR_BMC,
 		VPC:           POID_TOR_BMC,
@@ -20,7 +21,7 @@ func (o *OutputType) UpdatePortChannel(inputData InputData) {
 		PO_MLAG_PEER := PortChannelType{
 			Description:   MLAG_PEER,
 			Function:      MLAG_PEER,
-			UntagVlan:     CISCOMLAG_NATIVEVLANID,
+			UntagVlan:     NATIVE_VLANID,
 			PortChannelID: POID_MLAG_PEER,
 			VPC:           "peer-link",
 			Shutdown:      false,
