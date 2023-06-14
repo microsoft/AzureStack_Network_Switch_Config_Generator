@@ -42,7 +42,6 @@ func parseInterfaceJson(interfaceJsonPath string) *PortJson {
 func initSwitchPort(interfaceJsonObj *PortJson, switchMake, switchType string) []PortType {
 	outputSwitchPorts := []PortType{}
 	portToIdx := map[string]int{}
-	fmt.Println(switchMake, switchType)
 	for _, port := range interfaceJsonObj.Port {
 		if strings.Contains(switchMake, "Dell") && strings.Contains(switchType, "TOR") {
 			if strings.Contains(port.Mode, "10g-4x") {
