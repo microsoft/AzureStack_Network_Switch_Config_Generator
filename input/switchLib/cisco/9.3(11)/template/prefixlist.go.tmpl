@@ -1,0 +1,13 @@
+{{ define "prefixlist"}}
+! prefixlist.go.tmpl-prefixlist
+{{ range . -}}  
+{{- $prefixlistname := .Name -}}
+{{ range .Config -}}  
+{{ if ne .Operation "" -}}
+ip prefix-list {{ $prefixlistname }} seq {{ .Idx }} {{ .Action }} {{ .Network }} {{ .Operation }} {{ .Prefix }}
+{{ else -}}
+ip prefix-list {{ $prefixlistname }} seq {{ .Idx }} {{ .Action }} {{ .Network }}
+{{ end -}}
+{{ end }}
+{{ end -}}
+{{ end -}}

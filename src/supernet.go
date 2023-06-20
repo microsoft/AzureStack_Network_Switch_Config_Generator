@@ -103,6 +103,13 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 					vlanItem.Subnet = supernet.IPv4.Subnet
 					vlanItem.Mtu = JUMBOMTU
 					vlanItem.Shutdown = false
+
+					for _, ipv4 := range supernet.IPv4.Assignment {
+						if strings.Contains(strings.ToUpper(ipv4.Name), strings.ToUpper(o.Switch.Type)) {
+							// Assignment Type binds with Switch.Type
+							vlanItem.IPAddress = ipv4.IP
+						}
+					}
 					vlanList = append(vlanList, vlanItem)
 				} else if strings.Contains(strings.ToUpper(supernet.GroupName), strings.ToUpper(UNUSED_VLANName)) {
 					// Unused Vlan defined in input json

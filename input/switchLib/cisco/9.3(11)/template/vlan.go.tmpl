@@ -1,0 +1,37 @@
+{{ define "define_vlan"}}
+! vlan.go.tmpl-define_vlan
+{{ range . -}}    
+vlan {{.VlanID}}
+  name {{.VlanName}}
+{{ end }}
+{{ end }}
+
+{{ define "interface_vlan"}}
+! vlan.go.tmpl-interface_vlan
+{{ $SwitchType := .Switch.Type }}
+{{ range .Vlans -}}
+{{ if .IPAddress -}} 
+interface vlan{{.VlanID}}
+  description {{.VlanName}}
+  mtu {{.Mtu}}
+  {{if .Shutdown -}} 
+  shutdown 
+  {{ else -}} 
+  no shutdown
+  {{ end -}}
+  ip address {{ .IPAddress }}/{{ .Cidr }}
+  no ip redirects
+  no ipv6 redirects
+  {{ if .VIPAddress -}}
+  hsrp version 2
+  hsrp {{.VlanID}}
+    {{ if eq $SwitchType "TOR1" -}}
+    priority 150 forwarding-threshold lower 1 upper 150
+    {{ else if eq $SwitchType "TOR2" -}}
+    priority 140 forwarding-threshold lower 1 upper 140
+    {{ end -}}
+    ip {{.VIPAddress}}
+  {{ end -}}
+{{- end}}
+{{ end -}}
+{{ end -}}

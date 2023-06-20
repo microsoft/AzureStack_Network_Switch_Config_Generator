@@ -1,0 +1,9 @@
+{{ define "loopback"}}
+{{ range . -}}
+{{ if eq .Function "Loopback0" }}
+interface {{.Function}}
+  description {{.Description}}
+  ip address {{.Subnet}}
+{{ end -}}
+{{ end -}}
+{{ end -}}
