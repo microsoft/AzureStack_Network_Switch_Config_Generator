@@ -48,6 +48,12 @@ func TestMain(t *testing.T) {
 		"rr1s45r16-sw6-definition": {
 			inputTestFileName: "rr1s45r16-sw6-definition.json",
 		},
+		"rr1n35r05-hc4-definition": {
+			inputTestFileName: "rr1n35r05-hc4-definition.json",
+		},
+		"rr1n22r09-hc15-definition": {
+			inputTestFileName: "rr1n22r09-hc15-definition.json",
+		},
 	}
 
 	for name, tc := range testCases {

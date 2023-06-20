@@ -1501,10 +1501,10 @@ Routing:
     BGPAsn: 64516
     RouterID: 100.71.4.150
     IPv4Network:
-    - 100.71.4.150/32
-    - 100.71.4.132/30
     - 100.71.4.140/30
     - 100.71.4.144/30
+    - 100.71.4.150/32
+    - 100.71.4.132/30
     - 100.71.4.192/26
     - 100.71.138.128/25
     - 100.68.144.0/24
@@ -1555,7 +1555,7 @@ Routing:
       NeighborAsn: 64516
       NeighborIPAddress: 100.71.4.145
       Shutdown: false
-      NbrPassword: Yhju7fnS@Ej&$1n2
+      NbrPassword: 28SRsgJny!7ru@s!
     TemplateNeigbor:
     - SwitchRelation: SwitchDownlink
       Description: TO_MUX

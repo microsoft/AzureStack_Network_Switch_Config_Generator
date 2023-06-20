@@ -1,0 +1,83 @@
+{{ define "set_ntp"}}
+! settings.go.tmpl-set_ntp
+clock timezone UTC 0 0
+{{ range .TimeServer -}}
+ntp server {{.}}
+{{ end -}}
+ntp source-interface {{.OOB}}
+{{ end }}
+
+{{ define "set_syslog"}}
+! settings.go.tmpl-set_syslog
+{{ range .SyslogServer -}}
+logging server {{ . }} 7 facility local7 use-vrf default
+{{ end -}}
+logging source-interface {{.OOB}}
+logging level local7 7
+no logging console
+login on-success log
+logging origin-id hostname
+!
+logging level acllog 7
+logging level aclmgr 7
+logging level eth_port_channel 7
+logging level hsrp 7
+logging level icam 7
+logging level interface-vlan 7
+logging level ipqosmgr 7
+logging level vlan_mgr 7
+logging level vpc 7
+logging level netstack 7
+logging level bgp 7
+{{ end }}
+
+{{ define "set_errdisable_setting"}}
+! settings.go.tmpl-set_errdisable_setting
+errdisable recovery interval 600
+errdisable recovery cause link-flap
+errdisable recovery cause udld
+errdisable recovery cause bpduguard
+system default switchport shutdown
+switching-mode store-forward
+{{ end }}
+
+{{ define "set_rmon"}}
+! settings.go.tmpl-set_rmon
+rmon event 1 description FATAL(1) owner PMON@FATAL
+rmon event 2 description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 description ERROR(3) owner PMON@ERROR
+rmon event 4 description WARNING(4) owner PMON@WARNING
+rmon event 5 description INFORMATION(5) owner PMON@INFO
+{{ end }}
+
+{{ define "set_dhcp"}}
+! settings.go.tmpl-set_dhcp
+service dhcp
+ip dhcp relay
+{{ end }}
+
+{{ define "set_snmp"}}
+! settings.go.tmpl-set_snmp
+snmp-server globalEnforcePriv
+no snmp-server protocol enable
+{{ end }}
+
+{{ define "set_console_vty"}}
+! settings.go.tmpl-set_console_vty
+line console
+  exec-timeout 10
+line vty
+  exec-timeout 10
+  access-class ssh-only in
+  session-limit 3
+{{ end }}
+
+{{ define "set_load_sharing"}}
+! settings.go.tmpl-set_load_sharing
+ip load-sharing address source-destination port source-destination
+{{ end }}
+
+{{ define "set_icmp_errors"}}
+! settings.go.tmpl-set_icmp_errors
+ip icmp-errors source-interface {{.OOB}}
+{{ end }}

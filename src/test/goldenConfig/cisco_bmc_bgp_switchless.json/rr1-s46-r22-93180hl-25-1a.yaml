@@ -1168,10 +1168,10 @@ Routing:
     BGPAsn: 65243
     RouterID: 100.71.85.149
     IPv4Network:
-    - 100.71.85.136/30
     - 100.71.85.144/30
     - 100.71.85.149/32
     - 100.71.85.128/30
+    - 100.71.85.136/30
     - 100.71.85.192/26
     - 100.71.131.128/25
     - 100.69.181.0/24
@@ -1221,7 +1221,7 @@ Routing:
       NeighborAsn: 65243
       NeighborIPAddress: 100.71.85.146
       Shutdown: false
-      NbrPassword: tnocaJ%t*19AK$m6
+      NbrPassword: '*p!T5uufJ46msaM&'
     - SwitchRelation: SwitchDownlink
       Description: TO_MUX
       NeighborAsn: 65113

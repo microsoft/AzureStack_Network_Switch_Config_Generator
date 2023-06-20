@@ -1275,7 +1275,7 @@ Routing:
       NeighborAsn: 65243
       NeighborIPAddress: 100.71.85.146
       Shutdown: false
-      NbrPassword: Xj$mVw%r&89aLcw1
+      NbrPassword: '*V!bizKYmv86gr#9'
     - SwitchRelation: SwitchDownlink
       Description: TO_MUX
       NeighborAsn: 65113
