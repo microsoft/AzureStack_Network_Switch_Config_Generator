@@ -47,7 +47,7 @@ Vlans:
   VlanName: BMC_Mgmt_125
   VlanID: 125
   VirtualGroupID: 0
-  IPAddress: ""
+  IPAddress: 100.71.85.253
   Cidr: 26
   Subnet: 100.71.85.192/26
   MTU: 9216
@@ -58,7 +58,7 @@ PortChannel:
   TOR_BMC:
     Description: TOR_BMC
     Function: TOR_BMC
-    UntagVlan: 99
+    UntagVlan: 0
     TagVlans: 125
     IPAddress: ""
     PortChannelID: "102"

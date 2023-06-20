@@ -58,7 +58,7 @@ Vlans:
   VlanName: BMC_Mgmt_125
   VlanID: 125
   VirtualGroupID: 0
-  IPAddress: ""
+  IPAddress: 100.71.4.253
   Cidr: 26
   Subnet: 100.71.4.192/26
   MTU: 9216

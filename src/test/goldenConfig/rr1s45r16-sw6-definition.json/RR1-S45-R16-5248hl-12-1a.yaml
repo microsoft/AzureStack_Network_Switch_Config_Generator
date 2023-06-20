@@ -1555,7 +1555,7 @@ Routing:
       NeighborAsn: 64516
       NeighborIPAddress: 100.71.4.146
       Shutdown: false
-      NbrPassword: ArZm9d#t5&Jue5g#
+      NbrPassword: tnocaJ%t*19AK$m6
     TemplateNeigbor:
     - SwitchRelation: SwitchDownlink
       Description: TO_MUX

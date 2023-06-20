@@ -409,6 +409,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -438,6 +439,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -467,6 +469,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -496,6 +499,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -525,6 +529,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -554,6 +559,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -583,6 +589,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -612,6 +619,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -641,6 +649,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -670,6 +679,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -699,6 +709,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -728,6 +739,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -757,6 +769,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -786,6 +799,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -815,6 +829,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -844,6 +859,7 @@ Ports:
   Type: Ethernet
   Description: Switched-Compute
   Function: Compute
+  UntagVlan: 7
   TagVlans:
   - 6
   - 7
@@ -1262,7 +1278,7 @@ Routing:
       NeighborAsn: 64715
       NeighborIPAddress: 100.71.41.145
       Shutdown: false
-      NbrPassword: '&fPf!sFo%Ax9r7e6'
+      NbrPassword: w&k153V$AsycueJ&
     - SwitchRelation: SwitchDownlink
       Description: TO_MUX
       NeighborAsn: 64623

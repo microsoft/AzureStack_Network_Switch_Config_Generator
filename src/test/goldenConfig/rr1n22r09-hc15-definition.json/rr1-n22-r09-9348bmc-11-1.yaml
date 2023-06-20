@@ -3,22 +3,22 @@ Switch:
   Make: Cisco
   Model: 9348GC-FXP
   Type: BMC
-  Hostname: rr1-s46-r22-9348bmc-25-1
+  Hostname: rr1-n22-r09-9348bmc-11-1
   ASN: 0
-  Firmware: 9.3(9)
+  Firmware: 9.3(11)
 DeploymentPattern: Switched
 SwitchUplink:
 - Make: Cisco
-  Model: C3132Q-XL
+  Model: C9336C-FX2
   Type: Border1
-  Hostname: rr1-s46-r01-x32ssp-1a
-  ASN: 64846
+  Hostname: rr1-n22-r12-9336ssp-1a
+  ASN: 64810
   Firmware: ""
 - Make: Cisco
-  Model: C3132Q-XL
+  Model: C9336C-FX2
   Type: Border2
-  Hostname: rr1-s46-r01-x32ssp-1b
-  ASN: 64846
+  Hostname: rr1-n22-r12-9336ssp-1a
+  ASN: 64810
   Firmware: ""
 GlobalSetting:
   Username: $CREDENTIAL_PLACEHOLDER$
@@ -43,8 +43,8 @@ Vlans:
   VIPAddress: ""
   VIPPriorityId: 0
   Shutdown: true
-- GroupName: Cisco_MLAG_NativeVlan
-  VlanName: Cisco_MLAG_NativeVlan
+- GroupName: NativeVlan
+  VlanName: NativeVlan
   VlanID: 99
   VirtualGroupID: 0
   IPAddress: ""
@@ -58,9 +58,9 @@ Vlans:
   VlanName: BMC_Mgmt_125
   VlanID: 125
   VirtualGroupID: 0
-  IPAddress: 100.71.85.253
+  IPAddress: 100.71.19.125
   Cidr: 26
-  Subnet: 100.71.85.192/26
+  Subnet: 100.71.19.64/26
   MTU: 9216
   VIPAddress: ""
   VIPPriorityId: 0

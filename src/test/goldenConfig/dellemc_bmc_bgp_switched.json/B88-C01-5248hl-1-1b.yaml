@@ -368,7 +368,7 @@ PortChannel:
   MLAG_PEER:
     Description: MLAG_PEER
     Function: MLAG_PEER
-    UntagVlan: 99
+    UntagVlan: 0
     TagVlans: 0
     IPAddress: ""
     PortChannelID: "101"
@@ -386,7 +386,7 @@ PortChannel:
   TOR_BMC:
     Description: TOR_BMC
     Function: TOR_BMC
-    UntagVlan: 99
+    UntagVlan: 0
     TagVlans: 125
     IPAddress: ""
     PortChannelID: "102"
@@ -1193,7 +1193,7 @@ Routing:
       NeighborAsn: 65341
       NeighborIPAddress: 100.71.85.145
       Shutdown: false
-      NbrPassword: Yhju7fnS@Ej&$1n2
+      NbrPassword: 2AjwF#$3wnxaT5r*
     TemplateNeigbor:
     - SwitchRelation: SwitchDownlink
       Description: TO_MUX
