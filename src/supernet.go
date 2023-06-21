@@ -18,13 +18,13 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 				if strings.Contains(strings.ToUpper(supernet.GroupName), strings.ToUpper(BMC)) {
 					// BMC Vlan
 					BMC_VlanID = supernet.IPv4.VlanID
-				} else if strings.Contains(strings.ToUpper(supernet.GroupName), strings.ToUpper(Compute_NativeVlanName)) {
+				} else if strings.EqualFold(supernet.GroupName, Compute_NativeVlanName) {
 					// Management/Infra Vlan
 					Compute_NativeVlanID = supernet.IPv4.VlanID
-				} else if strings.Contains(strings.ToUpper(supernet.GroupName), strings.ToUpper(UNUSED_VLANName)) {
+				} else if strings.EqualFold(supernet.GroupName, UNUSED_VLANName) {
 					// Unused Vlan defined in input json
 					UNUSED_VLANID = supernet.IPv4.VlanID
-				} else if strings.Contains(strings.ToUpper(supernet.GroupName), strings.ToUpper(NATIVE_VLANName)) {
+				} else if strings.EqualFold(supernet.GroupName, NATIVE_VLANName) {
 					// Native Vlan 99
 					NATIVE_VLANID = supernet.IPv4.VlanID
 				}

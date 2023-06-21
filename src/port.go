@@ -204,7 +204,7 @@ func (o *OutputType) UpdateTORSwitchPorts(VlanGroup map[string][]string) {
 			tmpPortObj.TagVlans = nil
 			tmpPortObj.Description = UNUSED
 			tmpPortObj.Function = UNUSED
-		} else if portItem.Function == MLAG_PEER {
+		} else if strings.EqualFold(portItem.Function, MLAG_PEER) {
 			tmpPortObj.UntagVlan = NATIVE_VLANID
 			portOthers := map[string]string{
 				"ChannelGroup": o.PortChannel[MLAG_PEER].PortChannelID,
