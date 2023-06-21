@@ -1,8 +1,7 @@
 {{- /* Only one compose file using under the folder so use if else for better organize */ -}}
 {{- /* BMC Switch */ -}}
 {{- if eq .Switch.Type "BMC" -}}
-{{ template "hostname" .Switch -}}
-{{ template "banner" .ToolBuildVersion -}}
+{{ template "hostname" . -}}
 {{if .Routing.PrefixList}}{{ template "prefixlist" .Routing.PrefixList -}} {{ end -}}
 {{ template "stig_user" .GlobalSetting -}}
 {{ template "stig_feature" . -}}
@@ -28,8 +27,7 @@
 {{if .Routing.Static}}{{ template "static" .Routing.Static -}} {{ end -}}
 {{- /* TOR Switch */ -}}
 {{- else -}}
-{{ template "hostname" .Switch -}}
-{{ template "banner" .ToolBuildVersion -}}
+{{ template "hostname" . -}}
 {{ template "stig_feature" . -}}
 {{ template "stig_user" .GlobalSetting -}}
 {{ template "stig_ssh" -}}
