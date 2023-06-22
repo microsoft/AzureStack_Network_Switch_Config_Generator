@@ -30,30 +30,15 @@ func TestMain(t *testing.T) {
 		inputTestFileName string
 	}
 	testCases := map[string]test{
-		// "cisco_bmc_bgp_hyperconverged": {
-		// 	inputTestFileName: "cisco_bmc_bgp_hyperconverged.json",
-		// },
-		// "cisco_bmc_bgp_switched": {
-		// 	inputTestFileName: "cisco_bmc_bgp_switched.json",
-		// },
-		// "cisco_bmc_bgp_switchless": {
-		// 	inputTestFileName: "cisco_bmc_bgp_switchless.json",
-		// },
-		// "dellemc_nobmc_bgp_switched": {
-		// 	inputTestFileName: "dellemc_nobmc_bgp_switched.json",
-		// },
-		// "dellemc_bmc_bgp_switched": {
-		// 	inputTestFileName: "dellemc_bmc_bgp_switched.json",
-		// },
-		// "rr1s45r16-sw6-definition": {
-		// 	inputTestFileName: "rr1s45r16-sw6-definition.json",
-		// },
-		// "rr1n35r05-hc4-definition": {
-		// 	inputTestFileName: "rr1n35r05-hc4-definition.json",
-		// },
-		// "rr1n22r09-hc15-definition": {
-		// 	inputTestFileName: "rr1n22r09-hc15-definition.json",
-		// },
+		"rr1s45r16-sw6-definition": {
+			inputTestFileName: "rr1s45r16-sw6-definition.json",
+		},
+		"rr1n35r05-hc4-definition": {
+			inputTestFileName: "rr1n35r05-hc4-definition.json",
+		},
+		"rr1n22r09-hc15-definition": {
+			inputTestFileName: "rr1n22r09-hc15-definition.json",
+		},
 		"rr1s46r21-hc4-definition": {
 			inputTestFileName: "rr1s46r21-hc4-definition.json",
 		},
