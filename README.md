@@ -1,3 +1,5 @@
+[![Build Status](https://msazure.visualstudio.com/One/_apis/build/status%2FOneBranch%2FAzureStack_Network_Switch_Framework%2FAzureStack_Network_Switch_Framework-Official?repoName=AzureStack_Network_Switch_Framework&branchName=main)](https://msazure.visualstudio.com/One/_build/latest?definitionId=315775&repoName=AzureStack_Network_Switch_Framework&branchName=main)
+
 # Azure Stack Switch Config Generator
 
 ## Project Overview
@@ -17,7 +19,7 @@ flowchart TD
     B[User Input Template]
     C(Generator Tool)
     D(Switch Output Object)
-    E[Switch Object JSON Files]
+    E[Switch Object YAML Files]
     F[Switch Configuration Files]
     B --> C
     A --> C
