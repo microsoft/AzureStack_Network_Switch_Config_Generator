@@ -21,6 +21,7 @@ interface port-channel{{ .PortChannelID }}
   {{else if eq .Function "TOR_BMC" -}}
   switchport
   switchport mode trunk
+  switchport trunk native vlan {{ .UntagVlan }}
   switchport trunk allowed vlan {{ .TagVlans }}
   spanning-tree port type network
   logging event port link-status

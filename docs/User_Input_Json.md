@@ -1,6 +1,6 @@
 # Input JSON
 
-Reference File: [sample_input.json](docs/sample_input.json)
+Reference File: [sample_input_files](/src/test/testInput)
 
 The json format and struct could be refined and updated based on optimization and new requirement, so file issues if anything inaccurate.
 

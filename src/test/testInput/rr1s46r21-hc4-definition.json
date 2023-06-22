@@ -90,7 +90,7 @@
           "Type": "TOR1",
           "Hostname": "rr1-s46-r21-93180hl-24-1a",
           "ASN": 65242,
-          "Firmware": "9.3(9)"
+          "Firmware": "9.3(11)"
         },
         {
           "Make": "Cisco",
@@ -98,7 +98,7 @@
           "Type": "TOR2",
           "Hostname": "rr1-s46-r21-93180hl-24-1b",
           "ASN": 65242,
-          "Firmware": "9.3(9)"
+          "Firmware": "9.3(11)"
         },
         {
           "Make": "Cisco",
@@ -106,7 +106,7 @@
           "Type": "BMC",
           "Hostname": "rr1-s46-r21-9348bmc-24-1",
           "ASN": null,
-          "Firmware": "9.3(9)"
+          "Firmware": "9.3(11)"
         },
         {
           "Make": "Microsoft",

@@ -79,7 +79,7 @@ func (o *OutputType) ParseBGP(BGPObj BGPType) {
 				newBGPIPv4NbrItem := ipv4NbrItem
 				newBGPIPv4NbrItem.Description = fmt.Sprintf("TO_%s", switchItem.Type)
 				newBGPIPv4NbrItem.NeighborAsn = switchItem.Asn
-				newBGPIPv4NbrItem.NbrPassword = generateRandomString(16, 3, 3, 3)
+				newBGPIPv4NbrItem.NbrPassword = o.GlobalSetting.Password
 				newBGPIPv4NbrItem.NeighborIPAddress = o.getL3IntfObjByName(ipv4NbrItem.NeighborIPAddress).NbrIPAddress
 				newBGPIPv4Nbrs = append(newBGPIPv4Nbrs, newBGPIPv4NbrItem)
 			}

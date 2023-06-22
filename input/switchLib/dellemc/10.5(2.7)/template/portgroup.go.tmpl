@@ -1,8 +1,0 @@
-{{ define "portgroup"}}
-! portgroup.go.tmpl-portgroup
-!
-{{ range . }}
-port-group {{ .PortGroup }}
-{{ if eq .Type "ethernet" }} mode Eth {{ .Mode }}{{ end }}
-{{ end -}}
-{{ end -}}

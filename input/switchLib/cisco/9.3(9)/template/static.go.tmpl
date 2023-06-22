@@ -1,6 +1,0 @@
-{{ define "static"}}
-! static.go.tmpl-static
-{{ range . -}}  
-ip route {{.Network}} {{.NextHop}} name {{.Name}}
-{{ end -}}
-{{ end -}}
