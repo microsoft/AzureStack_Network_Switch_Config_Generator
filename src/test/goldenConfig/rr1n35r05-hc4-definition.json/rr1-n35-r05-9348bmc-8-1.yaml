@@ -62,7 +62,7 @@ Vlans:
   Cidr: 26
   Subnet: 100.71.41.192/26
   MTU: 9216
-  VIPAddress: ""
+  VIPAddress: 100.71.41.193
   VIPPriorityId: 0
   Shutdown: false
 PortChannel:
@@ -79,35 +79,35 @@ Ports:
 - Port: 1/1
   Idx: 1
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/2
   Idx: 2
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/3
   Idx: 3
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/4
   Idx: 4
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/5
   Idx: 5
   Type: Ethernet
@@ -399,32 +399,32 @@ Ports:
 - Port: 1/41
   Idx: 41
   Type: Ethernet
-  Description: Reserved_For_PDU
-  Function: Reserved_For_PDU
+  Description: Unused
+  Function: Unused
   UntagVlan: 2
   MTU: 9216
   Shutdown: true
 - Port: 1/42
   Idx: 42
   Type: Ethernet
-  Description: Reserved_For_PDU
-  Function: Reserved_For_PDU
+  Description: Unused
+  Function: Unused
   UntagVlan: 2
   MTU: 9216
   Shutdown: true
 - Port: 1/43
   Idx: 43
   Type: Ethernet
-  Description: Reserved_For_PDU
-  Function: Reserved_For_PDU
+  Description: Unused
+  Function: Unused
   UntagVlan: 2
   MTU: 9216
   Shutdown: true
 - Port: 1/44
   Idx: 44
   Type: Ethernet
-  Description: Reserved_For_PDU
-  Function: Reserved_For_PDU
+  Description: Unused
+  Function: Unused
   UntagVlan: 2
   MTU: 9216
   Shutdown: true
@@ -525,5 +525,5 @@ Ports:
 Routing:
   Static:
   - Network: 0.0.0.0/0
-    NextHop: ""
+    NextHop: 100.71.41.193
     Name: GlobalDefaultRoute

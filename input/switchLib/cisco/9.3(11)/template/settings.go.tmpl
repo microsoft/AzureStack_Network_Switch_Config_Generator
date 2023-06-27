@@ -1,6 +1,12 @@
+{{ define "set_global"}}
+! settings.go.tmpl-set_global
+cli alias name wr copy running-config startup-config
+{{ end }}
+
 {{ define "set_ntp"}}
 ! settings.go.tmpl-set_ntp
-clock timezone UTC 0 0
+clock timezone PST -8 0
+clock summer-time PDT 2 Sun Apr 02:00 1 Sun Nov 02:00 60
 {{ range .TimeServer -}}
 ntp server {{.}}
 {{ end -}}
@@ -68,7 +74,6 @@ line console
   exec-timeout 10
 line vty
   exec-timeout 10
-  access-class ssh-only in
   session-limit 3
 {{ end }}
 

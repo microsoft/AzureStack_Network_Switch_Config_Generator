@@ -105,7 +105,9 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 					vlanItem.Shutdown = false
 
 					for _, ipv4 := range supernet.IPv4.Assignment {
-						if strings.Contains(strings.ToUpper(ipv4.Name), strings.ToUpper(o.Switch.Type)) {
+						if strings.Contains(strings.ToUpper(ipv4.Name), strings.ToUpper(VIPGATEWAY)) {
+							vlanItem.VIPAddress = ipv4.IP
+						} else if strings.Contains(strings.ToUpper(ipv4.Name), strings.ToUpper(o.Switch.Type)) {
 							// Assignment Type binds with Switch.Type
 							vlanItem.IPAddress = ipv4.IP
 						}

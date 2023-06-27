@@ -43,7 +43,7 @@ var (
 	ANYNETWORK             = "0.0.0.0/0"
 
 	COMPUTE, STORAGE                         = "Compute", "Storage"
-	SWITCHED, SWITCHLESS, HYPERCONVERGED     = "Switched", "Switchless", "Hyperconverged"
+	SWITCHED, SWITCHLESS, HYPERCONVERGED     = "Switched", "Switchless", "HyperConverged"
 	HLHBMC, HLHOS, HOSTBMC                   = "HLH_BMC", "HLH_OS", "HOST_BMC"
 	SWITCHUPLINK, SWITCHDOWNLINK, SWITCHPEER = "SwitchUplink", "SwitchDownlink", "SwitchPeer"
 	BMC_DEFAULT_ROUTE                        = "GlobalDefaultRoute"

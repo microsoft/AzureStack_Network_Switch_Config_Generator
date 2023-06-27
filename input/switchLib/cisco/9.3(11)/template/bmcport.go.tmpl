@@ -16,12 +16,7 @@ interface {{ .Type}} {{ .Port }}
   switchport access vlan {{ .UntagVlan }}
   spanning-tree port type edge
   no logging event port link-status
-  {{ else if or (eq .Function "HLH_BMC") (eq .Function "HLH_OS") -}}
-  switchport
-  switchport access vlan {{ .UntagVlan }}
-  spanning-tree port type edge
-  no logging event port link-status
-  {{ else if eq .Function "Reserved_For_PDU" -}}
+  {{ else if or (eq .Function "HLH_BMC") (eq .Function "HLH_OS") (eq .Function "HOST_BMC") -}}
   switchport
   switchport access vlan {{ .UntagVlan }}
   spanning-tree port type edge

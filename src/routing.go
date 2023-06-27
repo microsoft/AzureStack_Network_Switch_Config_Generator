@@ -57,9 +57,7 @@ func (o *OutputType) ParseBGP(BGPObj BGPType) {
 	// ## Selected Vlan Subnet
 	for _, networkName := range BGPObj.IPv4Network {
 		_, vlanSubnetList := o.getSubnetByVlanGroupName(networkName)
-		for _, subnet := range vlanSubnetList {
-			ipv4Networks = append(ipv4Networks, subnet)
-		}
+		ipv4Networks = append(ipv4Networks, vlanSubnetList...)
 	}
 	newBGPObj.IPv4Network = ipv4Networks
 
