@@ -17,7 +17,7 @@ interface {{ .Type}} {{ .Port }}
   switchport access vlan {{ .UntagVlan }}
   spanning-tree port type edge
   no logging event port link-status
-  {{else if or (eq .Function "Compute") (eq .Function "Hyperconverged") -}}
+  {{else if or (eq .Function "Compute") (eq .Function "HyperConverged") -}}
   switchport
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}
@@ -25,8 +25,10 @@ interface {{ .Type}} {{ .Port }}
   {{ range .TagVlans -}}
   switchport trunk allowed vlan add {{ . }}
   {{end -}}
+  priority-flow-control mode on
   spanning-tree port type edge trunk
   no logging event port link-status
+  service-policy type qos input AZS_SERVICES no-stats
   {{else if eq .Function "Storage" -}}
   switchport
   switchport mode trunk
@@ -39,7 +41,7 @@ interface {{ .Type}} {{ .Port }}
   priority-flow-control mode on
   spanning-tree port type edge trunk
   no logging event port link-status
-  service-policy type qos input AZS_SERVICES
+  service-policy type qos input AZS_SERVICES no-stats
   {{else if eq .Function "MLAG_Peer" -}}
   switchport
   switchport mode trunk

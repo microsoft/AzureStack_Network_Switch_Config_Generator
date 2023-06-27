@@ -15,6 +15,7 @@ interface port-channel{{ .PortChannelID }}
   switchport
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}
+  priority-flow-control mode on
   spanning-tree port type network
   logging event port link-status
   vpc {{ .VPC }}

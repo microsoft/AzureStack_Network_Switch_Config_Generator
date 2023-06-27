@@ -62,7 +62,7 @@ Vlans:
   Cidr: 26
   Subnet: 100.71.4.192/26
   MTU: 9216
-  VIPAddress: ""
+  VIPAddress: 100.71.4.193
   VIPPriorityId: 0
   Shutdown: false
 PortChannel:
@@ -509,5 +509,5 @@ Ports:
 Routing:
   Static:
   - Network: 0.0.0.0/0
-    NextHop: ""
+    NextHop: 100.71.4.193
     Name: GlobalDefaultRoute

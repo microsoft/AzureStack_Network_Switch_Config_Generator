@@ -117,7 +117,7 @@
           "Firmware": null
         }
       ],
-      "DeploymentPattern": "Switched",
+      "DeploymentPattern": "HyperConverged",
       "SwitchUplink": "BGP",
       "HostConnectivity": "BGP",
       "Supernets": [

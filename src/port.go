@@ -175,6 +175,7 @@ func (o *OutputType) UpdateTORSwitchPorts(VlanGroup map[string][]string) {
 			tmpPortObj.TagVlans = STORAGE_VlanList
 			tmpPortObj.Description = fmt.Sprintf("%s-%s", o.DeploymentPattern, STORAGE)
 			tmpPortObj.Function = STORAGE
+			tmpPortObj.Shutdown = false
 		} else if strings.Contains(strings.ToUpper(portItem.Function), P2P_BORDER) {
 			// Uplink to Border
 			l3IntfName := strings.ToUpper(fmt.Sprintf("%s_%s", portItem.Function, o.Switch.Type))

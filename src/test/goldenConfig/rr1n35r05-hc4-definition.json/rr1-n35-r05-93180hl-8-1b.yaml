@@ -894,7 +894,7 @@ Ports:
   - 711
   - 712
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/18
   Idx: 18
   Type: Ethernet
@@ -905,7 +905,7 @@ Ports:
   - 711
   - 712
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/19
   Idx: 19
   Type: Ethernet
@@ -916,7 +916,7 @@ Ports:
   - 711
   - 712
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/20
   Idx: 20
   Type: Ethernet
@@ -927,7 +927,7 @@ Ports:
   - 711
   - 712
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/21
   Idx: 21
   Type: Ethernet
@@ -938,7 +938,7 @@ Ports:
   - 711
   - 712
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/22
   Idx: 22
   Type: Ethernet
@@ -949,7 +949,7 @@ Ports:
   - 711
   - 712
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/23
   Idx: 23
   Type: Ethernet
@@ -1230,10 +1230,10 @@ Routing:
     BGPAsn: 64715
     RouterID: 100.71.41.150
     IPv4Network:
-    - 100.71.41.140/30
-    - 100.71.41.144/30
     - 100.71.41.150/32
     - 100.71.41.132/30
+    - 100.71.41.140/30
+    - 100.71.41.144/30
     - 100.71.41.192/26
     - 100.71.137.128/25
     - 100.68.96.0/24

@@ -9,10 +9,11 @@
 {{ template "define_vlan" .Vlans -}}
 {{ template "interface_vlan" . -}}
 {{ template "stp" .Switch -}}
-{{ template "vpc" .L3Interfaces -}}
+{{ template "vpc" . -}}
 {{if .PortChannel}}{{ template "portchannel" . -}}{{ end -}}
 {{ template "bmcport" .Ports -}}
 {{ template "loopback" .L3Interfaces -}}
+{{ template "set_global" -}}
 {{ template "set_snmp" -}}
 {{ template "set_errdisable_setting" -}}
 {{ template "set_rmon" -}}
@@ -35,10 +36,11 @@
 {{ template "define_vlan" .Vlans -}}
 {{ template "interface_vlan" . -}}
 {{ template "stp" .Switch -}}
-{{ template "vpc" .L3Interfaces -}}
+{{ template "vpc" . -}}
 {{if .PortChannel}}{{ template "portchannel" . -}}{{ end -}}
 {{ template "torport" .Ports -}}
 {{ template "loopback" .L3Interfaces -}}
+{{ template "set_global" -}}
 {{ template "set_snmp" -}}
 {{ template "set_errdisable_setting" -}}
 {{ template "set_rmon" -}}

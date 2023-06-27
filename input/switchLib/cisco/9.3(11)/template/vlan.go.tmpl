@@ -22,7 +22,7 @@ interface vlan{{.VlanID}}
   ip address {{ .IPAddress }}/{{ .Cidr }}
   no ip redirects
   no ipv6 redirects
-  {{ if .VIPAddress -}}
+  {{ if and (.VIPAddress) (ne $SwitchType "BMC") -}}
   hsrp version 2
   hsrp {{.VlanID}}
     {{ if eq $SwitchType "TOR1" -}}
