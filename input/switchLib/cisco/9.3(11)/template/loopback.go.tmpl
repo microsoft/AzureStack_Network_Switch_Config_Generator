@@ -1,7 +1,7 @@
 {{ define "loopback"}}
 {{ range . -}}
-{{ if eq .Function "Loopback0" }}
-interface {{.Function}}
+{{ if eq .Name "loopback0" }}
+interface {{.Name}}
   description {{.Description}}
   ip address {{.Subnet}}
 {{ end -}}

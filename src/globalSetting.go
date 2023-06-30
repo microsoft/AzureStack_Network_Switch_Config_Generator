@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func (o *OutputType) UpdateGlobalSetting(inputData InputData) {
 	// Create random credential for switch config if no input values
@@ -23,6 +26,24 @@ func (o *OutputType) UpdateGlobalSetting(inputData InputData) {
 		if v.GroupName == BMC {
 			o.GlobalSetting.OOB = fmt.Sprintf("vlan%d", v.VlanID)
 			break
+		}
+	}
+}
+
+func (o *OutputType) UpdateDHCPIps(inputData InputData) {
+	for _, supernet := range inputData.Supernets {
+		if supernet.GroupName == BMC {
+			DHCPInfra := []string{}
+			DHCPTenant := []string{}
+			for _, assignIP := range supernet.IPv4.Assignment {
+				if strings.Contains(assignIP.Name, "DVM") {
+					DHCPInfra = append(DHCPInfra, assignIP.IP)
+				} else if strings.EqualFold(assignIP.Name, "HLH-OS") {
+					DHCPTenant = append(DHCPTenant, assignIP.IP)
+				}
+			}
+			o.GlobalSetting.DHCPInfra = DHCPInfra
+			o.GlobalSetting.DHCPTenant = DHCPTenant
 		}
 	}
 }

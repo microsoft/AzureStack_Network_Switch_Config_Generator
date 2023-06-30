@@ -9,6 +9,8 @@ vlan {{.VlanID}}
 {{ define "interface_vlan"}}
 ! vlan.go.tmpl-interface_vlan
 {{ $SwitchType := .Switch.Type }}
+{{ $DHCPInfra := .GlobalSetting.DHCPInfra }}
+{{ $DHCPTenant := .GlobalSetting.DHCPTenant }}
 {{ range .Vlans -}}
 {{ if .IPAddress -}} 
 interface vlan{{.VlanID}}
@@ -22,6 +24,15 @@ interface vlan{{.VlanID}}
   ip address {{ .IPAddress }}/{{ .Cidr }}
   no ip redirects
   no ipv6 redirects
+  {{ if eq .GroupName "Infrastructure" -}}
+  {{ range $DHCPInfra -}}
+  ip dhcp relay address {{.}}
+  {{ end -}}
+  {{ else if eq .VlanID 401 -}}
+  {{ range $DHCPTenant -}}
+  ip dhcp relay address {{.}}
+  {{ end -}}
+  {{ end -}}
   {{ if and (.VIPAddress) (ne $SwitchType "BMC") -}}
   hsrp version 2
   hsrp {{.VlanID}}

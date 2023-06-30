@@ -51,18 +51,22 @@ GlobalSetting:
   DNSForwarder:
   - 10.10.240.23
   - 10.10.240.24
+  DHCPInfra:
+  - 100.71.85.107
+  - 100.71.85.108
+  - 100.71.85.109
+  - 100.71.85.110
+  DHCPTenant:
+  - 100.71.85.126
   OOB: vlan125
 Vlans:
 - GroupName: UNUSED_VLAN
   VlanName: UNUSED_VLAN
   VlanID: 2
-  VirtualGroupID: 0
   IPAddress: ""
   Cidr: 0
   Subnet: ""
   MTU: 9216
-  VIPAddress: ""
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: HNVPA
   VlanName: HNVPA_6
@@ -73,7 +77,6 @@ Vlans:
   Subnet: 100.71.131.0/25
   MTU: 9216
   VIPAddress: 100.71.131.1
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: Infrastructure
   VlanName: Infra_7
@@ -84,18 +87,14 @@ Vlans:
   Subnet: 100.69.176.0/24
   MTU: 9216
   VIPAddress: 100.69.176.1
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: NativeVlan
   VlanName: NativeVlan
   VlanID: 99
-  VirtualGroupID: 0
   IPAddress: ""
   Cidr: 0
   Subnet: ""
   MTU: 9216
-  VIPAddress: ""
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: BMC
   VlanName: BMC_Mgmt_125
@@ -106,7 +105,6 @@ Vlans:
   Subnet: 100.71.85.64/26
   MTU: 9216
   VIPAddress: 100.71.85.65
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: TENANT
   VlanName: Tenant_201
@@ -117,7 +115,6 @@ Vlans:
   Subnet: 100.69.177.0/24
   MTU: 9216
   VIPAddress: 100.69.177.1
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: TENANT
   VlanName: LogicalTenant_301
@@ -128,7 +125,6 @@ Vlans:
   Subnet: 100.69.178.0/25
   MTU: 9216
   VIPAddress: 100.69.178.1
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: TENANT
   VlanName: DhcpTenant_401
@@ -139,7 +135,6 @@ Vlans:
   Subnet: 100.69.178.128/25
   MTU: 9216
   VIPAddress: 100.69.178.129
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_501
@@ -150,7 +145,6 @@ Vlans:
   Subnet: 100.69.179.0/28
   MTU: 9216
   VIPAddress: 100.69.179.1
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_502
@@ -161,7 +155,6 @@ Vlans:
   Subnet: 100.69.179.16/28
   MTU: 9216
   VIPAddress: 100.69.179.17
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_503
@@ -172,7 +165,6 @@ Vlans:
   Subnet: 100.69.179.32/28
   MTU: 9216
   VIPAddress: 100.69.179.33
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_504
@@ -183,7 +175,6 @@ Vlans:
   Subnet: 100.69.179.48/28
   MTU: 9216
   VIPAddress: 100.69.179.49
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_505
@@ -194,7 +185,6 @@ Vlans:
   Subnet: 100.69.179.64/28
   MTU: 9216
   VIPAddress: 100.69.179.65
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_506
@@ -205,7 +195,6 @@ Vlans:
   Subnet: 100.69.179.80/28
   MTU: 9216
   VIPAddress: 100.69.179.81
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_507
@@ -216,7 +205,6 @@ Vlans:
   Subnet: 100.69.179.96/28
   MTU: 9216
   VIPAddress: 100.69.179.97
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_508
@@ -227,7 +215,6 @@ Vlans:
   Subnet: 100.69.179.112/28
   MTU: 9216
   VIPAddress: 100.69.179.113
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_509
@@ -238,18 +225,14 @@ Vlans:
   Subnet: 100.69.179.128/28
   MTU: 9216
   VIPAddress: 100.69.179.129
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_510
   VlanID: 510
-  VirtualGroupID: 0
   IPAddress: 100.69.179.146
   Cidr: 28
   Subnet: 100.69.179.144/28
   MTU: 9216
-  VIPAddress: ""
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_511
@@ -260,7 +243,6 @@ Vlans:
   Subnet: 100.69.179.160/28
   MTU: 9216
   VIPAddress: 100.69.179.161
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_512
@@ -271,7 +253,6 @@ Vlans:
   Subnet: 100.69.179.176/28
   MTU: 9216
   VIPAddress: 100.69.179.177
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_513
@@ -282,7 +263,6 @@ Vlans:
   Subnet: 100.69.179.192/28
   MTU: 9216
   VIPAddress: 100.69.179.193
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_514
@@ -293,7 +273,6 @@ Vlans:
   Subnet: 100.69.179.208/28
   MTU: 9216
   VIPAddress: 100.69.179.209
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_515
@@ -304,7 +283,6 @@ Vlans:
   Subnet: 100.69.179.224/28
   MTU: 9216
   VIPAddress: 100.69.179.225
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_516
@@ -315,32 +293,26 @@ Vlans:
   Subnet: 100.69.179.240/28
   MTU: 9216
   VIPAddress: 100.69.179.241
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: Storage
   VlanName: Storage_711
   VlanID: 711
-  VirtualGroupID: 0
   IPAddress: ""
   Cidr: 24
   Subnet: 10.71.1.0/24
   MTU: 9216
-  VIPAddress: ""
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: Storage
   VlanName: Storage_712
   VlanID: 712
-  VirtualGroupID: 0
   IPAddress: ""
   Cidr: 24
   Subnet: 10.71.2.0/24
   MTU: 9216
-  VIPAddress: ""
-  VIPPriorityId: 0
   Shutdown: false
 L3Interfaces:
   LOOPBACK0_TOR2:
+    Name: loopback0
     Function: Loopback0_Tor2
     Description: Loopback0_Tor2
     IPAddress: 100.71.85.22
@@ -349,6 +321,7 @@ L3Interfaces:
     MTU: 9216
     Shutdown: false
   P2P_BORDER1_TOR2:
+    Name: p2p_border
     Function: P2P_Border1_Tor2
     Description: P2P_Border1_Tor2
     IPAddress: 100.71.85.6
@@ -358,6 +331,7 @@ L3Interfaces:
     MTU: 9216
     Shutdown: false
   P2P_BORDER2_TOR2:
+    Name: p2p_border
     Function: P2P_Border2_Tor2
     Description: P2P_Border2_Tor2
     IPAddress: 100.71.85.14
@@ -367,6 +341,7 @@ L3Interfaces:
     MTU: 9216
     Shutdown: false
   P2P_IBGP:
+    Name: p2p_ibgp
     Function: P2P_iBGP
     Description: P2P_iBGP
     IPAddress: 100.71.85.18
@@ -1139,6 +1114,7 @@ Ports:
   Type: Ethernet
   Description: TOR_BMC
   Function: TOR_BMC
+  UntagVlan: 99
   TagVlans:
   - 125
   MTU: 9216
@@ -1244,10 +1220,10 @@ Routing:
     BGPAsn: 65242
     RouterID: 100.71.85.22
     IPv4Network:
+    - 100.71.85.22/32
     - 100.71.85.4/30
     - 100.71.85.12/30
     - 100.71.85.16/30
-    - 100.71.85.22/32
     - 100.71.85.64/26
     - 100.71.131.0/25
     - 100.69.176.0/24

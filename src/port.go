@@ -192,7 +192,7 @@ func (o *OutputType) UpdateTORSwitchPorts(VlanGroup map[string][]string) {
 			tmpPortObj.Shutdown = false
 		} else if portItem.Function == TOR_BMC && len(o.SwitchBMC) > 0 {
 			// Has BMC
-			tmpPortObj.UntagVlan = 0
+			tmpPortObj.UntagVlan = NATIVE_VLANID
 			tmpPortObj.TagVlans = append(tmpPortObj.TagVlans, BMC_VlanID)
 			portOthers := map[string]string{
 				"ChannelGroup": o.PortChannel[TOR_BMC].PortChannelID,
@@ -228,7 +228,7 @@ func (o *OutputType) UpdateBMCSwitchPorts(VlanGroup map[string][]string) {
 			tmpPortObj.Mtu = JUMBOMTU
 		} else if strings.EqualFold(portItem.Function, TOR_BMC) {
 			// Has BMC to TOR
-			tmpPortObj.UntagVlan = 0
+			tmpPortObj.UntagVlan = NATIVE_VLANID
 			tmpPortObj.TagVlans = append(tmpPortObj.TagVlans, BMC_VlanID)
 			portOthers := map[string]string{
 				"ChannelGroup": o.PortChannel[TOR_BMC].PortChannelID,

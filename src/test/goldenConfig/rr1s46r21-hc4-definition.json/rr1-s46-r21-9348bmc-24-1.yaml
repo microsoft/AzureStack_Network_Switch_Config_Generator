@@ -30,40 +30,34 @@ GlobalSetting:
   DNSForwarder:
   - 10.10.240.23
   - 10.10.240.24
+  DHCPInfra: []
+  DHCPTenant: []
   OOB: vlan125
 Vlans:
 - GroupName: UNUSED_VLAN
   VlanName: UNUSED_VLAN
   VlanID: 2
-  VirtualGroupID: 0
   IPAddress: ""
   Cidr: 0
   Subnet: ""
   MTU: 9216
-  VIPAddress: ""
-  VIPPriorityId: 0
   Shutdown: true
 - GroupName: NativeVlan
   VlanName: NativeVlan
   VlanID: 99
-  VirtualGroupID: 0
   IPAddress: ""
   Cidr: 0
   Subnet: ""
   MTU: 9216
-  VIPAddress: ""
-  VIPPriorityId: 0
   Shutdown: false
 - GroupName: BMC
   VlanName: BMC_Mgmt_125
   VlanID: 125
-  VirtualGroupID: 0
   IPAddress: 100.71.85.125
   Cidr: 26
   Subnet: 100.71.85.64/26
   MTU: 9216
   VIPAddress: 100.71.85.65
-  VIPPriorityId: 0
   Shutdown: false
 PortChannel:
   TOR_BMC:
@@ -481,6 +475,7 @@ Ports:
   Type: Ethernet
   Description: TOR_BMC
   Function: TOR_BMC
+  UntagVlan: 99
   TagVlans:
   - 125
   MTU: 9216
@@ -492,6 +487,7 @@ Ports:
   Type: Ethernet
   Description: TOR_BMC
   Function: TOR_BMC
+  UntagVlan: 99
   TagVlans:
   - 125
   MTU: 9216

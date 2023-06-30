@@ -3,43 +3,43 @@ Switch:
   Make: Cisco
   Model: 93180YC-FX
   Type: TOR1
-  Hostname: rr1-n22-r09-93180hl-11-1a
-  ASN: 64735
+  Hostname: rr1-s46-r21-93180hl-24-1a
+  ASN: 65242
   Firmware: 9.3(11)
-DeploymentPattern: Switched
+DeploymentPattern: HyperConverged
 SwitchPeer:
 - Make: Cisco
   Model: 93180YC-FX
   Type: TOR2
-  Hostname: rr1-n22-r09-93180hl-11-1b
-  ASN: 64735
+  Hostname: rr1-s46-r21-93180hl-24-1b
+  ASN: 65242
   Firmware: 9.3(11)
 SwitchBMC:
 - Make: Cisco
   Model: 9348GC-FXP
   Type: BMC
-  Hostname: rr1-n22-r09-9348bmc-11-1
+  Hostname: rr1-s46-r21-9348bmc-24-1
   ASN: 0
   Firmware: 9.3(11)
 SwitchUplink:
 - Make: Cisco
   Model: C9336C-FX2
   Type: Border1
-  Hostname: rr1-n22-r12-9336ssp-1a
-  ASN: 64810
+  Hostname: rr1-s46-r01-x32ssp-1a
+  ASN: 64846
   Firmware: ""
 - Make: Cisco
   Model: C9336C-FX2
   Type: Border2
-  Hostname: rr1-n22-r12-9336ssp-1a
-  ASN: 64810
+  Hostname: rr1-s46-r01-x32ssp-1b
+  ASN: 64846
   Firmware: ""
 SwitchDownlink:
 - Make: Microsoft
   Model: ""
   Type: MUX
-  Hostname: rr1-n22-r09-MUX-1
-  ASN: 64629
+  Hostname: rr1-s46-r21-MUX-1
+  ASN: 65112
   Firmware: ""
 GlobalSetting:
   Username: $CREDENTIAL_PLACEHOLDER$
@@ -68,22 +68,22 @@ Vlans:
   VlanName: HNVPA_6
   VlanID: 6
   VirtualGroupID: 58
-  IPAddress: 100.71.146.2
-  Cidr: 24
-  Subnet: 100.71.146.0/24
+  IPAddress: 100.71.131.2
+  Cidr: 25
+  Subnet: 100.71.131.0/25
   MTU: 9216
-  VIPAddress: 100.71.146.1
+  VIPAddress: 100.71.131.1
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: Infrastructure
   VlanName: Infra_7
   VlanID: 7
   VirtualGroupID: 59
-  IPAddress: 100.72.16.2
-  Cidr: 23
-  Subnet: 100.72.16.0/23
+  IPAddress: 100.69.176.2
+  Cidr: 24
+  Subnet: 100.69.176.0/24
   MTU: 9216
-  VIPAddress: 100.72.16.1
+  VIPAddress: 100.69.176.1
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: NativeVlan
@@ -101,152 +101,152 @@ Vlans:
   VlanName: BMC_Mgmt_125
   VlanID: 125
   VirtualGroupID: 57
-  IPAddress: 100.71.19.123
+  IPAddress: 100.71.85.123
   Cidr: 26
-  Subnet: 100.71.19.64/26
+  Subnet: 100.71.85.64/26
   MTU: 9216
-  VIPAddress: 100.71.19.65
+  VIPAddress: 100.71.85.65
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: TENANT
   VlanName: Tenant_201
   VlanID: 201
   VirtualGroupID: 60
-  IPAddress: 100.72.18.2
-  Cidr: 23
-  Subnet: 100.72.18.0/23
+  IPAddress: 100.69.177.2
+  Cidr: 24
+  Subnet: 100.69.177.0/24
   MTU: 9216
-  VIPAddress: 100.72.18.1
+  VIPAddress: 100.69.177.1
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: TENANT
   VlanName: LogicalTenant_301
   VlanID: 301
   VirtualGroupID: 61
-  IPAddress: 100.72.20.2
-  Cidr: 24
-  Subnet: 100.72.20.0/24
+  IPAddress: 100.69.178.2
+  Cidr: 25
+  Subnet: 100.69.178.0/25
   MTU: 9216
-  VIPAddress: 100.72.20.1
+  VIPAddress: 100.69.178.1
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: TENANT
   VlanName: DhcpTenant_401
   VlanID: 401
   VirtualGroupID: 62
-  IPAddress: 100.72.21.2
-  Cidr: 24
-  Subnet: 100.72.21.0/24
+  IPAddress: 100.69.178.130
+  Cidr: 25
+  Subnet: 100.69.178.128/25
   MTU: 9216
-  VIPAddress: 100.72.21.1
+  VIPAddress: 100.69.178.129
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_501
   VlanID: 501
   VirtualGroupID: 63
-  IPAddress: 100.72.22.2
+  IPAddress: 100.69.179.2
   Cidr: 28
-  Subnet: 100.72.22.0/28
+  Subnet: 100.69.179.0/28
   MTU: 9216
-  VIPAddress: 100.72.22.1
+  VIPAddress: 100.69.179.1
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_502
   VlanID: 502
   VirtualGroupID: 64
-  IPAddress: 100.72.22.18
+  IPAddress: 100.69.179.18
   Cidr: 28
-  Subnet: 100.72.22.16/28
+  Subnet: 100.69.179.16/28
   MTU: 9216
-  VIPAddress: 100.72.22.17
+  VIPAddress: 100.69.179.17
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_503
   VlanID: 503
   VirtualGroupID: 65
-  IPAddress: 100.72.22.34
+  IPAddress: 100.69.179.34
   Cidr: 28
-  Subnet: 100.72.22.32/28
+  Subnet: 100.69.179.32/28
   MTU: 9216
-  VIPAddress: 100.72.22.33
+  VIPAddress: 100.69.179.33
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_504
   VlanID: 504
   VirtualGroupID: 66
-  IPAddress: 100.72.22.50
+  IPAddress: 100.69.179.50
   Cidr: 28
-  Subnet: 100.72.22.48/28
+  Subnet: 100.69.179.48/28
   MTU: 9216
-  VIPAddress: 100.72.22.49
+  VIPAddress: 100.69.179.49
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_505
   VlanID: 505
   VirtualGroupID: 67
-  IPAddress: 100.72.22.66
+  IPAddress: 100.69.179.66
   Cidr: 28
-  Subnet: 100.72.22.64/28
+  Subnet: 100.69.179.64/28
   MTU: 9216
-  VIPAddress: 100.72.22.65
+  VIPAddress: 100.69.179.65
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_506
   VlanID: 506
   VirtualGroupID: 68
-  IPAddress: 100.72.22.82
+  IPAddress: 100.69.179.82
   Cidr: 28
-  Subnet: 100.72.22.80/28
+  Subnet: 100.69.179.80/28
   MTU: 9216
-  VIPAddress: 100.72.22.81
+  VIPAddress: 100.69.179.81
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_507
   VlanID: 507
   VirtualGroupID: 69
-  IPAddress: 100.72.22.98
+  IPAddress: 100.69.179.98
   Cidr: 28
-  Subnet: 100.72.22.96/28
+  Subnet: 100.69.179.96/28
   MTU: 9216
-  VIPAddress: 100.72.22.97
+  VIPAddress: 100.69.179.97
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_508
   VlanID: 508
   VirtualGroupID: 70
-  IPAddress: 100.72.22.114
+  IPAddress: 100.69.179.114
   Cidr: 28
-  Subnet: 100.72.22.112/28
+  Subnet: 100.69.179.112/28
   MTU: 9216
-  VIPAddress: 100.72.22.113
+  VIPAddress: 100.69.179.113
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_509
   VlanID: 509
   VirtualGroupID: 71
-  IPAddress: 100.72.22.130
+  IPAddress: 100.69.179.130
   Cidr: 28
-  Subnet: 100.72.22.128/28
+  Subnet: 100.69.179.128/28
   MTU: 9216
-  VIPAddress: 100.72.22.129
+  VIPAddress: 100.69.179.129
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_510
   VlanID: 510
   VirtualGroupID: 0
-  IPAddress: 100.72.22.145
+  IPAddress: 100.69.179.145
   Cidr: 28
-  Subnet: 100.72.22.144/28
+  Subnet: 100.69.179.144/28
   MTU: 9216
   VIPAddress: ""
   VIPPriorityId: 0
@@ -255,242 +255,66 @@ Vlans:
   VlanName: L3forward_511
   VlanID: 511
   VirtualGroupID: 73
-  IPAddress: 100.72.22.162
+  IPAddress: 100.69.179.162
   Cidr: 28
-  Subnet: 100.72.22.160/28
+  Subnet: 100.69.179.160/28
   MTU: 9216
-  VIPAddress: 100.72.22.161
+  VIPAddress: 100.69.179.161
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_512
   VlanID: 512
   VirtualGroupID: 74
-  IPAddress: 100.72.22.178
+  IPAddress: 100.69.179.178
   Cidr: 28
-  Subnet: 100.72.22.176/28
+  Subnet: 100.69.179.176/28
   MTU: 9216
-  VIPAddress: 100.72.22.177
+  VIPAddress: 100.69.179.177
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_513
   VlanID: 513
   VirtualGroupID: 75
-  IPAddress: 100.72.22.194
+  IPAddress: 100.69.179.194
   Cidr: 28
-  Subnet: 100.72.22.192/28
+  Subnet: 100.69.179.192/28
   MTU: 9216
-  VIPAddress: 100.72.22.193
+  VIPAddress: 100.69.179.193
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_514
   VlanID: 514
   VirtualGroupID: 76
-  IPAddress: 100.72.22.210
+  IPAddress: 100.69.179.210
   Cidr: 28
-  Subnet: 100.72.22.208/28
+  Subnet: 100.69.179.208/28
   MTU: 9216
-  VIPAddress: 100.72.22.209
+  VIPAddress: 100.69.179.209
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_515
   VlanID: 515
   VirtualGroupID: 77
-  IPAddress: 100.72.22.226
+  IPAddress: 100.69.179.226
   Cidr: 28
-  Subnet: 100.72.22.224/28
+  Subnet: 100.69.179.224/28
   MTU: 9216
-  VIPAddress: 100.72.22.225
+  VIPAddress: 100.69.179.225
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: L3FORWARD
   VlanName: L3forward_516
   VlanID: 516
   VirtualGroupID: 78
-  IPAddress: 100.72.22.242
+  IPAddress: 100.69.179.242
   Cidr: 28
-  Subnet: 100.72.22.240/28
+  Subnet: 100.69.179.240/28
   MTU: 9216
-  VIPAddress: 100.72.22.241
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_517
-  VlanID: 517
-  VirtualGroupID: 79
-  IPAddress: 100.72.23.2
-  Cidr: 28
-  Subnet: 100.72.23.0/28
-  MTU: 9216
-  VIPAddress: 100.72.23.1
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_518
-  VlanID: 518
-  VirtualGroupID: 80
-  IPAddress: 100.72.23.18
-  Cidr: 28
-  Subnet: 100.72.23.16/28
-  MTU: 9216
-  VIPAddress: 100.72.23.17
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_519
-  VlanID: 519
-  VirtualGroupID: 81
-  IPAddress: 100.72.23.34
-  Cidr: 28
-  Subnet: 100.72.23.32/28
-  MTU: 9216
-  VIPAddress: 100.72.23.33
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_520
-  VlanID: 520
-  VirtualGroupID: 82
-  IPAddress: 100.72.23.50
-  Cidr: 28
-  Subnet: 100.72.23.48/28
-  MTU: 9216
-  VIPAddress: 100.72.23.49
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_521
-  VlanID: 521
-  VirtualGroupID: 83
-  IPAddress: 100.72.23.66
-  Cidr: 28
-  Subnet: 100.72.23.64/28
-  MTU: 9216
-  VIPAddress: 100.72.23.65
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_522
-  VlanID: 522
-  VirtualGroupID: 84
-  IPAddress: 100.72.23.82
-  Cidr: 28
-  Subnet: 100.72.23.80/28
-  MTU: 9216
-  VIPAddress: 100.72.23.81
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_523
-  VlanID: 523
-  VirtualGroupID: 85
-  IPAddress: 100.72.23.98
-  Cidr: 28
-  Subnet: 100.72.23.96/28
-  MTU: 9216
-  VIPAddress: 100.72.23.97
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_524
-  VlanID: 524
-  VirtualGroupID: 86
-  IPAddress: 100.72.23.114
-  Cidr: 28
-  Subnet: 100.72.23.112/28
-  MTU: 9216
-  VIPAddress: 100.72.23.113
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_525
-  VlanID: 525
-  VirtualGroupID: 87
-  IPAddress: 100.72.23.130
-  Cidr: 28
-  Subnet: 100.72.23.128/28
-  MTU: 9216
-  VIPAddress: 100.72.23.129
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_526
-  VlanID: 526
-  VirtualGroupID: 0
-  IPAddress: 100.72.23.145
-  Cidr: 28
-  Subnet: 100.72.23.144/28
-  MTU: 9216
-  VIPAddress: ""
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_527
-  VlanID: 527
-  VirtualGroupID: 89
-  IPAddress: 100.72.23.162
-  Cidr: 28
-  Subnet: 100.72.23.160/28
-  MTU: 9216
-  VIPAddress: 100.72.23.161
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_528
-  VlanID: 528
-  VirtualGroupID: 90
-  IPAddress: 100.72.23.178
-  Cidr: 28
-  Subnet: 100.72.23.176/28
-  MTU: 9216
-  VIPAddress: 100.72.23.177
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_529
-  VlanID: 529
-  VirtualGroupID: 91
-  IPAddress: 100.72.23.194
-  Cidr: 28
-  Subnet: 100.72.23.192/28
-  MTU: 9216
-  VIPAddress: 100.72.23.193
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_530
-  VlanID: 530
-  VirtualGroupID: 92
-  IPAddress: 100.72.23.210
-  Cidr: 28
-  Subnet: 100.72.23.208/28
-  MTU: 9216
-  VIPAddress: 100.72.23.209
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_531
-  VlanID: 531
-  VirtualGroupID: 93
-  IPAddress: 100.72.23.226
-  Cidr: 28
-  Subnet: 100.72.23.224/28
-  MTU: 9216
-  VIPAddress: 100.72.23.225
-  VIPPriorityId: 0
-  Shutdown: false
-- GroupName: L3FORWARD
-  VlanName: L3forward_532
-  VlanID: 532
-  VirtualGroupID: 94
-  IPAddress: 100.72.23.242
-  Cidr: 28
-  Subnet: 100.72.23.240/28
-  MTU: 9216
-  VIPAddress: 100.72.23.241
+  VIPAddress: 100.69.179.241
   VIPPriorityId: 0
   Shutdown: false
 - GroupName: Storage
@@ -519,36 +343,36 @@ L3Interfaces:
   LOOPBACK0_TOR1:
     Function: Loopback0_Tor1
     Description: Loopback0_Tor1
-    IPAddress: 100.71.19.21
+    IPAddress: 100.71.85.21
     Cidr: 32
-    Subnet: 100.71.19.21/32
+    Subnet: 100.71.85.21/32
     MTU: 9216
     Shutdown: false
   P2P_BORDER1_TOR1:
     Function: P2P_Border1_Tor1
     Description: P2P_Border1_Tor1
-    IPAddress: 100.71.19.2
+    IPAddress: 100.71.85.2
     Cidr: 30
-    NbrIPAddress: 100.71.19.1
-    Subnet: 100.71.19.0/30
+    NbrIPAddress: 100.71.85.1
+    Subnet: 100.71.85.0/30
     MTU: 9216
     Shutdown: false
   P2P_BORDER2_TOR1:
     Function: P2P_Border2_Tor1
     Description: P2P_Border2_Tor1
-    IPAddress: 100.71.19.10
+    IPAddress: 100.71.85.10
     Cidr: 30
-    NbrIPAddress: 100.71.19.9
-    Subnet: 100.71.19.8/30
+    NbrIPAddress: 100.71.85.9
+    Subnet: 100.71.85.8/30
     MTU: 9216
     Shutdown: false
   P2P_IBGP:
     Function: P2P_iBGP
     Description: P2P_iBGP
-    IPAddress: 100.71.19.17
+    IPAddress: 100.71.85.17
     Cidr: 30
-    NbrIPAddress: 100.71.19.18
-    Subnet: 100.71.19.16/30
+    NbrIPAddress: 100.71.85.18
+    Subnet: 100.71.85.16/30
     MTU: 9216
     Shutdown: false
 PortChannel:
@@ -566,7 +390,7 @@ PortChannel:
     Function: P2P_IBGP
     UntagVlan: 0
     TagVlans: 0
-    IPAddress: 100.71.19.17/30
+    IPAddress: 100.71.85.17/30
     PortChannelID: "50"
     VPC: ""
     Shutdown: false
@@ -583,8 +407,8 @@ Ports:
 - Port: 1/1
   Idx: 1
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -608,29 +432,15 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/2
   Idx: 2
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -654,29 +464,15 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/3
   Idx: 3
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -700,29 +496,15 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/4
   Idx: 4
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -746,29 +528,15 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/5
   Idx: 5
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -792,29 +560,15 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/6
   Idx: 6
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -838,29 +592,15 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/7
   Idx: 7
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -884,29 +624,15 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/8
   Idx: 8
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -930,29 +656,15 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/9
   Idx: 9
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -976,29 +688,15 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/10
   Idx: 10
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -1022,29 +720,15 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/11
   Idx: 11
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -1068,29 +752,15 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/12
   Idx: 12
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -1114,29 +784,15 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/13
   Idx: 13
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -1160,29 +816,15 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/14
   Idx: 14
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -1206,29 +848,15 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/15
   Idx: 15
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -1252,29 +880,15 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/16
   Idx: 16
   Type: Ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -1298,90 +912,58 @@ Ports:
   - 514
   - 515
   - 516
-  - 517
-  - 518
-  - 519
-  - 520
-  - 521
-  - 522
-  - 523
-  - 524
-  - 525
-  - 526
-  - 527
-  - 528
-  - 529
-  - 530
-  - 531
-  - 532
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
 - Port: 1/17
   Idx: 17
   Type: Ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
 - Port: 1/18
   Idx: 18
   Type: Ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
 - Port: 1/19
   Idx: 19
   Type: Ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
 - Port: 1/20
   Idx: 20
   Type: Ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
 - Port: 1/21
   Idx: 21
   Type: Ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
 - Port: 1/22
   Idx: 22
   Type: Ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
 - Port: 1/23
   Idx: 23
   Type: Ethernet
@@ -1584,7 +1166,7 @@ Ports:
   Type: Ethernet
   Description: P2P_Border2
   Function: P2P_Border2
-  IPAddress: 100.71.19.10/30
+  IPAddress: 100.71.85.10/30
   MTU: 9216
   Shutdown: false
 - Port: 1/48
@@ -1592,7 +1174,7 @@ Ports:
   Type: Ethernet
   Description: P2P_Border1
   Function: P2P_Border1
-  IPAddress: 100.71.19.2/30
+  IPAddress: 100.71.85.2/30
   MTU: 9216
   Shutdown: false
 - Port: 1/49
@@ -1659,56 +1241,40 @@ Ports:
   Shutdown: true
 Routing:
   BGP:
-    BGPAsn: 64735
-    RouterID: 100.71.19.21
+    BGPAsn: 65242
+    RouterID: 100.71.85.21
     IPv4Network:
-    - 100.71.19.0/30
-    - 100.71.19.8/30
-    - 100.71.19.16/30
-    - 100.71.19.21/32
-    - 100.71.19.64/26
-    - 100.71.146.0/24
-    - 100.72.16.0/23
-    - 100.72.18.0/23
-    - 100.72.20.0/24
-    - 100.72.21.0/24
-    - 100.72.22.0/28
-    - 100.72.22.16/28
-    - 100.72.22.32/28
-    - 100.72.22.48/28
-    - 100.72.22.64/28
-    - 100.72.22.80/28
-    - 100.72.22.96/28
-    - 100.72.22.112/28
-    - 100.72.22.128/28
-    - 100.72.22.144/28
-    - 100.72.22.160/28
-    - 100.72.22.176/28
-    - 100.72.22.192/28
-    - 100.72.22.208/28
-    - 100.72.22.224/28
-    - 100.72.22.240/28
-    - 100.72.23.0/28
-    - 100.72.23.16/28
-    - 100.72.23.32/28
-    - 100.72.23.48/28
-    - 100.72.23.64/28
-    - 100.72.23.80/28
-    - 100.72.23.96/28
-    - 100.72.23.112/28
-    - 100.72.23.128/28
-    - 100.72.23.144/28
-    - 100.72.23.160/28
-    - 100.72.23.176/28
-    - 100.72.23.192/28
-    - 100.72.23.208/28
-    - 100.72.23.224/28
-    - 100.72.23.240/28
+    - 100.71.85.0/30
+    - 100.71.85.8/30
+    - 100.71.85.16/30
+    - 100.71.85.21/32
+    - 100.71.85.64/26
+    - 100.71.131.0/25
+    - 100.69.176.0/24
+    - 100.69.177.0/24
+    - 100.69.178.0/25
+    - 100.69.178.128/25
+    - 100.69.179.0/28
+    - 100.69.179.16/28
+    - 100.69.179.32/28
+    - 100.69.179.48/28
+    - 100.69.179.64/28
+    - 100.69.179.80/28
+    - 100.69.179.96/28
+    - 100.69.179.112/28
+    - 100.69.179.128/28
+    - 100.69.179.144/28
+    - 100.69.179.160/28
+    - 100.69.179.176/28
+    - 100.69.179.192/28
+    - 100.69.179.208/28
+    - 100.69.179.224/28
+    - 100.69.179.240/28
     IPv4Neighbor:
     - SwitchRelation: SwitchUplink
       Description: TO_Border1
-      NeighborAsn: 64810
-      NeighborIPAddress: 100.71.19.1
+      NeighborAsn: 64846
+      NeighborIPAddress: 100.71.85.1
       PrefixList:
       - Name: ExternalPrefix
         Direction: in
@@ -1718,8 +1284,8 @@ Routing:
       Shutdown: false
     - SwitchRelation: SwitchUplink
       Description: TO_Border2
-      NeighborAsn: 64810
-      NeighborIPAddress: 100.71.19.9
+      NeighborAsn: 64846
+      NeighborIPAddress: 100.71.85.9
       PrefixList:
       - Name: ExternalPrefix
         Direction: in
@@ -1729,14 +1295,14 @@ Routing:
       Shutdown: false
     - SwitchRelation: SwitchPeer
       Description: TO_TOR2
-      NeighborAsn: 64735
-      NeighborIPAddress: 100.71.19.18
+      NeighborAsn: 65242
+      NeighborIPAddress: 100.71.85.18
       Shutdown: false
       NbrPassword: $CREDENTIAL_PLACEHOLDER$
     - SwitchRelation: SwitchDownlink
       Description: TO_MUX
-      NeighborAsn: 64629
-      NeighborIPAddress: 100.71.146.0/24
+      NeighborAsn: 65112
+      NeighborIPAddress: 100.71.131.0/25
       PrefixList:
       - Name: DefaultRoute
         Direction: out
@@ -1762,19 +1328,19 @@ Routing:
     - Idx: 50
       Action: deny
       Description: Tenant
-      Network: 100.72.18.0/23
+      Network: 100.69.177.0/24
       Operation: le
       Prefix: 32
     - Idx: 55
       Action: deny
       Description: Tenant
-      Network: 100.72.20.0/24
+      Network: 100.69.178.0/25
       Operation: le
       Prefix: 32
     - Idx: 60
       Action: deny
       Description: Tenant
-      Network: 100.72.21.0/24
+      Network: 100.69.178.128/25
       Operation: le
       Prefix: 32
     - Idx: 100

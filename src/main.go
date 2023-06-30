@@ -102,6 +102,7 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 			// fmt.Printf("%#v\n%#v\n", torOutput, inputData)
 			torOutput.UpdateVlanAndL3Intf(inputData)
 			torOutput.UpdateGlobalSetting(inputData)
+			torOutput.UpdateDHCPIps(inputData)
 			templateFolder, frameworkFolder := torOutput.parseFrameworkPath(switchLibFolder)
 			torOutput.UpdatePortChannel(inputData)
 			torOutput.ParseSwitchPort(frameworkFolder)

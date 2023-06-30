@@ -43,21 +43,24 @@ type GlobalSettingType struct {
 	TimeServer   []string `yaml:"TimeServer"`
 	SyslogServer []string `yaml:"SyslogServer"`
 	DNSForwarder []string `yaml:"DNSForwarder"`
+	DHCPInfra    []string `yaml:"DHCPInfra"`
+	DHCPTenant   []string `yaml:"DHCPTenant"`
 	OOB          string   `yaml:"OOB"`
 }
 
 type VlanType struct {
-	GroupName      string `yaml:"GroupName"`
-	VlanName       string `yaml:"VlanName"`
-	VlanID         int    `yaml:"VlanID"`
-	VirtualGroupID int    `yaml:"VirtualGroupID"`
-	IPAddress      string `yaml:"IPAddress"`
-	Cidr           int    `yaml:"Cidr"`
-	Subnet         string `yaml:"Subnet"`
-	Mtu            int    `yaml:"MTU"`
-	VIPAddress     string `yaml:"VIPAddress"`
-	VIPPriorityId  int    `yaml:"VIPPriorityId"`
-	Shutdown       bool   `yaml:"Shutdown"`
+	GroupName      string            `yaml:"GroupName"`
+	VlanName       string            `yaml:"VlanName"`
+	VlanID         int               `yaml:"VlanID"`
+	VirtualGroupID int               `yaml:"VirtualGroupID,omitempty"`
+	IPAddress      string            `yaml:"IPAddress"`
+	Cidr           int               `yaml:"Cidr"`
+	Subnet         string            `yaml:"Subnet"`
+	Mtu            int               `yaml:"MTU"`
+	VIPAddress     string            `yaml:"VIPAddress,omitempty"`
+	VIPPriorityId  int               `yaml:"VIPPriorityId,omitempty"`
+	Shutdown       bool              `yaml:"Shutdown"`
+	Others         map[string]string `yaml:"Others,omitempty"`
 }
 
 type PortChannelType struct {
@@ -72,6 +75,7 @@ type PortChannelType struct {
 }
 
 type L3IntfType struct {
+	Name         string `yaml:"Name"`
 	Function     string `yaml:"Function"`
 	Description  string `yaml:"Description"`
 	IPAddress    string `yaml:"IPAddress"`

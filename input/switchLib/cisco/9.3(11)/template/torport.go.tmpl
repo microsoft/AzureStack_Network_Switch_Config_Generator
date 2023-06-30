@@ -56,9 +56,11 @@ interface {{ .Type}} {{ .Port }}
   {{else if eq .Function "TOR_BMC" -}}
   switchport
   switchport mode trunk
+  switchport trunk native vlan {{ .UntagVlan }}
   {{ range .TagVlans -}}
   switchport trunk allowed vlan {{ . }}
   {{end -}}
+  spanning-tree port type network
   logging event port link-status
   channel-group {{ .Others.ChannelGroup }} mode active
   {{else if eq .Function "P2P_Border1" -}}
