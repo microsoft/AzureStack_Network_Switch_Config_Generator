@@ -481,6 +481,7 @@ Ports:
   Type: Ethernet
   Description: TOR_BMC
   Function: TOR_BMC
+  UntagVlan: 99
   TagVlans:
   - 125
   MTU: 9216
@@ -492,6 +493,7 @@ Ports:
   Type: Ethernet
   Description: TOR_BMC
   Function: TOR_BMC
+  UntagVlan: 99
   TagVlans:
   - 125
   MTU: 9216

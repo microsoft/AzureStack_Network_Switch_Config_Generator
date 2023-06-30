@@ -72,6 +72,7 @@ type PortChannelType struct {
 }
 
 type L3IntfType struct {
+	Name         string `yaml:"Name"`
 	Function     string `yaml:"Function"`
 	Description  string `yaml:"Description"`
 	IPAddress    string `yaml:"IPAddress"`

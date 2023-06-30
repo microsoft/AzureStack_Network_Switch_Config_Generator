@@ -517,6 +517,7 @@ Vlans:
   Shutdown: false
 L3Interfaces:
   LOOPBACK0_TOR1:
+    Name: loopback0
     Function: Loopback0_Tor1
     Description: Loopback0_Tor1
     IPAddress: 100.71.19.21
@@ -525,6 +526,7 @@ L3Interfaces:
     MTU: 9216
     Shutdown: false
   P2P_BORDER1_TOR1:
+    Name: p2p_border
     Function: P2P_Border1_Tor1
     Description: P2P_Border1_Tor1
     IPAddress: 100.71.19.2
@@ -534,6 +536,7 @@ L3Interfaces:
     MTU: 9216
     Shutdown: false
   P2P_BORDER2_TOR1:
+    Name: p2p_border
     Function: P2P_Border2_Tor1
     Description: P2P_Border2_Tor1
     IPAddress: 100.71.19.10
@@ -543,6 +546,7 @@ L3Interfaces:
     MTU: 9216
     Shutdown: false
   P2P_IBGP:
+    Name: p2p_ibgp
     Function: P2P_iBGP
     Description: P2P_iBGP
     IPAddress: 100.71.19.17
@@ -1557,6 +1561,7 @@ Ports:
   Type: Ethernet
   Description: TOR_BMC
   Function: TOR_BMC
+  UntagVlan: 99
   TagVlans:
   - 125
   MTU: 9216

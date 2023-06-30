@@ -79,6 +79,7 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 				}
 				if len(l3IntfItem.IPAddress) != 0 {
 					l3IntfItem.Function = supernet.IPv4.Name
+					l3IntfItem.Name = strings.ToLower(supernet.GroupName)
 					l3IntfItem.Description = supernet.IPv4.Name
 					l3IntfItem.Cidr = supernet.IPv4.Cidr
 					l3IntfItem.Mtu = JUMBOMTU
