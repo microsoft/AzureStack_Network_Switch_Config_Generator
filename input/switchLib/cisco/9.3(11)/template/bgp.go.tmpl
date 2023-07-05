@@ -26,7 +26,6 @@ router bgp {{ .BGPAsn }}
       prefix-list {{.Name}} {{.Direction}}
       {{ end -}}
       maximum-prefix 12000 warning-only
-    {{ if .RemovePrivateAS }}remove-private-as{{ end -}}
     {{ if ne .NbrPassword "" }}password {{.NbrPassword}} {{ end -}}
     {{ if ne .UpdateSource "" }}update-source {{.UpdateSource}}{{ end }}
     {{ if ne .LocalAS "" }}local-as {{.LocalAS}}{{ end }}
