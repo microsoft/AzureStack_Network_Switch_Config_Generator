@@ -11,7 +11,6 @@ interface {{ .Port }}
 interface {{ .Type}} {{ .Port }}
   description {{ .Description }}
   no cdp enable
-  mtu {{ .Mtu }}
   {{if eq .Function "Unused" -}} 
   switchport
   switchport access vlan {{ .UntagVlan }}
@@ -62,7 +61,7 @@ interface {{ .Type}} {{ .Port }}
   {{end -}}
   spanning-tree port type network
   logging event port link-status
-  channel-group {{ .Others.ChannelGroup }} mode active
+  channel-group {{ .Others.ChannelGroup }}
   {{else if eq .Function "P2P_Border1" -}}
   no switchport
   no ip redirects
@@ -73,8 +72,9 @@ interface {{ .Type}} {{ .Port }}
   no ip redirects
   ip address {{ .IPAddress }}
   no ipv6 redirects
-  {{ end }}
-  {{- if .Shutdown }}shutdown{{ else }}no shutdown{{ end }}
+  {{ end -}}
+  mtu {{ .Mtu }}
+  {{ if .Shutdown }}shutdown{{ else }}no shutdown{{ end }}
   {{ end }}
 {{ end -}}
 {{ end -}}
