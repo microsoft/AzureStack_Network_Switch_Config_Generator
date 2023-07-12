@@ -16,6 +16,7 @@ interface {{ .Type}} {{ .Port }}
   switchport access vlan {{ .UntagVlan }}
   spanning-tree port type edge
   no logging event port link-status
+  mtu {{ .Mtu }}
   {{else if or (eq .Function "Compute") (eq .Function "HyperConverged") -}}
   switchport
   switchport mode trunk
@@ -28,6 +29,7 @@ interface {{ .Type}} {{ .Port }}
   spanning-tree port type edge trunk
   no logging event port link-status
   service-policy type qos input AZS_SERVICES no-stats
+  mtu {{ .Mtu }}
   {{else if eq .Function "Storage" -}}
   switchport
   switchport mode trunk
@@ -41,6 +43,7 @@ interface {{ .Type}} {{ .Port }}
   spanning-tree port type edge trunk
   no logging event port link-status
   service-policy type qos input AZS_SERVICES no-stats
+  mtu {{ .Mtu }}
   {{else if eq .Function "MLAG_Peer" -}}
   switchport
   switchport mode trunk
@@ -62,18 +65,20 @@ interface {{ .Type}} {{ .Port }}
   spanning-tree port type network
   logging event port link-status
   channel-group {{ .Others.ChannelGroup }}
+  mtu {{ .Mtu }}
   {{else if eq .Function "P2P_Border1" -}}
   no switchport
   no ip redirects
   ip address {{ .IPAddress }}
   no ipv6 redirects
+  mtu {{ .Mtu }}
   {{else if eq .Function "P2P_Border2" -}}
   no switchport
   no ip redirects
   ip address {{ .IPAddress }}
   no ipv6 redirects
-  {{ end -}}
   mtu {{ .Mtu }}
+  {{ end -}}
   {{ if .Shutdown }}shutdown{{ else }}no shutdown{{ end }}
   {{ end }}
 {{ end -}}
