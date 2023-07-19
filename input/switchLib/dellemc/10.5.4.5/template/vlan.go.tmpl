@@ -8,9 +8,10 @@ interface vlan{{.VlanID}}
 {{ end }}
 
 {{ define "interface_vlan"}}
-{{ $DHCPInfra := .GlobalSetting.DHCPInfra }}
 ! vlan.go.tmpl-interface_vlan
-{{- $SwitchType := .Switch.Type -}}
+{{ $SwitchType := .Switch.Type }}
+{{ $DHCPInfra := .GlobalSetting.DHCPInfra }}
+{{ $DHCPTenant := .GlobalSetting.DHCPTenant }}
 {{ range .Vlans -}}
 {{ if .IPAddress }} 
 interface vlan{{.VlanID}}
@@ -20,7 +21,11 @@ interface vlan{{.VlanID}}
   ip address {{ .IPAddress }}/{{ .Cidr }}
   {{ if eq .GroupName "Infrastructure" -}}
   {{ range $DHCPInfra -}}
-  ip dhcp relay address {{.}}
+  ip helper-address {{.}}
+  {{ end -}}
+  {{ else if eq .VlanID 401 -}}
+  {{ range $DHCPTenant -}}
+  ip helper-address {{.}}
   {{ end -}}
   {{ end -}}
   {{ if and (.VIPAddress) (ne $SwitchType "BMC") -}}
