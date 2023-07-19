@@ -1220,10 +1220,10 @@ Routing:
     BGPAsn: 65242
     RouterID: 100.71.85.21
     IPv4Network:
-    - 100.71.85.0/30
-    - 100.71.85.8/30
     - 100.71.85.16/30
     - 100.71.85.21/32
+    - 100.71.85.0/30
+    - 100.71.85.8/30
     - 100.71.85.64/26
     - 100.71.131.0/25
     - 100.69.176.0/24
@@ -1290,36 +1290,6 @@ Routing:
   - Name: ExternalPrefix
     Config:
     - Idx: 10
-      Action: deny
-      Description: Storage
-      Network: 10.71.1.0/24
-      Operation: le
-      Prefix: 32
-    - Idx: 15
-      Action: deny
-      Description: Storage
-      Network: 10.71.2.0/24
-      Operation: le
-      Prefix: 32
-    - Idx: 50
-      Action: deny
-      Description: Tenant
-      Network: 100.69.177.0/24
-      Operation: le
-      Prefix: 32
-    - Idx: 55
-      Action: deny
-      Description: Tenant
-      Network: 100.69.178.0/25
-      Operation: le
-      Prefix: 32
-    - Idx: 60
-      Action: deny
-      Description: Tenant
-      Network: 100.69.178.128/25
-      Operation: le
-      Prefix: 32
-    - Idx: 100
       Action: permit
       Description: Any
       Network: 0.0.0.0/0

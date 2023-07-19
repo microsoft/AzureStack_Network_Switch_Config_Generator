@@ -3,22 +3,22 @@ Switch:
   Make: DellEMC
   Model: N3248TE-ON
   Type: BMC
-  Hostname: RR1-S45-R16-3248bmc-12-1
+  Hostname: rr1-s46-r06-3248bmc-6-1
   ASN: 0
   Firmware: 10.5.4.5
 DeploymentPattern: Switched
 SwitchUplink:
 - Make: Cisco
-  Model: C3132Q-XL
+  Model: C9336C-FX2
   Type: Border1
-  Hostname: rr1-s45-r01-x32ssp-1a
-  ASN: 64831
+  Hostname: rr1-s46-r01-9336ssp-1a
+  ASN: 64846
   Firmware: ""
 - Make: Cisco
-  Model: C3132Q-XL
+  Model: C9336C-FX2
   Type: Border2
-  Hostname: rr1-s45-r01-x32ssp-1b
-  ASN: 64831
+  Hostname: rr1-s46-r01-9336ssp-1b
+  ASN: 64846
   Firmware: ""
 GlobalSetting:
   Username: $CREDENTIAL_PLACEHOLDER$
@@ -53,11 +53,11 @@ Vlans:
 - GroupName: BMC
   VlanName: BMC_Mgmt_125
   VlanID: 125
-  IPAddress: 100.71.4.253
+  IPAddress: 100.71.12.125
   Cidr: 26
-  Subnet: 100.71.4.192/26
+  Subnet: 100.71.12.64/26
   MTU: 9216
-  VIPAddress: 100.71.4.193
+  VIPAddress: 100.71.12.65
   Shutdown: false
 PortChannel:
   TOR_BMC:
@@ -505,5 +505,5 @@ Ports:
 Routing:
   Static:
   - Network: 0.0.0.0/0
-    NextHop: 100.71.4.193
+    NextHop: 100.71.12.65
     Name: GlobalDefaultRoute
