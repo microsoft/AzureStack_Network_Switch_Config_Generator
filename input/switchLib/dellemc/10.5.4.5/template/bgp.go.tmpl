@@ -4,7 +4,7 @@
 router bgp {{ .BGPAsn }}
   router-id {{ .RouterID }}
   bestpath as-path multipath-relax
-  maximum-paths 8
+  maximum-paths ebgp 8
   maximum-paths ibgp 8
   address-family ipv4 unicast
     {{ range .IPv4Network -}}  

@@ -17,8 +17,6 @@ ip ssh server cipher aes256-ctr aes192-ctr aes128-ctr
 ip ssh server mac hmac-sha1 hmac-sha2-256
 ip ssh server max-auth-tries 3
 no ip telnet server enable
-line vty
- ip access-class ssh-only
 {{ end }}
 
 {{ define "stig_login"}}

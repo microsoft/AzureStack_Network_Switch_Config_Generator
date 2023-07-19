@@ -8,15 +8,21 @@ interface vlan{{.VlanID}}
 {{ end }}
 
 {{ define "interface_vlan"}}
+{{ $DHCPInfra := .GlobalSetting.DHCPInfra }}
 ! vlan.go.tmpl-interface_vlan
 {{- $SwitchType := .Switch.Type -}}
 {{ range .Vlans -}}
-{{ if .Subnet }} 
+{{ if .IPAddress }} 
 interface vlan{{.VlanID}}
   description {{.VlanName}}
   {{if .Shutdown -}}shutdown{{ else }}no shutdown{{ end }}
   mtu {{.Mtu}}
   ip address {{ .IPAddress }}/{{ .Cidr }}
+  {{ if eq .GroupName "Infrastructure" -}}
+  {{ range $DHCPInfra -}}
+  ip dhcp relay address {{.}}
+  {{ end -}}
+  {{ end -}}
   {{ if and (.VIPAddress) (ne $SwitchType "BMC") -}}
   !
   vrrp-group {{.VirtualGroupID}}

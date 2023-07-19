@@ -40,7 +40,9 @@ func (o *OutputType) UpdatePortChannel(inputData InputData) {
 			PortChannelID: POID_P2P_IBGP,
 			Shutdown:      false,
 		}
-		portChannelMap[MLAG_PEER] = PO_MLAG_PEER
+		if !strings.Contains(o.Switch.Make, "Dell") {
+			portChannelMap[MLAG_PEER] = PO_MLAG_PEER
+		}
 		portChannelMap[P2P_IBGP] = PO_P2P_IBGP
 		portChannelMap[TOR_BMC] = PO_TOR_BMC
 
