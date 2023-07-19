@@ -1,6 +1,6 @@
 {{ define "set_ntp"}}
 ! settings.go.tmpl-set_ntp
-clock timezone UTC 0 0
+clock timezone standard-timezone America/Los_Angeles
 {{ range .TimeServer -}}
 ntp server {{.}}
 {{ end -}}

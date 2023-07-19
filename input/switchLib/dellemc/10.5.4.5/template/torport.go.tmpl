@@ -17,18 +17,29 @@ interface {{ .Type}} {{ .Port }}
   switchport access vlan {{ .UntagVlan }}
   spanning-tree bpduguard enable
   spanning-tree guard root
-  {{else if or (eq .Function "Compute") (eq .Function "Hyperconverged") -}}
+  {{else if (eq .Function "Hyperconverged") -}}
   no switchport
   switchport mode trunk
   switchport access vlan {{ .UntagVlan }}
   {{ range .TagVlans -}}
   switchport trunk allowed vlan {{ . }}
   {{end -}}
+  flowcontrol receive off
   priority-flow-control mode on
   service-policy input type network-qos AZS_SERVICES_pfc
   service-policy output type queuing AZS_SERVICES_ets
-  qos-map traffic-class AZS_SERVICES_Que
-  ets mode on
+  spanning-tree bpduguard enable
+  spanning-tree guard root
+  spanning-tree port type edge
+  {{else if (eq .Function "Compute") -}}
+  no switchport
+  switchport mode trunk
+  switchport access vlan {{ .UntagVlan }}
+  {{ range .TagVlans -}}
+  switchport trunk allowed vlan {{ . }}
+  {{end -}}
+  flowcontrol receive off
+  priority-flow-control mode on
   spanning-tree bpduguard enable
   spanning-tree guard root
   spanning-tree port type edge
@@ -39,11 +50,10 @@ interface {{ .Type}} {{ .Port }}
   {{ range .TagVlans -}}
   switchport trunk allowed vlan {{ . }}
   {{end -}}
+  flowcontrol receive off
   priority-flow-control mode on
   service-policy input type network-qos AZS_SERVICES_pfc
   service-policy output type queuing AZS_SERVICES_ets
-  qos-map traffic-class AZS_SERVICES_Que
-  ets mode on
   spanning-tree bpduguard enable
   spanning-tree guard root
   spanning-tree port type edge
@@ -54,14 +64,10 @@ interface {{ .Type}} {{ .Port }}
   priority-flow-control mode on
   service-policy input type network-qos AZS_SERVICES_pfc
   service-policy output type queuing AZS_SERVICES_ets
-  qos-map traffic-class AZS_SERVICES_Que
-  ets mode on
   {{else if eq .Function "P2P_IBGP" -}}
   priority-flow-control mode on
   service-policy input type network-qos AZS_SERVICES_pfc
   service-policy output type queuing AZS_SERVICES_ets
-  qos-map traffic-class AZS_SERVICES_Que
-  ets mode on
   channel-group {{ .Others.ChannelGroup }} mode active
   {{else if eq .Function "TOR_BMC" -}}
   channel-group {{ .Others.ChannelGroup }} mode active

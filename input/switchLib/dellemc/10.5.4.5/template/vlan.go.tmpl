@@ -9,14 +9,25 @@ interface vlan{{.VlanID}}
 
 {{ define "interface_vlan"}}
 ! vlan.go.tmpl-interface_vlan
-{{- $SwitchType := .Switch.Type -}}
+{{ $SwitchType := .Switch.Type }}
+{{ $DHCPInfra := .GlobalSetting.DHCPInfra }}
+{{ $DHCPTenant := .GlobalSetting.DHCPTenant }}
 {{ range .Vlans -}}
-{{ if .Subnet }} 
+{{ if .IPAddress }} 
 interface vlan{{.VlanID}}
   description {{.VlanName}}
   {{if .Shutdown -}}shutdown{{ else }}no shutdown{{ end }}
   mtu {{.Mtu}}
   ip address {{ .IPAddress }}/{{ .Cidr }}
+  {{ if eq .GroupName "Infrastructure" -}}
+  {{ range $DHCPInfra -}}
+  ip helper-address {{.}}
+  {{ end -}}
+  {{ else if eq .VlanID 401 -}}
+  {{ range $DHCPTenant -}}
+  ip helper-address {{.}}
+  {{ end -}}
+  {{ end -}}
   {{ if and (.VIPAddress) (ne $SwitchType "BMC") -}}
   !
   vrrp-group {{.VirtualGroupID}}
