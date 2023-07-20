@@ -4,7 +4,7 @@ clock timezone standard-timezone America/Los_Angeles
 {{ range .TimeServer -}}
 ntp server {{.}}
 {{ end -}}
-ntp source-interface {{.OOB}}
+ntp source {{.OOB}}
 {{ end }}
 
 {{ define "set_syslog"}}
@@ -34,9 +34,4 @@ no ip dhcp snooping
 ! stig.go.tmpl-stig_vrrp
 vrrp version 3
 vrrp delay reload 180
-{{ end }}
-
-{{ define "set_load_sharing"}}
-! settings.go.tmpl-set_load_sharing
-ip load-sharing address source-destination port source-destination
 {{ end }}

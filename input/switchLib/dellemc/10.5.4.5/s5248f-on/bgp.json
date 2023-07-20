@@ -46,7 +46,7 @@
         "Description": "MUX",
         "NeighborAsn": 0,
         "NeighborIPAddress": "HNVPA",
-        "UpdateSource": "Loopback0",
+        "UpdateSource": "loopback0",
         "LocalAS": "64512",
         "EBGPMultiHop": 3,
         "Shutdown": false

@@ -3,12 +3,12 @@
 {{ range . -}}
 {{ if eq .Type "mgmt" -}}
 interface {{ .Port }}
-  description use the BMCMgmt switch virtual interface
+  description "use the BMCMgmt switch virtual interface"
   no ip address
   shutdown
 {{ else -}}
 interface {{ .Type}} {{ .Port }}
-  description {{ .Description }}
+  description "{{ .Description }}"
   {{if .Shutdown }}shutdown{{ else }}no shutdown{{ end }}
   mtu {{ .Mtu }}
   flowcontrol receive off
