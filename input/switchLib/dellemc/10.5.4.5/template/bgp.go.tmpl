@@ -30,7 +30,6 @@ router bgp {{ .BGPAsn }}
     description {{ .Description }}
     remote-as {{ .NeighborAsn }}
     no shutdown
-    {{ if .RemovePrivateAS }}remove-private-as{{ else }}!{{ end }}
     {{ if ne .NbrPassword "" }}password {{.NbrPassword}}{{ else }}!{{ end }}
     {{ if ne .UpdateSource "" }}update-source {{.UpdateSource}}{{ else }}!{{ end }}
     {{ if ne .LocalAS "" }}local-as {{.LocalAS}}{{ else }}!{{ end }}
@@ -38,9 +37,12 @@ router bgp {{ .BGPAsn }}
     address-family ipv4 unicast
       activate
       sender-side-loop-detection
+      {{ if .PrefixList -}}
+      next-hop-self
       {{ range .PrefixList -}}
       distribute-list {{.Name}} {{.Direction}}
       {{ end }}
+      {{- end }}
   {{ end -}}
 !
 {{ if .RouteMap }}

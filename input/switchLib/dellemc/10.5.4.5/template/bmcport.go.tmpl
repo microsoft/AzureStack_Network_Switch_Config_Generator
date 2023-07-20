@@ -7,7 +7,7 @@ interface {{ .Port }}
   shutdown
 {{ else -}}
 interface {{ .Type}} {{ .Port }}
-  description {{ .Description }}
+  description "{{ .Description }}"
   {{ if eq .Function "Unused" -}} 
   switchport access vlan {{ .UntagVlan }}
   mtu {{ .Mtu }}

@@ -54,6 +54,7 @@ interface {{ .Type}} {{ .Port }}
   {{else if eq .Function "P2P_IBGP" -}}
   priority-flow-control mode on
   logging event port link-status
+  mtu {{ .Mtu }}
   channel-group {{ .Others.ChannelGroup }} mode active
   {{else if eq .Function "TOR_BMC" -}}
   switchport

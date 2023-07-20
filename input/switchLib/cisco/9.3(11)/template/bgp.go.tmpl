@@ -28,7 +28,6 @@ router bgp {{ .BGPAsn }}
       maximum-prefix 12000 warning-only
     {{ if ne .NbrPassword "" }}password {{.NbrPassword}} {{ end -}}
     {{ if ne .UpdateSource "" }}update-source {{.UpdateSource}}{{ end }}
-    {{ if ne .LocalAS "" }}local-as {{.LocalAS}}{{ end }}
     {{ if ne .EBGPMultiHop 0 }}ebgp-multihop {{.EBGPMultiHop}}{{ end }}
   {{ end -}}
 
