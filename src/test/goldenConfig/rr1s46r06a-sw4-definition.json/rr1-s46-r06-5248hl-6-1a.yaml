@@ -953,7 +953,7 @@ Ports:
   Type: ethernet
   Description: Switched-Storage
   Function: Storage
-  UntagVlan: 2
+  UntagVlan: 99
   TagVlans:
   - 711
   - 712
@@ -966,7 +966,7 @@ Ports:
   Type: ethernet
   Description: Switched-Storage
   Function: Storage
-  UntagVlan: 2
+  UntagVlan: 99
   TagVlans:
   - 711
   - 712
@@ -979,7 +979,7 @@ Ports:
   Type: ethernet
   Description: Switched-Storage
   Function: Storage
-  UntagVlan: 2
+  UntagVlan: 99
   TagVlans:
   - 711
   - 712
@@ -992,7 +992,7 @@ Ports:
   Type: ethernet
   Description: Switched-Storage
   Function: Storage
-  UntagVlan: 2
+  UntagVlan: 99
   TagVlans:
   - 711
   - 712
@@ -1005,7 +1005,7 @@ Ports:
   Type: ethernet
   Description: Switched-Storage
   Function: Storage
-  UntagVlan: 2
+  UntagVlan: 99
   TagVlans:
   - 711
   - 712
@@ -1018,7 +1018,7 @@ Ports:
   Type: ethernet
   Description: Switched-Storage
   Function: Storage
-  UntagVlan: 2
+  UntagVlan: 99
   TagVlans:
   - 711
   - 712
@@ -1031,7 +1031,7 @@ Ports:
   Type: ethernet
   Description: Switched-Storage
   Function: Storage
-  UntagVlan: 2
+  UntagVlan: 99
   TagVlans:
   - 711
   - 712
@@ -1044,7 +1044,7 @@ Ports:
   Type: ethernet
   Description: Switched-Storage
   Function: Storage
-  UntagVlan: 2
+  UntagVlan: 99
   TagVlans:
   - 711
   - 712
@@ -1057,7 +1057,7 @@ Ports:
   Type: ethernet
   Description: Switched-Storage
   Function: Storage
-  UntagVlan: 2
+  UntagVlan: 99
   TagVlans:
   - 711
   - 712
@@ -1070,7 +1070,7 @@ Ports:
   Type: ethernet
   Description: Switched-Storage
   Function: Storage
-  UntagVlan: 2
+  UntagVlan: 99
   TagVlans:
   - 711
   - 712
@@ -1083,7 +1083,7 @@ Ports:
   Type: ethernet
   Description: Switched-Storage
   Function: Storage
-  UntagVlan: 2
+  UntagVlan: 99
   TagVlans:
   - 711
   - 712
@@ -1096,7 +1096,7 @@ Ports:
   Type: ethernet
   Description: Switched-Storage
   Function: Storage
-  UntagVlan: 2
+  UntagVlan: 99
   TagVlans:
   - 711
   - 712
@@ -1109,7 +1109,7 @@ Ports:
   Type: ethernet
   Description: Switched-Storage
   Function: Storage
-  UntagVlan: 2
+  UntagVlan: 99
   TagVlans:
   - 711
   - 712
@@ -1122,7 +1122,7 @@ Ports:
   Type: ethernet
   Description: Switched-Storage
   Function: Storage
-  UntagVlan: 2
+  UntagVlan: 99
   TagVlans:
   - 711
   - 712
@@ -1470,10 +1470,10 @@ Routing:
     BGPAsn: 64556
     RouterID: 100.71.12.21
     IPv4Network:
+    - 100.71.12.21/32
     - 100.71.12.0/30
     - 100.71.12.8/30
     - 100.71.12.16/30
-    - 100.71.12.21/32
     - 100.71.12.64/26
     - 100.71.143.0/25
     - 100.68.148.0/24
@@ -1531,7 +1531,7 @@ Routing:
       NeighborAsn: 65018
       NeighborIPAddress: 100.71.143.0/25
       Shutdown: false
-      UpdateSource: Loopback0
+      UpdateSource: loopback0
       LocalAS: "64512"
       EBGPMultiHop: 3
   PrefixList:
