@@ -165,13 +165,7 @@ func (o *OutputType) UpdateTORSwitchPorts(VlanGroup map[string][]string) {
 			tmpPortObj.Function = COMPUTE
 		} else if strings.EqualFold(portItem.Function, STORAGE) && strings.EqualFold(o.DeploymentPattern, SWITCHED) {
 			// Switched Non Converged use Storage Port Assignment
-			if strings.EqualFold(o.Switch.Make, "Cisco") {
-				// Cisco NXOS Storage Native Vlan is dummy vlan 99
-				tmpPortObj.UntagVlan = NATIVE_VLANID
-			} else if strings.EqualFold(o.Switch.Make, "DellEMC") {
-				// DellEMC Storage Native Vlan is shutdonw and unused
-				tmpPortObj.UntagVlan = UNUSED_VLANID
-			}
+			tmpPortObj.UntagVlan = NATIVE_VLANID
 			tmpPortObj.TagVlans = STORAGE_VlanList
 			tmpPortObj.Description = fmt.Sprintf("%s-%s", o.DeploymentPattern, STORAGE)
 			tmpPortObj.Function = STORAGE
