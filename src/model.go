@@ -17,7 +17,8 @@ type InputData struct {
 		TimeServer   []string `yaml:"TimeServer"`
 		SyslogServer []string `yaml:"SyslogServer"`
 		DNSForwarder []string `yaml:"DNSForwarder"`
-	}
+	} `yaml:"Setting"`
+	WANSIM WANSIMType `yaml:"WANSIM,omitempty"`
 }
 
 type OutputType struct {
@@ -35,6 +36,7 @@ type OutputType struct {
 	Ports             []PortType                 `yaml:"Ports,omitempty"`
 	PortGroup         []PortGroupType            `yaml:"PortGroup,omitempty"`
 	Routing           RoutingType                `yaml:"Routing,omitempty"`
+	WANSIM            WANSIMType                 `yaml:"WANSIM,omitempty"`
 }
 
 type GlobalSettingType struct {
@@ -121,8 +123,9 @@ type Supernet struct {
 }
 
 type IPv4Unit struct {
-	Name string `yaml:"Name"`
-	IP   string `yaml:"IP"`
+	Name      string `yaml:"Name"`
+	IP        string `yaml:"IP,omitempty"`
+	IPNetwork string `yaml:"IPNetwork,omitempty"`
 }
 
 type PortJson struct {
@@ -226,4 +229,15 @@ type PortGroupType struct {
 	Mode      string `yaml:"Mode,omitempty"`
 	Type      string `yaml:"Type,omitempty"`
 	Idx       int    `yaml:"Idx,omitempty"`
+}
+
+type WANSIMType struct {
+	Hostname string     `yaml:"Hostname"`
+	VMIntfs  []IPv4Unit `yaml:"VMIntfs"`
+	BGP      struct {
+		ASN    int    `yaml:"ASN"`
+		NbrIP  string `yaml:"NbrIP"`
+		NbrASN int    `yaml:"NbrASN"`
+	} `yaml:"BGP"`
+	RerouteNetworks []string `yaml:"RerouteNetworks"`
 }

@@ -107,6 +107,7 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 			torOutput.UpdatePortChannel(inputData)
 			torOutput.ParseSwitchPort(frameworkFolder)
 			torOutput.ParseRouting(frameworkFolder, inputData)
+			torOutput.UpdateWANSIM(inputData)
 			torOutput.writeToYaml(outputFolder)
 			torOutput.parseTemplate(templateFolder, outputFolder)
 		}

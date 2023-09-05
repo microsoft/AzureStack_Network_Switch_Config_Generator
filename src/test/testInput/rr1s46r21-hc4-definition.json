@@ -1694,17 +1694,31 @@
       },
       "WANSIM": {
         "Hostname":"rr1-s46-r21-wansim",
-        "Loopback": {
-          "IPv4": "11.11.11.11",
-          "IPv4Network": "11.11.11.11/32"
-        },
+        "VMIntfs": [
+          {
+            "Name": "Loopback",
+            "IP": "11.11.11.11",
+            "IPNetwork": "11.11.11.11/32"
+          },
+          {
+            "Name": "GRE1",
+            "IP": "192.168.10.0",
+            "IPNetwork": "192.168.10.0/31"
+          },
+          {
+            "Name": "GRE2",
+            "IP": "192.168.10.2",
+            "IPNetwork": "192.168.10.2/31"
+          }
+        ],
         "BGP": {
           "ASN": 65003,
           "NbrIP": "10.0.0.9",
           "NbrASN": 65001
         },
         "RerouteNetworks": [
-          "TENANT"
+          "TENANT",
+          "L3FORWARD"
         ]
       }
     }
