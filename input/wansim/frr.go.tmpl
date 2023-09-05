@@ -1,0 +1,23 @@
+{{ define "frr"}}
+frr defaults traditional
+log syslog informational
+ip forwarding
+no ipv6 forwarding
+service integrated-vtysh-config
+!
+{{ range .RedirectNetworks -}}  
+ip route {{ . }} gre1
+ip route {{ . }} gre2
+{{ end -}}
+!
+router bgp {{ .BGP.ASN }}
+ bgp router-id {{ .Loopback.IPAddress }}
+ neighbor {{ .BGP.NbrIP }} remote-as {{ .BGP.NbrASN }}
+ !
+ address-family ipv4 unicast
+  network {{ .Loopback.Network }}
+  redistribute static
+ exit-address-family
+!
+line vty
+{{ end -}}

@@ -1691,6 +1691,21 @@
           "10.10.240.23",
           "10.10.240.24"
         ]
+      },
+      "WANSIM": {
+        "Hostname":"rr1-s46-r21-wansim",
+        "Loopback": {
+          "IPv4": "11.11.11.11",
+          "IPv4Network": "11.11.11.11/32"
+        },
+        "BGP": {
+          "ASN": 65003,
+          "NbrIP": "10.0.0.9",
+          "NbrASN": 65001
+        },
+        "RerouteNetworks": [
+          "TENANT"
+        ]
       }
     }
   }
