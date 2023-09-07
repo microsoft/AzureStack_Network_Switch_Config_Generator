@@ -1691,6 +1691,33 @@
           "10.10.240.23",
           "10.10.240.24"
         ]
+      },
+      "WANSIM": {
+        "Hostname":"rr1-s46-r21-wansim",
+        "LoopbackSubnet":"11.11.11.0/24",
+        "Loopback":{
+          "IP": "11.11.11.11",
+          "IPNetwork": "11.11.11.11/32"
+        },
+        "GRE1":{
+          "Name": "TOR1",
+          "IP": "192.168.10.0",
+          "IPNetwork": "192.168.10.0/31"
+        },
+        "GRE2":{
+          "Name": "TOR2",
+          "IP": "192.168.10.2",
+          "IPNetwork": "192.168.10.2/31"
+        },
+        "BGP": {
+          "ASN": 65003,
+          "NbrIP": "10.0.0.9",
+          "NbrASN": 65001
+        },
+        "RerouteNetworks": [
+          "TENANT",
+          "L3FORWARD"
+        ]
       }
     }
   }

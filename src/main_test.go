@@ -22,6 +22,7 @@ func TestMain(t *testing.T) {
 	}
 
 	switchLibFolder := "../input/switchLib"
+	wansimLibFolder := "../input/wansimLib"
 	testInputFolder := cwd + "/test/testInput/"
 	testOutputFolder := cwd + "/test/testOutput/"
 	testGoldenFolder := cwd + "/test/goldenConfig/"
@@ -42,7 +43,7 @@ func TestMain(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			testInputData := parseInputJson(testInputFolder + tc.inputTestFileName)
 			testDeviceTypeMap := testInputData.createDeviceTypeMap()
-			generateSwitchConfig(testInputData, switchLibFolder, testOutputFolder+tc.inputTestFileName, testDeviceTypeMap)
+			generateSwitchConfig(testInputData, switchLibFolder, wansimLibFolder, testOutputFolder+tc.inputTestFileName, testDeviceTypeMap)
 			outputFiles := getFilesInFolder(testOutputFolder + tc.inputTestFileName)
 			for _, file := range outputFiles {
 				if strings.Contains(file, YAMLExtension) {

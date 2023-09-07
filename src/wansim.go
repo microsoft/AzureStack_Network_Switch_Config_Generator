@@ -7,6 +7,7 @@ import (
 	"math"
 	"net"
 	"strconv"
+	"strings"
 )
 
 func (o *OutputType) UpdateWANSIM(inputData InputData) {
@@ -15,50 +16,45 @@ func (o *OutputType) UpdateWANSIM(inputData InputData) {
 	for _, rnetwork := range inputData.WANSIM.RerouteNetworks {
 		_, vlanSubnetList := o.getSubnetByVlanGroupName(rnetwork)
 		for _, subnet := range vlanSubnetList {
-			fmt.Println(subnet)
 			_, ipNet, err := net.ParseCIDR(subnet)
 			if err != nil {
 				fmt.Println(err)
 				return
 			}
 			maskSize, _ := ipNet.Mask.Size()
-			fmt.Println(GenSubnetsInNetwork(subnet, maskSize+1))
+			newSubnets, err := DividSubnetsByGivenMaskSize(subnet, maskSize+1)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			tmpReRouteNetwork = append(tmpReRouteNetwork, newSubnets...)
 		}
-		tmpReRouteNetwork = append(tmpReRouteNetwork, vlanSubnetList...)
-
 	}
 
 	o.WANSIM = inputData.WANSIM
+	o.UpdateWANSIMGRE(inputData)
 	o.WANSIM.RerouteNetworks = tmpReRouteNetwork
 }
 
-// func DividSubnet(subnetStr string) {
-// 	ip, ipNet, err := net.ParseCIDR(subnetStr)
-// 	if err != nil {
-// 		fmt.Println(err)
-// 		return
-// 	}
-
-// 	maskSize, _ := ipNet.Mask.Size()
-// 	newIPMask := net.CIDRMask(maskSize+1, 32)
-// 	newNetMask := net.IP(newIPMask)
-
-// 	firstSubnet := ip.Mask(newIPMask)
-// 	secondSubnet := net.IP(make([]byte, len(firstSubnet)))
-// 	copy(secondSubnet, firstSubnet)
-// 	for i := len(secondSubnet) - 1; i >= 0; i-- {
-// 		if secondSubnet[i] == 255 {
-// 			secondSubnet[i] = 0
-// 			continue
-// 		}
-// 		secondSubnet[i] += 255 - newNetMask[i]
-// 		break
-// 	}
-// 	fmt.Printf("First subnet: %v/%d \n", firstSubnet, maskSize+1)
-// 	fmt.Printf("Second subnet: %v/%d \n", secondSubnet, maskSize+1)
-// }
-
-func GenSubnetsInNetwork(netCIDR string, subnetMaskSize int) ([]string, error) {
+func (o *OutputType) UpdateWANSIMGRE(inputData InputData) {
+	// GRE Tunnel is established between WAN-SIM Loopback and TOR BMC VLAN IP
+	// Local IP
+	o.WANSIM.GRE1.LocalIP = o.WANSIM.Loopback.IP
+	o.WANSIM.GRE2.LocalIP = o.WANSIM.Loopback.IP
+	// Remote IP
+	for _, supernetItem := range inputData.Supernets {
+		if supernetItem.GroupName == BMC {
+			for _, assignItem := range supernetItem.IPv4.Assignment {
+				if strings.Contains(strings.ToUpper(assignItem.Name), strings.ToUpper(o.WANSIM.GRE1.Name)) {
+					o.WANSIM.GRE1.RemoteIP = assignItem.IP
+				} else if strings.Contains(strings.ToUpper(assignItem.Name), strings.ToUpper(o.WANSIM.GRE2.Name)) {
+					o.WANSIM.GRE2.RemoteIP = assignItem.IP
+				}
+			}
+		}
+	}
+}
+func DividSubnetsByGivenMaskSize(netCIDR string, subnetMaskSize int) ([]string, error) {
 	ip, ipNet, err := net.ParseCIDR(netCIDR)
 	if err != nil {
 		return nil, err

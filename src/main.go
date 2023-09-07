@@ -41,6 +41,7 @@ var (
 	Compute_NativeVlanID   int
 	ANY                    = "Any"
 	ANYNETWORK             = "0.0.0.0/0"
+	WANSIM                 = "wansim"
 
 	COMPUTE, STORAGE                         = "Compute", "Storage"
 	SWITCHED, SWITCHLESS, HYPERCONVERGED     = "Switched", "Switchless", "HyperConverged"
@@ -62,6 +63,7 @@ func main() {
 	inputJsonFile := flag.String("inputJsonFile", "../input/cisco_sample_input1.json", "File path of switch deploy input.json")
 	outputFolder := flag.String("outputFolder", "../output", "Folder path of switch configurations")
 	switchLibFolder := flag.String("switchLib", "../input/switchLib", "Folder path of switch frameworks and templates")
+	wansimLibFolder := flag.String("wansimLibFolder", "../input/wansimLib", "Folder path of WAN-SIM solution templates")
 	flag.StringVar(&Username, "username", "", "Username for switch configuration")
 	flag.StringVar(&Password, "password", "", "Password for switch configuration")
 	flag.Parse()
@@ -69,7 +71,7 @@ func main() {
 	inputData := parseInputJson(*inputJsonFile)
 	// Create device categrory map: Border, TOR, BMC, MUX based on Type
 	DeviceTypeMap = inputData.createDeviceTypeMap()
-	generateSwitchConfig(inputData, *switchLibFolder, *outputFolder, DeviceTypeMap)
+	generateSwitchConfig(inputData, *switchLibFolder, *wansimLibFolder, *outputFolder, DeviceTypeMap)
 }
 
 func (o *OutputType) parseFrameworkPath(switchLibFolder string) (string, string) {
@@ -90,7 +92,7 @@ func (o *OutputType) parseFrameworkPath(switchLibFolder string) (string, string)
 	return templateFolder, frameworkFolder
 }
 
-func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFolder string, DeviceTypeMap map[string][]SwitchType) {
+func generateSwitchConfig(inputData InputData, switchLibFolder, wansimLibFolder, outputFolder string, DeviceTypeMap map[string][]SwitchType) {
 	// TOR Switch
 	if len(DeviceTypeMap[TOR]) > 0 {
 		for _, torItem := range DeviceTypeMap[TOR] {
@@ -109,18 +111,19 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 			torOutput.ParseRouting(frameworkFolder, inputData)
 			torOutput.UpdateWANSIM(inputData)
 			torOutput.writeToYaml(outputFolder)
-			torOutput.parseTemplate(templateFolder, outputFolder)
+			torOutput.parseCombineTemplate(templateFolder, outputFolder, torItem.Hostname)
+			torOutput.parseEachTemplate(wansimLibFolder, outputFolder)
 		}
 	} else {
 		log.Fatalln(NO_Valid_TOR_Switch)
 	}
 	// BMC Switch
 	if len(DeviceTypeMap[BMC]) > 0 {
-		for _, bmdItem := range DeviceTypeMap[BMC] {
+		for _, bmcItem := range DeviceTypeMap[BMC] {
 			bmcOutput := &OutputType{}
 			// Add Build Version
 			bmcOutput.ToolBuildVersion = ToolBuildVersion
-			bmcOutput.UpdateSwitch(bmdItem, BMC, DeviceTypeMap)
+			bmcOutput.UpdateSwitch(bmcItem, BMC, DeviceTypeMap)
 			bmcOutput.UpdateVlanAndL3Intf(inputData)
 			bmcOutput.UpdateGlobalSetting(inputData)
 			templateFolder, frameworkFolder := bmcOutput.parseFrameworkPath(switchLibFolder)
@@ -128,7 +131,7 @@ func generateSwitchConfig(inputData InputData, switchLibFolder string, outputFol
 			bmcOutput.ParseSwitchPort(frameworkFolder)
 			bmcOutput.ParseRouting(frameworkFolder, inputData)
 			bmcOutput.writeToYaml(outputFolder)
-			bmcOutput.parseTemplate(templateFolder, outputFolder)
+			bmcOutput.parseCombineTemplate(templateFolder, outputFolder, bmcItem.Hostname)
 
 		}
 	}

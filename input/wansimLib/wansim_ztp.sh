@@ -1,6 +1,6 @@
 # Init
 sudo apt-get update
-sudo apt-get install -y net-tools frr iperf3 traceroute
+sudo apt-get install -y net-tools frr iperf traceroute lldpd
 HOSTNAME="WAN-SIM"
 sudo hostnamectl set-hostname $HOSTNAME
 # sudo nano /etc/hosts

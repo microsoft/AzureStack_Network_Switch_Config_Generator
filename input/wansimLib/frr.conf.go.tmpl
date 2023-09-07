@@ -1,23 +1,24 @@
-{{ define "frr"}}
+{{- define "frr.conf" -}}
 frr defaults traditional
 log syslog informational
+hostname {{ .Hostname }}
 ip forwarding
 no ipv6 forwarding
 service integrated-vtysh-config
 !
-{{ range .RedirectNetworks -}}  
+{{ range .RerouteNetworks -}}  
 ip route {{ . }} gre1
 ip route {{ . }} gre2
 {{ end -}}
 !
 router bgp {{ .BGP.ASN }}
- bgp router-id {{ .Loopback.IPAddress }}
+ bgp router-id {{ .Loopback.IP }}
  neighbor {{ .BGP.NbrIP }} remote-as {{ .BGP.NbrASN }}
  !
  address-family ipv4 unicast
-  network {{ .Loopback.Network }}
+  network {{ .Loopback.IPNetwork }}
   redistribute static
  exit-address-family
 !
 line vty
-{{ end -}}
+{{- end -}}

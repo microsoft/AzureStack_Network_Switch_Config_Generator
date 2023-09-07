@@ -123,9 +123,11 @@ type Supernet struct {
 }
 
 type IPv4Unit struct {
-	Name      string `yaml:"Name"`
+	Name      string `yaml:"Name,omitempty"`
 	IP        string `yaml:"IP,omitempty"`
 	IPNetwork string `yaml:"IPNetwork,omitempty"`
+	LocalIP   string `yaml:"LocalIP,omitempty"`
+	RemoteIP  string `yaml:"RemoteIP,omitempty"`
 }
 
 type PortJson struct {
@@ -232,8 +234,10 @@ type PortGroupType struct {
 }
 
 type WANSIMType struct {
-	Hostname string     `yaml:"Hostname"`
-	VMIntfs  []IPv4Unit `yaml:"VMIntfs"`
+	Hostname string   `yaml:"Hostname"`
+	Loopback IPv4Unit `yaml:"Loopback"`
+	GRE1     IPv4Unit `yaml:"GRE1"`
+	GRE2     IPv4Unit `yaml:"GRE2"`
 	BGP      struct {
 		ASN    int    `yaml:"ASN"`
 		NbrIP  string `yaml:"NbrIP"`
