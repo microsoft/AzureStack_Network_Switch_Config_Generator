@@ -126,8 +126,15 @@ type IPv4Unit struct {
 	Name      string `yaml:"Name,omitempty"`
 	IP        string `yaml:"IP,omitempty"`
 	IPNetwork string `yaml:"IPNetwork,omitempty"`
-	LocalIP   string `yaml:"LocalIP,omitempty"`
-	RemoteIP  string `yaml:"RemoteIP,omitempty"`
+}
+
+type IPv4TunnelType struct {
+	Name        string `yaml:"Name,omitempty"`
+	TunnelSrcIP string `yaml:"TunnelSrcIP,omitempty"`
+	TunnelDstIP string `yaml:"TunnelDstIP,omitempty"`
+	IPNetwork   string `yaml:"IPNetwork"`
+	LocalIP     string `yaml:"LocalIP"`
+	RemoteIP    string `yaml:"RemoteIP"`
 }
 
 type PortJson struct {
@@ -182,16 +189,19 @@ type BGPType struct {
 }
 
 type IPv4NeighborType struct {
-	SwitchRelation    string `yaml:"SwitchRelation"`
+	SwitchRelation    string `yaml:"SwitchRelation,omitempty"`
 	Description       string `yaml:"Description"`
 	NeighborAsn       int    `yaml:"NeighborAsn"`
 	NeighborIPAddress string `yaml:"NeighborIPAddress"`
+	EbgpMultiHop      int    `yaml:"EbgpMultiHop,omitempty"`
 	PrefixList        []struct {
 		Name      string `yaml:"Name"`
 		Direction string `yaml:"Direction"`
 	} `yaml:"PrefixList,omitempty"`
+	RouteMapIn      string `yaml:"RouteMapIn,omitempty"`
+	RouteMapOut     string `yaml:"RouteMapOut,omitempty"`
 	RemovePrivateAS bool   `yaml:"RemovePrivateAS,omitempty"`
-	Shutdown        bool   `yaml:"Shutdown"`
+	Shutdown        bool   `yaml:"Shutdown,omitempty"`
 	NbrPassword     string `yaml:"NbrPassword,omitempty"`
 	UpdateSource    string `yaml:"UpdateSource,omitempty"`
 	LocalAS         string `yaml:"LocalAS,omitempty"`
@@ -234,14 +244,13 @@ type PortGroupType struct {
 }
 
 type WANSIMType struct {
-	Hostname string   `yaml:"Hostname"`
-	Loopback IPv4Unit `yaml:"Loopback"`
-	GRE1     IPv4Unit `yaml:"GRE1"`
-	GRE2     IPv4Unit `yaml:"GRE2"`
+	Hostname string         `yaml:"Hostname"`
+	Loopback IPv4Unit       `yaml:"Loopback"`
+	GRE1     IPv4TunnelType `yaml:"GRE1"`
+	GRE2     IPv4TunnelType `yaml:"GRE2"`
 	BGP      struct {
-		ASN    int    `yaml:"ASN"`
-		NbrIP  string `yaml:"NbrIP"`
-		NbrASN int    `yaml:"NbrASN"`
+		LocalASN int                `yaml:"LocalASN"`
+		IPv4Nbr  []IPv4NeighborType `yaml:"IPv4Nbr"`
 	} `yaml:"BGP"`
 	RerouteNetworks []string `yaml:"RerouteNetworks"`
 }

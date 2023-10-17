@@ -1,0 +1,9 @@
+{{ define "wansim_gre"}}
+{{ range . -}}
+{{ if eq .Name "loopback0" }}
+interface {{.Name}}
+  description {{.Description}}
+  ip address {{.Subnet}}
+{{ end -}}
+{{ end -}}
+{{ end -}}

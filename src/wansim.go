@@ -10,6 +10,14 @@ import (
 	"strings"
 )
 
+var (
+	PrefixList_DefaultRoute = "PL-DEFAULT"
+	PrefixList_AllRoute     = "PL-ALL"
+	RouteMap_Default_In     = "RM-DEFAULT-IN"
+	RouteMap_Default_Out    = "RM-DEFAULT-OUT"
+	RouteMap_NoRoute_IN     = "RM-NO-ROUTE-IN"
+)
+
 func (o *OutputType) UpdateWANSIM(inputData InputData) {
 	tmpReRouteNetwork := []string{}
 
@@ -34,26 +42,61 @@ func (o *OutputType) UpdateWANSIM(inputData InputData) {
 	o.WANSIM = inputData.WANSIM
 	o.UpdateWANSIMGRE(inputData)
 	o.WANSIM.RerouteNetworks = tmpReRouteNetwork
+	o.UpdateWANSIMBGP()
 }
 
 func (o *OutputType) UpdateWANSIMGRE(inputData InputData) {
 	// GRE Tunnel is established between WAN-SIM Loopback and TOR BMC VLAN IP
 	// Local IP
-	o.WANSIM.GRE1.LocalIP = o.WANSIM.Loopback.IP
-	o.WANSIM.GRE2.LocalIP = o.WANSIM.Loopback.IP
+	o.WANSIM.GRE1.TunnelSrcIP = o.WANSIM.Loopback.IP
+	o.WANSIM.GRE2.TunnelSrcIP = o.WANSIM.Loopback.IP
 	// Remote IP
 	for _, supernetItem := range inputData.Supernets {
 		if supernetItem.GroupName == BMC {
 			for _, assignItem := range supernetItem.IPv4.Assignment {
 				if strings.Contains(strings.ToUpper(assignItem.Name), strings.ToUpper(o.WANSIM.GRE1.Name)) {
-					o.WANSIM.GRE1.RemoteIP = assignItem.IP
+					o.WANSIM.GRE1.TunnelDstIP = assignItem.IP
 				} else if strings.Contains(strings.ToUpper(assignItem.Name), strings.ToUpper(o.WANSIM.GRE2.Name)) {
-					o.WANSIM.GRE2.RemoteIP = assignItem.IP
+					o.WANSIM.GRE2.TunnelDstIP = assignItem.IP
 				}
 			}
 		}
 	}
 }
+
+func (o *OutputType) UpdateWANSIMBGP() {
+	// Update Staick Route Map for Uplink Nbr
+	tmpIPv4Nbr := []IPv4NeighborType{}
+	for _, nbrObj := range o.WANSIM.BGP.IPv4Nbr {
+		tmpNbrObj := nbrObj
+		tmpNbrObj.RouteMapIn = RouteMap_Default_In
+		tmpIPv4Nbr = append(tmpIPv4Nbr, tmpNbrObj)
+	}
+	// Update GRE1 and GRE2 in BGP Section
+	RemoteRackASN := o.Routing.BGP.BGPAsn
+	// Add GRE1
+	tmpIPv4Nbr = append(tmpIPv4Nbr, IPv4NeighborType{
+		NeighborAsn:       RemoteRackASN,
+		NeighborIPAddress: o.WANSIM.GRE1.RemoteIP,
+		Description:       "To_TOR1",
+		EbgpMultiHop:      8,
+		UpdateSource:      "gre1",
+		RouteMapIn:        RouteMap_NoRoute_IN,
+		RouteMapOut:       RouteMap_Default_Out,
+	})
+	// Add GRE2
+	tmpIPv4Nbr = append(tmpIPv4Nbr, IPv4NeighborType{
+		NeighborAsn:       RemoteRackASN,
+		NeighborIPAddress: o.WANSIM.GRE2.RemoteIP,
+		Description:       "To_TOR2",
+		EbgpMultiHop:      8,
+		UpdateSource:      "gre2",
+		RouteMapIn:        RouteMap_NoRoute_IN,
+		RouteMapOut:       RouteMap_Default_Out,
+	})
+	o.WANSIM.BGP.IPv4Nbr = tmpIPv4Nbr
+}
+
 func DividSubnetsByGivenMaskSize(netCIDR string, subnetMaskSize int) ([]string, error) {
 	ip, ipNet, err := net.ParseCIDR(netCIDR)
 	if err != nil {

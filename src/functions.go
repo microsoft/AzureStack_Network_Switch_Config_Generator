@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"math/rand"
+	"net"
 	"os"
 	"strings"
 )
@@ -77,4 +78,37 @@ func createFolder(folderPath string) {
 			log.Fatal(err)
 		}
 	}
+}
+
+func subnetToIPMask(subnet string) (string, int) {
+	ip, ipnet, err := net.ParseCIDR(subnet)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	mask, _ := ipnet.Mask.Size()
+	return ip.String(), mask
+}
+
+func subnetToIPRange(subnet string) (string, string, string, string, int) {
+	ip, ipnet, err := net.ParseCIDR(subnet)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	mask, _ := ipnet.Mask.Size()
+	firstIP := ip.Mask(ipnet.Mask)
+	lastIP := net.IP(make([]byte, 4))
+	for i := 0; i < 4; i++ {
+		lastIP[i] = firstIP[i] | ^ipnet.Mask[i]
+	}
+	ones, bits := ipnet.Mask.Size()
+	availableIPs := (1 << uint(bits-ones)) - 2
+	firstHost := net.IP(make([]byte, 4))
+	copy(firstHost, firstIP)
+	lastHost := net.IP(make([]byte, 4))
+	copy(lastHost, lastIP)
+	if availableIPs > 0 {
+		firstHost[3]++
+		lastHost[3]--
+	}
+	return firstIP.String(), lastIP.String(), firstHost.String(), lastHost.String(), mask
 }

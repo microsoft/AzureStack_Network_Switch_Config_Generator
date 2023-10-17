@@ -6,21 +6,21 @@ network:
     ethernets:
         eth0:
             dhcp4: true
-            mtu: 9216
+            mtu: 9000
         lo:
             addresses: [ "127.0.0.1/8", "::1/128", "{{.Loopback.IPNetwork}}" ]
 
     tunnels:
         gre1:
             mode: gre
-            local: {{.Loopback.IP}}
-            remote: {{.GRE1.IP}}
-            addresses: [ "{{.Loopback.IPNetwork}}" ]
-            mtu: 9000
+            local: {{.GRE1.TunnelSrcIP}}
+            remote: {{.GRE1.TunnelDstIP}}
+            addresses: [ "{{.GRE1.IPNetwork}}" ]
+            mtu: 8000
         gre2:
             mode: gre
-            local: {{.Loopback.IP}}
-            remote: {{.GRE2.IP}}
-            addresses: [ "{{.Loopback.IPNetwork}}" ]
-            mtu: 9000
+            local: {{.GRE2.TunnelSrcIP}}
+            remote: {{.GRE2.TunnelDstIP}}
+            addresses: [ "{{.GRE2.IPNetwork}}" ]
+            mtu: 8000
 {{- end -}}

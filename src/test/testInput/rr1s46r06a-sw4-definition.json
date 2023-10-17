@@ -117,7 +117,7 @@
           "Firmware": null
         }
       ],
-      "DeploymentPattern": "Switched",
+      "DeploymentPattern": "HyperConverged",
       "SwitchUplink": "BGP",
       "HostConnectivity": "BGP",
       "Supernets": [
@@ -1694,25 +1694,37 @@
       },
       "WANSIM": {
         "Hostname":"rr1-s46-r21-wansim",
-        "LoopbackSubnet":"11.11.11.0/24",
+        "LoopbackSubnet":"10.10.32.128/26",
         "Loopback":{
-          "IP": "11.11.11.11",
-          "IPNetwork": "11.11.11.11/32"
+          "IP": "10.10.32.129",
+          "IPNetwork": "10.10.32.129/32"
         },
         "GRE1":{
           "Name": "TOR1",
-          "IP": "192.168.10.0",
-          "IPNetwork": "192.168.10.0/31"
+          "IP": "2.1.1.0",
+          "IPNetwork": "2.1.1.0/31"
         },
         "GRE2":{
           "Name": "TOR2",
-          "IP": "192.168.10.2",
-          "IPNetwork": "192.168.10.2/31"
+          "IP": "2.1.1.2",
+          "IPNetwork": "2.1.1.2/31"
         },
         "BGP": {
-          "ASN": 65003,
-          "NbrIP": "10.0.0.9",
-          "NbrASN": 65001
+          "LocalASN": 65003,
+          "IPv4Nbr": [
+            {
+              "NeighborAsn": 65001,
+              "NeighborIPAddress": "10.10.36.2",
+              "Description": "To_Uplink1",
+              "EbgpMultiHop":8
+            },
+            {
+              "NeighborAsn": 65001,
+              "NeighborIPAddress": "10.10.36.3",
+              "Description": "To_Uplink2",
+              "EbgpMultiHop":8
+            }
+          ]
         },
         "RerouteNetworks": [
           "TENANT",

@@ -6,7 +6,7 @@ Switch:
   Hostname: rr1-s46-r06-3248bmc-6-1
   ASN: 0
   Firmware: 10.5.4.5
-DeploymentPattern: Switched
+DeploymentPattern: HyperConverged
 SwitchUplink:
 - Make: Cisco
   Model: C9336C-FX2
