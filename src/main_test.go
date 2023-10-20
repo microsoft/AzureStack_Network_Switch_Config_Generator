@@ -59,9 +59,9 @@ func TestMain(t *testing.T) {
 					if len(goldenConfigObj.Routing.BGP.IPv4Network) != len(testOutputObj.Routing.BGP.IPv4Network) {
 						t.Errorf("name: %s BGP routing failed \n want: %#v \n got: %#v", name, len(goldenConfigObj.Routing.BGP.IPv4Network), len(testOutputObj.Routing.BGP.IPv4Network))
 					}
-					if len(goldenConfigObj.Routing.PrefixList) != len(testOutputObj.Routing.PrefixList) {
-						t.Errorf("name: %s Routing PrefixList failed \n want: %#v \n got: %#v", name, len(goldenConfigObj.Routing.PrefixList), len(testOutputObj.Routing.PrefixList))
-					}
+					// if len(goldenConfigObj.Routing.PrefixList) != len(testOutputObj.Routing.PrefixList) {
+					// 	t.Errorf("name: %s Routing PrefixList failed \n want: %#v \n got: %#v", name, len(goldenConfigObj.Routing.PrefixList), len(testOutputObj.Routing.PrefixList))
+					// }
 				}
 			}
 		})

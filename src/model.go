@@ -126,6 +126,7 @@ type IPv4Unit struct {
 	Name      string `yaml:"Name,omitempty"`
 	IP        string `yaml:"IP,omitempty"`
 	IPNetwork string `yaml:"IPNetwork,omitempty"`
+	Subnet    string `yaml:"Subnet,omitempty"`
 }
 
 type IPv4TunnelType struct {
@@ -194,18 +195,16 @@ type IPv4NeighborType struct {
 	NeighborAsn       int    `yaml:"NeighborAsn"`
 	NeighborIPAddress string `yaml:"NeighborIPAddress"`
 	EbgpMultiHop      int    `yaml:"EbgpMultiHop,omitempty"`
-	PrefixList        []struct {
-		Name      string `yaml:"Name"`
-		Direction string `yaml:"Direction"`
-	} `yaml:"PrefixList,omitempty"`
-	RouteMapIn      string `yaml:"RouteMapIn,omitempty"`
-	RouteMapOut     string `yaml:"RouteMapOut,omitempty"`
-	RemovePrivateAS bool   `yaml:"RemovePrivateAS,omitempty"`
-	Shutdown        bool   `yaml:"Shutdown,omitempty"`
-	NbrPassword     string `yaml:"NbrPassword,omitempty"`
-	UpdateSource    string `yaml:"UpdateSource,omitempty"`
-	LocalAS         string `yaml:"LocalAS,omitempty"`
-	EBGPMultiHop    int    `yaml:"EBGPMultiHop,omitempty"`
+	PrefixListIn      string `yaml:"PrefixListIn,omitempty"`
+	PrefixListOut     string `yaml:"PrefixListOut,omitempty"`
+	RouteMapIn        string `yaml:"RouteMapIn,omitempty"`
+	RouteMapOut       string `yaml:"RouteMapOut,omitempty"`
+	RemovePrivateAS   bool   `yaml:"RemovePrivateAS,omitempty"`
+	Shutdown          bool   `yaml:"Shutdown,omitempty"`
+	NbrPassword       string `yaml:"NbrPassword,omitempty"`
+	UpdateSource      string `yaml:"UpdateSource,omitempty"`
+	LocalAS           string `yaml:"LocalAS,omitempty"`
+	EBGPMultiHop      int    `yaml:"EBGPMultiHop,omitempty"`
 }
 
 type StaticType struct {

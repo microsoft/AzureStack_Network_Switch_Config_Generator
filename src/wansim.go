@@ -95,6 +95,9 @@ func (o *OutputType) UpdateWANSIMBGP() {
 		RouteMapOut:       RouteMap_Default_Out,
 	})
 	o.WANSIM.BGP.IPv4Nbr = tmpIPv4Nbr
+
+	// Update TOR Switch Configuration with GRE
+
 }
 
 func DividSubnetsByGivenMaskSize(netCIDR string, subnetMaskSize int) ([]string, error) {

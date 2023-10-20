@@ -50,7 +50,7 @@
 {{ template "set_syslog" .GlobalSetting -}}
 {{ template "set_load_sharing" -}}
 {{ template "set_icmp_errors" .GlobalSetting -}}
-{{if .Routing.PrefixList}}{{ template "prefixlist" .Routing.PrefixList -}} {{ end -}}
+{{ template "prefixlist" . -}}
 {{if ne .Routing.BGP.BGPAsn 0 }}{{ template "bgp" .Routing.BGP -}}{{ end -}}
 {{if .Routing.Static}}{{ template "static" .Routing.Static -}} {{ end -}}
 {{- /* {{ template "define_vlan" .Vlans -}}

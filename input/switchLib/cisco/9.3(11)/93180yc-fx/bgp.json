@@ -1,96 +1,69 @@
 {
-    "BGP": {
-      "BGPAsn": 0,
-      "RouterID": "Loopback0",
-      "IPv4Network": [
-        "P2P",
-        "Loopback",
-        "BMC",
-        "HNVPA",
-        "Infrastructure",
-        "Tenant",
-        "L3Forward"
-      ],
-      "IPv4Neighbor": [
-        {
-          "SwitchRelation": "SwitchUplink",
-          "Description": "P2P_Border",
-          "NeighborAsn": 0,
-          "NeighborIPAddress": "P2P_Border",
-          "PrefixList": [
-            {
-              "Name": "ExternalPrefix",
-              "Direction": "in"
-            },
-            {
-              "Name": "ExternalPrefix",
-              "Direction": "out"
-            }
-          ],
-          "RemovePrivateAS": true,
-          "Shutdown": false
-        },
-        {
-          "SwitchRelation": "SwitchPeer",
-          "Description": "P2P_IBGP",
-          "NbrPassword": "PASSWORD",
-          "NeighborAsn": 0,
-          "NeighborIPAddress": "P2P_IBGP",
-          "PrefixList": [],
-          "Shutdown": false
-        },
-        {
-          "SwitchRelation": "SwitchDownlink",
-          "Description": "MUX",
-          "NeighborAsn": 0,
-          "NeighborIPAddress": "HNVPA",
-          "PrefixList": [
-            {
-              "Name": "DefaultRoute",
-              "Direction": "out"
-            }
-          ],
-          "UpdateSource": "Loopback0",
-          "LocalAS": "64512",
-          "EBGPMultiHop": 3,
-          "Shutdown": false
-        }
-      ]
-    },
-    "PrefixList": [
+  "BGP": {
+    "BGPAsn": 0,
+    "RouterID": "Loopback0",
+    "IPv4Network": [
+      "P2P",
+      "Loopback",
+      "BMC",
+      "HNVPA",
+      "Infrastructure",
+      "Tenant",
+      "L3Forward"
+    ],
+    "IPv4Neighbor": [
       {
-        "Name": "ExternalPrefix",
-        "Config": [
-          {
-            "Idx": 10,
-            "Action": "permit",
-            "Description":"Any",
-            "Network": "Any",
-            "Operation": "le",
-            "Prefix": 32
-          }
-        ]
+        "SwitchRelation": "SwitchUplink",
+        "Description": "P2P_Border",
+        "NeighborAsn": 0,
+        "NeighborIPAddress": "P2P_Border",
+        "PrefixListIn": "FROM-BORDER",
+        "PrefixListOut": "TO-BORDER",
+        "RemovePrivateAS": true,
+        "Shutdown": false
       },
       {
-        "Name": "DefaultRoute",
-        "Config": [
-          {
-            "Idx": 10,
-            "Action": "permit",
-            "Description":"Any",
-            "Network": "Any",
-            "Operation": "",
-            "Prefix": 0
-          },
-          {
-            "Idx": 50,
-            "Action": "deny",
-            "Description":"Any",
-            "Network": "Any",
-            "Operation": "le",
-            "Prefix": 32
-          }
-        ]
+        "SwitchRelation": "SwitchPeer",
+        "Description": "P2P_IBGP",
+        "NbrPassword": "PASSWORD",
+        "NeighborAsn": 0,
+        "NeighborIPAddress": "P2P_IBGP",
+        "Shutdown": false
+      },
+      {
+        "SwitchRelation": "SwitchDownlink",
+        "Description": "MUX",
+        "NeighborAsn": 0,
+        "NeighborIPAddress": "HNVPA",
+        "PrefixListOut": "DefaultRoute",
+        "UpdateSource": "Loopback0",
+        "LocalAS": "64512",
+        "EBGPMultiHop": 3,
+        "Shutdown": false
       }
     ]
-  }
+  },
+  "PrefixList": [
+    {
+      "Name": "DefaultRoute",
+      "Config": [
+        {
+          "Idx": 10,
+          "Action": "permit",
+          "Description": "Any",
+          "Network": "Any",
+          "Operation": "",
+          "Prefix": 0
+        },
+        {
+          "Idx": 50,
+          "Action": "deny",
+          "Description": "Any",
+          "Network": "Any",
+          "Operation": "le",
+          "Prefix": 32
+        }
+      ]
+    }
+  ]
+}
