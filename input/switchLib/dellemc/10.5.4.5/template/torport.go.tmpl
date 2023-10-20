@@ -17,7 +17,7 @@ interface {{ .Type}} {{ .Port }}
   switchport access vlan {{ .UntagVlan }}
   spanning-tree bpduguard enable
   spanning-tree guard root
-  {{else if (eq .Function "Hyperconverged") -}}
+  {{else if (eq .Function "HyperConverged") -}}
   no switchport
   switchport mode trunk
   switchport access vlan {{ .UntagVlan }}

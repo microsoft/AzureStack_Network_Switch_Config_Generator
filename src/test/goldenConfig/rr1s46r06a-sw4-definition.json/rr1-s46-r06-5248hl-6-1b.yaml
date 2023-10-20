@@ -6,7 +6,7 @@ Switch:
   Hostname: rr1-s46-r06-5248hl-6-1b
   ASN: 64556
   Firmware: 10.5.4.5
-DeploymentPattern: Switched
+DeploymentPattern: HyperConverged
 SwitchPeer:
 - Make: DellEMC
   Model: S5248F-ON
@@ -375,8 +375,8 @@ Ports:
 - Port: 1/1/1
   Idx: 1
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -400,6 +400,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -407,8 +409,8 @@ Ports:
 - Port: 1/1/2
   Idx: 2
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -432,6 +434,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -439,8 +443,8 @@ Ports:
 - Port: 1/1/3
   Idx: 3
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -464,6 +468,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -471,8 +477,8 @@ Ports:
 - Port: 1/1/4
   Idx: 4
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -496,6 +502,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -503,8 +511,8 @@ Ports:
 - Port: 1/1/5
   Idx: 5
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -528,6 +536,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -535,8 +545,8 @@ Ports:
 - Port: 1/1/6
   Idx: 6
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -560,6 +570,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -567,8 +579,8 @@ Ports:
 - Port: 1/1/7
   Idx: 7
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -592,6 +604,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -599,8 +613,8 @@ Ports:
 - Port: 1/1/8
   Idx: 8
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -624,6 +638,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -631,8 +647,8 @@ Ports:
 - Port: 1/1/9
   Idx: 9
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -656,6 +672,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -663,8 +681,8 @@ Ports:
 - Port: 1/1/10
   Idx: 10
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -688,6 +706,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -695,8 +715,8 @@ Ports:
 - Port: 1/1/11
   Idx: 11
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -720,6 +740,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -727,8 +749,8 @@ Ports:
 - Port: 1/1/12
   Idx: 12
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -752,6 +774,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -759,8 +783,8 @@ Ports:
 - Port: 1/1/13
   Idx: 13
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -784,6 +808,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -791,8 +817,8 @@ Ports:
 - Port: 1/1/14
   Idx: 14
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -816,6 +842,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -823,8 +851,8 @@ Ports:
 - Port: 1/1/15
   Idx: 15
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -848,6 +876,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -855,8 +885,8 @@ Ports:
 - Port: 1/1/16
   Idx: 16
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -880,6 +910,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -887,8 +919,8 @@ Ports:
 - Port: 1/1/17
   Idx: 17
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -912,6 +944,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -919,8 +953,8 @@ Ports:
 - Port: 1/1/18
   Idx: 18
   Type: ethernet
-  Description: Switched-Compute
-  Function: Compute
+  Description: HyperConverged
+  Function: HyperConverged
   UntagVlan: 7
   TagVlans:
   - 6
@@ -944,6 +978,8 @@ Ports:
   - 514
   - 515
   - 516
+  - 711
+  - 712
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -951,183 +987,141 @@ Ports:
 - Port: 1/1/19
   Idx: 19
   Type: ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/5
 - Port: 1/1/20
   Idx: 20
   Type: ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/5
 - Port: 1/1/21
   Idx: 21
   Type: ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/6
 - Port: 1/1/22
   Idx: 22
   Type: ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/6
 - Port: 1/1/23
   Idx: 23
   Type: ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/6
 - Port: 1/1/24
   Idx: 24
   Type: ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/6
 - Port: 1/1/25
   Idx: 25
   Type: ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/7
 - Port: 1/1/26
   Idx: 26
   Type: ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/7
 - Port: 1/1/27
   Idx: 27
   Type: ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/7
 - Port: 1/1/28
   Idx: 28
   Type: ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/7
 - Port: 1/1/29
   Idx: 29
   Type: ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/8
 - Port: 1/1/30
   Idx: 30
   Type: ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/8
 - Port: 1/1/31
   Idx: 31
   Type: ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/8
 - Port: 1/1/32
   Idx: 32
   Type: ethernet
-  Description: Switched-Storage
-  Function: Storage
-  UntagVlan: 99
-  TagVlans:
-  - 711
-  - 712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/8
 - Port: 1/1/33
