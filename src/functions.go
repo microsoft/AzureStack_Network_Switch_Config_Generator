@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"net"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -111,4 +112,41 @@ func subnetToIPRange(subnet string) (string, string, string, string, int) {
 		lastHost[3]--
 	}
 	return firstIP.String(), lastIP.String(), firstHost.String(), lastHost.String(), mask
+}
+
+// optimizeArray takes an array of integers and returns a string in the format "1-4,6,8-10,100"
+// // Example usage
+// arr := []int{1, 2, 3, 4, 6, 8, 9, 10, 100}
+// result := optimizeArray(arr)
+// fmt.Println(result) // Output: "1-4,6,8-10,100"
+
+func optimizeArray(arr []int) string {
+	var result strings.Builder
+	start := arr[0]
+	end := arr[0]
+
+	// Iterate over the array and keep track of the start and end of each range of consecutive numbers
+	for i := 1; i < len(arr); i++ {
+		if arr[i] == end+1 {
+			end = arr[i]
+		} else {
+			// If a gap is encountered, add the current range to the result string and start a new range
+			if start == end {
+				result.WriteString(strconv.Itoa(start) + ",")
+			} else {
+				result.WriteString(strconv.Itoa(start) + "-" + strconv.Itoa(end) + ",")
+			}
+			start = arr[i]
+			end = arr[i]
+		}
+	}
+
+	// Add the last range to the result string
+	if start == end {
+		result.WriteString(strconv.Itoa(start))
+	} else {
+		result.WriteString(strconv.Itoa(start) + "-" + strconv.Itoa(end))
+	}
+
+	return result.String()
 }
