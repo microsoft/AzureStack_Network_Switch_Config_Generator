@@ -476,8 +476,9 @@ Ports:
   Description: TOR_BMC
   Function: TOR_BMC
   UntagVlan: 99
-  TagVlans:
+  TagVlanList:
   - 125
+  TagVlanString: "125"
   MTU: 9216
   Shutdown: false
   Others:
@@ -488,8 +489,9 @@ Ports:
   Description: TOR_BMC
   Function: TOR_BMC
   UntagVlan: 99
-  TagVlans:
+  TagVlanList:
   - 125
+  TagVlanString: "125"
   MTU: 9216
   Shutdown: false
   Others:

@@ -2,7 +2,7 @@
 {{- /* BMC Switch */ -}}
 {{- if eq .Switch.Type "BMC" -}}
 {{ template "hostname" . -}}
-{{if .Routing.PrefixList}}{{ template "prefixlist" .Routing.PrefixList -}} {{ end -}}
+{{if .Routing.PrefixList}}{{ template "prefixlist" . -}} {{ end -}}
 {{ template "stig_user" .GlobalSetting -}}
 {{ template "stig_ssh" -}}
 {{ template "stig_login" -}}
@@ -23,7 +23,7 @@
 {{- /* TOR Switch */ -}}
 {{- else -}}
 {{ template "hostname" . -}}
-{{if .Routing.PrefixList}}{{ template "prefixlist" .Routing.PrefixList -}} {{ end -}}
+{{if .Routing.PrefixList}}{{ template "prefixlist" . -}} {{ end -}}
 {{ template "stig_user" .GlobalSetting -}}
 {{ template "stig_ssh" -}}
 {{ template "stig_login" -}}

@@ -2,7 +2,7 @@
 {{- /* BMC Switch */ -}}
 {{- if eq .Switch.Type "BMC" -}}
 {{ template "hostname" . -}}
-{{if .Routing.PrefixList}}{{ template "prefixlist" .Routing.PrefixList -}} {{ end -}}
+{{if .Routing.PrefixList}}{{ template "prefixlist" . -}} {{ end -}}
 {{ template "stig_user" .GlobalSetting -}}
 {{ template "stig_feature" . -}}
 {{ template "stig_ssh" -}}
@@ -23,7 +23,6 @@
 {{ template "set_syslog" .GlobalSetting -}}
 {{ template "set_load_sharing" -}}
 {{ template "set_icmp_errors" .GlobalSetting -}}
-{{if .Routing.PrefixList}}{{ template "prefixlist" .Routing.PrefixList -}} {{ end -}}
 {{if ne .Routing.BGP.BGPAsn 0 }}{{ template "bgp" .Routing.BGP -}}{{ end -}}
 {{if .Routing.Static}}{{ template "static" .Routing.Static -}} {{ end -}}
 {{- /* TOR Switch */ -}}
@@ -50,7 +49,7 @@
 {{ template "set_syslog" .GlobalSetting -}}
 {{ template "set_load_sharing" -}}
 {{ template "set_icmp_errors" .GlobalSetting -}}
-{{ template "prefixlist" . -}}
+{{if .Routing.PrefixList}}{{ template "prefixlist" . -}} {{ end -}}
 {{if ne .Routing.BGP.BGPAsn 0 }}{{ template "bgp" .Routing.BGP -}}{{ end -}}
 {{if .Routing.Static}}{{ template "static" .Routing.Static -}} {{ end -}}
 {{- /* {{ template "define_vlan" .Vlans -}}

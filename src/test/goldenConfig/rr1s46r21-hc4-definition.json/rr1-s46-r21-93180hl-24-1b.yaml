@@ -385,7 +385,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -409,6 +409,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/2
@@ -417,7 +418,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -441,6 +442,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/3
@@ -449,7 +451,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -473,6 +475,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/4
@@ -481,7 +484,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -505,6 +508,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/5
@@ -513,7 +517,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -537,6 +541,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/6
@@ -545,7 +550,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -569,6 +574,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/7
@@ -577,7 +583,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -601,6 +607,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/8
@@ -609,7 +616,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -633,6 +640,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/9
@@ -641,7 +649,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -665,6 +673,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/10
@@ -673,7 +682,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -697,6 +706,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/11
@@ -705,7 +715,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -729,6 +739,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/12
@@ -737,7 +748,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -761,6 +772,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/13
@@ -769,7 +781,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -793,6 +805,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/14
@@ -801,7 +814,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -825,6 +838,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/15
@@ -833,7 +847,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -857,6 +871,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/16
@@ -865,7 +880,7 @@ Ports:
   Description: HyperConverged
   Function: HyperConverged
   UntagVlan: 7
-  TagVlans:
+  TagVlanList:
   - 6
   - 7
   - 201
@@ -889,6 +904,7 @@ Ports:
   - 516
   - 711
   - 712
+  TagVlanString: 6-7,201,301,401,501-516,711-712
   MTU: 9216
   Shutdown: false
 - Port: 1/17
@@ -1115,8 +1131,9 @@ Ports:
   Description: TOR_BMC
   Function: TOR_BMC
   UntagVlan: 99
-  TagVlans:
+  TagVlanList:
   - 125
+  TagVlanString: "125"
   MTU: 9216
   Shutdown: false
   Others:
@@ -1251,50 +1268,30 @@ Routing:
       Description: TO_Border1
       NeighborAsn: 64846
       NeighborIPAddress: 100.71.85.5
-      PrefixList:
-      - Name: ExternalPrefix
-        Direction: in
-      - Name: ExternalPrefix
-        Direction: out
+      PrefixListIn: FROM-BORDER
+      PrefixListOut: TO-BORDER
       RemovePrivateAS: true
-      Shutdown: false
     - SwitchRelation: SwitchUplink
       Description: TO_Border2
       NeighborAsn: 64846
       NeighborIPAddress: 100.71.85.13
-      PrefixList:
-      - Name: ExternalPrefix
-        Direction: in
-      - Name: ExternalPrefix
-        Direction: out
+      PrefixListIn: FROM-BORDER
+      PrefixListOut: TO-BORDER
       RemovePrivateAS: true
-      Shutdown: false
     - SwitchRelation: SwitchPeer
       Description: TO_TOR1
       NeighborAsn: 65242
       NeighborIPAddress: 100.71.85.17
-      Shutdown: false
       NbrPassword: $CREDENTIAL_PLACEHOLDER$
     - SwitchRelation: SwitchDownlink
       Description: TO_MUX
       NeighborAsn: 65112
       NeighborIPAddress: 100.71.131.0/25
-      PrefixList:
-      - Name: DefaultRoute
-        Direction: out
-      Shutdown: false
+      PrefixListOut: DefaultRoute
       UpdateSource: Loopback0
       LocalAS: "64512"
       EBGPMultiHop: 3
   PrefixList:
-  - Name: ExternalPrefix
-    Config:
-    - Idx: 10
-      Action: permit
-      Description: Any
-      Network: 0.0.0.0/0
-      Operation: le
-      Prefix: 32
   - Name: DefaultRoute
     Config:
     - Idx: 10
@@ -1309,3 +1306,91 @@ Routing:
       Network: 0.0.0.0/0
       Operation: le
       Prefix: 32
+WANSIM:
+  Hostname: rr1-s46-r21-wansim
+  Loopback:
+    IP: 10.10.32.129
+    IPNetwork: 10.10.32.129/32
+    Subnet: 10.10.32.128/26
+  GRE1:
+    Name: TOR1
+    TunnelSrcIP: 10.10.32.129
+    TunnelDstIP: 100.71.85.123
+    IPNetwork: 2.1.1.0/31
+    LocalIP: 2.1.1.0
+    RemoteIP: 2.1.1.1
+  GRE2:
+    Name: TOR2
+    TunnelSrcIP: 10.10.32.129
+    TunnelDstIP: 100.71.85.124
+    IPNetwork: 2.1.1.2/31
+    LocalIP: 2.1.1.2
+    RemoteIP: 2.1.1.3
+  BGP:
+    LocalASN: 65003
+    IPv4Nbr:
+    - Description: To_Uplink1
+      NeighborAsn: 65001
+      NeighborIPAddress: 10.10.36.2
+      EbgpMultiHop: 8
+      RouteMapIn: RM-DEFAULT-IN
+      UpdateSource: eth0
+    - Description: To_Uplink2
+      NeighborAsn: 65001
+      NeighborIPAddress: 10.10.36.3
+      EbgpMultiHop: 8
+      RouteMapIn: RM-DEFAULT-IN
+      UpdateSource: eth0
+    - Description: To_TOR1
+      NeighborAsn: 65242
+      NeighborIPAddress: 2.1.1.1
+      EbgpMultiHop: 8
+      RouteMapIn: RM-NO-ROUTE-IN
+      RouteMapOut: RM-DEFAULT-OUT
+      UpdateSource: gre1
+    - Description: To_TOR2
+      NeighborAsn: 65242
+      NeighborIPAddress: 2.1.1.3
+      EbgpMultiHop: 8
+      RouteMapIn: RM-NO-ROUTE-IN
+      RouteMapOut: RM-DEFAULT-OUT
+      UpdateSource: gre2
+  RerouteNetworks:
+  - 100.69.177.0/25
+  - 100.69.177.128/25
+  - 100.69.178.0/26
+  - 100.69.178.64/26
+  - 100.69.178.128/26
+  - 100.69.178.192/26
+  - 100.69.179.0/29
+  - 100.69.179.8/29
+  - 100.69.179.16/29
+  - 100.69.179.24/29
+  - 100.69.179.32/29
+  - 100.69.179.40/29
+  - 100.69.179.48/29
+  - 100.69.179.56/29
+  - 100.69.179.64/29
+  - 100.69.179.72/29
+  - 100.69.179.80/29
+  - 100.69.179.88/29
+  - 100.69.179.96/29
+  - 100.69.179.104/29
+  - 100.69.179.112/29
+  - 100.69.179.120/29
+  - 100.69.179.128/29
+  - 100.69.179.136/29
+  - 100.69.179.144/29
+  - 100.69.179.152/29
+  - 100.69.179.160/29
+  - 100.69.179.168/29
+  - 100.69.179.176/29
+  - 100.69.179.184/29
+  - 100.69.179.192/29
+  - 100.69.179.200/29
+  - 100.69.179.208/29
+  - 100.69.179.216/29
+  - 100.69.179.224/29
+  - 100.69.179.232/29
+  - 100.69.179.240/29
+  - 100.69.179.248/29
