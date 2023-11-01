@@ -159,19 +159,20 @@ type PortJson struct {
 }
 
 type PortType struct {
-	Port        string            `yaml:"Port"`
-	Idx         int               `yaml:"Idx"`
-	Type        string            `yaml:"Type"`
-	Description string            `yaml:"Description"`
-	Function    string            `yaml:"Function"`
-	UntagVlan   int               `yaml:"UntagVlan,omitempty"`
-	TagVlans    []int             `yaml:"TagVlans,omitempty"`
-	IPAddress   string            `yaml:"IPAddress,omitempty"`
-	Mtu         int               `yaml:"MTU"`
-	Shutdown    bool              `yaml:"Shutdown"`
-	Others      map[string]string `yaml:"Others,omitempty"`
-	Mode        string            `yaml:"Mode,omitempty"`
-	PortGroup   string            `yaml:"PortGroup,omitempty"`
+	Port          string            `yaml:"Port"`
+	Idx           int               `yaml:"Idx"`
+	Type          string            `yaml:"Type"`
+	Description   string            `yaml:"Description"`
+	Function      string            `yaml:"Function"`
+	UntagVlan     int               `yaml:"UntagVlan,omitempty"`
+	TagVlanList   []int             `yaml:"TagVlanList,omitempty"`
+	TagVlanString string            `yaml:"TagVlanString,omitempty"`
+	IPAddress     string            `yaml:"IPAddress,omitempty"`
+	Mtu           int               `yaml:"MTU"`
+	Shutdown      bool              `yaml:"Shutdown"`
+	Others        map[string]string `yaml:"Others,omitempty"`
+	Mode          string            `yaml:"Mode,omitempty"`
+	PortGroup     string            `yaml:"PortGroup,omitempty"`
 }
 
 type RoutingType struct {
