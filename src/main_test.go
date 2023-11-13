@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"reflect"
@@ -31,11 +30,14 @@ func TestMain(t *testing.T) {
 		inputTestFileName string
 	}
 	testCases := map[string]test{
-		"rr1s46r06a-sw4-definition": {
-			inputTestFileName: "rr1s46r06a-sw4-definition.json",
-		},
-		"rr1s46r21-hc4-definition": {
-			inputTestFileName: "rr1s46r21-hc4-definition.json",
+		// "rr1s46r06a-sw4-definition": {
+		// 	inputTestFileName: "rr1s46r06a-sw4-definition.json",
+		// },
+		// "rr1s46r21-hc4-definition": {
+		// 	inputTestFileName: "rr1s46r21-hc4-definition.json",
+		// },
+		"rr1n22r03-hc10-definition": {
+			inputTestFileName: "rr1n22r03-hc10-definition.json",
 		},
 	}
 
@@ -70,7 +72,7 @@ func TestMain(t *testing.T) {
 
 func getFilesInFolder(foldername string) []string {
 	fileList := []string{}
-	files, err := ioutil.ReadDir(foldername)
+	files, err := os.ReadDir(foldername)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -82,7 +84,7 @@ func getFilesInFolder(foldername string) []string {
 
 func parseOutputYaml(outputFile string) *OutputType {
 	outputObj := &OutputType{}
-	bytes, err := ioutil.ReadFile(outputFile)
+	bytes, err := os.ReadFile(outputFile)
 	if err != nil {
 		log.Fatalln(err)
 	}

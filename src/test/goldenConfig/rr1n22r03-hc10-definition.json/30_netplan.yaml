@@ -1,0 +1,24 @@
+# https://netplan.readthedocs.io/en/stable/examples/
+network:
+    version: 2
+    renderer: networkd
+    ethernets:
+        eth0:
+            dhcp4: true
+            mtu: 9000
+        lo:
+            addresses: [ "127.0.0.1/8", "::1/128", "10.10.32.130/32" ]
+
+    tunnels:
+        gre1:
+            mode: gre
+            local: 10.10.32.130
+            remote: 100.71.18.251
+            addresses: [ "2.1.1.0/31" ]
+            mtu: 8000
+        gre2:
+            mode: gre
+            local: 10.10.32.130
+            remote: 100.71.18.252
+            addresses: [ "2.1.1.2/31" ]
+            mtu: 8000

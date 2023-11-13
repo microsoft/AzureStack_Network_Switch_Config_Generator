@@ -3,7 +3,7 @@
 {{ range . -}}
 {{ if eq .Type "mgmt" -}}
 interface {{ .Port }}
-  description use the BMCMgmt switch virtual interface
+  description BMCMgmt_switch_virtual_interface
   no ip redirects
   no ipv6 redirects
   shutdown
