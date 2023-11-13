@@ -30,14 +30,17 @@ func TestMain(t *testing.T) {
 		inputTestFileName string
 	}
 	testCases := map[string]test{
-		// "rr1s46r06a-sw4-definition": {
-		// 	inputTestFileName: "rr1s46r06a-sw4-definition.json",
-		// },
-		// "rr1s46r21-hc4-definition": {
-		// 	inputTestFileName: "rr1s46r21-hc4-definition.json",
-		// },
+		"rr1s46r06a-sw4-definition": {
+			inputTestFileName: "rr1s46r06a-sw4-definition.json",
+		},
+		"rr1s46r21-hc4-definition": {
+			inputTestFileName: "rr1s46r21-hc4-definition.json",
+		},
 		"rr1n22r03-hc10-definition": {
 			inputTestFileName: "rr1n22r03-hc10-definition.json",
+		},
+		"rr1n22r09-hc15-definition": {
+			inputTestFileName: "rr1n22r09-hc15-definition.json",
 		},
 	}
 
