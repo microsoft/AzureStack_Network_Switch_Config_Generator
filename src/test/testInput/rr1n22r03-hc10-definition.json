@@ -2862,7 +2862,7 @@
           }
         ]
       },
-      "RerouteNetworks": ["TENANT", "L3FORWARD"]
+      "RerouteNetworks": ["Infrastructure", "TENANT", "L3FORWARD"]
     }
   }
 }

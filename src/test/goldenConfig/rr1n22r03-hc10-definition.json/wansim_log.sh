@@ -2,19 +2,23 @@
 #####
 # Pre-Config
 # # Config Interface
-# sudo cp ./30_netplan_wansim.yaml /etc/netplan/30_netplan_wansim.yaml
+# sudo cp ./30_netplan.yaml /etc/netplan/00-installer-config.yaml
 # sudo netplan apply
 
 # # Config FRR
-# sudo cp ./wansim_daemons /etc/frr/daemons
+# sudo cp ./daemons /etc/frr/daemons
 # sudo service frr restart
-# sudo cp ./wansim_frr.conf /etc/frr/frr.conf
+# sudo cp ./frr.conf /etc/frr/frr.conf
 # sudo service frr restart
 
 # # Config Log
+# sudo tr -d '\r' < ./wansim_log.sh | sudo tee ./wansim_log.sh > /dev/null
 # # Execute Every Half Hour
 # # Minutes (0,30): The script will run when the minute is either 0 or 30.
-# echo "0,30 * * * ./wansim_log.sh" | crontab -
+# Define using crobtab
+# sudo crontab -e
+# MAIlTO=""
+# 0,30 * * *  sudo /home/wansimadmin/wansim_log.sh
 #####
 
 # Define the function

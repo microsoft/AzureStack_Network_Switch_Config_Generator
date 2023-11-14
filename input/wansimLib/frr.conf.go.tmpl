@@ -16,7 +16,7 @@ router bgp {{ .BGP.LocalASN }}
  bgp suppress-fib-pending
  bgp log-neighbor-changes
  no bgp ebgp-requires-policy
- no bgp default ipv4-unicast
+ bgp default ipv4-unicast
  {{ range .BGP.IPv4Nbr -}}  
  neighbor {{ .NeighborIPAddress }} remote-as {{ .NeighborAsn }}
  neighbor {{ .NeighborIPAddress }} description {{ .Description }}

@@ -1602,6 +1602,8 @@ WANSIM:
       RouteMapOut: RM-DEFAULT-OUT
       UpdateSource: gre2
   RerouteNetworks:
+  - 100.68.148.0/25
+  - 100.68.148.128/25
   - 100.68.149.0/25
   - 100.68.149.128/25
   - 100.68.150.0/26
