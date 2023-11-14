@@ -28,13 +28,11 @@ router bgp {{ .BGP.LocalASN }}
   network {{ .Loopback.IPNetwork }}
   redistribute static
   {{ range .BGP.IPv4Nbr -}}  
-  neighbor {{ .NeighborIPAddress }} remote-as {{ .NeighborAsn }}
-  neighbor {{ .NeighborIPAddress }} description {{ .Description }}
-  neighbor {{ .NeighborIPAddress }} ebgp-multihop {{ .EbgpMultiHop }}
-  neighbor {{ .NeighborIPAddress }} update-source {{ .UpdateSource }}
+  neighbor {{ .NeighborIPAddress }} active
   {{ if .RouteMapIn -}}neighbor {{ .NeighborIPAddress }} route-map {{ .RouteMapIn }} in {{ end }}
   {{ if .RouteMapOut -}}neighbor {{ .NeighborIPAddress }} route-map {{ .RouteMapOut }} out {{ end }}
-  {{ end -}}
+  {{ if ne .UpdateSource "eth0" }}neighbor {{ .NeighborIPAddress }} default-originate {{ end }}
+  {{ end }}
  exit-address-family
 exit
 !
