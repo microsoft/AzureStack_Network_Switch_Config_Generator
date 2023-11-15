@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path"
 	"strings"
 )
 
@@ -112,7 +113,9 @@ func generateSwitchConfig(inputData InputData, switchLibFolder, wansimLibFolder,
 			torOutput.UpdateWANSIM(inputData)
 			torOutput.writeToYaml(outputFolder)
 			torOutput.parseCombineTemplate(templateFolder, outputFolder, torItem.Hostname)
-			torOutput.parseEachTemplate(wansimLibFolder, outputFolder)
+			wansimOutput := path.Join(outputFolder,"wansim_config")
+			createFolder(wansimOutput)
+			torOutput.parseEachTemplate(wansimLibFolder, wansimOutput)
 		}
 	} else {
 		log.Fatalln(NO_Valid_TOR_Switch)

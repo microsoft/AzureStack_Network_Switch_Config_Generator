@@ -1,4 +1,3 @@
-{{- define "wansim_log.sh" -}}
 #!/bin/bash
 #####
 # Pre-Config
@@ -8,6 +7,7 @@
 
 # # Config FRR
 # sudo cp ./daemons /etc/frr/daemons
+# sudo service frr restart
 # sudo cp ./frr.conf /etc/frr/frr.conf
 # sudo service frr restart
 
@@ -17,8 +17,8 @@
 # # Minutes (0,30): The script will run when the minute is either 0 or 30.
 # Define using crobtab
 # sudo crontab -e
-# MAILTO=""
-# 0,30 * * * *  sudo /home/wansimadmin/wansim_config/wansim_log.sh
+# MAIlTO=""
+# 0,30 * * *  sudo /home/wansimadmin/wansim_log.sh
 #####
 
 # Define the function
@@ -63,4 +63,3 @@ done
 # END
 logger -t WANSIM "WANSIM LOG - END"
 # tail -n 50 /var/log/syslog
-{{- end -}}
