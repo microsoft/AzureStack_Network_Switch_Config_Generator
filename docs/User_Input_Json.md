@@ -109,3 +109,16 @@ This section defines switch global setting variables:
 | TimeServer   | List            | List of TimeServer IP   |
 | SyslogServer | List            | List of SyslogServer IP |
 | DNSForwarder | List            | List of DNSForwarder IP |
+
+### InputData.WANSIM
+
+This section defines WANSIM VM network variables to generate WANSIM `netplan` and `frr` configuration.
+
+| Key             | Value (Example) | Comment                                              |
+| --------------- | --------------- | ---------------------------------------------------- |
+| Hostname        | String          | Hostname of WANSIM (Not being used, can replace DNS) |
+| Loopback        | Object          | Loopback as Tunnel Source IP and BGP Router ID       |
+| GRE1            | Object          | Tunnel Variables with TOR1                           |
+| GRE2            | Object          | Tunnel Variables with TOR2                           |
+| BGP             | Object          | BGP Peer with TORs via GRE Tunnels                   |
+| RerouteNetworks | Object          | List of GroupName of Supernets                       |

@@ -1681,13 +1681,19 @@
     ],
     "Setting": {
       "TimeZone": "Pacific Standard Time",
-      "TimeServer": ["10.10.240.20"],
-      "SyslogServer": ["10.10.43.111"],
-      "DNSForwarder": ["10.10.240.23", "10.10.240.24"]
+      "TimeServer": [
+        "10.10.240.20"
+      ],
+      "SyslogServer": [
+        "10.10.43.111"
+      ],
+      "DNSForwarder": [
+        "10.10.240.23",
+        "10.10.240.24"
+      ]
     },
     "WANSIM": {
       "Hostname": "rr1-s46-r21-wansim",
-      "LoopbackSubnet": "10.10.32.128/26",
       "Loopback": {
         "IP": "10.10.32.129",
         "IPNetwork": "10.10.32.129/32",
@@ -1724,7 +1730,11 @@
           }
         ]
       },
-      "RerouteNetworks": ["Infrastructure", "TENANT", "L3FORWARD"]
+      "RerouteNetworks": [
+        "Infrastructure",
+        "TENANT",
+        "L3FORWARD"
+      ]
     }
   }
 }
