@@ -21,8 +21,8 @@ router bgp {{ .BGPAsn }}
   neighbor {{ .NeighborIPAddress }}
     description {{ .Description }}
     remote-as {{ .NeighborAsn }}
-    {{ with .UpdateSource }}update-source {{.}}{{ end }}
-    {{ with .EBGPMultiHop }}ebgp-multihop {{.}}{{ end }}
+    {{ if ne .UpdateSource "" }}update-source {{.UpdateSource}}{{ else }}!{{ end }}
+    {{ if ne .EBGPMultiHop 0 }}ebgp-multihop {{.EBGPMultiHop}}{{ else }}!{{ end }}
     address-family ipv4 unicast
       maximum-prefix 12000 warning-only
       {{ with .PrefixListOut }}prefix-list {{.}} out{{ end }}

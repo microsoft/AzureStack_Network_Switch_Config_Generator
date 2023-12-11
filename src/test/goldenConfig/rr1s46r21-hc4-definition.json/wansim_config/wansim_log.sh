@@ -7,7 +7,6 @@
 
 # # Config FRR
 # sudo cp ./daemons /etc/frr/daemons
-# sudo service frr restart
 # sudo cp ./frr.conf /etc/frr/frr.conf
 # sudo service frr restart
 
@@ -17,8 +16,8 @@
 # # Minutes (0,30): The script will run when the minute is either 0 or 30.
 # Define using crobtab
 # sudo crontab -e
-# MAIlTO=""
-# 0,30 * * *  sudo /home/wansimadmin/wansim_log.sh
+# MAILTO=""
+# 0,30 * * * *  sudo /home/wansimadmin/wansim_config/wansim_log.sh
 #####
 
 # Define the function
