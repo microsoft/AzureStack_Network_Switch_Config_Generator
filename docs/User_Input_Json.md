@@ -157,11 +157,38 @@ This section defines the GRE IP Information between WANSIM VM and TOR2, these IP
 
 #### InputData.WANSIM.BGP
 
-This section defines the GRE IP Information between WANSIM VM and TOR2, these IPs are all private for the Tunnel so can be reused:
+This section defines the BGP information to generate BGP in FRR config:
 
-| Key       | Value  | (Example)    | Comment                                     |
-| --------- | ------ | ------------ | ------------------------------------------- |
-| Name      | string | "TOR2"       | Reserved, not being used.                   |
-| LocalIP   | string | "2.1.1.2"    | WANSIM VM GRE2 Tunnel Local IP              |
-| RemoteIP  | string | "2.1.1.3"    | WANSIM VM GRE2 Tunnel Remote IP (TOR2 side) |
-| IPNetwork | string | "2.1.1.2/31" | GRE2 Tunnel Subnet                          |
+| Key      | Value | (Example) | Comment                        |
+| -------- | ----- | --------- | ------------------------------ |
+| LocalASN | int   | 65003     | Reserved, not being used.      |
+| IPv4Nbr  | List  |           | WANSIM VM GRE2 Tunnel Local IP |
+
+##### InputData.WANSIM.BGP.IPv4Nbr
+
+Because the TOR switches information already includes in the file, so only need to put the uplink switches if any to peer with WANSIM.
+
+| Key               | Value  | (Example)    | Comment                                   |
+| ----------------- | ------ | ------------ | ----------------------------------------- |
+| NeighborAsn       | int    | 65001        | Uplink Switch ASN                         |
+| NeighborIPAddress | string | "10.10.36.2" | Uplink Switch IP Address to Peer BGP      |
+| Description       | string | "To_Uplink1" | BGP Neighbor Description                  |
+| EbgpMultiHop      | int    | 8            | EBGP Multihop Value                       |
+| UpdateSource      | string | "eth0"       | Source Interface of WANSIM VM to Peer BGP |
+
+#### InputData.WANSIM.RerouteNetworks
+
+This section defines the network need to be redirected into WANSIM VM:
+
+| Key             | Value | (Example) | Comment                                        |
+| --------------- | ----- | --------- | ---------------------------------------------- |
+| RerouteNetworks | List  | 65003     | List of GroupName defined in Supernets section |
+
+## Q&A
+
+#### Are there any examples to understand the mapping between definition and configuration.
+
+Here is an example:
+
+- Input: [Definition JSON](\src\test\testInput\rr1s46r21-hc4-definition.json)
+- Output: [Switch and WANSIM Configuration](\src\test\goldenConfig\rr1s46r21-hc4-definition.json)
