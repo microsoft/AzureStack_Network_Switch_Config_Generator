@@ -190,5 +190,5 @@ This section defines the network need to be redirected into WANSIM VM:
 
 Here is an example:
 
-- Input: [Definition JSON](\src\test\testInput\rr1s46r21-hc4-definition.json)
-- Output: [Switch and WANSIM Configuration](\src\test\goldenConfig\rr1s46r21-hc4-definition.json)
+- Input: [Definition JSON](/src/test/testInput/rr1s46r21-hc4-definition.json)
+- Output: [Switch and WANSIM Configuration](/src/test/goldenConfig/rr1s46r21-hc4-definition.json/)
