@@ -137,7 +137,7 @@ This section defines WANSIM VM Loopback setting variables, which will be used fo
 
 This section defines the GRE IP Information between WANSIM VM and TOR1, these IPs are all private for the Tunnel so can be reused:
 
-| Key       | Value  | (Example)    | Comment                                     |
+| Key       | Value  | Example      | Comment                                     |
 | --------- | ------ | ------------ | ------------------------------------------- |
 | Name      | string | "TOR1"       | Reserved, not being used.                   |
 | LocalIP   | string | "2.1.1.0"    | WANSIM VM GRE1 Tunnel Local IP              |
@@ -148,7 +148,7 @@ This section defines the GRE IP Information between WANSIM VM and TOR1, these IP
 
 This section defines the GRE IP Information between WANSIM VM and TOR2, these IPs are all private for the Tunnel so can be reused:
 
-| Key       | Value  | (Example)    | Comment                                     |
+| Key       | Value  | Example      | Comment                                     |
 | --------- | ------ | ------------ | ------------------------------------------- |
 | Name      | string | "TOR2"       | Reserved, not being used.                   |
 | LocalIP   | string | "2.1.1.2"    | WANSIM VM GRE2 Tunnel Local IP              |
@@ -159,16 +159,16 @@ This section defines the GRE IP Information between WANSIM VM and TOR2, these IP
 
 This section defines the BGP information to generate BGP in FRR config:
 
-| Key      | Value | (Example) | Comment                        |
-| -------- | ----- | --------- | ------------------------------ |
-| LocalASN | int   | 65003     | Reserved, not being used.      |
-| IPv4Nbr  | List  |           | WANSIM VM GRE2 Tunnel Local IP |
+| Key      | Value | Example | Comment                        |
+| -------- | ----- | ------- | ------------------------------ |
+| LocalASN | int   | 65003   | Reserved, not being used.      |
+| IPv4Nbr  | List  |         | WANSIM VM GRE2 Tunnel Local IP |
 
 ##### InputData.WANSIM.BGP.IPv4Nbr
 
 Because the TOR switches information already includes in the file, so only need to put the uplink switches if any to peer with WANSIM.
 
-| Key               | Value  | (Example)    | Comment                                   |
+| Key               | Value  | Example      | Comment                                   |
 | ----------------- | ------ | ------------ | ----------------------------------------- |
 | NeighborAsn       | int    | 65001        | Uplink Switch ASN                         |
 | NeighborIPAddress | string | "10.10.36.2" | Uplink Switch IP Address to Peer BGP      |
@@ -180,9 +180,9 @@ Because the TOR switches information already includes in the file, so only need 
 
 This section defines the network need to be redirected into WANSIM VM:
 
-| Key             | Value | (Example) | Comment                                        |
-| --------------- | ----- | --------- | ---------------------------------------------- |
-| RerouteNetworks | List  | 65003     | List of GroupName defined in Supernets section |
+| Key             | Value | Example                     | Comment                                        |
+| --------------- | ----- | --------------------------- | ---------------------------------------------- |
+| RerouteNetworks | List  | ["Infrastructure","TENANT"] | List of GroupName defined in Supernets section |
 
 ## Q&A
 
