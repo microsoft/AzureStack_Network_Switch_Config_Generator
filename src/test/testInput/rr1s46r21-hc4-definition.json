@@ -1693,7 +1693,7 @@
       ]
     },
     "WANSIM": {
-      "Hostname": "rr1-s46-r21-wansim",
+      "Hostname": "rack1-wansim",
       "Loopback": {
         "IP": "10.10.32.129",
         "IPNetwork": "10.10.32.129/32",

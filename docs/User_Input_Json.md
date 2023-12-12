@@ -1,8 +1,8 @@
-# Input JSON
+# User Input Definition JSON
 
 Reference File: [sample_input_files](/src/test/testInput)
 
-The json format and struct could be refined and updated based on optimization and new requirement, so file issues if anything inaccurate.
+The json format and structure could be refined and updated based on optimization and new requirement, so file issues if anything inaccurate.
 
 ## Structure
 
@@ -114,11 +114,54 @@ This section defines switch global setting variables:
 
 This section defines WANSIM VM network variables to generate WANSIM `netplan` and `frr` configuration.
 
-| Key             | Value (Example) | Comment                                              |
-| --------------- | --------------- | ---------------------------------------------------- |
-| Hostname        | String          | Hostname of WANSIM (Not being used, can replace DNS) |
-| Loopback        | Object          | Loopback as Tunnel Source IP and BGP Router ID       |
-| GRE1            | Object          | Tunnel Variables with TOR1                           |
-| GRE2            | Object          | Tunnel Variables with TOR2                           |
-| BGP             | Object          | BGP Peer with TORs via GRE Tunnels                   |
-| RerouteNetworks | Object          | List of GroupName of Supernets                       |
+| Key             | Value (Example)       | Comment                                              |
+| --------------- | --------------------- | ---------------------------------------------------- |
+| Hostname        | String,"rack1-wansim" | Hostname of WANSIM (Not being used, can replace DNS) |
+| Loopback        | Object                | Loopback as Tunnel Source IP and BGP Router ID       |
+| GRE1            | Object                | Tunnel Variables with TOR1                           |
+| GRE2            | Object                | Tunnel Variables with TOR2                           |
+| BGP             | Object                | BGP Peer with TORs via GRE Tunnels                   |
+| RerouteNetworks | Object                | List of GroupName of Supernets                       |
+
+#### InputData.WANSIM.Loopback
+
+This section defines WANSIM VM Loopback setting variables, which will be used for two GRE Tunnel Source IP, so has to be unique in the network:
+
+| Key       | Value (Example)           | Comment                         |
+| --------- | ------------------------- | ------------------------------- |
+| IP        | string, "10.10.32.129"    | VM Assigned Loopback IP Address |
+| IPNetwork | string, "10.10.32.129/32" | VM Assigned Loopback IPNetwork  |
+| Subnet    | string,"10.10.32.128/26"  | Loopback Subnet                 |
+
+#### InputData.WANSIM.GRE1
+
+This section defines the GRE IP Information between WANSIM VM and TOR1, these IPs are all private for the Tunnel so can be reused:
+
+| Key       | Value  | (Example)    | Comment                                     |
+| --------- | ------ | ------------ | ------------------------------------------- |
+| Name      | string | "TOR1"       | Reserved, not being used.                   |
+| LocalIP   | string | "2.1.1.0"    | WANSIM VM GRE1 Tunnel Local IP              |
+| RemoteIP  | string | "2.1.1.1"    | WANSIM VM GRE1 Tunnel Remote IP (TOR1 side) |
+| IPNetwork | string | "2.1.1.0/31" | GRE1 Tunnel Subnet                          |
+
+#### InputData.WANSIM.GRE2
+
+This section defines the GRE IP Information between WANSIM VM and TOR2, these IPs are all private for the Tunnel so can be reused:
+
+| Key       | Value  | (Example)    | Comment                                     |
+| --------- | ------ | ------------ | ------------------------------------------- |
+| Name      | string | "TOR2"       | Reserved, not being used.                   |
+| LocalIP   | string | "2.1.1.2"    | WANSIM VM GRE2 Tunnel Local IP              |
+| RemoteIP  | string | "2.1.1.3"    | WANSIM VM GRE2 Tunnel Remote IP (TOR2 side) |
+| IPNetwork | string | "2.1.1.2/31" | GRE2 Tunnel Subnet                          |
+
+#### InputData.WANSIM.BGP
+
+This section defines the GRE IP Information between WANSIM VM and TOR2, these IPs are all private for the Tunnel so can be reused:
+
+| Key       | Value  | (Example)    | Comment                                     |
+| --------- | ------ | ------------ | ------------------------------------------- |
+| Name      | string | "TOR2"       | Reserved, not being used.                   |
+| LocalIP   | string | "2.1.1.2"    | WANSIM VM GRE2 Tunnel Local IP              |
+| RemoteIP  | string | "2.1.1.3"    | WANSIM VM GRE2 Tunnel Remote IP (TOR2 side) |
+| IPNetwork | string | "2.1.1.2/31" | GRE2 Tunnel Subnet                          |
