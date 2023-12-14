@@ -15,17 +15,19 @@ This is a tool to generate network switch deployment configuration for Azure Sta
 
 ```mermaid
 flowchart TD
-    A[SwitchLib: Framework JSON + Go Template]
-    B[User Input Template]
+    A[Framework JSON + Go Template]
+    B[User Input JSON]
     C(Generator Tool)
-    D(Switch Output Object)
-    E[Switch Object YAML Files]
+    D(Output Files)
+    E[YAML Files]
     F[Switch Configuration Files]
+    G[WANSIM Configuration Files]
     B --> C
     A --> C
     C --> D
     D -.-> |For Debug| E
     D --> |For Deploy| F
+    D -.-> |If Configured| G
 ```
 
 ## Project Design
@@ -43,3 +45,4 @@ flowchart TD
 ### Use Cases
 
 - [Generate Vlan Configuration](docs/Generate_Vlan_Config.md)
+- [Understand AzureStackWANSimulator](https://github.com/microsoft/AzureStackWANSimulator)
