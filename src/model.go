@@ -17,7 +17,8 @@ type InputData struct {
 		TimeServer   []string `yaml:"TimeServer"`
 		SyslogServer []string `yaml:"SyslogServer"`
 		DNSForwarder []string `yaml:"DNSForwarder"`
-	}
+	} `yaml:"Setting"`
+	WANSIM WANSIMType `yaml:"WANSIM,omitempty"`
 }
 
 type OutputType struct {
@@ -35,6 +36,7 @@ type OutputType struct {
 	Ports             []PortType                 `yaml:"Ports,omitempty"`
 	PortGroup         []PortGroupType            `yaml:"PortGroup,omitempty"`
 	Routing           RoutingType                `yaml:"Routing,omitempty"`
+	WANSIM            WANSIMType                 `yaml:"WANSIM,omitempty"`
 }
 
 type GlobalSettingType struct {
@@ -121,8 +123,19 @@ type Supernet struct {
 }
 
 type IPv4Unit struct {
-	Name string `yaml:"Name"`
-	IP   string `yaml:"IP"`
+	Name      string `yaml:"Name,omitempty"`
+	IP        string `yaml:"IP,omitempty"`
+	IPNetwork string `yaml:"IPNetwork,omitempty"`
+	Subnet    string `yaml:"Subnet,omitempty"`
+}
+
+type IPv4TunnelType struct {
+	Name        string `yaml:"Name,omitempty"`
+	TunnelSrcIP string `yaml:"TunnelSrcIP,omitempty"`
+	TunnelDstIP string `yaml:"TunnelDstIP,omitempty"`
+	IPNetwork   string `yaml:"IPNetwork"`
+	LocalIP     string `yaml:"LocalIP"`
+	RemoteIP    string `yaml:"RemoteIP"`
 }
 
 type PortJson struct {
@@ -146,19 +159,20 @@ type PortJson struct {
 }
 
 type PortType struct {
-	Port        string            `yaml:"Port"`
-	Idx         int               `yaml:"Idx"`
-	Type        string            `yaml:"Type"`
-	Description string            `yaml:"Description"`
-	Function    string            `yaml:"Function"`
-	UntagVlan   int               `yaml:"UntagVlan,omitempty"`
-	TagVlans    []int             `yaml:"TagVlans,omitempty"`
-	IPAddress   string            `yaml:"IPAddress,omitempty"`
-	Mtu         int               `yaml:"MTU"`
-	Shutdown    bool              `yaml:"Shutdown"`
-	Others      map[string]string `yaml:"Others,omitempty"`
-	Mode        string            `yaml:"Mode,omitempty"`
-	PortGroup   string            `yaml:"PortGroup,omitempty"`
+	Port          string            `yaml:"Port"`
+	Idx           int               `yaml:"Idx"`
+	Type          string            `yaml:"Type"`
+	Description   string            `yaml:"Description"`
+	Function      string            `yaml:"Function"`
+	UntagVlan     int               `yaml:"UntagVlan,omitempty"`
+	TagVlanList   []int             `yaml:"TagVlanList,omitempty"`
+	TagVlanString string            `yaml:"TagVlanString,omitempty"`
+	IPAddress     string            `yaml:"IPAddress,omitempty"`
+	Mtu           int               `yaml:"MTU"`
+	Shutdown      bool              `yaml:"Shutdown"`
+	Others        map[string]string `yaml:"Others,omitempty"`
+	Mode          string            `yaml:"Mode,omitempty"`
+	PortGroup     string            `yaml:"PortGroup,omitempty"`
 }
 
 type RoutingType struct {
@@ -177,20 +191,21 @@ type BGPType struct {
 }
 
 type IPv4NeighborType struct {
-	SwitchRelation    string `yaml:"SwitchRelation"`
+	SwitchRelation    string `yaml:"SwitchRelation,omitempty"`
 	Description       string `yaml:"Description"`
 	NeighborAsn       int    `yaml:"NeighborAsn"`
 	NeighborIPAddress string `yaml:"NeighborIPAddress"`
-	PrefixList        []struct {
-		Name      string `yaml:"Name"`
-		Direction string `yaml:"Direction"`
-	} `yaml:"PrefixList,omitempty"`
-	RemovePrivateAS bool   `yaml:"RemovePrivateAS,omitempty"`
-	Shutdown        bool   `yaml:"Shutdown"`
-	NbrPassword     string `yaml:"NbrPassword,omitempty"`
-	UpdateSource    string `yaml:"UpdateSource,omitempty"`
-	LocalAS         string `yaml:"LocalAS,omitempty"`
-	EBGPMultiHop    int    `yaml:"EBGPMultiHop,omitempty"`
+	EbgpMultiHop      int    `yaml:"EbgpMultiHop,omitempty"`
+	PrefixListIn      string `yaml:"PrefixListIn,omitempty"`
+	PrefixListOut     string `yaml:"PrefixListOut,omitempty"`
+	RouteMapIn        string `yaml:"RouteMapIn,omitempty"`
+	RouteMapOut       string `yaml:"RouteMapOut,omitempty"`
+	RemovePrivateAS   bool   `yaml:"RemovePrivateAS,omitempty"`
+	Shutdown          bool   `yaml:"Shutdown,omitempty"`
+	NbrPassword       string `yaml:"NbrPassword,omitempty"`
+	UpdateSource      string `yaml:"UpdateSource,omitempty"`
+	LocalAS           string `yaml:"LocalAS,omitempty"`
+	EBGPMultiHop      int    `yaml:"EBGPMultiHop,omitempty"`
 }
 
 type StaticType struct {
@@ -226,4 +241,16 @@ type PortGroupType struct {
 	Mode      string `yaml:"Mode,omitempty"`
 	Type      string `yaml:"Type,omitempty"`
 	Idx       int    `yaml:"Idx,omitempty"`
+}
+
+type WANSIMType struct {
+	Hostname string         `yaml:"Hostname"`
+	Loopback IPv4Unit       `yaml:"Loopback"`
+	GRE1     IPv4TunnelType `yaml:"GRE1"`
+	GRE2     IPv4TunnelType `yaml:"GRE2"`
+	BGP      struct {
+		LocalASN int                `yaml:"LocalASN"`
+		IPv4Nbr  []IPv4NeighborType `yaml:"IPv4Nbr"`
+	} `yaml:"BGP"`
+	RerouteNetworks []string `yaml:"RerouteNetworks"`
 }

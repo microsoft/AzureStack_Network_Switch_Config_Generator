@@ -21,9 +21,7 @@ interface {{ .Type}} {{ .Port }}
   no switchport
   switchport mode trunk
   switchport access vlan {{ .UntagVlan }}
-  {{ range .TagVlans -}}
-  switchport trunk allowed vlan {{ . }}
-  {{end -}}
+  switchport trunk allowed vlan {{ .TagVlanString }}
   flowcontrol receive off
   priority-flow-control mode on
   service-policy input type network-qos AZS_SERVICES_pfc
@@ -35,9 +33,7 @@ interface {{ .Type}} {{ .Port }}
   no switchport
   switchport mode trunk
   switchport access vlan {{ .UntagVlan }}
-  {{ range .TagVlans -}}
-  switchport trunk allowed vlan {{ . }}
-  {{end -}}
+  switchport trunk allowed vlan {{ .TagVlanString }}
   flowcontrol receive off
   priority-flow-control mode on
   spanning-tree bpduguard enable
@@ -47,9 +43,7 @@ interface {{ .Type}} {{ .Port }}
   no switchport
   switchport mode trunk
   switchport access vlan {{ .UntagVlan }}
-  {{ range .TagVlans -}}
-  switchport trunk allowed vlan {{ . }}
-  {{end -}}
+  switchport trunk allowed vlan {{ .TagVlanString }}
   flowcontrol receive off
   priority-flow-control mode on
   service-policy input type network-qos AZS_SERVICES_pfc

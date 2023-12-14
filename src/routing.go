@@ -207,6 +207,18 @@ func (o *OutputType) getVIPByVlanGroupName(GroupName string) map[int]string {
 	return sunbetMap
 }
 
+func (o *OutputType) getIPByVlanGroupName(GroupName string) map[int]string {
+	sunbetMap := map[int]string{}
+	GroupName = strings.ToUpper(GroupName)
+
+	for _, vlanItem := range o.Vlans {
+		if vlanItem.GroupName == GroupName {
+			sunbetMap[vlanItem.VlanID] = vlanItem.IPAddress
+		}
+	}
+	return sunbetMap
+}
+
 func (o *OutputType) getL3IntfObjByName(networkName string) L3IntfType {
 	var L3IntfObj L3IntfType
 	networkName = strings.ToUpper(networkName)

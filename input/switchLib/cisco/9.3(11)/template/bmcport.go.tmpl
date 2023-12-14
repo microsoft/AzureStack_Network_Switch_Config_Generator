@@ -24,9 +24,7 @@ interface {{ .Type}} {{ .Port }}
   switchport
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}
-  {{ range .TagVlans -}}
-  switchport trunk allowed vlan {{ . }}
-  {{end -}}
+  switchport trunk allowed vlan {{ .TagVlanString }}
   spanning-tree port type network
   logging event port link-status
   channel-group 102

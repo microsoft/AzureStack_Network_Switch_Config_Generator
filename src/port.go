@@ -140,14 +140,14 @@ func (o *OutputType) UpdateTORSwitchPorts(VlanGroup map[string][]string) {
 		if strings.EqualFold(portItem.Function, COMPUTE) && strings.EqualFold(o.DeploymentPattern, SWITCHLESS) {
 			// Switched Non Converged use both Compute and Storage Port Assignment
 			tmpPortObj.UntagVlan = Compute_NativeVlanID
-			tmpPortObj.TagVlans = COMPUTE_VlanList
+			tmpPortObj.TagVlanList = COMPUTE_VlanList
 			tmpPortObj.Shutdown = false
 			tmpPortObj.Description = COMPUTE
 			tmpPortObj.Function = COMPUTE
 		} else if strings.EqualFold(portItem.Function, COMPUTE) && strings.EqualFold(o.DeploymentPattern, HYPERCONVERGED) {
 			// Switched Non Converged use both Compute and Storage Port Assignment
 			tmpPortObj.UntagVlan = Compute_NativeVlanID
-			tmpPortObj.TagVlans = append(COMPUTE_VlanList, STORAGE_VlanList...)
+			tmpPortObj.TagVlanList = append(COMPUTE_VlanList, STORAGE_VlanList...)
 			tmpPortObj.Shutdown = false
 			tmpPortObj.Description = o.DeploymentPattern
 			tmpPortObj.Function = o.DeploymentPattern
@@ -159,14 +159,14 @@ func (o *OutputType) UpdateTORSwitchPorts(VlanGroup map[string][]string) {
 		} else if strings.EqualFold(portItem.Function, COMPUTE) && strings.EqualFold(o.DeploymentPattern, SWITCHED) {
 			// Switched Non Converged use Compute Port Assignment
 			tmpPortObj.UntagVlan = Compute_NativeVlanID
-			tmpPortObj.TagVlans = COMPUTE_VlanList
+			tmpPortObj.TagVlanList = COMPUTE_VlanList
 			tmpPortObj.Shutdown = false
 			tmpPortObj.Description = fmt.Sprintf("%s-%s", o.DeploymentPattern, COMPUTE)
 			tmpPortObj.Function = COMPUTE
 		} else if strings.EqualFold(portItem.Function, STORAGE) && strings.EqualFold(o.DeploymentPattern, SWITCHED) {
 			// Switched Non Converged use Storage Port Assignment
 			tmpPortObj.UntagVlan = NATIVE_VLANID
-			tmpPortObj.TagVlans = STORAGE_VlanList
+			tmpPortObj.TagVlanList = STORAGE_VlanList
 			tmpPortObj.Description = fmt.Sprintf("%s-%s", o.DeploymentPattern, STORAGE)
 			tmpPortObj.Function = STORAGE
 			tmpPortObj.Shutdown = false
@@ -187,7 +187,7 @@ func (o *OutputType) UpdateTORSwitchPorts(VlanGroup map[string][]string) {
 		} else if portItem.Function == TOR_BMC && len(o.SwitchBMC) > 0 {
 			// Has BMC
 			tmpPortObj.UntagVlan = NATIVE_VLANID
-			tmpPortObj.TagVlans = append(tmpPortObj.TagVlans, BMC_VlanID)
+			tmpPortObj.TagVlanList = append(tmpPortObj.TagVlanList, BMC_VlanID)
 			portOthers := map[string]string{
 				"ChannelGroup": o.PortChannel[TOR_BMC].PortChannelID,
 			}
@@ -196,7 +196,7 @@ func (o *OutputType) UpdateTORSwitchPorts(VlanGroup map[string][]string) {
 		} else if portItem.Function == TOR_BMC && len(o.SwitchBMC) == 0 {
 			// No BMC
 			tmpPortObj.UntagVlan = UNUSED_VLANID
-			tmpPortObj.TagVlans = nil
+			tmpPortObj.TagVlanList = nil
 			tmpPortObj.Description = UNUSED
 			tmpPortObj.Function = UNUSED
 		} else if strings.EqualFold(portItem.Function, MLAG_PEER) {
@@ -206,6 +206,9 @@ func (o *OutputType) UpdateTORSwitchPorts(VlanGroup map[string][]string) {
 			}
 			tmpPortObj.Others = portOthers
 			tmpPortObj.Shutdown = false
+		}
+		if len(tmpPortObj.TagVlanList) > 0 {
+			tmpPortObj.TagVlanString = optimizeArray(tmpPortObj.TagVlanList)
 		}
 		o.Ports[i] = tmpPortObj
 	}
@@ -223,12 +226,15 @@ func (o *OutputType) UpdateBMCSwitchPorts(VlanGroup map[string][]string) {
 		} else if strings.EqualFold(portItem.Function, TOR_BMC) {
 			// Has BMC to TOR
 			tmpPortObj.UntagVlan = NATIVE_VLANID
-			tmpPortObj.TagVlans = append(tmpPortObj.TagVlans, BMC_VlanID)
+			tmpPortObj.TagVlanList = append(tmpPortObj.TagVlanList, BMC_VlanID)
 			portOthers := map[string]string{
 				"ChannelGroup": o.PortChannel[TOR_BMC].PortChannelID,
 			}
 			tmpPortObj.Others = portOthers
 			tmpPortObj.Shutdown = false
+		}
+		if len(tmpPortObj.TagVlanList) > 0 {
+			tmpPortObj.TagVlanString = optimizeArray(tmpPortObj.TagVlanList)
 		}
 		o.Ports[i] = tmpPortObj
 	}

@@ -17,19 +17,18 @@ router bgp {{ .BGPAsn }}
     redistribute static route-map {{.Name}}
     {{ end -}}
     {{ end }}
-  {{ range .IPv4Neighbor -}}  
+  {{ range .IPv4Neighbor }}  
   neighbor {{ .NeighborIPAddress }}
     description {{ .Description }}
     remote-as {{ .NeighborAsn }}
+    {{ if ne .UpdateSource "" }}update-source {{.UpdateSource}}{{ else }}!{{ end }}
+    {{ if ne .EBGPMultiHop 0 }}ebgp-multihop {{.EBGPMultiHop}}{{ else }}!{{ end }}
     address-family ipv4 unicast
-      {{ range .PrefixList -}}
-      prefix-list {{.Name}} {{.Direction}}
-      {{ end -}}
       maximum-prefix 12000 warning-only
-    {{ if ne .NbrPassword "" }}password {{.NbrPassword}} {{ end -}}
-    {{ if ne .UpdateSource "" }}update-source {{.UpdateSource}}{{ end }}
-    {{ if ne .EBGPMultiHop 0 }}ebgp-multihop {{.EBGPMultiHop}}{{ end }}
-  {{ end -}}
+      {{ with .PrefixListOut }}prefix-list {{.}} out{{ end }}
+      {{ with .PrefixListIn }}prefix-list {{.}} in{{ end }}
+      {{ with .RouteMapIn }}route-map {{.}} in{{ end }}
+  {{- end -}}
 
 {{ if .RouteMap }}
 {{ range .RouteMap -}} 

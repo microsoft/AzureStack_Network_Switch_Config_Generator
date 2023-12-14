@@ -37,21 +37,10 @@ router bgp {{ .BGPAsn }}
     address-family ipv4 unicast
       activate
       sender-side-loop-detection
-      {{ if .PrefixList -}}
       next-hop-self
-      {{ range .PrefixList -}}
-      distribute-list {{.Name}} {{.Direction}}
-      {{ end }}
+      {{ with .PrefixListOut }}distribute-list {{.}} out{{ end }}
+      {{ with .PrefixListIn }}distribute-list {{.}} in{{ end }}
       {{- end }}
   {{ end -}}
 !
-{{ if .RouteMap }}
-{{ range .RouteMap -}} 
-route-map {{.Name}} {{.Action}} {{.Seq}}
-  {{ range .Rules -}} 
-  match ip address prefix-list {{.PrefixList}}
-  {{ end -}}
-{{ end -}}
-{{ end -}}
-{{ end -}}
 {{ end -}}

@@ -17,16 +17,8 @@
         "Description": "P2P_Border",
         "NeighborAsn": 0,
         "NeighborIPAddress": "P2P_Border",
-        "PrefixList": [
-          {
-            "Name": "ExternalPrefix",
-            "Direction": "in"
-          },
-          {
-            "Name": "ExternalPrefix",
-            "Direction": "out"
-          }
-        ],
+        "PrefixListIn": "FROM-BORDER",
+        "PrefixListOut": "TO-BORDER",
         "RemovePrivateAS": true,
         "Shutdown": false
       },
@@ -55,11 +47,19 @@
   },
   "PrefixList": [
     {
-      "Name": "ExternalPrefix",
+      "Name": "DefaultRoute",
       "Config": [
         {
-          "Idx": 300,
+          "Idx": 10,
           "Action": "permit",
+          "Description": "Any",
+          "Network": "Any",
+          "Operation": "",
+          "Prefix": 0
+        },
+        {
+          "Idx": 50,
+          "Action": "deny",
           "Description": "Any",
           "Network": "Any",
           "Operation": "le",

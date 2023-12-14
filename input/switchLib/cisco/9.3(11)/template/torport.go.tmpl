@@ -3,7 +3,7 @@
 {{ range . -}}
 {{ if eq .Type "mgmt" -}}
 interface {{ .Port }}
-  description use the BMCMgmt switch virtual interface
+  description BMCMgmt_switch_virtual_interface
   no ip redirects
   no ipv6 redirects
   shutdown
@@ -21,10 +21,7 @@ interface {{ .Type}} {{ .Port }}
   switchport
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}
-  switchport trunk allowed vlan {{ .UntagVlan }}
-  {{ range .TagVlans -}}
-  switchport trunk allowed vlan add {{ . }}
-  {{end -}}
+  switchport trunk allowed vlan {{ .TagVlanString }}
   priority-flow-control mode on
   spanning-tree port type edge trunk
   no logging event port link-status
@@ -34,11 +31,7 @@ interface {{ .Type}} {{ .Port }}
   switchport
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}
-  switchport trunk allowed vlan {{ .UntagVlan }}
-  {{ range .TagVlans -}}
-  switchport trunk allowed vlan add {{ . }}
-  {{end -}}
-  switchport trunk allowed vlan remove {{ .UntagVlan }}
+  switchport trunk allowed vlan {{ .TagVlanString }}
   priority-flow-control mode on
   spanning-tree port type edge trunk
   no logging event port link-status
@@ -60,13 +53,11 @@ interface {{ .Type}} {{ .Port }}
   switchport
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}
-  {{ range .TagVlans -}}
-  switchport trunk allowed vlan {{ . }}
-  {{end -}}
+  switchport trunk allowed vlan {{ .TagVlanString }}
   spanning-tree port type network
   logging event port link-status
-  channel-group {{ .Others.ChannelGroup }}
   mtu {{ .Mtu }}
+  channel-group {{ .Others.ChannelGroup }}
   {{else if eq .Function "P2P_Border1" -}}
   no switchport
   no ip redirects

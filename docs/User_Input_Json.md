@@ -1,8 +1,8 @@
-# Input JSON
+# User Input Definition JSON
 
 Reference File: [sample_input_files](/src/test/testInput)
 
-The json format and struct could be refined and updated based on optimization and new requirement, so file issues if anything inaccurate.
+The json format and structure could be refined and updated based on optimization and new requirement, so file issues if anything inaccurate.
 
 ## Structure
 
@@ -109,3 +109,96 @@ This section defines switch global setting variables:
 | TimeServer   | List            | List of TimeServer IP   |
 | SyslogServer | List            | List of SyslogServer IP |
 | DNSForwarder | List            | List of DNSForwarder IP |
+
+### InputData.WANSIM
+
+This section defines WANSIM VM network variables to generate WANSIM `netplan` and `frr` configuration.
+
+| Key             | Value (Example)       | Comment                                              |
+| --------------- | --------------------- | ---------------------------------------------------- |
+| Hostname        | String,"rack1-wansim" | Hostname of WANSIM (Not being used, can replace DNS) |
+| Loopback        | Object                | Loopback as Tunnel Source IP and BGP Router ID       |
+| GRE1            | Object                | Tunnel Variables with TOR1                           |
+| GRE2            | Object                | Tunnel Variables with TOR2                           |
+| BGP             | Object                | BGP Peer with TORs via GRE Tunnels                   |
+| RerouteNetworks | Object                | List of GroupName of Supernets                       |
+
+#### InputData.WANSIM.Loopback
+
+This section defines WANSIM VM Loopback setting variables, which will be used for two GRE Tunnel Source IP, so has to be advertised and unique in the network:
+
+| Key       | Value (Example)           | Comment                         |
+| --------- | ------------------------- | ------------------------------- |
+| IP        | string, "10.10.32.129"    | VM Assigned Loopback IP Address |
+| IPNetwork | string, "10.10.32.129/32" | VM Assigned Loopback IPNetwork  |
+| Subnet    | string,"10.10.32.128/25"  | Loopback Subnet                 |
+
+#### InputData.WANSIM.GRE1
+
+This section defines the GRE IP Information between WANSIM VM and TOR1, these IPs are all private for the Tunnel so can be reused:
+
+| Key       | Value  | Example      | Comment                                     |
+| --------- | ------ | ------------ | ------------------------------------------- |
+| Name      | string | "TOR1"       | Reserved, not being used.                   |
+| LocalIP   | string | "2.1.1.0"    | WANSIM VM GRE1 Tunnel Local IP              |
+| RemoteIP  | string | "2.1.1.1"    | WANSIM VM GRE1 Tunnel Remote IP (TOR1 side) |
+| IPNetwork | string | "2.1.1.0/31" | GRE1 Tunnel Subnet                          |
+
+#### InputData.WANSIM.GRE2
+
+This section defines the GRE IP Information between WANSIM VM and TOR2, these IPs are all private for the Tunnel so can be reused:
+
+| Key       | Value  | Example      | Comment                                     |
+| --------- | ------ | ------------ | ------------------------------------------- |
+| Name      | string | "TOR2"       | Reserved, not being used.                   |
+| LocalIP   | string | "2.1.1.2"    | WANSIM VM GRE2 Tunnel Local IP              |
+| RemoteIP  | string | "2.1.1.3"    | WANSIM VM GRE2 Tunnel Remote IP (TOR2 side) |
+| IPNetwork | string | "2.1.1.2/31" | GRE2 Tunnel Subnet                          |
+
+#### InputData.WANSIM.BGP
+
+This section defines the BGP information to generate BGP in FRR config:
+
+| Key      | Value | Example | Comment                        |
+| -------- | ----- | ------- | ------------------------------ |
+| LocalASN | int   | 65003   | Reserved, not being used.      |
+| IPv4Nbr  | List  |         | WANSIM VM GRE2 Tunnel Local IP |
+
+##### InputData.WANSIM.BGP.IPv4Nbr
+
+Because the TOR switches information already includes in the file, so only need to put the uplink switches if any to peer with WANSIM.
+
+| Key               | Value  | Example      | Comment                                   |
+| ----------------- | ------ | ------------ | ----------------------------------------- |
+| NeighborAsn       | int    | 65001        | Uplink Switch ASN                         |
+| NeighborIPAddress | string | "10.10.36.2" | Uplink Switch IP Address to Peer BGP      |
+| Description       | string | "To_Uplink1" | BGP Neighbor Description                  |
+| EbgpMultiHop      | int    | 8            | EBGP Multihop Value                       |
+| UpdateSource      | string | "eth0"       | Source Interface of WANSIM VM to Peer BGP |
+
+#### InputData.WANSIM.RerouteNetworks
+
+This section defines the network need to be redirected into WANSIM VM:
+
+| Key             | Value | Example                     | Comment                                        |
+| --------------- | ----- | --------------------------- | ---------------------------------------------- |
+| RerouteNetworks | List  | ["Infrastructure","TENANT"] | List of GroupName defined in Supernets section |
+
+## Q&A
+
+#### Are there any examples to understand the mapping between definition and configuration.
+
+Use this definition JSON as example: [s46r21-definition.json](/src/test/testInput/s46r21-definition.json)
+
+The tool generates two parts of configuration:
+
+- [Azure Stack Switch Configuration](/src/test/testOutput/s46r21-definition/)
+
+  - TOR Switches Configuration.
+  - BMC Switch Configuration if has.
+
+- [WANSIM VM Configuration](/src/test/testOutput/s46r21-definition/wansim_config/) which peer with Azure Stack Switch. [Click Here](<(https://github.com/microsoft/AzureStackWANSimulator)>) to understand WANSIM Feature.
+  - VM netplan YAML File, which defines all the interfaces with IP.
+  - FRR configuration: daemons + frr.conf.
+  - Default network profile rules: 1Gbit Download and Upload Bandwidth.
+  - Bash script to add WANSIM related log into syslog.

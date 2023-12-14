@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 	"text/template"
 
@@ -34,8 +35,8 @@ func containsString(s, substring string) bool {
 	return strings.Contains(strings.ToUpper(s), strings.ToUpper(substring))
 }
 
-func (o *OutputType) parseTemplate(templateFolder, outputFolder string) {
-	configFilePath := outputFolder + "/" + o.Switch.Hostname + CONFIGExtension
+func (o *OutputType) parseCombineTemplate(templateFolder, outputFolder, configFilename string) {
+	configFilePath := outputFolder + "/" + configFilename + CONFIGExtension
 	templateFiles := templateFolder + "/*.go.tmpl"
 	// Parse the whole template folder based on .go.tmpl files
 
@@ -56,4 +57,37 @@ func (o *OutputType) parseTemplate(templateFolder, outputFolder string) {
 		log.Fatalln(err)
 	}
 	f.Close()
+}
+
+func (o *OutputType) parseEachTemplate(templateFolder, outputFolder string) {
+	// Parse all .go.tmpl files in the specified folder
+	templateFiles, err := filepath.Glob(filepath.Join(templateFolder, "*.go.tmpl"))
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	// Define the templates
+	t := template.New("")
+
+	for _, templateFile := range templateFiles {
+		// Parse the template file
+		t = template.Must(t.ParseFiles(templateFile))
+	}
+
+	// Generate the output files
+	for _, templateFile := range templateFiles {
+		configFilename := strings.TrimSuffix(filepath.Base(templateFile), ".go.tmpl")
+		configFilePath := filepath.Join(outputFolder, configFilename)
+
+		f, err := os.OpenFile(configFilePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		err = t.ExecuteTemplate(f, configFilename, o.WANSIM)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		f.Close()
+	}
 }
