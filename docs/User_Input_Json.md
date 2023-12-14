@@ -125,13 +125,13 @@ This section defines WANSIM VM network variables to generate WANSIM `netplan` an
 
 #### InputData.WANSIM.Loopback
 
-This section defines WANSIM VM Loopback setting variables, which will be used for two GRE Tunnel Source IP, so has to be unique in the network:
+This section defines WANSIM VM Loopback setting variables, which will be used for two GRE Tunnel Source IP, so has to be advertised and unique in the network:
 
 | Key       | Value (Example)           | Comment                         |
 | --------- | ------------------------- | ------------------------------- |
 | IP        | string, "10.10.32.129"    | VM Assigned Loopback IP Address |
 | IPNetwork | string, "10.10.32.129/32" | VM Assigned Loopback IPNetwork  |
-| Subnet    | string,"10.10.32.128/26"  | Loopback Subnet                 |
+| Subnet    | string,"10.10.32.128/25"  | Loopback Subnet                 |
 
 #### InputData.WANSIM.GRE1
 
