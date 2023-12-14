@@ -192,12 +192,12 @@ Use this definition JSON as example: [s46r21-definition.json](/src/test/testInpu
 
 The tool generates two parts of configuration:
 
-- [Azure Stack Switch Configuration](/src/test/testOutput/s46r21-definition/)
+- [Azure Stack Switch Configuration](/src/test/goldenConfig/s46r21-definition/)
 
   - TOR Switches Configuration.
   - BMC Switch Configuration if has.
 
-- [WANSIM VM Configuration](/src/test/testOutput/s46r21-definition/wansim_config/) which peer with Azure Stack Switch. [Click Here](<(https://github.com/microsoft/AzureStackWANSimulator)>) to understand WANSIM Feature.
+- [WANSIM VM Configuration](/src/test/goldenConfig/s46r21-definition/wansim_config/) which peer with Azure Stack Switch. [Click Here](<(https://github.com/microsoft/AzureStackWANSimulator)>) to understand WANSIM Feature.
   - VM netplan YAML File, which defines all the interfaces with IP.
   - FRR configuration: daemons + frr.conf.
   - Default network profile rules: 1Gbit Download and Upload Bandwidth.
