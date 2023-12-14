@@ -73,14 +73,14 @@
       {
         "Make": "Cisco",
         "Model": "C9336C-FX2",
-        "Hostname": "rr1-s46-r01-x32ssp-1a",
+        "Hostname": "s46-r01-x32ssp-1a",
         "Type": "Border1",
         "ASN": 64846
       },
       {
         "Make": "Cisco",
         "Model": "C9336C-FX2",
-        "Hostname": "rr1-s46-r01-x32ssp-1b",
+        "Hostname": "s46-r01-x32ssp-1b",
         "Type": "Border2",
         "ASN": 64846
       },
@@ -88,7 +88,7 @@
         "Make": "Cisco",
         "Model": "93180YC-FX",
         "Type": "TOR1",
-        "Hostname": "rr1-s46-r21-93180hl-24-1a",
+        "Hostname": "s46-r21-93180hl-24-1a",
         "ASN": 65242,
         "Firmware": "9.3(11)"
       },
@@ -96,7 +96,7 @@
         "Make": "Cisco",
         "Model": "93180YC-FX",
         "Type": "TOR2",
-        "Hostname": "rr1-s46-r21-93180hl-24-1b",
+        "Hostname": "s46-r21-93180hl-24-1b",
         "ASN": 65242,
         "Firmware": "9.3(11)"
       },
@@ -104,7 +104,7 @@
         "Make": "Cisco",
         "Model": "9348GC-FXP",
         "Type": "BMC",
-        "Hostname": "rr1-s46-r21-9348bmc-24-1",
+        "Hostname": "s46-r21-9348bmc-24-1",
         "ASN": null,
         "Firmware": "9.3(11)"
       },
@@ -112,7 +112,7 @@
         "Make": "Microsoft",
         "Model": null,
         "Type": "MUX",
-        "Hostname": "rr1-s46-r21-MUX-1",
+        "Hostname": "s46-r21-MUX-1",
         "ASN": 65112,
         "Firmware": null
       }

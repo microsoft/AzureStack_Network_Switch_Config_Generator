@@ -2,43 +2,43 @@ ToolBuildVersion: 1.2305.01
 Switch:
   Make: DellEMC
   Model: S5248F-ON
-  Type: TOR1
-  Hostname: rr1-s46-r06-5248hl-6-1a
+  Type: TOR2
+  Hostname: s46-r06-5248hl-6-1b
   ASN: 64556
   Firmware: 10.5.4.5
 DeploymentPattern: HyperConverged
 SwitchPeer:
 - Make: DellEMC
   Model: S5248F-ON
-  Type: TOR2
-  Hostname: rr1-s46-r06-5248hl-6-1b
+  Type: TOR1
+  Hostname: s46-r06-5248hl-6-1a
   ASN: 64556
   Firmware: 10.5.4.5
 SwitchBMC:
 - Make: DellEMC
   Model: N3248TE-ON
   Type: BMC
-  Hostname: rr1-s46-r06-3248bmc-6-1
+  Hostname: s46-r06-3248bmc-6-1
   ASN: 0
   Firmware: 10.5.4.5
 SwitchUplink:
 - Make: Cisco
   Model: C9336C-FX2
   Type: Border1
-  Hostname: rr1-s46-r01-9336ssp-1a
+  Hostname: s46-r01-9336ssp-1a
   ASN: 64846
   Firmware: ""
 - Make: Cisco
   Model: C9336C-FX2
   Type: Border2
-  Hostname: rr1-s46-r01-9336ssp-1b
+  Hostname: s46-r01-9336ssp-1b
   ASN: 64846
   Firmware: ""
 SwitchDownlink:
 - Make: Microsoft
   Model: ""
   Type: MUX
-  Hostname: rr1-s46-r06-MUX-1
+  Hostname: s46-r06-MUX-1
   ASN: 65018
   Firmware: ""
 GlobalSetting:
@@ -72,7 +72,7 @@ Vlans:
   VlanName: HNVPA_6
   VlanID: 6
   VirtualGroupID: 58
-  IPAddress: 100.71.143.2
+  IPAddress: 100.71.143.3
   Cidr: 25
   Subnet: 100.71.143.0/25
   MTU: 9216
@@ -82,7 +82,7 @@ Vlans:
   VlanName: Infra_7
   VlanID: 7
   VirtualGroupID: 59
-  IPAddress: 100.68.148.2
+  IPAddress: 100.68.148.3
   Cidr: 24
   Subnet: 100.68.148.0/24
   MTU: 9216
@@ -100,7 +100,7 @@ Vlans:
   VlanName: BMC_Mgmt_125
   VlanID: 125
   VirtualGroupID: 57
-  IPAddress: 100.71.12.123
+  IPAddress: 100.71.12.124
   Cidr: 26
   Subnet: 100.71.12.64/26
   MTU: 9216
@@ -110,7 +110,7 @@ Vlans:
   VlanName: Tenant_201
   VlanID: 201
   VirtualGroupID: 60
-  IPAddress: 100.68.149.2
+  IPAddress: 100.68.149.3
   Cidr: 24
   Subnet: 100.68.149.0/24
   MTU: 9216
@@ -120,7 +120,7 @@ Vlans:
   VlanName: LogicalTenant_301
   VlanID: 301
   VirtualGroupID: 61
-  IPAddress: 100.68.150.2
+  IPAddress: 100.68.150.3
   Cidr: 25
   Subnet: 100.68.150.0/25
   MTU: 9216
@@ -130,7 +130,7 @@ Vlans:
   VlanName: DhcpTenant_401
   VlanID: 401
   VirtualGroupID: 62
-  IPAddress: 100.68.150.130
+  IPAddress: 100.68.150.131
   Cidr: 25
   Subnet: 100.68.150.128/25
   MTU: 9216
@@ -140,7 +140,7 @@ Vlans:
   VlanName: L3forward_501
   VlanID: 501
   VirtualGroupID: 63
-  IPAddress: 100.68.151.2
+  IPAddress: 100.68.151.3
   Cidr: 28
   Subnet: 100.68.151.0/28
   MTU: 9216
@@ -150,7 +150,7 @@ Vlans:
   VlanName: L3forward_502
   VlanID: 502
   VirtualGroupID: 64
-  IPAddress: 100.68.151.18
+  IPAddress: 100.68.151.19
   Cidr: 28
   Subnet: 100.68.151.16/28
   MTU: 9216
@@ -160,7 +160,7 @@ Vlans:
   VlanName: L3forward_503
   VlanID: 503
   VirtualGroupID: 65
-  IPAddress: 100.68.151.34
+  IPAddress: 100.68.151.35
   Cidr: 28
   Subnet: 100.68.151.32/28
   MTU: 9216
@@ -170,7 +170,7 @@ Vlans:
   VlanName: L3forward_504
   VlanID: 504
   VirtualGroupID: 66
-  IPAddress: 100.68.151.50
+  IPAddress: 100.68.151.51
   Cidr: 28
   Subnet: 100.68.151.48/28
   MTU: 9216
@@ -180,7 +180,7 @@ Vlans:
   VlanName: L3forward_505
   VlanID: 505
   VirtualGroupID: 67
-  IPAddress: 100.68.151.66
+  IPAddress: 100.68.151.67
   Cidr: 28
   Subnet: 100.68.151.64/28
   MTU: 9216
@@ -190,7 +190,7 @@ Vlans:
   VlanName: L3forward_506
   VlanID: 506
   VirtualGroupID: 68
-  IPAddress: 100.68.151.82
+  IPAddress: 100.68.151.83
   Cidr: 28
   Subnet: 100.68.151.80/28
   MTU: 9216
@@ -200,7 +200,7 @@ Vlans:
   VlanName: L3forward_507
   VlanID: 507
   VirtualGroupID: 69
-  IPAddress: 100.68.151.98
+  IPAddress: 100.68.151.99
   Cidr: 28
   Subnet: 100.68.151.96/28
   MTU: 9216
@@ -210,7 +210,7 @@ Vlans:
   VlanName: L3forward_508
   VlanID: 508
   VirtualGroupID: 70
-  IPAddress: 100.68.151.114
+  IPAddress: 100.68.151.115
   Cidr: 28
   Subnet: 100.68.151.112/28
   MTU: 9216
@@ -220,7 +220,7 @@ Vlans:
   VlanName: L3forward_509
   VlanID: 509
   VirtualGroupID: 71
-  IPAddress: 100.68.151.130
+  IPAddress: 100.68.151.131
   Cidr: 28
   Subnet: 100.68.151.128/28
   MTU: 9216
@@ -230,7 +230,7 @@ Vlans:
   VlanName: L3forward_510
   VlanID: 510
   VirtualGroupID: 72
-  IPAddress: 100.68.151.145
+  IPAddress: 100.68.151.146
   Cidr: 28
   Subnet: 100.68.151.144/28
   MTU: 9216
@@ -240,7 +240,7 @@ Vlans:
   VlanName: L3forward_511
   VlanID: 511
   VirtualGroupID: 73
-  IPAddress: 100.68.151.162
+  IPAddress: 100.68.151.163
   Cidr: 28
   Subnet: 100.68.151.160/28
   MTU: 9216
@@ -250,7 +250,7 @@ Vlans:
   VlanName: L3forward_512
   VlanID: 512
   VirtualGroupID: 74
-  IPAddress: 100.68.151.178
+  IPAddress: 100.68.151.179
   Cidr: 28
   Subnet: 100.68.151.176/28
   MTU: 9216
@@ -260,7 +260,7 @@ Vlans:
   VlanName: L3forward_513
   VlanID: 513
   VirtualGroupID: 75
-  IPAddress: 100.68.151.194
+  IPAddress: 100.68.151.195
   Cidr: 28
   Subnet: 100.68.151.192/28
   MTU: 9216
@@ -270,7 +270,7 @@ Vlans:
   VlanName: L3forward_514
   VlanID: 514
   VirtualGroupID: 76
-  IPAddress: 100.68.151.210
+  IPAddress: 100.68.151.211
   Cidr: 28
   Subnet: 100.68.151.208/28
   MTU: 9216
@@ -280,7 +280,7 @@ Vlans:
   VlanName: L3forward_515
   VlanID: 515
   VirtualGroupID: 77
-  IPAddress: 100.68.151.226
+  IPAddress: 100.68.151.227
   Cidr: 28
   Subnet: 100.68.151.224/28
   MTU: 9216
@@ -290,7 +290,7 @@ Vlans:
   VlanName: L3forward_516
   VlanID: 516
   VirtualGroupID: 78
-  IPAddress: 100.68.151.242
+  IPAddress: 100.68.151.243
   Cidr: 28
   Subnet: 100.68.151.240/28
   MTU: 9216
@@ -313,42 +313,42 @@ Vlans:
   MTU: 9216
   Shutdown: false
 L3Interfaces:
-  LOOPBACK0_TOR1:
+  LOOPBACK0_TOR2:
     Name: loopback0
-    Function: Loopback0_Tor1
-    Description: Loopback0_Tor1
-    IPAddress: 100.71.12.21
+    Function: Loopback0_Tor2
+    Description: Loopback0_Tor2
+    IPAddress: 100.71.12.22
     Cidr: 32
-    Subnet: 100.71.12.21/32
+    Subnet: 100.71.12.22/32
     MTU: 9216
     Shutdown: false
-  P2P_BORDER1_TOR1:
+  P2P_BORDER1_TOR2:
     Name: p2p_border
-    Function: P2P_Border1_Tor1
-    Description: P2P_Border1_Tor1
-    IPAddress: 100.71.12.2
+    Function: P2P_Border1_Tor2
+    Description: P2P_Border1_Tor2
+    IPAddress: 100.71.12.6
     Cidr: 30
-    NbrIPAddress: 100.71.12.1
-    Subnet: 100.71.12.0/30
+    NbrIPAddress: 100.71.12.5
+    Subnet: 100.71.12.4/30
     MTU: 9216
     Shutdown: false
-  P2P_BORDER2_TOR1:
+  P2P_BORDER2_TOR2:
     Name: p2p_border
-    Function: P2P_Border2_Tor1
-    Description: P2P_Border2_Tor1
-    IPAddress: 100.71.12.10
+    Function: P2P_Border2_Tor2
+    Description: P2P_Border2_Tor2
+    IPAddress: 100.71.12.14
     Cidr: 30
-    NbrIPAddress: 100.71.12.9
-    Subnet: 100.71.12.8/30
+    NbrIPAddress: 100.71.12.13
+    Subnet: 100.71.12.12/30
     MTU: 9216
     Shutdown: false
   P2P_IBGP:
     Name: p2p_ibgp
     Function: P2P_iBGP
     Description: P2P_iBGP
-    IPAddress: 100.71.12.17
+    IPAddress: 100.71.12.18
     Cidr: 30
-    NbrIPAddress: 100.71.12.18
+    NbrIPAddress: 100.71.12.17
     Subnet: 100.71.12.16/30
     MTU: 9216
     Shutdown: false
@@ -358,7 +358,7 @@ PortChannel:
     Function: P2P_IBGP
     UntagVlan: 0
     TagVlans: 0
-    IPAddress: 100.71.12.17/30
+    IPAddress: 100.71.12.18/30
     PortChannelID: "50"
     VPC: ""
     Shutdown: false
@@ -1294,7 +1294,7 @@ Ports:
   Type: ethernet
   Description: P2P_Border2
   Function: P2P_Border2
-  IPAddress: 100.71.12.10/30
+  IPAddress: 100.71.12.14/30
   MTU: 9216
   Shutdown: false
   Mode: 10g-4x
@@ -1304,7 +1304,7 @@ Ports:
   Type: ethernet
   Description: P2P_Border1
   Function: P2P_Border1
-  IPAddress: 100.71.12.2/30
+  IPAddress: 100.71.12.6/30
   MTU: 9216
   Shutdown: false
   Mode: 10g-4x
@@ -1481,12 +1481,12 @@ PortGroup:
 Routing:
   BGP:
     BGPAsn: 64556
-    RouterID: 100.71.12.21
+    RouterID: 100.71.12.22
     IPv4Network:
-    - 100.71.12.0/30
-    - 100.71.12.8/30
+    - 100.71.12.4/30
+    - 100.71.12.12/30
     - 100.71.12.16/30
-    - 100.71.12.21/32
+    - 100.71.12.22/32
     - 100.71.12.64/26
     - 100.71.143.0/25
     - 100.68.148.0/24
@@ -1513,21 +1513,21 @@ Routing:
     - SwitchRelation: SwitchUplink
       Description: TO_Border1
       NeighborAsn: 64846
-      NeighborIPAddress: 100.71.12.1
+      NeighborIPAddress: 100.71.12.5
       PrefixListIn: FROM-BORDER
       PrefixListOut: TO-BORDER
       RemovePrivateAS: true
     - SwitchRelation: SwitchUplink
       Description: TO_Border2
       NeighborAsn: 64846
-      NeighborIPAddress: 100.71.12.9
+      NeighborIPAddress: 100.71.12.13
       PrefixListIn: FROM-BORDER
       PrefixListOut: TO-BORDER
       RemovePrivateAS: true
     - SwitchRelation: SwitchPeer
-      Description: TO_TOR2
+      Description: TO_TOR1
       NeighborAsn: 64556
-      NeighborIPAddress: 100.71.12.18
+      NeighborIPAddress: 100.71.12.17
       NbrPassword: $CREDENTIAL_PLACEHOLDER$
     TemplateNeigbor:
     - SwitchRelation: SwitchDownlink

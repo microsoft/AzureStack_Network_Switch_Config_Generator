@@ -73,14 +73,14 @@
       {
         "Make": "Cisco",
         "Model": "C9336C-FX2",
-        "Hostname": "rr1-s46-r01-9336ssp-1a",
+        "Hostname": "s46-r01-9336ssp-1a",
         "Type": "Border1",
         "ASN": 64846
       },
       {
         "Make": "Cisco",
         "Model": "C9336C-FX2",
-        "Hostname": "rr1-s46-r01-9336ssp-1b",
+        "Hostname": "s46-r01-9336ssp-1b",
         "Type": "Border2",
         "ASN": 64846
       },
@@ -88,7 +88,7 @@
         "Make": "DellEMC",
         "Model": "S5248F-ON",
         "Type": "TOR1",
-        "Hostname": "rr1-s46-r06-5248hl-6-1a",
+        "Hostname": "s46-r06-5248hl-6-1a",
         "ASN": 64556,
         "Firmware": "10.5.4.5"
       },
@@ -96,7 +96,7 @@
         "Make": "DellEMC",
         "Model": "S5248F-ON",
         "Type": "TOR2",
-        "Hostname": "rr1-s46-r06-5248hl-6-1b",
+        "Hostname": "s46-r06-5248hl-6-1b",
         "ASN": 64556,
         "Firmware": "10.5.4.5"
       },
@@ -104,7 +104,7 @@
         "Make": "DellEMC",
         "Model": "N3248TE-ON",
         "Type": "BMC",
-        "Hostname": "rr1-s46-r06-3248bmc-6-1",
+        "Hostname": "s46-r06-3248bmc-6-1",
         "ASN": null,
         "Firmware": "10.5.4.5"
       },
@@ -112,7 +112,7 @@
         "Make": "Microsoft",
         "Model": null,
         "Type": "MUX",
-        "Hostname": "rr1-s46-r06-MUX-1",
+        "Hostname": "s46-r06-MUX-1",
         "ASN": 65018,
         "Firmware": null
       }

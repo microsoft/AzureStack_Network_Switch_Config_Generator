@@ -30,11 +30,11 @@ func TestMain(t *testing.T) {
 		inputTestFileName string
 	}
 	testCases := map[string]test{
-		"rr1s46r06a-sw4-definition": {
-			inputTestFileName: "rr1s46r06a-sw4-definition.json",
+		"s46r06-definition": {
+			inputTestFileName: "s46r06-definition.json",
 		},
-		"rr1s46r21-hc4-definition": {
-			inputTestFileName: "rr1s46r21-hc4-definition.json",
+		"s46r21-definition": {
+			inputTestFileName: "s46r21-definition.json",
 		},
 	}
 
@@ -42,11 +42,11 @@ func TestMain(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			testInputData := parseInputJson(testInputFolder + tc.inputTestFileName)
 			testDeviceTypeMap := testInputData.createDeviceTypeMap()
-			generateSwitchConfig(testInputData, switchLibFolder, wansimLibFolder, testOutputFolder+tc.inputTestFileName, testDeviceTypeMap)
-			outputFiles := getFilesInFolder(testOutputFolder + tc.inputTestFileName)
+			generateSwitchConfig(testInputData, switchLibFolder, wansimLibFolder, testOutputFolder+name, testDeviceTypeMap)
+			outputFiles := getFilesInFolder(testOutputFolder+name)
 			for _, file := range outputFiles {
 				if strings.Contains(file, YAMLExtension) {
-					relativePath := fmt.Sprintf("%s/%s", tc.inputTestFileName, file)
+					relativePath := fmt.Sprintf("%s/%s", name, file)
 					goldenConfigObj := parseOutputYaml(testGoldenFolder + relativePath)
 					testOutputObj := parseOutputYaml(testOutputFolder + relativePath)
 					if !reflect.DeepEqual(goldenConfigObj.Vlans, testOutputObj.Vlans) {

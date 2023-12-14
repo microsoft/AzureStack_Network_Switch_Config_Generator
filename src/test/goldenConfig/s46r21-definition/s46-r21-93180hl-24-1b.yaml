@@ -3,7 +3,7 @@ Switch:
   Make: Cisco
   Model: 93180YC-FX
   Type: TOR2
-  Hostname: rr1-s46-r21-93180hl-24-1b
+  Hostname: s46-r21-93180hl-24-1b
   ASN: 65242
   Firmware: 9.3(11)
 DeploymentPattern: HyperConverged
@@ -11,34 +11,34 @@ SwitchPeer:
 - Make: Cisco
   Model: 93180YC-FX
   Type: TOR1
-  Hostname: rr1-s46-r21-93180hl-24-1a
+  Hostname: s46-r21-93180hl-24-1a
   ASN: 65242
   Firmware: 9.3(11)
 SwitchBMC:
 - Make: Cisco
   Model: 9348GC-FXP
   Type: BMC
-  Hostname: rr1-s46-r21-9348bmc-24-1
+  Hostname: s46-r21-9348bmc-24-1
   ASN: 0
   Firmware: 9.3(11)
 SwitchUplink:
 - Make: Cisco
   Model: C9336C-FX2
   Type: Border1
-  Hostname: rr1-s46-r01-x32ssp-1a
+  Hostname: s46-r01-x32ssp-1a
   ASN: 64846
   Firmware: ""
 - Make: Cisco
   Model: C9336C-FX2
   Type: Border2
-  Hostname: rr1-s46-r01-x32ssp-1b
+  Hostname: s46-r01-x32ssp-1b
   ASN: 64846
   Firmware: ""
 SwitchDownlink:
 - Make: Microsoft
   Model: ""
   Type: MUX
-  Hostname: rr1-s46-r21-MUX-1
+  Hostname: s46-r21-MUX-1
   ASN: 65112
   Firmware: ""
 GlobalSetting:
@@ -1307,7 +1307,7 @@ Routing:
       Operation: le
       Prefix: 32
 WANSIM:
-  Hostname: rr1-s46-r21-wansim
+  Hostname: rack1-wansim
   Loopback:
     IP: 10.10.32.129
     IPNetwork: 10.10.32.129/32

@@ -188,7 +188,17 @@ This section defines the network need to be redirected into WANSIM VM:
 
 #### Are there any examples to understand the mapping between definition and configuration.
 
-Here is an example:
+Use this definition JSON as example: [s46r21-definition.json](/src/test/testInput/s46r21-definition.json)
 
-- Input: [Definition JSON](/src/test/testInput/rr1s46r21-hc4-definition.json)
-- Output: [Switch and WANSIM Configuration](/src/test/goldenConfig/rr1s46r21-hc4-definition.json/)
+The tool generates two parts of configuration:
+
+- [Azure Stack Switch Configuration](/src/test/testOutput/s46r21-definition/)
+
+  - TOR Switches Configuration.
+  - BMC Switch Configuration if has.
+
+- [WANSIM VM Configuration](/src/test/testOutput/s46r21-definition/wansim_config/) which peer with Azure Stack Switch. [Click Here](<(https://github.com/microsoft/AzureStackWANSimulator)>) to understand WANSIM Feature.
+  - VM netplan YAML File, which defines all the interfaces with IP.
+  - FRR configuration: daemons + frr.conf.
+  - Default network profile rules: 1Gbit Download and Upload Bandwidth.
+  - Bash script to add WANSIM related log into syslog.
