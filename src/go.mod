@@ -1,4 +1,4 @@
-module SwitchConfigGenerator
+module AzureStackSwitchConfigGenerator
 
 go 1.17
 

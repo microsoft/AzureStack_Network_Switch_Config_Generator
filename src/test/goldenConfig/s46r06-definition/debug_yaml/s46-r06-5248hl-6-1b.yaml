@@ -1557,7 +1557,7 @@ WANSIM:
   Loopback:
     IP: 10.10.32.129
     IPNetwork: 10.10.32.129/32
-    Subnet: 10.10.32.128/26
+    Subnet: 10.10.32.128/25
   GRE1:
     Name: TOR1
     TunnelSrcIP: 10.10.32.129

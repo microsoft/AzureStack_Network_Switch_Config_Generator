@@ -111,8 +111,11 @@ func generateSwitchConfig(inputData InputData, switchLibFolder, wansimLibFolder,
 			torOutput.ParseSwitchPort(frameworkFolder)
 			torOutput.ParseRouting(frameworkFolder, inputData)
 			torOutput.UpdateWANSIM(inputData)
-			torOutput.writeToYaml(outputFolder)
-			torOutput.parseCombineTemplate(templateFolder, outputFolder, torItem.Hostname)
+			debugYAMLOutput := path.Join(outputFolder,"debug_yaml")
+			torOutput.writeToYaml(debugYAMLOutput)
+			switchConfigOutput := path.Join(outputFolder,"switch_config")
+			createFolder(switchConfigOutput)
+			torOutput.parseCombineTemplate(templateFolder, switchConfigOutput, torItem.Hostname)
 			wansimOutput := path.Join(outputFolder,"wansim_config")
 			createFolder(wansimOutput)
 			torOutput.parseEachTemplate(wansimLibFolder, wansimOutput)
@@ -133,9 +136,11 @@ func generateSwitchConfig(inputData InputData, switchLibFolder, wansimLibFolder,
 			bmcOutput.UpdatePortChannel(inputData)
 			bmcOutput.ParseSwitchPort(frameworkFolder)
 			bmcOutput.ParseRouting(frameworkFolder, inputData)
-			bmcOutput.writeToYaml(outputFolder)
-			bmcOutput.parseCombineTemplate(templateFolder, outputFolder, bmcItem.Hostname)
-
+			debugYAMLOutput := path.Join(outputFolder,"debug_yaml")
+			bmcOutput.writeToYaml(debugYAMLOutput)
+			switchConfigOutput := path.Join(outputFolder,"switch_config")
+			createFolder(switchConfigOutput)
+			bmcOutput.parseCombineTemplate(templateFolder, switchConfigOutput, bmcItem.Hostname)
 		}
 	}
 }
