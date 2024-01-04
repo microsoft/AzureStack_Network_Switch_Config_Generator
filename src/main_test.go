@@ -25,6 +25,7 @@ func TestMain(t *testing.T) {
 	testInputFolder := cwd + "/test/testInput/"
 	testOutputFolder := cwd + "/test/testOutput/"
 	testGoldenFolder := cwd + "/test/goldenConfig/"
+	debugYamlFolderName := "debug_yaml"
 
 	type test struct {
 		inputTestFileName string
@@ -43,10 +44,12 @@ func TestMain(t *testing.T) {
 			testInputData := parseInputJson(testInputFolder + tc.inputTestFileName)
 			testDeviceTypeMap := testInputData.createDeviceTypeMap()
 			generateSwitchConfig(testInputData, switchLibFolder, wansimLibFolder, testOutputFolder+name, testDeviceTypeMap)
-			outputFiles := getFilesInFolder(testOutputFolder+name)
+			outputFiles := getFilesInFolder(testOutputFolder+name+"/"+debugYamlFolderName)
+			// fmt.Println(outputFiles)
 			for _, file := range outputFiles {
 				if strings.Contains(file, YAMLExtension) {
-					relativePath := fmt.Sprintf("%s/%s", name, file)
+					relativePath := fmt.Sprintf("%s/%s/%s", name, debugYamlFolderName,file)
+					// fmt.Println(relativePath)
 					goldenConfigObj := parseOutputYaml(testGoldenFolder + relativePath)
 					testOutputObj := parseOutputYaml(testOutputFolder + relativePath)
 					if !reflect.DeepEqual(goldenConfigObj.Vlans, testOutputObj.Vlans) {
