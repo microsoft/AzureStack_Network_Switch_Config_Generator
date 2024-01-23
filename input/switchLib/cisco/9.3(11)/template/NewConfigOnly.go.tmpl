@@ -1,0 +1,5 @@
+feature tunnel
+{{ template "wansim_gre" . -}}
+{{ template "prefixlist" . -}}
+{{ template "full_wansim_bgp" . -}}
+end

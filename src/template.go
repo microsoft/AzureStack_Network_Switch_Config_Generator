@@ -41,11 +41,6 @@ func (o *OutputType) parseCombineTemplate(templateFolder, outputFolder, configFi
 	// Parse the whole template folder based on .go.tmpl files
 
 	t := template.Must(template.ParseGlob(templateFiles))
-	// .Funcs(template.FuncMap{
-	// 	"contains":  containsString,
-	// 	"hasPrefix": strings.HasPrefix,
-	// 	"hasSuffix": strings.HasSuffix,
-	// })
 
 	f, err := os.OpenFile(configFilePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
@@ -89,5 +84,51 @@ func (o *OutputType) parseEachTemplate(templateFolder, outputFolder string) {
 			log.Fatalln(err)
 		}
 		f.Close()
+	}
+}
+
+// parseSelectedTemplate is a method on the OutputType struct.
+// It takes in a template folder path, output folder path, and a config filename.
+// It opens a new file in the output folder with the config filename and extension,
+// parses the selected template files from the template folder, and executes the parsed template with the OutputType data.
+func (o *OutputType) parseSelectedTemplate(templateFolder, outputFolder, configFilename string) {
+	// Create the path for the new config file in the output folder
+	newConfigOnlyFilePath := outputFolder + "/" + configFilename + CONFIGExtension
+
+	// Open the new config file with write-only access, create it if it doesn't exist, and truncate it if it does
+	f, err := os.OpenFile(newConfigOnlyFilePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	// If there's an error opening the file, log the error and exit the program
+	if err != nil {
+		log.Fatalln(err)
+	}
+	// Ensure the file gets closed once the function finishes
+	defer f.Close()
+
+	// Define the template files to be parsed
+	selectedTemplateFiles := []string{
+		"NewConfigOnly.go.tmpl",
+		"wansim.go.tmpl",
+		"prefixlist.go.tmpl",
+	}
+
+	// Initialize a slice to hold the full file paths of the template files
+	var filePaths []string
+	// For each template file, join the template folder path and the template file name, and append it to the file paths slice
+	for _, file := range selectedTemplateFiles {
+		filePaths = append(filePaths, filepath.Join(templateFolder, file))
+	}
+
+	// Parse the template files
+	t, err := template.ParseFiles(filePaths...)
+	// If there's an error parsing the files, panic and exit the program
+	if err != nil {
+		panic(err)
+	}
+
+	// Execute the template with the OutputType data
+	err = t.Execute(f, o)
+	// If there's an error executing the template, panic and exit the program
+	if err != nil {
+		panic(err)
 	}
 }
