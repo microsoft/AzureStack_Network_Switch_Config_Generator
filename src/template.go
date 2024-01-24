@@ -87,13 +87,10 @@ func (o *OutputType) parseEachTemplate(templateFolder, outputFolder string) {
 	}
 }
 
-// parseSelectedTemplate is a method on the OutputType struct.
-// It takes in a template folder path, output folder path, and a config filename.
-// It opens a new file in the output folder with the config filename and extension,
-// parses the selected template files from the template folder, and executes the parsed template with the OutputType data.
-func (o *OutputType) parseSelectedTemplate(templateFolder, outputFolder, configFilename string) {
+
+func (o *OutputType) parseSelectedTemplate(templateFolder, outputFolder string) {
 	// Create the path for the new config file in the output folder
-	newConfigOnlyFilePath := outputFolder + "/" + configFilename + CONFIGExtension
+	newConfigOnlyFilePath := outputFolder + "/" + o.GlobalSetting.OOBIP + CONFIGExtension
 
 	// Open the new config file with write-only access, create it if it doesn't exist, and truncate it if it does
 	f, err := os.OpenFile(newConfigOnlyFilePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
@@ -106,7 +103,7 @@ func (o *OutputType) parseSelectedTemplate(templateFolder, outputFolder, configF
 
 	// Define the template files to be parsed
 	selectedTemplateFiles := []string{
-		"NewConfigOnly.go.tmpl",
+		"WANSIMConfigOnly.go.tmpl",
 		"wansim.go.tmpl",
 		"prefixlist.go.tmpl",
 	}

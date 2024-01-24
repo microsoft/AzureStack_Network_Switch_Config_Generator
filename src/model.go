@@ -48,6 +48,7 @@ type GlobalSettingType struct {
 	DHCPInfra    []string `yaml:"DHCPInfra"`
 	DHCPTenant   []string `yaml:"DHCPTenant"`
 	OOB          string   `yaml:"OOB"`
+	OOBIP        string   `yaml:"OOBIP"`
 }
 
 type VlanType struct {

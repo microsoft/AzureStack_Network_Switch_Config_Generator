@@ -121,7 +121,7 @@ func generateSwitchConfig(inputData InputData, switchLibFolder, wansimLibFolder,
 			torOutput.parseEachTemplate(wansimLibFolder, wansimOutput)
 			onlyNewConfigOnlyOutput := path.Join(outputFolder,"wansim_switch_config")
 			createFolder(onlyNewConfigOnlyOutput)
-			torOutput.parseSelectedTemplate(templateFolder, onlyNewConfigOnlyOutput, torItem.Hostname)
+			torOutput.parseSelectedTemplate(templateFolder, onlyNewConfigOnlyOutput)
 		}
 	} else {
 		log.Fatalln(NO_Valid_TOR_Switch)
