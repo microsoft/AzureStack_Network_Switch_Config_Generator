@@ -33,6 +33,7 @@ GlobalSetting:
   DHCPInfra: []
   DHCPTenant: []
   OOB: vlan125
+  OOBIP: 100.71.85.125
 Vlans:
 - GroupName: UNUSED_VLAN
   VlanName: UNUSED_VLAN

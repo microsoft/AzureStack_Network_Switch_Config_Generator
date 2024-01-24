@@ -30,3 +30,19 @@ interface Tunnel1
       route-map PREFER-WANSIM in
       maximum-prefix 12000 warning-only
 {{ end }}
+
+{{ define "full_wansim_bgp"}}
+router bgp {{ .Routing.BGP.BGPAsn }}
+{{- $SwitchType := .Switch.Type }}
+{{- if eq $SwitchType "TOR1" }}
+  neighbor {{ .WANSIM.GRE1.LocalIP}}
+{{- else if eq $SwitchType "TOR2" }}
+  neighbor {{ .WANSIM.GRE2.LocalIP}}
+{{- end }}
+    remote-as {{ .WANSIM.BGP.LocalASN}}
+    description BGP_Peer_With_WANSIM
+    update-source Tunnel1
+    address-family ipv4 unicast
+      route-map PREFER-WANSIM in
+      maximum-prefix 12000 warning-only
+{{ end }}
