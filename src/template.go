@@ -90,7 +90,7 @@ func (o *OutputType) parseEachTemplate(templateFolder, outputFolder string) {
 
 func (o *OutputType) parseSelectedTemplate(templateFolder, outputFolder string) {
 	// Create the path for the new config file in the output folder
-	newConfigOnlyFilePath := outputFolder + "/" + o.GlobalSetting.OOBIP + CONFIGExtension
+	newConfigOnlyFilePath := outputFolder + "/" + o.GlobalSetting.OOBIP + "_" + o.Switch.Make + CONFIGExtension
 
 	// Open the new config file with write-only access, create it if it doesn't exist, and truncate it if it does
 	f, err := os.OpenFile(newConfigOnlyFilePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
