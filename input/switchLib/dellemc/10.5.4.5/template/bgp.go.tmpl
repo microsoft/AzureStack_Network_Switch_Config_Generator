@@ -17,7 +17,7 @@ router bgp {{ .BGPAsn }}
     {{ end -}}
     {{ end }}
   !
-  {{ range .TemplateNeigbor -}}
+  {{ range .TemplateNeigbor }}
   template {{ .Description }}
     ebgp-multihop {{ .EBGPMultiHop }}
     listen {{ .NeighborIPAddress }} limit 5
@@ -25,7 +25,7 @@ router bgp {{ .BGPAsn }}
     update-source {{ .UpdateSource }}
   {{ end -}}
   !
-  {{ range .IPv4Neighbor -}}
+  {{ range .IPv4Neighbor }}
   neighbor {{ .NeighborIPAddress }}
     description {{ .Description }}
     remote-as {{ .NeighborAsn }}
@@ -40,7 +40,6 @@ router bgp {{ .BGPAsn }}
       next-hop-self
       {{ with .PrefixListOut }}distribute-list {{.}} out{{ end }}
       {{ with .PrefixListIn }}distribute-list {{.}} in{{ end }}
-      {{- end }}
+      {{ end }}
   {{ end -}}
-!
-{{ end -}}
+{{- end -}}
