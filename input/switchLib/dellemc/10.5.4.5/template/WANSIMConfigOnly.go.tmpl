@@ -1,3 +1,5 @@
+copy running-configuration config://Before_WANSIM.config
+
 {{ template "wansim_gre" . -}}
 {{ template "prefixlist" . -}}
 {{ template "full_wansim_bgp" . -}}
