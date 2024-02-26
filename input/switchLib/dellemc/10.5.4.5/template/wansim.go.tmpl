@@ -1,7 +1,7 @@
 {{ define "wansim_gre"}}
 ! GRE Tunnel To WANSIM
 {{ $SwitchType := .Switch.Type -}}
-interface Tunnel1
+interface tunnel 1
   mode gre-ipv4
   {{ if eq $SwitchType "TOR1" -}}
   ip address {{ .WANSIM.GRE1.RemoteIP}}/31
