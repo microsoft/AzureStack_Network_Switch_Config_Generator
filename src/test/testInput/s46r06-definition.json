@@ -90,7 +90,7 @@
         "Type": "TOR1",
         "Hostname": "s46-r06-5248hl-6-1a",
         "ASN": 64556,
-        "Firmware": "10.5.4.5"
+        "Firmware": "10.5.5.5"
       },
       {
         "Make": "DellEMC",
@@ -98,7 +98,7 @@
         "Type": "TOR2",
         "Hostname": "s46-r06-5248hl-6-1b",
         "ASN": 64556,
-        "Firmware": "10.5.4.5"
+        "Firmware": "10.5.5.5"
       },
       {
         "Make": "DellEMC",
@@ -106,7 +106,7 @@
         "Type": "BMC",
         "Hostname": "s46-r06-3248bmc-6-1",
         "ASN": null,
-        "Firmware": "10.5.4.5"
+        "Firmware": "10.5.5.5"
       },
       {
         "Make": "Microsoft",
