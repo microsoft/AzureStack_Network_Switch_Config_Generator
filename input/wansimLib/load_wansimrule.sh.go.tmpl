@@ -7,7 +7,16 @@
 
 sudo mkdir -p /etc/wansimrule/
 sudo chmod 777 /etc/wansimrule/
+# Copy service script file
 sudo cp /home/wansimadmin/wansim_vm_config/wansimrule_service.sh /etc/wansimrule/wansimrule_service.sh
 sudo chmod +x /etc/wansimrule/wansimrule_service.sh
-sudo nano /etc/systemd/system/wansimrule.service
+# Copy service definition file
+sudo cp /home/wansimadmin/wansim_vm_config/wansimrule.service /etc/systemd/system/wansimrule.service
+sudo chmod +x /etc/systemd/system/wansimrule.service
+# Validate service
+sudo systemctl daemon-reload
+sudo systemctl enable wansimrule.service
+sudo systemctl start wansimrule.service
+sudo systemctl status wansimrule.service
+# sudo systemctl stop wansimrule.service
 {{- end -}}
