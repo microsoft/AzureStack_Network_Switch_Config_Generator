@@ -44,6 +44,5 @@
 {{ template "torport" .Ports -}}
 {{ template "vlt" . -}}
 {{if ne .Routing.BGP.BGPAsn 0 }}{{ template "bgp" .Routing.BGP -}}{{ end -}}
-{{if ne .WANSIM.BGP.LocalASN 0 }}{{ template "wansim_bgp" . -}}{{ end -}}
 {{if .Routing.Static}}{{ template "static" .Routing.Static -}}{{ end -}}
 {{ end }}

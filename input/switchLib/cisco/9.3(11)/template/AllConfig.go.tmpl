@@ -39,7 +39,6 @@
 {{if .PortChannel}}{{ template "portchannel" . -}}{{ end -}}
 {{ template "torport" .Ports -}}
 {{ template "loopback" .L3Interfaces -}}
-{{ template "wansim_gre" . -}}
 {{ template "set_global" -}}
 {{ template "set_snmp" -}}
 {{ template "set_errdisable_setting" -}}
@@ -52,7 +51,6 @@
 {{ template "set_icmp_errors" .GlobalSetting -}}
 {{if .Routing.PrefixList}}{{ template "prefixlist" . -}} {{ end -}}
 {{if ne .Routing.BGP.BGPAsn 0 }}{{ template "bgp" .Routing.BGP -}}{{ end -}}
-{{ if ne .WANSIM.BGP.LocalASN 0 }}{{ template "wansim_bgp" . -}}{{- end -}}
 {{if .Routing.Static}}{{ template "static" .Routing.Static -}} {{ end -}}
 {{- /* {{ template "define_vlan" .Vlans -}}
 {{ template "interface_vlan" .Vlans -}} */ -}}
