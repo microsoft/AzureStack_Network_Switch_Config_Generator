@@ -5,11 +5,11 @@ interface tunnel 1
   mode gre-ipv4
   {{ if eq $SwitchType "TOR1" -}}
   ip address {{ .WANSIM.GRE1.RemoteIP}}/31
-  tunnel source {{ .WANSIM.GRE1.TunnelDstIP}}
+  tunnel source loopback0
   tunnel destination {{ .WANSIM.GRE1.TunnelSrcIP}}
   {{ else if eq $SwitchType "TOR2" -}}
   ip address {{ .WANSIM.GRE2.RemoteIP}}/31
-  tunnel source {{ .WANSIM.GRE2.TunnelDstIP}}
+  tunnel source loopback0
   tunnel destination {{ .WANSIM.GRE2.TunnelSrcIP}}
   {{ end -}}
   description Tunnel_To_WANSIM

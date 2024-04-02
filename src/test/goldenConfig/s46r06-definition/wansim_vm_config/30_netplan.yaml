@@ -13,12 +13,12 @@ network:
         gre1:
             mode: gre
             local: 10.10.32.129
-            remote: 100.71.12.123
+            remote: 100.71.12.21
             addresses: [ "2.1.1.0/31" ]
             mtu: 8000
         gre2:
             mode: gre
             local: 10.10.32.129
-            remote: 100.71.12.124
+            remote: 100.71.12.22
             addresses: [ "2.1.1.2/31" ]
             mtu: 8000

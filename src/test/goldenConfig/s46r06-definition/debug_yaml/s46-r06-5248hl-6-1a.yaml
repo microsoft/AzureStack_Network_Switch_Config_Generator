@@ -1562,14 +1562,14 @@ WANSIM:
   GRE1:
     Name: TOR1
     TunnelSrcIP: 10.10.32.129
-    TunnelDstIP: 100.71.12.123
+    TunnelDstIP: 100.71.12.21
     IPNetwork: 2.1.1.0/31
     LocalIP: 2.1.1.0
     RemoteIP: 2.1.1.1
   GRE2:
     Name: TOR2
     TunnelSrcIP: 10.10.32.129
-    TunnelDstIP: 100.71.12.124
+    TunnelDstIP: 100.71.12.22
     IPNetwork: 2.1.1.2/31
     LocalIP: 2.1.1.2
     RemoteIP: 2.1.1.3

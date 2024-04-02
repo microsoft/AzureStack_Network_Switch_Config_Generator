@@ -52,7 +52,7 @@ func (o *OutputType) UpdateWANSIMGRE(inputData InputData) {
 	o.WANSIM.GRE2.TunnelSrcIP = o.WANSIM.Loopback.IP
 	// Remote IP
 	for _, supernetItem := range inputData.Supernets {
-		if supernetItem.GroupName == BMC {
+		if strings.ToUpper(supernetItem.GroupName) == "LOOPBACK0" {
 			for _, assignItem := range supernetItem.IPv4.Assignment {
 				if strings.Contains(strings.ToUpper(assignItem.Name), strings.ToUpper(o.WANSIM.GRE1.Name)) {
 					o.WANSIM.GRE1.TunnelDstIP = assignItem.IP

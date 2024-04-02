@@ -1484,10 +1484,10 @@ Routing:
     BGPAsn: 64556
     RouterID: 100.71.12.22
     IPv4Network:
-    - 100.71.12.4/30
     - 100.71.12.12/30
     - 100.71.12.16/30
     - 100.71.12.22/32
+    - 100.71.12.4/30
     - 100.71.12.64/26
     - 100.71.143.0/25
     - 100.68.148.0/24
@@ -1562,14 +1562,14 @@ WANSIM:
   GRE1:
     Name: TOR1
     TunnelSrcIP: 10.10.32.129
-    TunnelDstIP: 100.71.12.123
+    TunnelDstIP: 100.71.12.21
     IPNetwork: 2.1.1.0/31
     LocalIP: 2.1.1.0
     RemoteIP: 2.1.1.1
   GRE2:
     Name: TOR2
     TunnelSrcIP: 10.10.32.129
-    TunnelDstIP: 100.71.12.124
+    TunnelDstIP: 100.71.12.22
     IPNetwork: 2.1.1.2/31
     LocalIP: 2.1.1.2
     RemoteIP: 2.1.1.3
