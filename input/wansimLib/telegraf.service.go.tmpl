@@ -1,0 +1,13 @@
+{{- define "telegraf.service" -}}
+# /etc/systemd/system/telegraf.service
+[Unit]
+Description=Telegraf Service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/telegraf
+User=wansimadmin
+
+[Install]
+WantedBy=multi-user.target
+{{- end -}}
