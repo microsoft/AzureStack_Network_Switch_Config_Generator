@@ -1643,3 +1643,4 @@ WANSIM:
   - 100.68.151.232/29
   - 100.68.151.240/29
   - 100.68.151.248/29
+  PingTest: '"microsoft.com","azure.com","msk8s.api.cdp.microsoft.com","100.68.148.1","100.71.12.65"'
