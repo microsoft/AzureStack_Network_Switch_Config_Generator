@@ -254,4 +254,5 @@ type WANSIMType struct {
 		IPv4Nbr  []IPv4NeighborType `yaml:"IPv4Nbr"`
 	} `yaml:"BGP"`
 	RerouteNetworks []string `yaml:"RerouteNetworks"`
+	PingTest 	  string `yaml:"PingTest"`
 }

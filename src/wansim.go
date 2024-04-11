@@ -43,6 +43,7 @@ func (o *OutputType) UpdateWANSIM(inputData InputData) {
 	o.UpdateWANSIMGRE(inputData)
 	o.WANSIM.RerouteNetworks = tmpReRouteNetwork
 	o.UpdateWANSIMBGP()
+	o.UpdateWANSIMPingTestList()
 }
 
 func (o *OutputType) UpdateWANSIMGRE(inputData InputData) {
@@ -95,9 +96,19 @@ func (o *OutputType) UpdateWANSIMBGP() {
 		RouteMapOut:       RouteMap_Default_Out,
 	})
 	o.WANSIM.BGP.IPv4Nbr = tmpIPv4Nbr
+}
 
-	// Update TOR Switch Configuration with GRE
-
+func (o *OutputType) UpdateWANSIMPingTestList() {
+	DefaultPingList := []string{"\"microsoft.com\"","\"azure.com\"","\"msk8s.api.cdp.microsoft.com\""}
+	for _, v := range o.Vlans {
+		if v.GroupName == Compute_NativeVlanName {
+			DefaultPingList=append(DefaultPingList, "\""+v.VIPAddress+"\"")
+		}else if v.GroupName == BMC {
+			DefaultPingList=append(DefaultPingList, "\""+v.VIPAddress+"\"")
+		}
+	}
+	PingListStr := strings.Join(DefaultPingList, ",")
+	o.WANSIM.PingTest = PingListStr
 }
 
 func DividSubnetsByGivenMaskSize(netCIDR string, subnetMaskSize int) ([]string, error) {
