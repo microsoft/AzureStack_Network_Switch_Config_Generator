@@ -27,10 +27,14 @@ fi
 echo "# HELP bgp_nbr_uptime_ms uptime of BGP neighbors in frr"
 echo "# TYPE bgp_nbr_uptime_ms counter"
 
+echo "# HELP bgp_nbr_pfxSnt sent prefix routes of BGP neighbors in frr"
+echo "# TYPE bgp_nbr_pfxSnt gauge"
+
 peers=$(echo "$bgp_json" | jq -r '.ipv4Unicast.peers | to_entries[] | "\(.key) \(.value.peerUptimeMsec) \(.value.state) \(.value.pfxSnt) \(.value.desc)"')
 # Iterate over each peer in the variable
 echo "$peers" | while read nbrip peerUptimeMsec state pfxSnt desc; do
-    echo "bgp_nbr_uptime_ms{nbrip=\"$nbrip\", state=\"$state\", pfxSnt=\"$pfxSnt\", desc=\"$desc\"} $peerUptimeMsec"
+    echo "bgp_nbr_uptime_ms{nbrip=\"$nbrip\", state=\"$state\"} $peerUptimeMsec"
+    echo "bgp_nbr_pfxSnt{nbrip=\"$nbrip\", desc=\"$desc\"} $pfxSnt"
     # "$pfxSnt" -eq 1 for uplink nbr means static redistribute is disabled
     if [ "$failedPeers" -eq 0 ] && [ "$pfxSnt" -eq 1 ] && [[ "$desc" == *"To_Uplink"* ]]; then
         enable_static_redistribute
