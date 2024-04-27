@@ -188,14 +188,20 @@
   service_address = "udp4://:6343"
 
 [[inputs.exec]]
-  ## Commands array
+  ## Monitor FRR BGP 
   commands = [
-    "/etc/telegraf/custom_metrics.sh"
+    "/etc/telegraf/monitor_frr_bgp.sh"
+  ]
+  interval = "2m" 
+  timeout = "5s"
+  data_format = "prometheus"
+
+[[inputs.exec]]
+  ## Monitor TC Rule
+  commands = [
+    "/etc/telegraf/monitor_tc_rules.sh"
   ]
   interval = "30m" 
-  timeout = "20s"
-
-  ## Data format to consume.
-  ## https://github.com/influxdata/telegraf/blob/master/docs/DATA_FORMATS_INPUT.md
+  timeout = "5s"
   data_format = "prometheus"
 {{- end -}}

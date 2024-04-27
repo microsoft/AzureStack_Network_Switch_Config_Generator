@@ -1,16 +1,6 @@
+{{- define "monitor_tc_rules.sh" -}}
 #!/bin/bash
-# /etc/telegraf/custom_metrics.sh
-
-echo "# HELP bgp_nbr_uptime_ms uptime of BGP neighbors in frr"
-echo "# TYPE bgp_nbr_uptime_ms counter"
-sudo vtysh -c 'show ip bgp neigh json' | jq -r 'to_entries[] | "\(.key) \(.value.bgpTimerUpMsec)"' | while read nbrip bgpTimerUpMsec; do
-    # This line runs the command, pipes the output into jq for processing
-    # The -r option tells jq to output raw strings, not JSON-encoded strings
-    # The 'to_entries[]' part converts the JSON object into an array of key-value pairs
-    # The '| "\(.nbrip) \(.value.bgpTimerUpMsec)"' part formats the output as a string with the nbrip and bgpTimerUpMsec value
-    # The output is then piped into a while loop
-    echo "bgp_nbr_uptime_ms{nbrip=\"$nbrip\"} $bgpTimerUpMsec"
-done
+# /etc/telegraf/monitor_tc_rules.sh
 
 echo "# HELP tc_bw_rate_bits TC Rule for BW by ENV"
 echo "# TYPE tc_bw_rate_bits gauge"
@@ -39,3 +29,4 @@ for intf in "${intfs[@]}"; do
         echo "tc_bw_rate_bits{intf=\"$intf\", class=\"$class\", rate=\"$rate\"} $rate"
     done <<< "$(sudo tc class show dev "$intf")"
 done
+{{- end -}}
