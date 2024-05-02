@@ -190,7 +190,7 @@
 [[inputs.exec]]
   ## Monitor FRR BGP 
   commands = [
-    "/etc/telegraf/monitor_frr_bgp.sh"
+    "python3 /etc/telegraf/monitor_frr_bgp.py"
   ]
   interval = "2m" 
   timeout = "5s"
@@ -199,9 +199,9 @@
 [[inputs.exec]]
   ## Monitor TC Rule
   commands = [
-    "/etc/telegraf/monitor_tc_rules.sh"
+    "python3 /etc/telegraf/monitor_tc_rules.py"
   ]
-  interval = "30m" 
+  interval = "10m" 
   timeout = "5s"
   data_format = "prometheus"
 {{- end -}}
