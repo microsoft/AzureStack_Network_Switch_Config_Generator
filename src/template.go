@@ -85,12 +85,15 @@ func (o *OutputType) parseEachTemplate(templateFolder, outputFolder string) {
 		}
 		f.Close()
 	}
+
+	copyFile(filepath.Join(templateFolder,"monitor_frr_bgp.py"), filepath.Join(outputFolder,"monitor_frr_bgp.py"))
+	copyFile(filepath.Join(templateFolder,"monitor_tc_rules.py"), filepath.Join(outputFolder,"monitor_tc_rules.py"))
 }
 
 
 func (o *OutputType) parseSelectedTemplate(templateFolder, outputFolder string) {
 	// Create the path for the new config file in the output folder
-	newConfigOnlyFilePath := outputFolder + "/" + o.GlobalSetting.OOBIP + "_" + o.Switch.Make + CONFIGExtension
+	newConfigOnlyFilePath := outputFolder + "/" + o.Switch.Type + "_" + o.Switch.Make + CONFIGExtension
 
 	// Open the new config file with write-only access, create it if it doesn't exist, and truncate it if it does
 	f, err := os.OpenFile(newConfigOnlyFilePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
