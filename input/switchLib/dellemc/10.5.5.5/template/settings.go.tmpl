@@ -35,3 +35,14 @@ no ip dhcp snooping
 vrrp version 3
 vrrp delay reload 180
 {{ end }}
+
+{{ define "set_tacacs"}}
+! stig.go.tmpl-set_tacacs
+ip tacacs source-interface {{.OOB}}
+tacacs-server host [TACACS_SERVER1] key [TACACS_KEY]
+tacacs-server host [TACACS_SERVER2] key [TACACS_KEY]
+
+aaa authentication login default group tacacs+
+aaa authentication login console group tacacs+ local
+aaa accounting commands all default start-stop group tacacs+
+{{ end }}

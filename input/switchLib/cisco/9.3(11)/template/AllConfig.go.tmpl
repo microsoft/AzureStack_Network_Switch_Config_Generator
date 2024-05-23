@@ -23,6 +23,7 @@
 {{ template "set_syslog" .GlobalSetting -}}
 {{ template "set_load_sharing" -}}
 {{ template "set_icmp_errors" .GlobalSetting -}}
+{{ template "set_tacacs" .GlobalSetting -}}
 {{if ne .Routing.BGP.BGPAsn 0 }}{{ template "bgp" .Routing.BGP -}}{{ end -}}
 {{if .Routing.Static}}{{ template "static" .Routing.Static -}} {{ end -}}
 {{- /* TOR Switch */ -}}
@@ -49,6 +50,7 @@
 {{ template "set_syslog" .GlobalSetting -}}
 {{ template "set_load_sharing" -}}
 {{ template "set_icmp_errors" .GlobalSetting -}}
+{{ template "set_tacacs" .GlobalSetting -}}
 {{if .Routing.PrefixList}}{{ template "prefixlist" . -}} {{ end -}}
 {{if ne .Routing.BGP.BGPAsn 0 }}{{ template "bgp" .Routing.BGP -}}{{ end -}}
 {{if .Routing.Static}}{{ template "static" .Routing.Static -}} {{ end -}}

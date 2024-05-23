@@ -86,3 +86,22 @@ ip load-sharing address source-destination port source-destination
 ! settings.go.tmpl-set_icmp_errors
 ip icmp-errors source-interface {{.OOB}}
 {{ end }}
+
+{{ define "set_tacacs"}}
+! settings.go.tmpl-set_tacacs
+tacacs-server key [TACACS_KEY]
+tacacs-server timeout 2
+ip tacacs source-interface {{.OOB}}
+
+tacacs-server host [TACACS_SERVER1]
+tacacs-server host [TACACS_SERVER2] 
+
+aaa group server tacacs+ TACACS_Lab 
+    server [TACACS_SERVER1] 
+    server [TACACS_SERVER2]
+    source-interface {{.OOB}}
+
+aaa authentication login default group TACACS_Lab
+aaa authentication login console group TACACS_Lab
+aaa accounting default group TACACS_Lab
+{{ end }}
