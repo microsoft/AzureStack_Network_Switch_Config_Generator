@@ -38,6 +38,7 @@ vrrp delay reload 180
 
 {{ define "set_tacacs"}}
 ! stig.go.tmpl-set_tacacs
+! Replace [TACACS_SERVER] and [TACACS_KEY] with your TACACS server and key
 ip tacacs source-interface {{.OOB}}
 tacacs-server host [TACACS_SERVER1] key [TACACS_KEY]
 tacacs-server host [TACACS_SERVER2] key [TACACS_KEY]

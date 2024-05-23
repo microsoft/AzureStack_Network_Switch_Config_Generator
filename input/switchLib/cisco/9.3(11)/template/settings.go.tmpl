@@ -89,6 +89,7 @@ ip icmp-errors source-interface {{.OOB}}
 
 {{ define "set_tacacs"}}
 ! settings.go.tmpl-set_tacacs
+! Replace [TACACS_SERVER] and [TACACS_KEY] with your TACACS server and key
 tacacs-server key [TACACS_KEY]
 tacacs-server timeout 2
 ip tacacs source-interface {{.OOB}}
