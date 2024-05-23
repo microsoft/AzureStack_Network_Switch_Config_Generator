@@ -15,6 +15,7 @@
 {{ template "set_dhcp" -}}
 {{ template "set_ntp" .GlobalSetting -}}
 {{ template "set_syslog" .GlobalSetting -}}
+{{ template "set_tacacs" .GlobalSetting -}}
 {{ template "bmc_portchannel" .PortChannel -}}
 {{ template "loopback" .L3Interfaces -}}
 {{ template "bmcport" .Ports -}}
@@ -39,6 +40,7 @@
 {{ template "set_vrrp" -}}
 {{ template "set_ntp" .GlobalSetting -}}
 {{ template "set_syslog" .GlobalSetting -}}
+{{ template "set_tacacs" .GlobalSetting -}}
 {{ template "tor_portchannel" .PortChannel -}}
 {{ template "loopback" .L3Interfaces -}}
 {{ template "torport" .Ports -}}
