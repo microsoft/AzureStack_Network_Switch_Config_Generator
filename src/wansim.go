@@ -99,12 +99,12 @@ func (o *OutputType) UpdateWANSIMBGP() {
 }
 
 func (o *OutputType) UpdateWANSIMPingTestList() {
-	DefaultPingList := []string{"\"microsoft.com\"","\"azure.com\"","\"msk8s.api.cdp.microsoft.com\""}
+	DefaultPingList := []string{"\"microsoft.com\"", "\"azure.com\"", "\"msk8s.api.cdp.microsoft.com\""}
 	for _, v := range o.Vlans {
 		if v.GroupName == Compute_NativeVlanName {
-			DefaultPingList=append(DefaultPingList, "\""+v.VIPAddress+"\"")
-		}else if v.GroupName == BMC {
-			DefaultPingList=append(DefaultPingList, "\""+v.VIPAddress+"\"")
+			DefaultPingList = append(DefaultPingList, "\""+v.VIPAddress+"\"")
+		} else if v.GroupName == BMC {
+			DefaultPingList = append(DefaultPingList, "\""+v.VIPAddress+"\"")
 		}
 	}
 	PingListStr := strings.Join(DefaultPingList, ",")
