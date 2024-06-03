@@ -151,27 +151,26 @@ func optimizeArray(arr []int) string {
 	return result.String()
 }
 
-
 // Copy a template file from template to wansim_switch_config folder
 func copyFile(sourcePath, destPath string) {
-    // Open the source file
-    sourceFile, err := os.Open(sourcePath)
-    if err != nil {
-        log.Fatalf("error opening source file: %v", err)
-    }
-    defer sourceFile.Close()
+	// Open the source file
+	sourceFile, err := os.Open(sourcePath)
+	if err != nil {
+		log.Fatalf("error opening source file: %v", err)
+	}
+	defer sourceFile.Close()
 
-    // Create the destination file
-    destFile, err := os.Create(destPath)
-    if err != nil {
-        log.Fatalf("error creating destination file: %v", err)
-    }
-    defer destFile.Close()
+	// Create the destination file
+	destFile, err := os.Create(destPath)
+	if err != nil {
+		log.Fatalf("error creating destination file: %v", err)
+	}
+	defer destFile.Close()
 
-    // Copy the contents of the source file to the destination file
-    _, err = io.Copy(destFile, sourceFile)
-    if err != nil {
-        log.Fatalf("error copying file: %v", err)
-    }
-    // log.Printf("copied file from %s to %s\n", sourcePath, destPath)
+	// Copy the contents of the source file to the destination file
+	_, err = io.Copy(destFile, sourceFile)
+	if err != nil {
+		log.Fatalf("error copying file: %v", err)
+	}
+	// log.Printf("copied file from %s to %s\n", sourcePath, destPath)
 }
