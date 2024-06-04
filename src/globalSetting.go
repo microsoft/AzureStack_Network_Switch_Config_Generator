@@ -21,6 +21,8 @@ func (o *OutputType) UpdateGlobalSetting(inputData InputData) {
 	o.GlobalSetting.DNSForwarder = inputData.Setting.DNSForwarder
 	// Update Deployment Pattern
 	o.DeploymentPattern = inputData.DeploymentPattern
+	// NodeCount
+	o.NodeCount = inputData.MainEnvData[0].NodeCount
 
 	for _, v := range o.Vlans {
 		if v.GroupName == BMC {
