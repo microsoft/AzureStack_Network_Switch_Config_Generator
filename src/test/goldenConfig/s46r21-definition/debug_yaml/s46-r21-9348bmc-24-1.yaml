@@ -106,99 +106,99 @@ Ports:
 - Port: 1/5
   Idx: 5
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/6
   Idx: 6
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/7
   Idx: 7
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/8
   Idx: 8
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/9
   Idx: 9
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/10
   Idx: 10
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/11
   Idx: 11
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/12
   Idx: 12
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/13
   Idx: 13
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/14
   Idx: 14
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/15
   Idx: 15
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/16
   Idx: 16
   Type: Ethernet
-  Description: Unused
-  Function: Unused
-  UntagVlan: 2
+  Description: HOST_BMC
+  Function: HOST_BMC
+  UntagVlan: 125
   MTU: 9216
-  Shutdown: true
+  Shutdown: false
 - Port: 1/17
   Idx: 17
   Type: Ethernet
@@ -526,3 +526,4 @@ Routing:
   - Network: 0.0.0.0/0
     NextHop: 100.71.85.65
     Name: GlobalDefaultRoute
+NodeCount: 16

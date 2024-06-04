@@ -510,3 +510,4 @@ Routing:
   - Network: 0.0.0.0/0
     NextHop: 100.71.12.65
     Name: GlobalDefaultRoute
+NodeCount: 16

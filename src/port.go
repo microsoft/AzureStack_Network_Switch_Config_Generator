@@ -90,18 +90,24 @@ func initSwitchPort(interfaceJsonObj *PortJson, switchMake, switchType string, n
 
 	// For function ports for compute set it to empty slice
 	for i := range interfaceJsonObj.Function {
-		if strings.EqualFold(interfaceJsonObj.Function[i].Function, COMPUTE) {
+		isCompute := strings.EqualFold(interfaceJsonObj.Function[i].Function, "COMPUTE")
+		isHostBMC := strings.EqualFold(interfaceJsonObj.Function[i].Function, "HOST_BMC")
+		if isCompute || isHostBMC {
+			//if strings.EqualFold(interfaceJsonObj.Function[i].Function, "COMPUTE") || strings.EqualFold(interfaceJsonObj.Function[i].Function, "HOST_BMC") {
 			// set interfaceJsonObj.Function[i].Port to an empty slice
 			interfaceJsonObj.Function[i].Port = []string{}
 		}
 	}
 	// function ports for compute set it to the number of nodes
 	for i := range interfaceJsonObj.Function {
-		if strings.EqualFold(interfaceJsonObj.Function[i].Function, COMPUTE) {
+		isCompute := strings.EqualFold(interfaceJsonObj.Function[i].Function, "COMPUTE")
+		isHostBMC := strings.EqualFold(interfaceJsonObj.Function[i].Function, "HOST_BMC")
+		if isCompute || isHostBMC {
+			//if strings.EqualFold(interfaceJsonObj.Function[i].Function, "COMPUTE") || strings.EqualFold(interfaceJsonObj.Function[i].Function, "HOST_BMC") {
 			for key, value := range portToIdx {
 				if value <= nodeCount {
 					interfaceJsonObj.Function[i].Port = append(interfaceJsonObj.Function[i].Port, key)
-					fmt.Printf("Appending %s to Port of Function %d\n", key, i)
+					//fmt.Printf("Appending %s to Port of Function %d\n", key, i)
 				}
 			}
 		}

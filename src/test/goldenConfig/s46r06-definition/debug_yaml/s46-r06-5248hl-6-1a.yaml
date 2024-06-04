@@ -936,71 +936,21 @@ Ports:
 - Port: 1/1/17
   Idx: 17
   Type: ethernet
-  Description: HyperConverged
-  Function: HyperConverged
-  UntagVlan: 7
-  TagVlanList:
-  - 6
-  - 7
-  - 201
-  - 301
-  - 401
-  - 501
-  - 502
-  - 503
-  - 504
-  - 505
-  - 506
-  - 507
-  - 508
-  - 509
-  - 510
-  - 511
-  - 512
-  - 513
-  - 514
-  - 515
-  - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/5
 - Port: 1/1/18
   Idx: 18
   Type: ethernet
-  Description: HyperConverged
-  Function: HyperConverged
-  UntagVlan: 7
-  TagVlanList:
-  - 6
-  - 7
-  - 201
-  - 301
-  - 401
-  - 501
-  - 502
-  - 503
-  - 504
-  - 505
-  - 506
-  - 507
-  - 508
-  - 509
-  - 510
-  - 511
-  - 512
-  - 513
-  - 514
-  - 515
-  - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  Description: Unused
+  Function: Unused
+  UntagVlan: 2
   MTU: 9216
-  Shutdown: false
+  Shutdown: true
   Mode: 25g-4x
   PortGroup: 1/1/5
 - Port: 1/1/19
@@ -1644,3 +1594,4 @@ WANSIM:
   - 100.68.151.240/29
   - 100.68.151.248/29
   PingTest: '"microsoft.com","azure.com","msk8s.api.cdp.microsoft.com","100.68.148.1","100.71.12.65"'
+NodeCount: 16
