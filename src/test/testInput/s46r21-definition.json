@@ -1600,12 +1600,12 @@
       },
       {
         "GroupName": "Storage",
-        "Name": "Storage_711",
+        "Name": "Storage_711_TOR1",
         "VLANID": 711,
         "Description": "Storage Network, no config on switch. GroupName is unique key.",
         "IPv4": {
           "SwitchSVI": false,
-          "Name": "Storage_711",
+          "Name": "Storage_711_TOR1",
           "VLANID": 711,
           "Cidr": 24,
           "TORGroup": "",
@@ -1628,12 +1628,12 @@
       },
       {
         "GroupName": "Storage",
-        "Name": "Storage_712",
+        "Name": "Storage_712_TOR2",
         "VLANID": 712,
         "Description": "Storage Network, no config on switch. GroupName is unique key.",
         "IPv4": {
           "SwitchSVI": false,
-          "Name": "Storage_712",
+          "Name": "Storage_712_TOR2",
           "VLANID": 712,
           "Cidr": 24,
           "TORGroup": "",
