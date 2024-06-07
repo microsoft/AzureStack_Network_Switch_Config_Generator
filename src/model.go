@@ -113,6 +113,7 @@ type SwitchType struct {
 
 type Supernet struct {
 	GroupName   string `yaml:"GroupName"`
+	Name        string `yaml:"VlanName"`
 	Description string `yaml:"Description"`
 	Shutdown    bool   `yaml:"Shutdown"`
 	IPv4        struct {

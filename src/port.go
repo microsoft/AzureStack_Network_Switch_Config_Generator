@@ -90,9 +90,9 @@ func initSwitchPort(interfaceJsonObj *PortJson, switchMake, switchType string, n
 
 	// For function ports for compute set it to empty slice
 	for i := range interfaceJsonObj.Function {
-		isCompute := strings.EqualFold(interfaceJsonObj.Function[i].Function, "COMPUTE")
+		isCompute := strings.EqualFold(interfaceJsonObj.Function[i].Function, COMPUTE)
 		isHostBMC := strings.EqualFold(interfaceJsonObj.Function[i].Function, "HOST_BMC")
-		isStorage := strings.EqualFold(interfaceJsonObj.Function[i].Function, "STORAGE")
+		isStorage := strings.EqualFold(interfaceJsonObj.Function[i].Function, STORAGE)
 		if isCompute || isHostBMC || isStorage {
 			// set interfaceJsonObj.Function[i].Port to an empty slice
 			interfaceJsonObj.Function[i].Port = []string{}
@@ -100,9 +100,9 @@ func initSwitchPort(interfaceJsonObj *PortJson, switchMake, switchType string, n
 	}
 	// function ports for compute set it to the number of nodes
 	for i := range interfaceJsonObj.Function {
-		isCompute := strings.EqualFold(interfaceJsonObj.Function[i].Function, "COMPUTE")
+		isCompute := strings.EqualFold(interfaceJsonObj.Function[i].Function, COMPUTE)
 		isHostBMC := strings.EqualFold(interfaceJsonObj.Function[i].Function, "HOST_BMC")
-		isStorage := strings.EqualFold(interfaceJsonObj.Function[i].Function, "STORAGE")
+		isStorage := strings.EqualFold(interfaceJsonObj.Function[i].Function, STORAGE)
 		if isCompute || isHostBMC {
 			for key, value := range portToIdx {
 				if value <= nodeCount {
