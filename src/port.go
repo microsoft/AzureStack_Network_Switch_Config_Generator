@@ -114,7 +114,7 @@ func initSwitchPort(interfaceJsonObj *PortJson, switchMake, switchType string, n
 		// For storage start at nodeCout to nodecount *2
 		if isStorage {
 			for key, value := range portToIdx {
-				if value >= nodeCount+1 && value <= nodeCount*2 {
+				if value >= 21 && value <= nodeCount+21 {
 					interfaceJsonObj.Function[i].Port = append(interfaceJsonObj.Function[i].Port, key)
 					//fmt.Printf("Appending %s to Port of Function %d\n", key, i)
 				}
