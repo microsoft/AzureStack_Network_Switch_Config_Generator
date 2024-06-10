@@ -1,0 +1,14 @@
+# sudo nano /etc/systemd/system/wansimrule.service
+[Unit]
+Description=wansimrule_service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/etc/wansimrule/wansimrule_service.sh Start
+ExecStop=/etc/wansimrule/wansimrule_service.sh Stop
+RemainAfterExit=yes
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

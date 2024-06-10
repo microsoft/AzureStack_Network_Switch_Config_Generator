@@ -297,22 +297,6 @@ Vlans:
   MTU: 9216
   VIPAddress: 100.68.151.241
   Shutdown: false
-- GroupName: Storage
-  VlanName: Storage_711
-  VlanID: 711
-  IPAddress: ""
-  Cidr: 24
-  Subnet: 10.71.1.0/24
-  MTU: 9216
-  Shutdown: false
-- GroupName: Storage
-  VlanName: Storage_712
-  VlanID: 712
-  IPAddress: ""
-  Cidr: 24
-  Subnet: 10.71.2.0/24
-  MTU: 9216
-  Shutdown: false
 L3Interfaces:
   LOOPBACK0_TOR1:
     Name: loopback0
@@ -401,9 +385,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -436,9 +418,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -471,9 +451,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -506,9 +484,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -541,9 +517,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -576,9 +550,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -611,9 +583,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -646,9 +616,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -681,9 +649,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -716,9 +682,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -751,9 +715,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -786,9 +748,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -821,9 +781,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -856,9 +814,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -891,9 +847,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -926,9 +880,7 @@ Ports:
   - 514
   - 515
   - 516
-  - 711
-  - 712
-  TagVlanString: 6-7,201,301,401,501-516,711-712
+  TagVlanString: 6-7,201,301,401,501-516
   MTU: 9216
   Shutdown: false
   Mode: 25g-4x
@@ -1434,10 +1386,10 @@ Routing:
     BGPAsn: 64556
     RouterID: 100.71.12.21
     IPv4Network:
+    - 100.71.12.21/32
     - 100.71.12.0/30
     - 100.71.12.8/30
     - 100.71.12.16/30
-    - 100.71.12.21/32
     - 100.71.12.64/26
     - 100.71.143.0/25
     - 100.68.148.0/24

@@ -37,6 +37,12 @@ func TestMain(t *testing.T) {
 		"s46r21-definition": {
 			inputTestFileName: "s46r21-definition.json",
 		},
+		"s46r21-definition-Switched": {
+			inputTestFileName: "s46r21-definition-Switched.json",
+		},
+		"s46r21-definition-Switchless": {
+			inputTestFileName: "s46r21-definition-Switchless.json",
+		},
 	}
 
 	for name, tc := range testCases {
@@ -44,11 +50,11 @@ func TestMain(t *testing.T) {
 			testInputData := parseInputJson(testInputFolder + tc.inputTestFileName)
 			testDeviceTypeMap := testInputData.createDeviceTypeMap()
 			generateSwitchConfig(testInputData, switchLibFolder, wansimLibFolder, testOutputFolder+name, testDeviceTypeMap)
-			outputFiles := getFilesInFolder(testOutputFolder+name+"/"+debugYamlFolderName)
+			outputFiles := getFilesInFolder(testOutputFolder + name + "/" + debugYamlFolderName)
 			// fmt.Println(outputFiles)
 			for _, file := range outputFiles {
 				if strings.Contains(file, YAMLExtension) {
-					relativePath := fmt.Sprintf("%s/%s/%s", name, debugYamlFolderName,file)
+					relativePath := fmt.Sprintf("%s/%s/%s", name, debugYamlFolderName, file)
 					// fmt.Println(relativePath)
 					goldenConfigObj := parseOutputYaml(testGoldenFolder + relativePath)
 					testOutputObj := parseOutputYaml(testOutputFolder + relativePath)
