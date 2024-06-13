@@ -1320,7 +1320,7 @@ Routing:
       Prefix: 32
 WANSIM:
   Hostname: rack1-wansim
-  Enabled: false
+  Enabled: true
   Loopback:
     IP: 10.10.32.129
     IPNetwork: 10.10.32.129/32
