@@ -17,7 +17,7 @@ interface {{ .Type}} {{ .Port }}
   spanning-tree port type edge
   no logging event port link-status
   mtu {{ .Mtu }}
-  {{else if or (eq .Function "Compute") (eq .Function "HyperConverged") -}}
+  {{else if (eq .Function "HyperConverged") -}}
   switchport
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}
@@ -26,6 +26,14 @@ interface {{ .Type}} {{ .Port }}
   spanning-tree port type edge trunk
   no logging event port link-status
   service-policy type qos input AZS_SERVICES no-stats
+  mtu {{ .Mtu }}
+  {{else if (eq .Function "Compute") -}}
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan {{ .UntagVlan }}
+  switchport trunk allowed vlan {{ .TagVlanString }}
+  spanning-tree port type edge trunk
+  no logging event port link-status
   mtu {{ .Mtu }}
   {{else if eq .Function "Storage" -}}
   switchport

@@ -1,0 +1,38 @@
+# wansimrule service
+sudo rm -rf /etc/wansimrule/
+sudo mkdir -p /etc/wansimrule/
+sudo chmod 777 /etc/wansimrule/
+sudo cp /home/wansimadmin/wansim_vm_config/wansimrule_service.sh /etc/wansimrule/wansimrule_service.sh
+sudo chmod +x /etc/wansimrule/wansimrule_service.sh
+sudo nano /etc/systemd/system/wansimrule.service
+
+# Telegraf
+sudo cp /home/wansimadmin/wansim_vm_config/telegraf.conf /etc/telegraf/telegraf.conf 
+sudo systemctl restart telegraf
+sudo systemctl status telegraf
+
+# hsflowd
+sudo systemctl enable hsflowd
+sudo cp /home/wansimadmin/wansim_vm_config/hsflowd.conf /etc/hsflowd.conf
+sudo systemctl restart hsflowd
+sudo systemctl status hsflowd
+
+# Show BW Rules
+sudo tc class show dev eth0
+sudo tc class show dev gre1
+sudo tc class show dev gre2
+
+# Show Delay+Loss Rules
+sudo tc qdisc show dev eth0
+sudo tc qdisc show dev gre1
+sudo tc qdisc show dev gre2
+
+# Show IP Filter Rules
+sudo tc filter show dev eth0
+sudo tc filter show dev gre1
+sudo tc filter show dev gre2
+
+# Delete all rules
+sudo tc qdisc del dev eth0 root
+sudo tc qdisc del dev gre1 root
+sudo tc qdisc del dev gre2 root

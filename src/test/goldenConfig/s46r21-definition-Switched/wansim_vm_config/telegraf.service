@@ -1,0 +1,11 @@
+# /etc/systemd/system/telegraf.service
+[Unit]
+Description=WANSIM Telegraf Agent
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/telegraf
+User=wansimadmin
+
+[Install]
+WantedBy=multi-user.target
