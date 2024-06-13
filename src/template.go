@@ -86,10 +86,9 @@ func (o *OutputType) parseEachTemplate(templateFolder, outputFolder string) {
 		f.Close()
 	}
 
-	copyFile(filepath.Join(templateFolder,"monitor_frr_bgp.py"), filepath.Join(outputFolder,"monitor_frr_bgp.py"))
-	copyFile(filepath.Join(templateFolder,"monitor_tc_rules.py"), filepath.Join(outputFolder,"monitor_tc_rules.py"))
+	copyFile(filepath.Join(templateFolder, "monitor_frr_bgp.py"), filepath.Join(outputFolder, "monitor_frr_bgp.py"))
+	copyFile(filepath.Join(templateFolder, "monitor_tc_rules.py"), filepath.Join(outputFolder, "monitor_tc_rules.py"))
 }
-
 
 func (o *OutputType) parseSelectedTemplate(templateFolder, outputFolder string) {
 	// Create the path for the new config file in the output folder

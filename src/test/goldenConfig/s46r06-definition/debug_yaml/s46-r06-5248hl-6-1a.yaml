@@ -1481,6 +1481,7 @@ Routing:
       Prefix: 32
 WANSIM:
   Hostname: rr1-s46-r21-wansim
+  Enabled: true
   Loopback:
     IP: 10.10.32.129
     IPNetwork: 10.10.32.129/32

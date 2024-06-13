@@ -1,0 +1,355 @@
+{
+    "Model": "93180YC-FX",
+    "Type": "TOR",
+    "SupportNoBmc": true,
+    "FirmwareVersion": "9.3(9)",
+    "MaxMTU": "9216",
+    "Function": [
+        {
+            "Function": "P2P_IBGP",
+            "Port": [
+                "1/41",
+                "1/42"
+            ]
+        },
+        {
+            "Function": "MLAG_Peer",
+            "Port": [
+                "1/49",
+                "1/50",
+                "1/51"
+            ]
+        },
+        {
+            "Function": "TOR_BMC",
+            "Port": [
+                "1/44"
+            ]
+        },
+        {
+            "Function": "P2P_Border2",
+            "Port": [
+                "1/47"
+            ]
+        },
+        {
+            "Function": "P2P_Border1",
+            "Port": [
+                "1/48"
+            ]
+        },
+        {
+            "Function": "Compute",
+            "Port": [
+                "1/1",
+                "1/2",
+                "1/3",
+                "1/4",
+                "1/5",
+                "1/6",
+                "1/7",
+                "1/8",
+                "1/9",
+                "1/10",
+                "1/11",
+                "1/12",
+                "1/13",
+                "1/14",
+                "1/15",
+                "1/16"
+            ]
+        },
+        {
+            "Function": "Storage",
+            "Port": [
+                "1/17",
+                "1/18",
+                "1/19",
+                "1/20",
+                "1/21",
+                "1/22"
+            ]
+        }
+    ],
+    "VlanGroup":{
+        "Storage":["Storage"],
+        "Compute":["HNVPA", "Infrastructure", "Tenant", "L3Forward"]
+    },
+    "Port": [
+        {
+            "Port": "1/1",
+            "Type": "Ethernet",
+            "Idx":1
+        },
+        {
+            "Port": "1/2",
+            "Type": "Ethernet",
+            "Idx":2
+        },
+        {
+            "Port": "1/3",
+            "Type": "Ethernet",
+            "Idx":3
+        },
+        {
+            "Port": "1/4",
+            "Type": "Ethernet",
+            "Idx":4
+        },
+        {
+            "Port": "1/5",
+            "Type": "Ethernet",
+            "Idx":5
+        },
+        {
+            "Port": "1/6",
+            "Type": "Ethernet",
+            "Idx":6
+        },
+        {
+            "Port": "1/7",
+            "Type": "Ethernet",
+            "Idx":7
+        },
+        {
+            "Port": "1/8",
+            "Type": "Ethernet",
+            "Idx":8
+        },
+        {
+            "Port": "1/9",
+            "Type": "Ethernet",
+            "Idx":9
+        },
+        {
+            "Port": "1/10",
+            "Type": "Ethernet",
+            "Idx":10
+        },
+        {
+            "Port": "1/11",
+            "Type": "Ethernet",
+            "Idx":11
+        },
+        {
+            "Port": "1/12",
+            "Type": "Ethernet",
+            "Idx":12
+        },
+        {
+            "Port": "1/13",
+            "Type": "Ethernet",
+            "Idx":13
+        },
+        {
+            "Port": "1/14",
+            "Type": "Ethernet",
+            "Idx":14
+        },
+        {
+            "Port": "1/15",
+            "Type": "Ethernet",
+            "Idx":15
+        },
+        {
+            "Port": "1/16",
+            "Type": "Ethernet",
+            "Idx":16
+        },
+        {
+            "Port": "1/17",
+            "Type": "Ethernet",
+            "Idx":17
+        },
+        {
+            "Port": "1/18",
+            "Type": "Ethernet",
+            "Idx":18
+        },
+        {
+            "Port": "1/19",
+            "Type": "Ethernet",
+            "Idx":19
+        },
+        {
+            "Port": "1/20",
+            "Type": "Ethernet",
+            "Idx":20
+        },
+        {
+            "Port": "1/21",
+            "Type": "Ethernet",
+            "Idx":21
+        },
+        {
+            "Port": "1/22",
+            "Type": "Ethernet",
+            "Idx":22
+        },
+        {
+            "Port": "1/23",
+            "Type": "Ethernet",
+            "Idx":23
+        },
+        {
+            "Port": "1/24",
+            "Type": "Ethernet",
+            "Idx":24
+        },
+        {
+            "Port": "1/25",
+            "Type": "Ethernet",
+            "Idx":25
+        },
+        {
+            "Port": "1/26",
+            "Type": "Ethernet",
+            "Idx":26
+        },
+        {
+            "Port": "1/27",
+            "Type": "Ethernet",
+            "Idx":27
+        },
+        {
+            "Port": "1/28",
+            "Type": "Ethernet",
+            "Idx":28
+        },
+        {
+            "Port": "1/29",
+            "Type": "Ethernet",
+            "Idx":29
+        },
+        {
+            "Port": "1/30",
+            "Type": "Ethernet",
+            "Idx":30
+        },
+        {
+            "Port": "1/31",
+            "Type": "Ethernet",
+            "Idx":31
+        },
+        {
+            "Port": "1/32",
+            "Type": "Ethernet",
+            "Idx":32
+        },
+        {
+            "Port": "1/33",
+            "Type": "Ethernet",
+            "Idx":33
+        },
+        {
+            "Port": "1/34",
+            "Type": "Ethernet",
+            "Idx":34
+        },
+        {
+            "Port": "1/35",
+            "Type": "Ethernet",
+            "Idx":35
+        },
+        {
+            "Port": "1/36",
+            "Type": "Ethernet",
+            "Idx":36
+        },
+        {
+            "Port": "1/37",
+            "Type": "Ethernet",
+            "Idx":37
+        },
+        {
+            "Port": "1/38",
+            "Type": "Ethernet",
+            "Idx":38
+        },
+        {
+            "Port": "1/39",
+            "Type": "Ethernet",
+            "Idx":39
+        },
+        {
+            "Port": "1/40",
+            "Type": "Ethernet",
+            "Idx":40
+        },
+        {
+            "Port": "1/41",
+            "Type": "Ethernet",
+            "Idx":41
+        },
+        {
+            "Port": "1/42",
+            "Type": "Ethernet",
+            "Idx":42
+        },
+        {
+            "Port": "1/43",
+            "Type": "Ethernet",
+            "Idx":43
+        },
+        {
+            "Port": "1/44",
+            "Type": "Ethernet",
+            "Idx":44
+        },
+        {
+            "Port": "1/45",
+            "Type": "Ethernet",
+            "Idx":45
+        },
+        {
+            "Port": "1/46",
+            "Type": "Ethernet",
+            "Idx":46
+        },
+        {
+            "Port": "1/47",
+            "Type": "Ethernet",
+            "Idx":47
+        },
+        {
+            "Port": "1/48",
+            "Type": "Ethernet",
+            "Idx":48
+        },
+        {
+            "Port": "1/49",
+            "Type": "Ethernet",
+            "Idx":49
+        },
+        {
+            "Port": "1/50",
+            "Type": "Ethernet",
+            "Idx":50
+        },
+        {
+            "Port": "1/51",
+            "Type": "Ethernet",
+            "Idx":51
+        },
+        {
+            "Port": "1/52",
+            "Type": "Ethernet",
+            "Idx":52
+        },
+        {
+            "Port": "1/53",
+            "Type": "Ethernet",
+            "Idx":53
+        },
+        {
+            "Port": "1/54",
+            "Type": "Ethernet",
+            "Idx":54
+        },
+        {
+            "Port": "mgmt0",
+            "Type": "mgmt",
+            "Idx":55
+        }
+    ]
+}

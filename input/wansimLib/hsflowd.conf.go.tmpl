@@ -1,7 +1,10 @@
 {{- define "hsflowd.conf" -}}
 sflow {
-    polling = 30
-    sampling.10G = 10000
+    polling = 10
+    sampling.100M = 50
+    sampling.1G = 100
+    sampling.10G = 500
+    sampling.http = 5
     # ====== Sampling/Polling/Collectors ======
     collector { ip=127.0.0.1 udpport=6343 }
     

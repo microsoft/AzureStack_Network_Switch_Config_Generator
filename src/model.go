@@ -253,6 +253,7 @@ type PortGroupType struct {
 
 type WANSIMType struct {
 	Hostname string         `yaml:"Hostname"`
+	Enabled  bool           `yaml:"Enabled"`
 	Loopback IPv4Unit       `yaml:"Loopback"`
 	GRE1     IPv4TunnelType `yaml:"GRE1"`
 	GRE2     IPv4TunnelType `yaml:"GRE2"`
