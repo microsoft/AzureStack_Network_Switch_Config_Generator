@@ -37,6 +37,12 @@ func TestMain(t *testing.T) {
 		"s46r21-definition": {
 			inputTestFileName: "s46r21-definition.json",
 		},
+		"s46r21-definition-Switched": {
+			inputTestFileName: "s46r21-definition-Switched.json",
+		},
+		"s46r21-definition-Switchless": {
+			inputTestFileName: "s46r21-definition-Switchless.json",
+		},
 	}
 
 	for name, tc := range testCases {

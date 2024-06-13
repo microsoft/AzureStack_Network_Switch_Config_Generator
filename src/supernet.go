@@ -53,7 +53,16 @@ func (o *OutputType) UpdateVlanAndL3Intf(inputData InputData) {
 					}
 				}
 				if !(strings.EqualFold(supernet.GroupName, STORAGE) && strings.EqualFold(inputData.DeploymentPattern, SWITCHLESS)) {
-					vlanList = append(vlanList, vlanItem)
+					if strings.EqualFold(supernet.GroupName, STORAGE) {
+						if strings.HasSuffix(strings.ToUpper(supernet.Name), strings.ToUpper("_"+o.Switch.Type)) {
+							vlanList = append(vlanList, vlanItem)
+						} else {
+							// tor1 should only have tor1 storage vlan, and tor2 should only have tor2 storage vlan
+							//fmt.Println("Skipping VLAN: ", vlanItem.VlanName, " for switch type: ", o.Switch.Type, " and supernet name: ", supernet.Name)
+						}
+					} else {
+						vlanList = append(vlanList, vlanItem)
+					}
 				}
 			} else {
 				// L3 Interface Object

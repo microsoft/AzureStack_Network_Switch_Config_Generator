@@ -18,7 +18,12 @@ type InputData struct {
 		SyslogServer []string `yaml:"SyslogServer"`
 		DNSForwarder []string `yaml:"DNSForwarder"`
 	} `yaml:"Setting"`
-	WANSIM WANSIMType `yaml:"WANSIM,omitempty"`
+	WANSIM      WANSIMType    `yaml:"WANSIM,omitempty"`
+	MainEnvData []MainEnvData `yaml:"MainEnvData"`
+}
+
+type MainEnvData struct {
+	NodeCount int `yaml:"NodeCount"`
 }
 
 type OutputType struct {
@@ -37,6 +42,7 @@ type OutputType struct {
 	PortGroup         []PortGroupType            `yaml:"PortGroup,omitempty"`
 	Routing           RoutingType                `yaml:"Routing,omitempty"`
 	WANSIM            WANSIMType                 `yaml:"WANSIM,omitempty"`
+	NodeCount         int                        `yaml:"NodeCount,omitempty"`
 }
 
 type GlobalSettingType struct {
@@ -107,6 +113,7 @@ type SwitchType struct {
 
 type Supernet struct {
 	GroupName   string `yaml:"GroupName"`
+	Name        string `yaml:"VlanName"`
 	Description string `yaml:"Description"`
 	Shutdown    bool   `yaml:"Shutdown"`
 	IPv4        struct {

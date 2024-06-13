@@ -17,7 +17,7 @@ func (o *OutputType) ParseSwitchPort(frameworkFolder string) {
 		o.updateDellPortGroup(interfaceJsonObj)
 	}
 
-	outputSwitchPorts := initSwitchPort(interfaceJsonObj, o.Switch.Make, o.Switch.Type)
+	outputSwitchPorts := initSwitchPort(interfaceJsonObj, o.Switch.Make, o.Switch.Type, o.NodeCount)
 	o.Ports = outputSwitchPorts
 	if strings.Contains(o.Switch.Type, TOR) {
 		o.UpdateTORSwitchPorts(interfaceJsonObj.VlanGroup)
@@ -39,9 +39,10 @@ func parseInterfaceJson(interfaceJsonPath string) *PortJson {
 	return interfaceJsonObj
 }
 
-func initSwitchPort(interfaceJsonObj *PortJson, switchMake, switchType string) []PortType {
+func initSwitchPort(interfaceJsonObj *PortJson, switchMake, switchType string, nodeCount int) []PortType {
 	outputSwitchPorts := []PortType{}
 	portToIdx := map[string]int{}
+	// the first forloop creates all the ports, calls them unused and shuts them down.
 	for _, port := range interfaceJsonObj.Port {
 		if strings.Contains(switchMake, "Dell") && strings.Contains(switchType, "TOR") {
 			if strings.Contains(port.Mode, "10g-4x") {
@@ -86,6 +87,41 @@ func initSwitchPort(interfaceJsonObj *PortJson, switchMake, switchType string) [
 		}
 		portToIdx[port.Port] = port.Idx
 	}
+
+	// For function ports for compute set it to empty slice
+	for i := range interfaceJsonObj.Function {
+		isCompute := strings.EqualFold(interfaceJsonObj.Function[i].Function, COMPUTE)
+		isHostBMC := strings.EqualFold(interfaceJsonObj.Function[i].Function, "HOST_BMC")
+		isStorage := strings.EqualFold(interfaceJsonObj.Function[i].Function, STORAGE)
+		if isCompute || isHostBMC || isStorage {
+			// set interfaceJsonObj.Function[i].Port to an empty slice
+			interfaceJsonObj.Function[i].Port = []string{}
+		}
+	}
+	// function ports for compute set it to the number of nodes
+	for i := range interfaceJsonObj.Function {
+		isCompute := strings.EqualFold(interfaceJsonObj.Function[i].Function, COMPUTE)
+		isHostBMC := strings.EqualFold(interfaceJsonObj.Function[i].Function, "HOST_BMC")
+		isStorage := strings.EqualFold(interfaceJsonObj.Function[i].Function, STORAGE)
+		if isCompute || isHostBMC {
+			for key, value := range portToIdx {
+				if value <= nodeCount {
+					interfaceJsonObj.Function[i].Port = append(interfaceJsonObj.Function[i].Port, key)
+					//fmt.Printf("Appending %s to Port of Function %d\n", key, i)
+				}
+			}
+		}
+		// For storage start at nodeCout to nodecount *2
+		if isStorage {
+			for key, value := range portToIdx {
+				if value >= 21 && value <= nodeCount+21 {
+					interfaceJsonObj.Function[i].Port = append(interfaceJsonObj.Function[i].Port, key)
+					//fmt.Printf("Appending %s to Port of Function %d\n", key, i)
+				}
+			}
+		}
+	}
+
 	// Initial Interface Object Map
 	maxIdx := len(outputSwitchPorts)
 	// Config Interface with Functions
@@ -114,7 +150,9 @@ func (o *OutputType) UpdateTORSwitchPorts(VlanGroup map[string][]string) {
 	for _, vlanItem := range o.Vlans {
 		for _, key := range VlanGroup[STORAGE] {
 			if strings.Contains(strings.ToUpper(vlanItem.GroupName), strings.ToUpper(key)) {
-				STORAGE_VlanMap[vlanItem.VlanID] = vlanItem.GroupName
+				if strings.HasSuffix(strings.ToUpper(vlanItem.VlanName), strings.ToUpper("_"+o.Switch.Type)) {
+					STORAGE_VlanMap[vlanItem.VlanID] = vlanItem.VlanName
+				}
 			}
 		}
 		for _, key := range VlanGroup[COMPUTE] {
