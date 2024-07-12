@@ -31,17 +31,17 @@ func TestMain(t *testing.T) {
 		inputTestFileName string
 	}
 	testCases := map[string]test{
-		"s46r06-definition": {
-			inputTestFileName: "s46r06-definition.json",
+		"DellEMC-Switched": {
+			inputTestFileName: "DellEMC-Switched.json",
 		},
-		"s46r21-definition": {
-			inputTestFileName: "s46r21-definition.json",
+		"CiscoNXOS-HyperConverged": {
+			inputTestFileName: "CiscoNXOS-HyperConverged.json",
 		},
-		"s46r21-definition-Switched": {
-			inputTestFileName: "s46r21-definition-Switched.json",
+		"CiscoNXOS-Switched": {
+			inputTestFileName: "CiscoNXOS-Switched.json",
 		},
-		"s46r21-definition-Switchless": {
-			inputTestFileName: "s46r21-definition-Switchless.json",
+		"CIscoNXOS-Switchless": {
+			inputTestFileName: "CIscoNXOS-Switchless.json",
 		},
 	}
 

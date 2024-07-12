@@ -1,7 +1,7 @@
 ToolBuildVersion: 1.2305.01
 Switch:
   Make: Cisco
-  Model: 93180YC-FX
+  Model: 93180YC-FX3
   Type: TOR2
   Hostname: s46-r21-93180hl-24-1b
   ASN: 65242
@@ -9,14 +9,14 @@ Switch:
 DeploymentPattern: HyperConverged
 SwitchPeer:
 - Make: Cisco
-  Model: 93180YC-FX
+  Model: 93180YC-FX3
   Type: TOR1
   Hostname: s46-r21-93180hl-24-1a
   ASN: 65242
   Firmware: 9.3(11)
 SwitchBMC:
 - Make: Cisco
-  Model: 9348GC-FXP
+  Model: 9348GC-FX3
   Type: BMC
   Hostname: s46-r21-9348bmc-24-1
   ASN: 0
