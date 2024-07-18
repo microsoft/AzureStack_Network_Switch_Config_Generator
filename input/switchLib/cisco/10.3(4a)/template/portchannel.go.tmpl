@@ -1,0 +1,34 @@
+{{ define "portchannel"}}
+! portchannel.go.tmpl-portchannel
+{{- $SwitchType := .Switch.Type -}}
+{{ range .PortChannel }}
+interface port-channel{{ .PortChannelID }}
+  description VPC:{{ .Description }}
+  {{if eq .Function "P2P_IBGP" -}}
+  no switchport
+  priority-flow-control mode on
+  ip address {{ .IPAddress }}
+  logging event port link-status
+  mtu 9216
+  service-policy type qos input AZS_SERVICES
+  {{else if eq .Function "MLAG_PEER" -}}
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan {{ .UntagVlan }}
+  priority-flow-control mode on
+  spanning-tree port type network
+  logging event port link-status
+  vpc {{ .VPC }}
+  {{else if eq .Function "TOR_BMC" -}}
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan {{ .UntagVlan }}
+  switchport trunk allowed vlan {{ .TagVlans }}
+  spanning-tree port type network
+  logging event port link-status
+  mtu 9216
+  {{ if eq $SwitchType "BMC" -}}!{{ else }}vpc {{ .VPC }}{{end}}
+  {{end -}}
+  {{if .Shutdown -}} shutdown {{else -}} no shutdown {{end}}
+  {{ end }}
+{{ end -}}

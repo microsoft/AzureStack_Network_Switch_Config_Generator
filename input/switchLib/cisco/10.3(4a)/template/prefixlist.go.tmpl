@@ -1,0 +1,15 @@
+{{ define "prefixlist"}}
+! prefixlist.go.tmpl-prefixlist
+ip prefix-list DEFAULT-FROM-WANSIM seq 5 permit 0.0.0.0/0
+ip prefix-list DefaultRoute seq 10 permit 0.0.0.0/0
+ip prefix-list DefaultRoute seq 50 deny 0.0.0.0/0 le 32
+ip prefix-list FROM-BORDER seq 10 permit 0.0.0.0/0
+ip prefix-list FROM-BORDER seq 20 permit {{.WANSIM.Loopback.Subnet}}
+ip prefix-list FROM-BORDER seq 30 deny 0.0.0.0/0 le 32
+ip prefix-list TO-BORDER seq 5 deny 0.0.0.0/0
+ip prefix-list TO-BORDER seq 10 permit 0.0.0.0/0 le 32
+
+route-map PREFER-WANSIM permit 10
+  match ip address prefix-list DEFAULT-FROM-WANSIM
+  set local-preference 200
+{{ end -}}

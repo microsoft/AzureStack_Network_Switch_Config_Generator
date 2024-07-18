@@ -5,7 +5,7 @@ Switch:
   Type: BMC
   Hostname: s46-r21-9348bmc-24-1
   ASN: 0
-  Firmware: 9.3(11)
+  Firmware: 10.3(4a)
 DeploymentPattern: HyperConverged
 SwitchUplink:
 - Make: Cisco

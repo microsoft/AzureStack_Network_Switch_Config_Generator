@@ -1,0 +1,18 @@
+{{ define "hostname"}}
+! header.go.tmpl-hostname
+! Name: {{ .Switch.Hostname }}
+! Make: {{ .Switch.Make }}
+! Model: {{ .Switch.Model }}
+hostname {{ .Switch.Hostname }}
+
+banner motd #
+NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE
+
+hostname {{ .Switch.Hostname }}
+BuildVersion: {{ .ToolBuildVersion }}
+Unauthorized access and/or use prohibited.
+All access and/or use subject to monitoring.
+
+NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE
+#
+{{ end }}
