@@ -261,6 +261,16 @@ type WANSIMType struct {
 		LocalASN int                `yaml:"LocalASN"`
 		IPv4Nbr  []IPv4NeighborType `yaml:"IPv4Nbr"`
 	} `yaml:"BGP"`
-	RerouteNetworks []string `yaml:"RerouteNetworks"`
-	PingTest        string   `yaml:"PingTest"`
+	RerouteNetworks []string           `yaml:"RerouteNetworks"`
+	PingTest        string             `yaml:"PingTest"`
+	NetworkProfile  NetworkProfileType `yaml:"NetworkProfile"`
+}
+
+type NetworkProfileType struct {
+	UploadBW      string `yaml:"UploadBW"`
+	UploadDelay   string `yaml:"UploadDelay"`
+	UploadLoss    string `yaml:"UploadLoss"`
+	DownloadBW    string `yaml:"DownloadBW"`
+	DownloadDelay string `yaml:"DownloadDelay"`
+	DownloadLoss  string `yaml:"DownloadLoss"`
 }

@@ -1410,10 +1410,10 @@ Routing:
     BGPAsn: 64556
     RouterID: 100.71.12.21
     IPv4Network:
+    - 100.71.12.0/30
     - 100.71.12.8/30
     - 100.71.12.16/30
     - 100.71.12.21/32
-    - 100.71.12.0/30
     - 100.71.12.64/26
     - 100.71.143.0/25
     - 100.68.148.0/24
@@ -1571,4 +1571,11 @@ WANSIM:
   - 100.68.151.240/29
   - 100.68.151.248/29
   PingTest: '"microsoft.com","azure.com","msk8s.api.cdp.microsoft.com","100.68.148.1","100.71.12.65"'
+  NetworkProfile:
+    UploadBW: 1Gbit
+    UploadDelay: 0ms
+    UploadLoss: 0%
+    DownloadBW: 1Gbit
+    DownloadDelay: 0ms
+    DownloadLoss: 0%
 NodeCount: 16

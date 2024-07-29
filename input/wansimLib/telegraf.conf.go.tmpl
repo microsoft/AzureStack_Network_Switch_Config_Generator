@@ -146,8 +146,9 @@
 [[inputs.ping]]
   ## Hosts to send ping packets to.
   urls = [{{ .PingTest }}]
-  count = 1
+  count = 3
   timeout = 2.0
+  deadline = 10
 
 # # SFlow V5 Protocol Listener
 [[inputs.sflow]]
@@ -168,7 +169,7 @@
   commands = [
     "python3 /etc/telegraf/monitor_tc_rules.py"
   ]
-  interval = "20m" 
+  interval = "30m" 
   timeout = "10s"
   data_format = "prometheus"
 {{- end -}}

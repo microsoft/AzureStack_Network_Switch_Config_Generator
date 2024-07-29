@@ -1571,4 +1571,11 @@ WANSIM:
   - 100.68.151.240/29
   - 100.68.151.248/29
   PingTest: '"microsoft.com","azure.com","msk8s.api.cdp.microsoft.com","100.68.148.1","100.71.12.65"'
+  NetworkProfile:
+    UploadBW: 1Gbit
+    UploadDelay: 0ms
+    UploadLoss: 0%
+    DownloadBW: 1Gbit
+    DownloadDelay: 0ms
+    DownloadLoss: 0%
 NodeCount: 16
