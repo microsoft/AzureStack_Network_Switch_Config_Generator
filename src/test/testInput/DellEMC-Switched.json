@@ -1681,16 +1681,9 @@
     ],
     "Setting": {
       "TimeZone": "Pacific Standard Time",
-      "TimeServer": [
-        "10.10.240.20"
-      ],
-      "SyslogServer": [
-        "10.10.43.111"
-      ],
-      "DNSForwarder": [
-        "10.10.240.23",
-        "10.10.240.24"
-      ]
+      "TimeServer": ["10.10.240.20"],
+      "SyslogServer": ["10.10.43.111"],
+      "DNSForwarder": ["10.10.240.23", "10.10.240.24"]
     },
     "WANSIM": {
       "Hostname": "rr1-s46-r21-wansim",
@@ -1731,11 +1724,15 @@
           }
         ]
       },
-      "RerouteNetworks": [
-        "Infrastructure",
-        "TENANT",
-        "L3FORWARD"
-      ]
+      "RerouteNetworks": ["Infrastructure", "TENANT", "L3FORWARD"],
+      "NetworkProfile": {
+        "UploadBW": "1Gbit",
+        "UploadDelay": "0ms",
+        "UploadLoss": "0%",
+        "DownloadBW": "1Gbit",
+        "DownloadDelay": "0ms",
+        "DownloadLoss": "0%"
+      }
     }
   }
 }

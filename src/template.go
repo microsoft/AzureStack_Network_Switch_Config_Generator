@@ -54,8 +54,8 @@ func (o *OutputType) parseCombineTemplate(templateFolder, outputFolder, configFi
 	f.Close()
 }
 
+// Parse all .go.tmpl files in the wansimLib Folder
 func (o *OutputType) parseEachTemplate(templateFolder, outputFolder string) {
-	// Parse all .go.tmpl files in the specified folder
 	templateFiles, err := filepath.Glob(filepath.Join(templateFolder, "*.go.tmpl"))
 	if err != nil {
 		log.Fatalln(err)
