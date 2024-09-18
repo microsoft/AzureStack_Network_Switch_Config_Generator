@@ -26,6 +26,7 @@ interface {{ .Type}} {{ .Port }}
   priority-flow-control mode on
   service-policy input type network-qos AZS_SERVICES_pfc
   service-policy output type queuing AZS_SERVICES_ets
+  ets mode on
   spanning-tree bpduguard enable
   spanning-tree guard root
   spanning-tree port type edge
@@ -48,6 +49,7 @@ interface {{ .Type}} {{ .Port }}
   priority-flow-control mode on
   service-policy input type network-qos AZS_SERVICES_pfc
   service-policy output type queuing AZS_SERVICES_ets
+  ets mode on
   spanning-tree bpduguard enable
   spanning-tree guard root
   spanning-tree port type edge

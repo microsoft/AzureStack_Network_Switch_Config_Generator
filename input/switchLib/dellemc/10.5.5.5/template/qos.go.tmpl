@@ -22,9 +22,6 @@ class-map type queuing AZS_SERVICES_EtsQue_3
 class-map type queuing AZS_SERVICES_EtsQue_7
  match queue 7 
 !
-class-map type queuing Queue_3
- match queue 3 
-!
 trust dot1p-map AZS_SERVICES_Dot1p
  qos-group 0 dot1p 0-2,4-6
  qos-group 3 dot1p 3
@@ -50,15 +47,10 @@ policy-map type queuing AZS_SERVICES_ets
  !
  class AZS_SERVICES_EtsQue_3
   bandwidth percent 50
+  random-detect ecn
  !
  class AZS_SERVICES_EtsQue_7
   bandwidth percent 2
-!
-policy-map type queuing policy_q3
- !
- class Queue_3
-  bandwidth percent 50
-  random-detect ecn
 !
 system qos
  trust-map dot1p AZS_SERVICES_Dot1p
