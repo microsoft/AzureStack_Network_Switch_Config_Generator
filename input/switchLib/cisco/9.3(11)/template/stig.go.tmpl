@@ -44,5 +44,6 @@ no cdp enable
 ! FIPS mode will automatically enable nxapi, the work around is to remove the ports it listens on.
 feature nxapi
 no nxapi http
-no nxapi https 
+no nxapi https
+lldp tlv-select dcbxp egress-queuing
 {{ end }}

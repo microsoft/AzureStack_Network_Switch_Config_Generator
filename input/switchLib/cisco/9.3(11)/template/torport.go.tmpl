@@ -22,7 +22,7 @@ interface {{ .Type}} {{ .Port }}
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}
   switchport trunk allowed vlan {{ .TagVlanString }}
-  priority-flow-control mode on
+  priority-flow-control mode on send-tlv
   spanning-tree port type edge trunk
   no logging event port link-status
   service-policy type qos input AZS_SERVICES no-stats
@@ -40,7 +40,7 @@ interface {{ .Type}} {{ .Port }}
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}
   switchport trunk allowed vlan {{ .TagVlanString }}
-  priority-flow-control mode on
+  priority-flow-control mode on send-tlv
   spanning-tree port type edge trunk
   no logging event port link-status
   service-policy type qos input AZS_SERVICES no-stats
@@ -49,11 +49,11 @@ interface {{ .Type}} {{ .Port }}
   switchport
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}
-  priority-flow-control mode on
+  priority-flow-control mode on send-tlv
   logging event port link-status
   channel-group {{ .Others.ChannelGroup }} mode active
   {{else if eq .Function "P2P_IBGP" -}}
-  priority-flow-control mode on
+  priority-flow-control mode on send-tlv
   logging event port link-status
   mtu {{ .Mtu }}
   channel-group {{ .Others.ChannelGroup }} mode active
