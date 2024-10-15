@@ -62,10 +62,14 @@ interface {{ .Type}} {{ .Port }}
   priority-flow-control mode on
   service-policy input type network-qos AZS_SERVICES_pfc
   service-policy output type queuing AZS_SERVICES_ets
+  qos-map traffic-class AZS_SERVICES_Que
+  ets mode on
   {{else if eq .Function "P2P_IBGP" -}}
   priority-flow-control mode on
   service-policy input type network-qos AZS_SERVICES_pfc
   service-policy output type queuing AZS_SERVICES_ets
+  qos-map traffic-class AZS_SERVICES_Que
+  ets mode on
   channel-group {{ .Others.ChannelGroup }} mode active
   {{else if eq .Function "TOR_BMC" -}}
   channel-group {{ .Others.ChannelGroup }} mode active
