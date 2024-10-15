@@ -49,11 +49,11 @@ interface {{ .Type}} {{ .Port }}
   switchport
   switchport mode trunk
   switchport trunk native vlan {{ .UntagVlan }}
-  priority-flow-control mode on
+  priority-flow-control mode on send-tlv
   logging event port link-status
   channel-group {{ .Others.ChannelGroup }} mode active
   {{else if eq .Function "P2P_IBGP" -}}
-  priority-flow-control mode on
+  priority-flow-control mode on send-tlv
   logging event port link-status
   mtu {{ .Mtu }}
   channel-group {{ .Others.ChannelGroup }} mode active
