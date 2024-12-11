@@ -1,9 +1,8 @@
-Vlan
-Interface
-Routing
-Global Setting
 
-### SwitchLib Hierachy Sample
+# Customize Your Own Switch Library
+
+The tool provides a framework for defining and customizing your switch library based on the `input.json` and `switch library` JSON files. This document is focuing on `switch library`, below is the high-level structure of default `switchLib`:
+
 
 ```
 .
@@ -11,6 +10,8 @@ Global Setting
 │   └── 9.3(9)
 │       ├── 93180yc-fx
 │       │   └── interface.json
+│       │   └── bgp.json
+│       │   └── static.json
 │       ├── 9348gc-fxp
 │       │   └── interface.json
 │       └── template
@@ -26,6 +27,7 @@ Global Setting
         │   └── interface.json
         ├── s5248-on
         │   └── interface.json
+        │   └── bgp.json
         └── template
             ├── AllConfig.go.tmpl
             ├── hostname.go.tmpl
@@ -35,112 +37,63 @@ Global Setting
             └── vlan.go.tmpl
 ```
 
-#### User Input Template
+- You can modify any files within the switchLib directory to suit your requirements. However, in most cases, the files that typically need adjustment when adding new device models are interface.json and bgp.json.
 
-```Go
-type InputType struct {
-	Version   string                 `json:"Version"`
-	Settings  map[string]interface{} `json:"Settings"`
-	IsNoBMC   bool                   `json:"IsNoBMC"`
-	Devices   []DeviceType           `json:"Devices"`
-	Supernets interface{}            `json:"Supernets"`
-}
+- All you need to ensure is that the tool can locate the correct path to your resources.
 
-type DeviceType struct {
-	Make                 string `json:"Make"`
-	Type                 string `json:"Type"`
-	Hostname             string `json:"Hostname"`
-	Asn                  int    `json:"ASN"`
-	Model                string `json:"Model"`
-	Firmware             string `json:"Firmware"`
-	GenerateDeviceConfig bool   `json:"GenerateDeviceConfig"`
-	StaticRouting        bool   `json:"StaticRouting"`
-	Username             string `json:"Username"`
-	Password             string `json:"Password"`
-}
+ 
+### Notes:
+- The files in the `template` folder are written using **Go Template**, which requires advanced knowledge to modify.
+- Ensure you create a backup copy of the files before making any direct modifications.
 
-type SupernetInputType struct {
-	VlanID           int    `json:"VlanID"`
-	Group            string `json:"Group"`
-	Name             string `json:"Name"`
-	Subnet           string `json:"Subnet"`
-	Shutdown         bool   `json:"Shutdown"`
-	SubnetAssignment []struct {
-		Name         string                  `json:"Name"`
-		Netmask      int                     `json:"Netmask"`
-		IPSize       int                     `json:"IPSize"`
-		IPAssignment []IPAssignmentInputItem `json:"IPAssignment"`
-	} `json:"SubnetAssignment"`
-}
+
+# Examples
+## Updating Port Assignment
+
+If you are using a Cisco 93180YC-FX switch running `9.3(11)` as a Top-of-Rack (TOR) switch and want to assign port `1/23` to the Storage port group, follow these steps:
+
+1. Navigate to the `interface.json` file located in the directory: `input/switchLib/cisco/9.3(11)/93180yc-fx/interface.json`
+
+2. Open the file and add `1/23` to the appropriate list.
+
 ```
-
-#### Switch Framework JSON
-
-Example: BGP Framework
-
-```Go
-type BGPType struct {
-	BGPAsn                 string   `json:"BGPAsn"`
-	RouterID               string   `json:"RouterID"`
-	IPv4Network            []string `json:"IPv4Network"`
-	EnableDefaultOriginate bool     `json:"EnableDefaultOriginate"`
-	RoutePrefix            struct {
-		MaxiPrefix  int    `json:"MaxiPrefix"`
-		ErrorAction string `json:"ErrorAction"`
-	} `json:"RoutePrefix"`
-	IPv4Neighbor []struct {
-		Description       string `json:"Description"`
-		EnablePassword    bool   `json:"EnablePassword"`
-		NeighborAsn       string `json:"NeighborAsn"`
-		NeighborIPAddress string `json:"NeighborIPAddress"`
-		PrefixList        []struct {
-			Name      string `json:"Name"`
-			Direction string `json:"Direction"`
-		} `json:"PrefixList"`
-		UpdateSource string `json:"UpdateSource"`
-		Shutdown     bool   `json:"Shutdown"`
-	} `json:"IPv4Neighbor"`
-	PrefixListName []string `json:"PrefixListName"`
-}
+        {
+            "Function": "Storage",
+            "Port": [
+                "1/17",
+                "1/18",
+                "1/19",
+                "1/20",
+                "1/21",
+                "1/22",
+				"1/23"
+            ]
+        }
 ```
+3. Save the file after making the changes.
 
-#### Switch Go Template
+The tool will automatically read the updated `interface.json` and generate the new configuration based on your modifications.
 
-Example: BGP Template
 
-```Go
-{{define "bgp_prefix"}}
-! bgp_prefix_list
-{{ range .PrefixList -}}
-{{ range .Config -}}
-ip prefix-list {{.Name}} {{.Action}} {{.Supernet}}
-{{end}}
-{{end}}
-{{end}}
+## Updating Existing Switch with a New OS Image
 
-{{define "bgp_routing"}}
-! bgp.go.tmpl-bgp
-router bgp {{.BGPAsn}}
-  router-id {{.RouterID}}
-  bestpath as-path multipath-relax
-  log-neighbor-changes
-  address-family ipv4 unicast
-    maximum-paths 9
-    {{- range .IPv4Network}}
-    network {{.}}
-    {{- end -}}
-{{- /* Define variable before assign*/ -}}
-{{$MaxiPrefix:= .RoutePrefix.MaxiPrefix}}
-{{$ErrorAction:= .RoutePrefix.ErrorAction}}
-  {{- range .IPv4Neighbor}}
-  neighbor {{.NeighborIPAddress}}
-    remote-as {{.NeighborAsn}}
-    description {{.Description}}
-    address-family ipv4 unicast
-      maximum-prefix {{$MaxiPrefix}} {{$ErrorAction}}
-      {{ range .PrefixList -}}
-      prefix-list {{.Name}} {{.Direction}}
-      {{end -}}
-  {{end -}}
-{{end}}
-```
+If you upgraded the Cisco 93180YC-FX switch from `9.3(11)` to `10.4`, follow these steps to add support for the new version:
+
+1. Copy the entire directory: `input/switchLib/cisco/9.3(11)`
+2. Rename the copied directory to: `input/switchLib/cisco/10.4`
+3. That's it! The new version is now supported.
+
+### Notes:
+1. Ensure that your `input.json` file is updated with the correct version (`10.4`) to reflect the changes.
+2. In most cases, vendors do not significantly change configuration commands across versions, so there is no need to modify the configuration templates.
+3. If upgrading across a major version gap, double-check with the vendor to confirm that the existing configurations remain compatible.
+
+## Adding New Switch Model
+
+If you are adding a new switch model, such as the Cisco 93190YC-FX switch running on `10.4`, follow these steps to add support for it:
+
+1. Make sure direcotry `input/switchLib/cisco/10.4` existing.
+2. Copy the entire directory: `input/switchLib/cisco/10.4/93180yc-fx`
+3. Rename the copied directory to: `input/switchLib/cisco/10.4/93190yc-fx`
+4. Update the json files (interface, bgp. etc) under the new folder accordingly.
+
