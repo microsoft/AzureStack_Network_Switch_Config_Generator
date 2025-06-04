@@ -1,5 +1,5 @@
 
-# Network Configuration Generation Tool - Design Document
+# Network Configuration Generation Tool
 
 ## 📘 Overview
 
@@ -22,8 +22,8 @@ This tool aims to generate vendor-specific network switch configurations (e.g., 
 ### Overall Flow
 ```mermaid
 flowchart LR
-    A["JSON Input File(Network Variables)"]
-    C["Jinja2 Template<br/>(Pre-defined Vendor Templates)"]
+    A["Standard Input JSON<br/>(Network Variables)"]
+    C["Jinja2 Template<br/>(Config Templates)"]
     E("Config Generation Tool<br/>(Python Script)")
     G(Generated Configuration)
 
@@ -38,15 +38,42 @@ flowchart LR
     end
 ```
 
-
 > **Note:**  
 > The structure and format of the **JSON input file must remain fixed** to match the variables used in the Jinja2 templates, but you can safely update **values** as needed, either manually or programmatically.
+
+#### Customized Input Format
+
+To support a wide range of input data formats, the system allows users to define their own converters. These converters transform any non-standard input into a unified JSON structure. Sample converters are provided in the repository as references to help users get started.
+
+```mermaid
+flowchart LR
+    U1["Non-Standard JSON Input"]
+    U2["CSV Input"]
+    U3["YAML Input"]
+    U4["Other Format Input"]
+    S1["Standard Input JSON"]
+
+    U1 -->|convertor1.py| S1
+    U2 -->|convertor2.py| S1
+    U3 -->|convertor3.py| S1
+    U4 -->|convertorx.py| S1
+
+    subgraph "User-Defined Input Types"
+        direction TB
+        U1
+        U2
+        U3
+        U4
+    end
+
+```
+Each input type should be handled by a user-defined converter script (e.g., convertor1.py). These scripts are responsible for converting the input into the standardized JSON format. Example converter scripts are included in the repo to illustrate expected structure and behavior.
 
 
 ### Workflow Detail
 ```mermaid
 flowchart LR
-    A["JSON Input File"]
+    A["Standard Input JSON"]
     B["Config Generation Tool"]
     T1["vlan.j2 Template"]
     T2["bgp.j2 Template"]
