@@ -1,8 +1,9 @@
 # loader.py
 import json
 import os
+from jinja2 import Environment, FileSystemLoader
 
-def load_json(filepath, verbose=False):
+def load_input_json(filepath, verbose=False):
     """
     Load and parse a JSON file safely.
 
@@ -48,3 +49,8 @@ def pretty_print_json(data, output_path):
         print(f"[✓] Pretty-printed JSON saved to: {output_path}")
     except Exception as e:
         print(f"[ERROR] Failed to write pretty JSON: {e}")
+
+
+def load_template(template_dir, template_path):
+    env = Environment(loader=FileSystemLoader(template_dir))
+    return env.get_template(template_path)

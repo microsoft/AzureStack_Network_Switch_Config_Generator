@@ -10,7 +10,7 @@ if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
 
 from convertors import convert_switch_input_json
-from loader import load_json
+from loader import load_input_json
 
 # Global test case base path
 BASE_PATH = ROOT_DIR / "tests" / "test_cases"
@@ -21,7 +21,7 @@ def test_convert_switch_input_json():
     expected_dir = BASE_PATH / folder / "expected_outputs"
     output_dir = BASE_PATH / folder / "generated_outputs"
 
-    input_data = load_json(input_path)
+    input_data = load_input_json(input_path)
     assert input_data is not None, "❌ Failed to load input JSON"
 
     # 🔄 Run conversion (writes files to output_dir)

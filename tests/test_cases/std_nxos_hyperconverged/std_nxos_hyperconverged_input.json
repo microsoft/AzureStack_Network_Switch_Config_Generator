@@ -58,20 +58,12 @@
   ],
   "interfaces": [
     {
-      "name": "Switched_Compute",
+      "name": "Hyperconverged",
       "type": "Trunk",
       "start_intf": "1/1",
       "end_intf": "1/16",
       "native_vlan": "99",
-      "tagged_vlans": "6-7,201,301,401,501-516"
-    },
-    {
-      "name": "Switched_Storage",
-      "type": "Trunk",
-      "start_intf": "1/21",
-      "end_intf": "1/37",
-      "native_vlan": "99",
-      "tagged_vlans": "711,712"
+      "tagged_vlans": "6-7,201,301,401,501-516,711,712"
     },
     {
       "name": "Loopback0",

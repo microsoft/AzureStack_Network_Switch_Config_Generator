@@ -62,6 +62,7 @@
       "type": "Trunk",
       "start_intf": "1/1",
       "end_intf": "1/16",
+      "vlanmode": "Trunk",
       "native_vlan": "99",
       "tagged_vlans": "6-7,201,301,401,501-516"
     },
@@ -70,6 +71,7 @@
       "type": "Trunk",
       "start_intf": "1/21",
       "end_intf": "1/37",
+      "vlanmode": "Trunk",
       "native_vlan": "99",
       "tagged_vlans": "711,712"
     },
