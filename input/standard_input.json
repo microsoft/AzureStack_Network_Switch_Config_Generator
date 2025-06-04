@@ -1,0 +1,111 @@
+{
+  "switch": {
+    "make": "cisco",
+    "model": "93180yc-fx3",
+    "type": "TOR1",
+    "hostname": "s46-r21-93180hl-24-1a",
+    "firmware": "10.3(4a)"
+  },
+  "vlans": [
+    {
+      "name": "UNUSED_VLAN",
+      "vlan_id": 2
+    },
+    {
+      "name": "HNVPA_6",
+      "vlan_id": 6,
+      "gateway": "100.71.131.1",
+      "ip": "100.71.131.2",
+      "cidr": 25
+    },
+    {
+      "name": "Infra_7",
+      "vlan_id": 7,
+      "gateway": "100.69.176.1",
+      "ip": "100.69.176.2",
+      "cidr": 24
+    },
+    {
+      "name": "BMC_Mgmt_125",
+      "vlan_id": 125,
+      "gateway": "100.71.85.65",
+      "ip": "100.71.85.123",
+      "cidr": 26
+    },
+    {
+      "name": "Tenant_201",
+      "vlan_id": 201,
+      "gateway": "100.69.177.1",
+      "ip": "100.69.177.2",
+      "cidr": 24
+    },
+    {
+      "name": "L3forward_501",
+      "vlan_id": 501,
+      "gateway": "100.69.179.1",
+      "ip": "100.69.179.2",
+      "cidr": 28
+    },
+    {
+      "name": "Storage_711_TOR1",
+      "vlan_id": 711
+    },
+    {
+      "name": "Storage_712_TOR2",
+      "vlan_id": 712
+    }
+  ],
+  "interfaces": [
+    {
+      "name": "ComputeRange",
+      "description": "Trunk ports for compute servers",
+      "type": "Trunk",
+      "portrange": "Ethernet1/1-16",
+      "vlanmode": "Trunk",
+      "vlans": "100-110"
+    },
+    {
+      "name": "StorageRange",
+      "description": "Trunk ports for storage network",
+      "type": "Trunk",
+      "portrange": "Ethernet1/21-30",
+      "vlanmode": "Trunk",
+      "vlans": "200-210"
+    },
+    {
+      "name": "UplinkToBorder",
+      "description": "L3 uplink to border switch",
+      "type": "L3",
+      "interface": "Ethernet1/50",
+      "ipv4": "10.0.0.1/30",
+      "peer": "Border1"
+    }
+  ],
+  "bgp": {
+    "local_asn": 65242,
+    "router_id": "100.69.178.2",
+    "neighbors": [
+      {
+        "ip": "100.69.178.1",
+        "remote_asn": 64846,
+        "description": "Border1",
+        "address_family": "ipv4",
+        "activate": true
+      },
+      {
+        "ip": "100.69.178.3",
+        "remote_asn": 64846,
+        "description": "Border2",
+        "address_family": "ipv4",
+        "activate": true
+      },
+      {
+        "ip": "fd00::1",
+        "remote_asn": 64846,
+        "description": "IPv6 Border",
+        "address_family": "ipv6",
+        "activate": true
+      }
+    ]
+  }
+}

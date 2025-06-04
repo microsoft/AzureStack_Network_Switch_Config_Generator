@@ -1,0 +1,182 @@
+{
+  "switch": {
+    "make": "cisco",
+    "model": "93180yc-fx3",
+    "type": "TOR2",
+    "hostname": "s46-r21-93180hl-24-1b",
+    "firmware": "10.3(4a)"
+  },
+  "vlans": [
+    {
+      "name": "UNUSED_VLAN",
+      "vlan_id": 2
+    },
+    {
+      "name": "HNVPA_6",
+      "vlan_id": 6,
+      "gateway": "100.71.131.1",
+      "ip": "100.71.131.3",
+      "cidr": 25
+    },
+    {
+      "name": "Infra_7",
+      "vlan_id": 7,
+      "gateway": "100.69.176.1",
+      "ip": "100.69.176.3",
+      "cidr": 24
+    },
+    {
+      "name": "NativeVlan",
+      "vlan_id": 99
+    },
+    {
+      "name": "BMC_Mgmt_125",
+      "vlan_id": 125,
+      "gateway": "100.71.85.65",
+      "ip": "100.71.85.124",
+      "cidr": 26
+    },
+    {
+      "name": "Tenant_201",
+      "vlan_id": 201,
+      "gateway": "100.69.177.1",
+      "ip": "100.69.177.3",
+      "cidr": 24
+    },
+    {
+      "name": "LogicalTenant_301",
+      "vlan_id": 301,
+      "gateway": "100.69.178.1",
+      "ip": "100.69.178.3",
+      "cidr": 25
+    },
+    {
+      "name": "DhcpTenant_401",
+      "vlan_id": 401,
+      "gateway": "100.69.178.129",
+      "ip": "100.69.178.131",
+      "cidr": 25
+    },
+    {
+      "name": "L3forward_501",
+      "vlan_id": 501,
+      "gateway": "100.69.179.1",
+      "ip": "100.69.179.3",
+      "cidr": 28
+    },
+    {
+      "name": "L3forward_502",
+      "vlan_id": 502,
+      "gateway": "100.69.179.17",
+      "ip": "100.69.179.19",
+      "cidr": 28
+    },
+    {
+      "name": "L3forward_503",
+      "vlan_id": 503,
+      "gateway": "100.69.179.33",
+      "ip": "100.69.179.35",
+      "cidr": 28
+    },
+    {
+      "name": "L3forward_504",
+      "vlan_id": 504,
+      "gateway": "100.69.179.49",
+      "ip": "100.69.179.51",
+      "cidr": 28
+    },
+    {
+      "name": "L3forward_505",
+      "vlan_id": 505,
+      "gateway": "100.69.179.65",
+      "ip": "100.69.179.67",
+      "cidr": 28
+    },
+    {
+      "name": "L3forward_506",
+      "vlan_id": 506,
+      "gateway": "100.69.179.81",
+      "ip": "100.69.179.83",
+      "cidr": 28
+    },
+    {
+      "name": "L3forward_507",
+      "vlan_id": 507,
+      "gateway": "100.69.179.97",
+      "ip": "100.69.179.99",
+      "cidr": 28
+    },
+    {
+      "name": "L3forward_508",
+      "vlan_id": 508,
+      "gateway": "100.69.179.113",
+      "ip": "100.69.179.115",
+      "cidr": 28
+    },
+    {
+      "name": "L3forward_509",
+      "vlan_id": 509,
+      "gateway": "100.69.179.129",
+      "ip": "100.69.179.131",
+      "cidr": 28
+    },
+    {
+      "name": "L3forward_510",
+      "vlan_id": 510,
+      "ip": "100.69.179.146",
+      "cidr": 28
+    },
+    {
+      "name": "L3forward_511",
+      "vlan_id": 511,
+      "gateway": "100.69.179.161",
+      "ip": "100.69.179.163",
+      "cidr": 28
+    },
+    {
+      "name": "L3forward_512",
+      "vlan_id": 512,
+      "gateway": "100.69.179.177",
+      "ip": "100.69.179.179",
+      "cidr": 28
+    },
+    {
+      "name": "L3forward_513",
+      "vlan_id": 513,
+      "gateway": "100.69.179.193",
+      "ip": "100.69.179.195",
+      "cidr": 28
+    },
+    {
+      "name": "L3forward_514",
+      "vlan_id": 514,
+      "gateway": "100.69.179.209",
+      "ip": "100.69.179.211",
+      "cidr": 28
+    },
+    {
+      "name": "L3forward_515",
+      "vlan_id": 515,
+      "gateway": "100.69.179.225",
+      "ip": "100.69.179.227",
+      "cidr": 28
+    },
+    {
+      "name": "L3forward_516",
+      "vlan_id": 516,
+      "gateway": "100.69.179.241",
+      "ip": "100.69.179.243",
+      "cidr": 28
+    },
+    {
+      "name": "Storage_711_TOR1",
+      "vlan_id": 711
+    },
+    {
+      "name": "Storage_712_TOR2",
+      "vlan_id": 712
+    }
+  ],
+  "interfaces": [],
+  "bgp": []
+}
