@@ -3,7 +3,7 @@
     "make": "cisco",
     "model": "93180yc-fx3",
     "type": "TOR1",
-    "hostname": "s46-r21-93180hl-24-1a",
+    "hostname": "Lab-TOR1",
     "firmware": "nxos",
     "version": "10.3(4a)"
   },
@@ -63,7 +63,7 @@
       "start_intf": "1/1",
       "end_intf": "1/16",
       "native_vlan": "99",
-      "tagged_vlans": "6-7,201,301,401,501-516"
+      "tagged_vlans": "6-7,201"
     },
     {
       "name": "Switched_Storage",

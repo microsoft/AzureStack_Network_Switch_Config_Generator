@@ -41,7 +41,7 @@ flowchart LR
 > **Note:**  
 > The structure and format of the **JSON input file must remain fixed** to match the variables used in the Jinja2 templates, but you can safely update **values** as needed, either manually or programmatically.
 
-#### Customized Input Format
+#### Other User-Defined Input Support
 
 To support a wide range of input data formats, the system allows users to define their own converters. These converters transform any non-standard input into a unified JSON structure. Sample converters are provided in the repository as references to help users get started.
 
@@ -126,47 +126,45 @@ flowchart LR
 
 ```plaintext
 root/
-├── input/                          # All device-related inputs
-│   ├── standard_input.json         # Device variables (standard format)
-│   └── templates/                  # Jinja2 templates by vendor/OS
-│       ├── cisco/
-│       │   └── nxos/
-│       │       ├── system.j2
-│       │       └── ...
-│       └── dell/
-│           └── os10/
-│               └── system.j2
-│
-├── src/                            # Python logic
+├── docs/
+│   └── architecture.md             # Design documentation
+├── input/
+│   ├── standard_input.json         # Standard input file
+│   └── templates/
+│       └── cisco/
+│           └── nxos/
+│               ├── full_config.j2           # Merge all templates into one
+│               ├── feature1.j2              # Default feature template
+│               ├── feature2.j2
+│               ├── system.j2
+│               └── 10/                      # NX-OS version 10 specific templates
+│                   ├── version_feature1.j2  # Versioned feature template
+│                   └── version_system.j2    # Versioned system template
+├── src/
 │   ├── __init__.py
-│   ├── convert_inputxx.py          # Convert different input formats  to standard JSON
-│   ├── generator.py                # Load JSON, select template, render
-│   └── loader.py                   # Input reading, file handling
-│
-├── tests/                          # Automated tests
-│   ├── test_generator.py           # Unit tests: render logic
-│   ├── test_templates.py           # Template correctness tests
-│   └── test_cases/                 # Integration tests (input + expected output)
-│       ├── case_01/
-│       │   ├── input.json
-│       │   └── expected.config
-│       ├── case_02/
-│       └── ...
-│
-├── main.py                         # Entry-point for manual use
-├── requirements.txt                # Python dependencies
-├── .gitignore                      # Files to exclude from Git
-├── README.md                       # Project overview
-└── docs/                           # Optional: design docs, Mermaid, notes
-    └── architecture.md
-```
+│   ├── convertor.py                # Converts various input formats
+│   ├── generator.py                # Main generation logic
+│   └── loader.py                   # Loads and parses input
+├── tests/
+│   ├── test_generator.py          # Unit tests for generator logic
+│   ├── test_convertors.py         # Unit tests for input conversion
+│   ├── test_cases/
+│   │   ├── convert_switch_input_json/
+│   │   │   └── convert_switch_input.json
+│   │   ├── std_nxos_hyperconverged/
+│   │   │   └── std_nxos_hyperconverged_input.json
+│   │   ├── std_nxos_switched/
+│   │   │   └── std_nxos_switched_input.json
+│   │
+├── requirements.txt               # Python dependencies
 
----                       |
+```
 
 ---
 
-## 🔧 Input Format (Example)
+## 🔧 Input (Example)
 
+### Standard Input JSON (Example)
 ```json
 {
   "hostname": "tor-switch-1",
@@ -190,7 +188,7 @@ root/
 
 ---
 
-## 🛠️ Template Structure (Jinja2)
+### Input Jinja2 Template (Example)
 
 Example: `templates/nxos/bgp.j2`
 
@@ -205,13 +203,6 @@ router bgp {{ bgp.asn }}
 
 ---
 
-## 📦 Packaging Strategy
-
-- Use [`pyproject.toml`](https://python-poetry.org/docs/pyproject/) for dependency management
-- Use [PyInstaller](https://pyinstaller.org/) to create standalone executables
-- Build artifacts in `dist/` for users without Python installed
-
----
 
 ## 🛠️ Why We Switched: Go Templates → Python + Jinja2
 
@@ -223,18 +214,10 @@ We initially used **Golang + Go Templates** to generate switch configurations. I
 |-------------------------------|-------------------------------------|-----------------------------------------|
 | Templating Features           | Basic, minimal logic                | Powerful logic, filters, macros         |
 | Community & Ecosystem         | Smaller for templates               | Large and well-supported                |
-| Flexibility                   | Harder to scale with many vendors   | Easy to handle multi-vendor templates   |
 | Config File Support           | Manual parsing needed               | Native support for JSON, YAML, TOML     |
 | Customer Customization        | Needs Go rebuild                    | Just edit input files or templates      |
 | Packaging                     | `go build` (simple binary)          | `pyinstaller` (self-contained app)      |
 
-### ✅ Why Python + Jinja2 Is Better
-
-- Templates are **easier to read and maintain**.
-- Supports **multiple vendors** without duplicating logic.
-- Accepts **human-readable input files** (JSON, YAML).
-- No need to recompile — customers can **edit templates directly**.
-- Larger ecosystem and more reusable tools.
 
 This change helps us move faster, reduce complexity, and make the tool more user-friendly.
 
