@@ -240,20 +240,24 @@ This version is compiled using **PyInstaller** and does **not require Python** o
 ---
 
 
-## 🛠️ Why Switched: Go Templates → Python + Jinja2
+## 🚀 What’s Improved in This Version
 
-We initially used **Golang + Go Templates** to generate switch configurations. It worked, but we found some limitations as the project grew. Now, we’ve switched to **Python + Jinja2** for better flexibility and maintainability.
+We’ve significantly redesigned the tool architecture to make it more modular, maintainable, and user-friendly. While the original version used **Go templates**, the new version is built with **Python + Jinja2** and brings several key improvements:
 
-### 🔍 Comparison Table
+### ✅ Key Enhancements
 
-| Feature                        | Go + Go Templates                   | Python + Jinja2                         |
-|-------------------------------|-------------------------------------|-----------------------------------------|
-| Templating Features           | Basic, minimal logic                | Powerful logic, filters, macros         |
-| Community & Ecosystem         | Smaller for templates               | Large and well-supported                |
-| Config File Support           | Manual parsing needed               | Native support for JSON, YAML, TOML     |
-| Customer Customization        | Needs Go rebuild                    | Just edit input files or templates      |
-| Packaging                     | `go build` (simple binary)          | `pyinstaller` (self-contained app)      |
+- **Modular Output Generation**  
+  Instead of producing a single full configuration, the tool now supports generating individual configuration sections (e.g., VLANs, interfaces, BGP) based on your input needs—making review, debugging, and reuse much easier.
 
+- **No Rebuild Required for Changes**  
+  All logic is now in editable Python and Jinja2 templates—no compilation needed. You can easily update the templates or logic without rebuilding any binary.
 
-This change helps us move faster, reduce complexity, and make the tool more user-friendly.
+- **Cleaner and More Flexible Logic**  
+  We’ve removed hardcoded rules and added more structured parsing logic, which makes the tool easier to extend, test, and adapt to different network designs or vendors.
+
+- **Open to Contributions**  
+  The new structure makes it easy for contributors to add new templates or enhance existing ones. If you support a new vendor or configuration style, you can simply submit a template pull request.
+
+This upgrade is not just a technology shift—it’s a foundation for faster iteration, better collaboration, and easier maintenance.
+
 
