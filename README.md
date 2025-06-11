@@ -142,9 +142,11 @@ root/
 │                   └── version_system.j2    # Versioned system template
 ├── src/
 │   ├── __init__.py
+│   ├── main.py                     # Entry point for the tool
 │   ├── convertor.py                # Converts various input formats
 │   ├── generator.py                # Main generation logic
 │   └── loader.py                   # Loads and parses input
+
 ├── tests/
 │   ├── test_generator.py          # Unit tests for generator logic
 │   ├── test_convertors.py         # Unit tests for input conversion
@@ -203,8 +205,42 @@ router bgp {{ bgp.asn }}
 
 ---
 
+## 🚀 Quick Start
 
-## 🛠️ Why We Switched: Go Templates → Python + Jinja2
+### 📥 Input Parameters
+
+The tool accepts the following input parameters:
+
+| Parameter            | Description                                                                 |
+|----------------------|-----------------------------------------------------------------------------|
+| `--input_std_json`   | **Required**. Path to the standard input JSON file.                      |
+| `--template_folder`  | Optional. Path to the Jinja2 templates folder. <br>Default: `input/templates` |
+| `--output_folder`    | Optional. Directory to save the generated configuration files. <br>Default: current working directory (`.`). |
+
+
+### Option 1: Run with Python (for Python users)
+
+If you're comfortable with Python, you can clone the repository and run the tool directly using the source code:
+
+```bash
+# Example
+python src/main.py --input_std_json your_standard_input.json --template_folder templates/ --output_folder outputs
+```
+
+### Option 2: Use the Precompiled .exe (no Python needed)
+
+A standalone executable (`.exe`) is available in the [Releases](https://github.com/YourRepo/releases) section.  
+This version is compiled using **PyInstaller** and does **not require Python** or any additional dependencies to run.
+
+```bash
+# Example
+.\network_config_generator.exe --input_std_json your_standard_input.json --template_folder templates/ --output_folder outputs
+```
+
+---
+
+
+## 🛠️ Why Switched: Go Templates → Python + Jinja2
 
 We initially used **Golang + Go Templates** to generate switch configurations. It worked, but we found some limitations as the project grew. Now, we’ve switched to **Python + Jinja2** for better flexibility and maintainability.
 
