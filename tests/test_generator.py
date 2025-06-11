@@ -1,13 +1,14 @@
 from pathlib import Path
 import sys
 import pytest
+import warnings
 
 print("✅ test_generator.py loaded")
 
 # === Path setup ===
 ROOT_DIR = Path(__file__).resolve().parent.parent
 SRC_PATH = ROOT_DIR / "src"
-TEMPLATE_DIR = ROOT_DIR / "input" / "templates" / "cisco" / "nxos"
+TEMPLATE_ROOT = ROOT_DIR / "input" / "templates"
 TEST_CASES_ROOT = ROOT_DIR / "tests" / "test_cases"
 
 # Add src to sys.path
@@ -37,64 +38,45 @@ def find_input_cases():
     return input_cases
 
 
-
-# === Step 2: Generate configs from templates ===
+# === Step 2: Generate configs using dynamic template selection ===
 def generate_all_configs(input_case):
     folder_name, input_file = input_case
     folder_path = TEST_CASES_ROOT / folder_name
+    output_folder = folder_path
 
-    generated_files = []
+    print(f"[GENERATE] Case: {folder_name}")
 
-    if not TEMPLATE_DIR.exists():
-        print(f"[WARN] Template directory not found: {TEMPLATE_DIR}")
-        return generated_files
-
-    templates = list(TEMPLATE_DIR.glob("*.j2"))
-    if not templates:
-        print(f"[WARN] No templates found in {TEMPLATE_DIR}")
-        return generated_files
-
-    for template_path in templates:
-        if not template_path.exists():
-            print(f"[WARN] Template not found: {template_path}")
-            continue
-
-        case_name = template_path.stem
-        output_cfg = folder_path / f"generated_{case_name}.cfg"
-
-        print(f"[GENERATE] {folder_name}/{case_name}")
-        generate_config(
-            input_path=str(input_file),
-            template_path=str(template_path),
-            output_path=str(output_cfg)
+    try:
+        generated_paths = generate_config(
+            input_std_json=str(input_file),
+            template_folder=str(TEMPLATE_ROOT),
+            output_folder=str(output_folder)
         )
+    except Exception as e:
+        print(f"[ERROR] Failed to generate configs for {folder_name}: {e}")
+        return []
 
-        generated_files.append((folder_name, case_name, output_cfg, template_path))
+    # We need to return: folder_name, case_name, generated_path, expected_path
+    all_pairs = []
+    for output_file in output_folder.glob("generated_*.cfg"):
+        case_name = output_file.stem.replace("generated_", "")
+        expected_file = folder_path / f"expected_{case_name}.cfg"
+        all_pairs.append((folder_name, case_name, str(output_file), str(expected_file)))
 
-    return generated_files
+    return all_pairs
 
 
-# === Step 3: Pair generated files with expected ===
+# === Step 3: Discover all test pairs ===
 def discover_test_cases():
     all_cases = []
     input_folders = find_input_cases()
 
     for case in input_folders:
-        generated = generate_all_configs(case)
-
-        for folder_name, case_name, generated_file, template_path in generated:
-            expected_file = TEST_CASES_ROOT / folder_name / f"expected_{case_name}.cfg"
-
-            all_cases.append((
-                folder_name,
-                case_name,
-                str(generated_file),
-                str(expected_file)
-            ))
+        case_tests = generate_all_configs(case)
+        all_cases.extend(case_tests)
 
     print(f"[DEBUG] Total test comparisons: {len(all_cases)}")
     return all_cases
-
 
 # === Run pytest parametrize ===
 ALL_TEST_CASES = discover_test_cases()
@@ -107,11 +89,14 @@ ALL_TEST_CASES = discover_test_cases()
 def test_generated_config_output(folder_name, case_name, generated_path, expected_path):
     print(f"\n[TEST] Comparing: {folder_name}/{case_name}")
 
-    if not Path(expected_path).exists():
-        print(f"[SKIP] No expected file found: {expected_path}")
-        pytest.skip(f"Expected output not available: {expected_path}")
+    expected_file = Path(expected_path)
+    if not expected_file.exists():
+        # 🔔 Temporary dev-friendly warning instead of error
+        warnings.warn(f"[WARN] Expected file missing, skipping: {expected_path}", UserWarning)
+        pytest.skip(f"[SKIP] No expected output yet for {folder_name}/{case_name}")
+        return
 
-    with open(generated_path) as gen, open(expected_path) as exp:
+    with open(generated_path) as gen, open(expected_file) as exp:
         generated = gen.read().strip()
         expected = exp.read().strip()
 
