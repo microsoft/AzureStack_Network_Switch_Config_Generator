@@ -9,77 +9,135 @@
   },
   "vlans": [
     {
-      "name": "UNUSED_VLAN",
-      "vlan_id": 2
+      "vlan_id": 2,
+      "name": "UNUSED_VLAN"
     },
     {
-      "name": "HNVPA_6",
       "vlan_id": 6,
-      "gateway": "100.71.131.1",
-      "ip": "100.71.131.2",
-      "cidr": 25
+      "name": "HNVPA_6",
+      "interface": {
+        "ip": "100.71.131.2",
+        "cidr": 25,
+        "mtu": 9216,
+        "redundancy": {
+          "type": "hsrp",
+          "group": 6,
+          "priority": 150,
+          "virtual_ip": "100.71.131.1"
+        }
+      }
     },
     {
-      "name": "Infra_7",
       "vlan_id": 7,
-      "gateway": "100.69.176.1",
-      "ip": "100.69.176.2",
-      "cidr": 24
+      "name": "Infra_7",
+      "interface": {
+        "ip": "100.69.176.2",
+        "cidr": 24,
+        "mtu": 9216,
+        "dhcp_relay": [
+          "100.71.85.107",
+          "100.71.85.108",
+          "100.71.85.109",
+          "100.71.85.110"
+        ],
+        "redundancy": {
+          "type": "hsrp",
+          "group": 7,
+          "priority": 150,
+          "virtual_ip": "100.69.176.1"
+        }
+      }
     },
     {
-      "name": "BMC_Mgmt_125",
       "vlan_id": 125,
-      "gateway": "100.71.85.65",
-      "ip": "100.71.85.123",
-      "cidr": 26
+      "name": "BMC_Mgmt_125",
+      "interface": {
+        "ip": "100.71.85.123",
+        "cidr": 26,
+        "mtu": 9216,
+        "redundancy": {
+          "type": "hsrp",
+          "group": 125,
+          "priority": 150,
+          "virtual_ip": "100.71.85.65"
+        }
+      }
     },
     {
-      "name": "Tenant_201",
       "vlan_id": 201,
-      "gateway": "100.69.177.1",
-      "ip": "100.69.177.2",
-      "cidr": 24
+      "name": "Tenant_201",
+      "interface": {
+        "ip": "100.69.177.2",
+        "cidr": 24,
+        "mtu": 9216,
+        "redundancy": {
+          "type": "hsrp",
+          "group": 201,
+          "priority": 150,
+          "virtual_ip": "100.69.177.1"
+        }
+      }
     },
     {
-      "name": "L3forward_501",
       "vlan_id": 501,
-      "gateway": "100.69.179.1",
-      "ip": "100.69.179.2",
-      "cidr": 28
+      "name": "L3forward_501",
+      "interface": {
+        "ip": "100.69.179.2",
+        "cidr": 28,
+        "mtu": 9216,
+        "redundancy": {
+          "type": "hsrp",
+          "group": 501,
+          "priority": 150,
+          "virtual_ip": "100.69.179.1"
+        }
+      }
     },
     {
-      "name": "Storage_711_TOR1",
-      "vlan_id": 711
+      "vlan_id": 711,
+      "name": "Storage_711_TOR1"
     },
     {
-      "name": "Storage_712_TOR2",
-      "vlan_id": 712
+      "vlan_id": 712,
+      "name": "Storage_712_TOR2"
     }
   ],
   "interfaces": [
     {
       "name": "Hyperconverged",
       "type": "Trunk",
+      "intf_type": "Ethernet",
       "start_intf": "1/1",
       "end_intf": "1/16",
       "native_vlan": "99",
       "tagged_vlans": "6-7,201,301,401,501-516,711,712"
     },
     {
+      "name": "Unused",
+      "type": "Access",
+      "intf_type": "Ethernet",
+      "intf": "1/17",
+      "access_vlan": "2",
+      "shutdown": true
+    },
+    {
       "name": "Loopback0",
       "type": "L3",
+      "intf_type": "loopback",
       "intf": "loopback0",
       "ipv4": "100.71.85.21/32"
     },
     {
       "name": "P2P_Border2",
       "type": "L3",
+      "intf_type": "Ethernet",
       "intf": "1/47",
       "ipv4": "100.71.85.10/30"
     },
     {
       "name": "P2P_Border1",
       "type": "L3",
+      "intf_type": "Ethernet",
       "intf": "1/48",
       "ipv4": "100.71.85.2/30"
     }

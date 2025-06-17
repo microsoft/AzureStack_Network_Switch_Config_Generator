@@ -20,7 +20,7 @@ def main():
 
     args = parser.parse_args()
 
-    # ✅ Only use .resolve() for user-provided files
+    # Only use .resolve() or absolute path for user-provided files
     input_std_json_path = Path(args.input_std_json).resolve()
     output_folder_path = Path(args.output_folder).resolve()
     template_folder_arg = Path(args.template_folder)
