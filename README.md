@@ -239,6 +239,16 @@ This version is compiled using **PyInstaller** and does **not require Python** o
 
 ---
 
+## Customization and Extensibility
+
+### Templates
+
+### Convertors
+
+### Test Cases
+
+
+---
 
 ## 🚀 What’s Improved in This Version
 

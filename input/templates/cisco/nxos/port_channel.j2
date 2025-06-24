@@ -1,0 +1,56 @@
+! port-channel.j2 
+{%- for pc in port_channels %}
+interface port-channel{{ pc.id }}
+  description {{ pc.description }}
+  {%- if pc.type | lower == 'trunk' %}
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan {{ pc.native_vlan }}
+    {%- if pc.tagged_vlans is defined %}
+  switchport trunk allowed vlan {{ pc.tagged_vlans }}
+    {%- endif %}
+  priority-flow-control mode on
+  spanning-tree port type network
+  logging event port link-status
+    {%- if pc.vpc_peer_link is defined and pc.vpc_peer_link %}
+  vpc peer-link
+    {%- endif %}
+    {%- if pc.vpc_id is defined %}
+  vpc {{ pc.vpc_id }}
+    {%- endif %}
+  {%- elif pc.type | lower == 'l3' %}
+  no switchport
+  priority-flow-control mode on
+  ip address {{ pc.ipv4 }}
+  logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  {%- endif %}
+  mtu 9216
+  no shutdown
+{{ '' }} {# Prevents line merging due to Jinja trimming #}
+  {%- for member in pc.members %}
+interface Ethernet {{ member }}
+  description {{ pc.description }}
+  no cdp enable
+    {%- if pc.type | lower == 'trunk' %}
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan {{ pc.native_vlan }}
+      {%- if pc.tagged_vlans is defined %}
+  switchport trunk allowed vlan {{ pc.tagged_vlans }}
+      {%- endif %}
+  spanning-tree port type network
+  priority-flow-control mode on send-tlv
+  logging event port link-status
+  mtu 9216
+  channel-group {{ pc.id }} mode active
+    {%- elif pc.type | lower == 'l3' %}
+  priority-flow-control mode on send-tlv
+  logging event port link-status
+  mtu 9216
+  channel-group {{ pc.id }} mode active
+    {%- endif %}
+  no shutdown
+  {% endfor %}
+
+{%- endfor %}

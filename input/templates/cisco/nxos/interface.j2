@@ -7,7 +7,11 @@
   {%- if iface.start_intf is defined and iface.end_intf is defined %}
     {%- set interface_name = (iface.intf_type | default('Ethernet')) ~ ' ' ~ iface.start_intf ~ '-' ~ iface.end_intf.split('/')[-1] %}
 
-  {#- Handle single interface like 1/17 or loopback0 -#}
+  {#- Handle loopback interface explicitly -#}
+  {%- elif iface.intf_type == 'loopback' and iface.intf is defined %}
+    {%- set interface_name = iface.intf %}
+
+  {#- Handle single non-loopback interface like 1/17 -#}
   {%- elif iface.intf is defined %}
     {%- set interface_name = (iface.intf_type | default('Ethernet')) ~ ' ' ~ iface.intf %}
   {%- endif %}

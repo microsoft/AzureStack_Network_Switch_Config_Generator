@@ -109,7 +109,7 @@
       "intf_type": "Ethernet",
       "start_intf": "1/1",
       "end_intf": "1/16",
-      "native_vlan": "99",
+      "native_vlan": "7",
       "tagged_vlans": "6-7,201,301,401,501-516,711,712"
     },
     {
@@ -140,6 +140,42 @@
       "intf_type": "Ethernet",
       "intf": "1/48",
       "ipv4": "100.71.85.2/30"
+    },
+    {
+      "name": "MLAG_Peer",
+      "type": "Trunk",
+      "intf": "1/49",
+      "native_vlan": "99",
+      "mlag": {
+        "channel_group": 101,
+        "mode": "active"
+      }
+    }
+  ],
+  "port_channels": [
+    {
+      "id": 50,
+      "description": "iBGP_Peer",
+      "type": "L3",
+      "ipv4": "100.71.85.17/30",
+      "members": ["1/41", "1/42"]
+    },
+    {
+      "id": 101,
+      "description": "L2_LAG_PEER_LINK",
+      "type": "Trunk",
+      "native_vlan": 99,
+      "vpc_peer_link": true,
+      "members": ["1/49", "1/50", "1/51"]
+    },
+    {
+      "id": 102,
+      "description": "L2_TO_BMC_SWITCH",
+      "type": "Trunk",
+      "native_vlan": 99,
+      "tagged_vlans": "125",
+      "vpc_id": 102,
+      "members": ["1/44"]
     }
   ],
   "bgp": {
@@ -192,7 +228,7 @@
       },
       {
         "ip": "100.71.85.18",
-        "description": "TO_TOR2",
+        "description": "iBGP_PEER",
         "remote_as": 65242,
         "af_ipv4_unicast": {}
       },
