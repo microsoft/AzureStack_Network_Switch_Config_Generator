@@ -1,3 +1,4 @@
+{% if interfaces is defined -%}
 ! interface.j2 
 {%- for iface in interfaces %}
   {#- Initialize interface_name as None -#}
@@ -60,3 +61,4 @@ interface {{ interface_name }}
   {% if iface.shutdown is defined and iface.shutdown %}shutdown{% else %}no shutdown{% endif %}
   {%- endif %}
 {% endfor %}
+{%- endif %}

@@ -1,3 +1,4 @@
+{% if vlans is defined -%}
 ! vlan.j2
 {% for vlan in vlans -%}
 vlan {{ vlan.vlan_id }}
@@ -32,3 +33,4 @@ interface vlan{{ vlan.vlan_id }}
   {%- endif %}
 
 {% endfor %}
+{% endif %}

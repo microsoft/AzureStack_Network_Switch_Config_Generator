@@ -1,0 +1,50 @@
+{% if qos is defined -%}
+! qos.j2
+{#- Class Maps (Traffic Matching) -#}
+{% for class in qos.class_maps %}
+class-map type qos match-all {{ class.name }}
+  match cos {{ class.match_cos }}
+{%- endfor -%}
+
+{# QoS Policy Map (Traffic Classification) #}
+{% for policy in qos.policy_maps if policy.type == 'qos' %}
+policy-map type qos {{ policy.name }}
+{%- for cls in policy.classes %}
+  class {{ cls.class_map }}
+    set qos-group {{ cls.qos_group }}
+{%- endfor -%}
+{% endfor -%}
+
+{# Network-QoS Policy (MTU & PFC) #}
+{% for policy in qos.policy_maps if policy.type == 'network-qos' %}
+policy-map type network-qos {{ policy.name }}
+{%- for cls in policy.classes %}
+  class type network-qos {{ cls.class_map }}
+  {%- if cls.pause %}
+    pause pfc-cos {{ cls.pause.pfc_cos }}
+  {%- endif %}
+    mtu {{ cls.mtu }}
+{%- endfor -%}
+{% endfor -%}
+
+{# Queuing Policy Map (Egress) #}
+{% for policy in qos.policy_maps if policy.type == 'queuing' %}
+policy-map type queuing {{ policy.name }}
+{%- for cls in policy.classes %}
+  class type queuing {{ cls.class_map }}
+    bandwidth{% if cls.bandwidth > 0 %} remaining percent {{ cls.bandwidth }}{% else %} percent 0{% endif %}
+  {%- if cls.ecn %}
+    random-detect minimum-threshold 300 kbytes maximum-threshold 300 kbytes drop-probability 100 weight 0 ecn
+  {%- endif -%}
+{%- endfor -%}
+{% endfor %}
+
+{# System QoS Application #}
+system qos
+{%- if qos.system_qos.queuing %}
+  service-policy type queuing output {{ qos.system_qos.queuing }}
+{%- endif %}
+{%- if qos.system_qos['network-qos'] %}
+  service-policy type network-qos {{ qos.system_qos['network-qos'] }}
+{% endif -%}
+{% endif %}

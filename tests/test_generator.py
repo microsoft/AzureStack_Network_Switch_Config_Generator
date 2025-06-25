@@ -47,23 +47,25 @@ def generate_all_configs(input_case):
     print(f"[GENERATE] Case: {folder_name}")
 
     try:
-        generated_paths = generate_config(
+        generate_config(
             input_std_json=str(input_file),
             template_folder=str(TEMPLATE_ROOT),
             output_folder=str(output_folder)
         )
     except Exception as e:
-        print(f"[ERROR] Failed to generate configs for {folder_name}: {e}")
+        warnings.warn(f"[WARN] Failed to generate configs for {folder_name}: {e}")
         return []
 
-    # We need to return: folder_name, case_name, generated_path, expected_path
-    all_pairs = []
-    for output_file in output_folder.glob("generated_*.cfg"):
-        case_name = output_file.stem.replace("generated_", "")
-        expected_file = folder_path / f"expected_{case_name}.cfg"
-        all_pairs.append((folder_name, case_name, str(output_file), str(expected_file)))
-
-    return all_pairs
+    # Gather all output files and map to their expected counterparts
+    return [
+        (
+            folder_name,
+            output_file.stem.replace("generated_", ""),
+            str(output_file),
+            str(folder_path / f"expected_{output_file.stem.replace('generated_', '')}.cfg")
+        )
+        for output_file in sorted(output_folder.glob("generated_*.cfg"))
+    ]
 
 
 # === Step 3: Discover all test pairs ===

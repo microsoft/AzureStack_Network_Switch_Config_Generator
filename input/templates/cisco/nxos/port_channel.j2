@@ -1,4 +1,5 @@
-! port-channel.j2 
+{% if port_channels is defined -%}
+! port-channel.j2
 {%- for pc in port_channels %}
 interface port-channel{{ pc.id }}
   description {{ pc.description }}
@@ -54,3 +55,4 @@ interface Ethernet {{ member }}
   {% endfor %}
 
 {%- endfor %}
+{%- endif %}

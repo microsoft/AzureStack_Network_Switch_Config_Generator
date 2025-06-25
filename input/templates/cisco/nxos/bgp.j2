@@ -1,3 +1,4 @@
+{% if bgp is defined -%}
 ! bgp.j2
 router bgp {{ bgp.asn }}
   router-id {{ bgp.router_id }}
@@ -29,3 +30,4 @@ router bgp {{ bgp.asn }}
       prefix-list {{ neighbor.af_ipv4_unicast.prefix_list_in }} in
       {%- endif %}
   {%- endfor %}
+{%- endif %}
