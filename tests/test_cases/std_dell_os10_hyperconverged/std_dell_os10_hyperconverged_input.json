@@ -1,11 +1,11 @@
 {
   "switch": {
-    "make": "cisco",
-    "model": "93180yc-fx3",
+    "make": "dell",
+    "model": "s5248f-on",
     "type": "TOR1",
-    "hostname": "s46-r21-93180hl-24-1a",
-    "firmware": "nxos",
-    "version": "10.3(4a)"
+    "hostname": "s46-r06-5248hl-6-1a",
+    "firmware": "os10",
+    "version": "10.5.5.5"
   },
   "vlans": [
     {
@@ -260,77 +260,27 @@
     ]
   },
   "qos": {
-    "class_maps": [
+    "name_prefix": "AZS_SERVICES",
+    "traffic_classes": [
       {
         "name": "RDMA",
-        "type": "qos",
-        "match_cos": 3
+        "cos": 3,
+        "pause": true,
+        "ecn": true,
+        "bandwidth_pct": 50
       },
       {
-        "name": "CLUSTER",
-        "type": "qos",
-        "match_cos": 7
+        "name": "Cluster",
+        "cos": 7,
+        "pause": false,
+        "bandwidth_pct": 1
+      },
+      {
+        "name": "Default",
+        "cos": 0,
+        "pause": false,
+        "bandwidth_pct": 48
       }
-    ],
-    "policy_maps": [
-      {
-        "name": "AZURELOCAL_NETWORK_QOS",
-        "type": "network-qos",
-        "classes": [
-          {
-            "class_map": "c-8q-nq3",
-            "pause": {
-              "pfc_cos": 3
-            },
-            "mtu": 9216
-          },
-          {
-            "class_map": "c-8q-nq-default",
-            "mtu": 9216
-          },
-          {
-            "class_map": "c-8q-nq7",
-            "mtu": 9216
-          }
-        ]
-      },
-      {
-        "name": "AZURELOCAL_QOS",
-        "type": "qos",
-        "classes": [
-          {
-            "class_map": "RDMA",
-            "qos_group": 3
-          },
-          {
-            "class_map": "CLUSTER",
-            "qos_group": 7
-          }
-        ]
-      },
-      {
-        "name": "AZURELOCAL_QUEUING",
-        "type": "queuing",
-        "classes": [
-          {
-            "class_map": "c-out-8q-q3",
-            "bandwidth": 50,
-            "ecn": true
-          },
-          {
-            "class_map": "c-out-8q-q-default",
-            "bandwidth": 48
-          },
-          {
-            "class_map": "c-out-8q-q7",
-            "bandwidth": 2
-          }
-        ]
-      }
-    ],
-    "system_qos": {
-      "network-qos": "AZURELOCAL_NETWORK_QOS",
-      "queuing": "AZURELOCAL_QUEUING"
-    }
+    ]
   }
 }

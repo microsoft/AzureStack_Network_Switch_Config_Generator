@@ -60,4 +60,4 @@ def generate_config(input_std_json, template_folder, output_folder):
         except Exception as e:
             warnings.warn(f"[WARN] Failed to render {template_name}: {e}", UserWarning)
 
-    print(f"\n=== ✅ Done generating for: {input_std_json_path.name} ===\n")
+    print(f"\n===  Done generating for: {input_std_json_path.name} ===\n")
