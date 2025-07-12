@@ -17,24 +17,13 @@ no ip telnet server enable
 login concurrent-session limit 3
 !
 login statistics enable
-!
-logging audit enable
-logging console disable
 
 ! login.j2 - tacacs
 ! Replace [TACACS_SERVER_IP], [TACACS_KEY], [TACACS_GROUP],[MGMT_VLAN] with actual values.
-tacacs-server key [TACACS_KEY]
-tacacs-server timeout 2
 ip tacacs source-interface [MGMT_VLAN]
+tacacs-server host [TACACS_SERVER1] key [TACACS_KEY]
+tacacs-server host [TACACS_SERVER2] key [TACACS_KEY]
 
-tacacs-server host [TACACS_SERVER_IP]
-tacacs-server host [TACACS_SERVER_IP] 
-
-aaa group server tacacs+ [TACACS_GROUP] 
-    server [TACACS_SERVER_IP] 
-    server [TACACS_SERVER_IP]
-    source-interface [MGMT_VLAN]
-
-aaa authentication login default group [TACACS_GROUP]
-aaa authentication login console group [TACACS_GROUP]
-aaa accounting default group [TACACS_GROUP]
+aaa authentication login default group tacacs+
+aaa authentication login console group tacacs+ local
+aaa accounting commands all default start-stop group tacacs+

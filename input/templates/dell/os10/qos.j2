@@ -24,13 +24,18 @@ trust dot1p-map {{ prefix }}_Dot1p
 {%- endfor %}
 
 {# -------- QoS-map: map qos-group to queue -------- #}
-qos-map traffic-class {{ prefix }}_Que
+qos-map traffic-class {{ prefix }}_TrafficClass
+{%- for tc in qos.traffic_classes if tc.cos != 0 %}
+ traffic-class {{ tc.cos }} queue {{ tc.cos }}
+{%- endfor %}
+
+{# -------- QoS-map: map qos-group to PFC -------- #}
 {%- for tc in qos.traffic_classes if tc.cos != 0 %}
  queue {{ tc.cos }} qos-group {{ tc.cos }}
 {%- endfor %}
 
 {# -------- Policy-map for PFC (Pause Control) -------- #}
-policy-map type network-qos {{ prefix }}_pfc
+policy-map type network-qos {{ prefix }}_NetworkQoS
 {%- for tc in qos.traffic_classes if tc.pause %}
  class {{ prefix }}_Dot1p_{{ tc.cos }}
   pause
@@ -38,7 +43,16 @@ policy-map type network-qos {{ prefix }}_pfc
 {%- endfor %}
 
 {# -------- Queuing policy with ETS and ECN -------- #}
-policy-map type queuing {{ prefix }}_ets
+policy-map type queuing {{ prefix }}_Queuing
+{%- for tc in qos.traffic_classes if tc.cos != 0 %}
+ class {{ prefix }}_EtsQue_{{ tc.cos }}
+  queue {{ tc.cos }}
+  {%- if tc.pause %}
+  pause
+  {%- endif %}
+{%- endfor %}
+
+{# -------- ETS Queuing Configuration -------- #}
 {%- for tc in qos.traffic_classes %}
  class {{ prefix }}_EtsQue_{{ tc.cos }}
   bandwidth percent {{ tc.bandwidth_pct }}

@@ -14,6 +14,10 @@ All access and/or use subject to monitoring.
 NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE
 #
 
+! system.j2-features
+lldp enable
+dcbx enable
+
 ! system.j2-ntp
 clock timezone standard-timezone America/Los_Angeles
 ntp server [NTP_SERVER_IP]
@@ -33,3 +37,8 @@ ztd cancel
 
 mac address-table aging-time 1000000
 
+no ip dhcp-relay information-option
+no ip dhcp snooping
+
+vrrp version 3
+vrrp delay reload 180
