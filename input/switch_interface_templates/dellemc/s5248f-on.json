@@ -1,0 +1,112 @@
+{
+    "Make": "Cisco",
+    "Model": "93180YC-FX3",
+    "Type": "TOR",
+  "interface_templates": {
+    "Common": {
+      "Unused": {
+        "name": "Unused",
+        "type": "Access",
+        "intf_type": "Ethernet",
+        "start_intf": "1/1",
+        "end_intf": "1/54",
+        "access_vlan": "2",
+        "shutdown": true
+      },
+      "Loopback0": {
+        "name": "Loopback0",
+        "type": "L3",
+        "intf_type": "loopback",
+        "intf": "loopback0",
+        "ipv4": ""
+      },
+      "P2P_Border1": {
+        "name": "P2P_Border1",
+        "type": "L3",
+        "intf_type": "Ethernet",
+        "intf": "1/48",
+        "ipv4": ""
+      },
+      "P2P_Border2": {
+        "name": "P2P_Border2",
+        "type": "L3",
+        "intf_type": "Ethernet",
+        "intf": "1/47",
+        "ipv4": ""
+      },
+      "Trunk_TO_BMC_SWITCH": {
+        "name": "Trunk_TO_BMC_SWITCH",
+        "type": "Trunk",
+        "intf_type": "Ethernet",
+        "intf": "1/49",
+        "native_vlan": "99",
+        "tagged_vlans": "125"
+      }
+    },
+    "FullyConverged": [
+      {
+        "name": "FullyConverged_To_Host",
+        "type": "Trunk",
+        "intf_type": "Ethernet",
+        "start_intf": "1/1",
+        "end_intf": "1/16",
+        "native_vlan": "M",
+        "tagged_vlans": "M,C,S1,S2",
+        "service_policy": {
+          "qos_input": "AZLOCAL-QOS-MAP"
+        }
+      }
+    ],
+    "Switched": [
+      {
+        "name": "Switched_Compute_To_Host",
+        "type": "Trunk",
+        "intf_type": "Ethernet",
+        "start_intf": "1/1",
+        "end_intf": "1/16",
+        "native_vlan": "M",
+        "tagged_vlans": "M,C"
+      },
+      {
+        "name": "Switched_Storage_To_Host",
+        "type": "Trunk",
+        "intf_type": "Ethernet",
+        "start_intf": "1/17",
+        "end_intf": "1/32",
+        "native_vlan": "99",
+        "tagged_vlans": "S1|S2",
+        "service_policy": {
+          "qos_input": "AZLOCAL-QOS-MAP"
+        }
+      }
+    ],
+    "Switchless": [
+      {
+        "name": "Switchless_Compute_To_Host",
+        "type": "Trunk",
+        "intf_type": "Ethernet",
+        "start_intf": "1/1",
+        "end_intf": "1/16",
+        "native_vlan": "M",
+        "tagged_vlans": "M,C"
+      }
+    ]
+  },
+    "port_channels": [
+    {
+      "id": 50,
+      "description": "iBGP_Peer",
+      "type": "L3",
+      "ipv4": "",
+      "members": ["1/41", "1/42"]
+    },
+    {
+      "id": 101,
+      "description": "ToR_Peer_Link",
+      "type": "Trunk",
+      "native_vlan": "99",
+      "tagged_vlans": "",
+      "members": ["1/49", "1/50", "1/51"]
+    }
+  ]
+}

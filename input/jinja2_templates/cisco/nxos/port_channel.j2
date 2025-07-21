@@ -1,5 +1,7 @@
 {% if port_channels is defined -%}
 ! port-channel.j2
+
+{# -------- Port-Channel Interfaces -------- #}
 {%- for pc in port_channels %}
 interface port-channel{{ pc.id }}
   description {{ pc.description }}
@@ -10,25 +12,17 @@ interface port-channel{{ pc.id }}
     {%- if pc.tagged_vlans is defined %}
   switchport trunk allowed vlan {{ pc.tagged_vlans }}
     {%- endif %}
-  priority-flow-control mode on
   spanning-tree port type network
   logging event port link-status
-    {%- if pc.vpc_peer_link is defined and pc.vpc_peer_link %}
-  vpc peer-link
-    {%- endif %}
-    {%- if pc.vpc_id is defined %}
-  vpc {{ pc.vpc_id }}
-    {%- endif %}
   {%- elif pc.type | lower == 'l3' %}
   no switchport
-  priority-flow-control mode on
   ip address {{ pc.ipv4 }}
   logging event port link-status
-  service-policy type qos input AZS_SERVICES
   {%- endif %}
   mtu 9216
   no shutdown
-{{ '' }} {# Prevents line merging due to Jinja trimming #}
+
+{# -------- Member Interfaces -------- #}
   {%- for member in pc.members %}
 interface Ethernet {{ member }}
   description {{ pc.description }}
@@ -41,12 +35,10 @@ interface Ethernet {{ member }}
   switchport trunk allowed vlan {{ pc.tagged_vlans }}
       {%- endif %}
   spanning-tree port type network
-  priority-flow-control mode on send-tlv
   logging event port link-status
   mtu 9216
   channel-group {{ pc.id }} mode active
     {%- elif pc.type | lower == 'l3' %}
-  priority-flow-control mode on send-tlv
   logging event port link-status
   mtu 9216
   channel-group {{ pc.id }} mode active
@@ -54,5 +46,5 @@ interface Ethernet {{ member }}
   no shutdown
   {% endfor %}
 
-{%- endfor %}
+{% endfor %}
 {%- endif %}

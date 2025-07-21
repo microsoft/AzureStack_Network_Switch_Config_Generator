@@ -104,21 +104,33 @@
   ],
   "interfaces": [
     {
+      "name": "Unused",
+      "type": "Access",
+      "intf_type": "Ethernet",
+      "start_intf": "1/1",
+      "end_intf": "1/54",
+      "access_vlan": "2",
+      "shutdown": true
+    },
+    {
       "name": "Hyperconverged",
       "type": "Trunk",
       "intf_type": "Ethernet",
       "start_intf": "1/1",
       "end_intf": "1/16",
       "native_vlan": "7",
-      "tagged_vlans": "6-7,201,301,401,501-516,711,712"
+      "tagged_vlans": "6-7,201,301,401,501-516,711,712",
+      "service_policy": {
+          "qos_input": "AZLOCAL-QOS-MAP"
+      }
     },
     {
-      "name": "Unused",
-      "type": "Access",
+      "name": "Trunk_TO_BMC_SWITCH",
+      "type": "Trunk",
       "intf_type": "Ethernet",
-      "intf": "1/17",
-      "access_vlan": "2",
-      "shutdown": true
+      "intf": "1/49",
+      "native_vlan": "99",
+      "tagged_vlans": "125"
     },
     {
       "name": "Loopback0",
@@ -140,16 +152,6 @@
       "intf_type": "Ethernet",
       "intf": "1/48",
       "ipv4": "100.71.85.2/30"
-    },
-    {
-      "name": "MLAG_Peer",
-      "type": "Trunk",
-      "intf": "1/49",
-      "native_vlan": "99",
-      "mlag": {
-        "channel_group": 101,
-        "mode": "active"
-      }
     }
   ],
   "port_channels": [
@@ -162,20 +164,11 @@
     },
     {
       "id": 101,
-      "description": "L2_LAG_PEER_LINK",
+      "description": "L2_LACP_Peer",
       "type": "Trunk",
       "native_vlan": 99,
-      "vpc_peer_link": true,
+      "tagged_vlans": "7,125",
       "members": ["1/49", "1/50", "1/51"]
-    },
-    {
-      "id": 102,
-      "description": "L2_TO_BMC_SWITCH",
-      "type": "Trunk",
-      "native_vlan": 99,
-      "tagged_vlans": "125",
-      "vpc_id": 102,
-      "members": ["1/44"]
     }
   ],
   "bgp": {
@@ -186,28 +179,7 @@
       "100.71.85.8/30",
       "100.71.85.16/30",
       "100.71.85.21/32",
-      "100.71.85.64/26",
-      "100.71.131.0/25",
-      "100.69.176.0/24",
-      "100.69.177.0/24",
-      "100.69.178.0/25",
-      "100.69.178.128/25",
-      "100.69.179.0/28",
-      "100.69.179.16/28",
-      "100.69.179.32/28",
-      "100.69.179.48/28",
-      "100.69.179.64/28",
-      "100.69.179.80/28",
-      "100.69.179.96/28",
-      "100.69.179.112/28",
-      "100.69.179.128/28",
-      "100.69.179.144/28",
-      "100.69.179.160/28",
-      "100.69.179.176/28",
-      "100.69.179.192/28",
-      "100.69.179.208/28",
-      "100.69.179.224/28",
-      "100.69.179.240/28"
+      "100.71.85.64/26"
     ],
     "neighbors": [
       {
@@ -259,28 +231,5 @@
       }
     ]
   },
-  "qos": {
-    "name_prefix": "AZS_SERVICES",
-    "traffic_classes": [
-      {
-        "name": "RDMA",
-        "cos": 3,
-        "pause": true,
-        "ecn": true,
-        "bandwidth_pct": 50
-      },
-      {
-        "name": "Cluster",
-        "cos": 7,
-        "pause": false,
-        "bandwidth_pct": 1
-      },
-      {
-        "name": "Default",
-        "cos": 0,
-        "pause": false,
-        "bandwidth_pct": 48
-      }
-    ]
-  }
+  "qos": true
 }

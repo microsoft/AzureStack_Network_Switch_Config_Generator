@@ -8,7 +8,7 @@ print("✅ test_generator.py loaded")
 # === Path setup ===
 ROOT_DIR = Path(__file__).resolve().parent.parent
 SRC_PATH = ROOT_DIR / "src"
-TEMPLATE_ROOT = ROOT_DIR / "input" / "templates"
+TEMPLATE_ROOT = ROOT_DIR / "input" / "jinja2_templates"
 TEST_CASES_ROOT = ROOT_DIR / "tests" / "test_cases"
 
 # Add src to sys.path

@@ -14,27 +14,28 @@ All access and/or use subject to monitoring.
 NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE
 #
 
-! system.j2-features
+{# -------- Feature Enablement -------- #}
+! system.j2 - features
 lldp enable
 dcbx enable
 
-! system.j2-ntp
+{# -------- NTP Configuration -------- #}
+! system.j2 - ntp
 clock timezone standard-timezone America/Los_Angeles
 ntp server [NTP_SERVER_IP]
 ntp source [MGMT_VLAN]
 
-! system.j2-syslog
+{# -------- Syslog Settings -------- #}
+! system.j2 - syslog
 logging server [LOG_SERVER_IP]
 logging source-interface [MGMT_VLAN]
 logging source-interface vlan125
-logging audit enable 
-logging console disable 
 logging audit enable
 logging console disable
 
-! system.j2-global_settings
+{# -------- Global System Settings -------- #}
+! system.j2 - global_settings
 ztd cancel
-
 mac address-table aging-time 1000000
 
 no ip dhcp-relay information-option
