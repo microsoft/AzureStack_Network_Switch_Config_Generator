@@ -4,3 +4,4 @@ pyinstaller --onefile src/main.py `
 
 
 pytest -s .\tests\test_generator.py
+pytest -s .\tests\test_convertors.py

@@ -1,40 +1,41 @@
 {
     "Make": "Cisco",
-    "Model": "93180YC-FX3",
+    "Model": "93108TC-FX3P",
     "Type": "TOR",
   "interface_templates": {
-    "Common": {
-      "Unused": {
+    "Common": [
+      {
         "name": "Unused",
         "type": "Access",
+        "description": "initial unused for all interfaces then config as defined",
         "intf_type": "Ethernet",
         "start_intf": "1/1",
         "end_intf": "1/54",
         "access_vlan": "2",
         "shutdown": true
       },
-      "Loopback0": {
+      {
         "name": "Loopback0",
         "type": "L3",
         "intf_type": "loopback",
         "intf": "loopback0",
         "ipv4": ""
       },
-      "P2P_Border1": {
+      {
         "name": "P2P_Border1",
         "type": "L3",
         "intf_type": "Ethernet",
         "intf": "1/48",
         "ipv4": ""
       },
-      "P2P_Border2": {
+      {
         "name": "P2P_Border2",
         "type": "L3",
         "intf_type": "Ethernet",
         "intf": "1/47",
         "ipv4": ""
       },
-      "Trunk_TO_BMC_SWITCH": {
+      {
         "name": "Trunk_TO_BMC_SWITCH",
         "type": "Trunk",
         "intf_type": "Ethernet",
@@ -42,10 +43,10 @@
         "native_vlan": "99",
         "tagged_vlans": "125"
       }
-    },
-    "FullyConverged": [
+    ],
+    "HyperConverged": [
       {
-        "name": "FullyConverged_To_Host",
+        "name": "HyperConverged_To_Host",
         "type": "Trunk",
         "intf_type": "Ethernet",
         "start_intf": "1/1",

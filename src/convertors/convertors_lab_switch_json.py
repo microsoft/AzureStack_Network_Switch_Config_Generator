@@ -1,9 +1,10 @@
 import json
 from copy import deepcopy
 from pathlib import Path
+from collections import defaultdict
 
 # ── Static config ─────────────────────────────────────────────────────────
-TARGET_SWITCH_TYPES          = ["TOR1", "TOR2", "BMC"]
+SWITCH_TYPES          = ["TOR1", "TOR2"]
 TOR1, TOR2                   = "TOR1", "TOR2"
 BMC                          = "BMC"
 
@@ -56,21 +57,35 @@ class StandardJSONBuilder:
     def __init__(self, input_data: dict):
         self.input_data = input_data
         self.sections   = {}
-        self.vlan_map = {}
+        self.vlan_map = defaultdict(list)
+        self.ip_map = defaultdict(list)
+        self.bgp_map = defaultdict(dict)
+        self.deployment_pattern = input_data.get("InputData", {}).get("DeploymentPattern", "").lower()
+        
+        # Translate hyperconverged to fully_converged for template compatibility
+        if self.deployment_pattern == "hyperconverged":
+            self.deployment_pattern = "fully_converged"
 
     # ------------------------------------------------------------------ #
     # Build switch section
     # ------------------------------------------------------------------ #
-    def build_switch(self, target_types=None):
-        if target_types is None:
-            target_types = set(TARGET_SWITCH_TYPES)
+    def build_switch(self, switch_type: str):
 
         switches_json = self.input_data.get("InputData", {}).get("Switches", [])
         self.sections["switch"] = {}
 
         for sw in switches_json:
             sw_type = sw.get("Type")
-            if sw_type not in target_types:
+
+            # Create BGP Mapping
+            if sw_type.startswith("Border"):
+                self.bgp_map["ASN_BORDER"] = sw.get("ASN", 0)
+            elif sw_type.startswith("TOR"):
+                self.bgp_map["ASN_TOR"] = sw.get("ASN", 0)
+            elif sw_type.startswith("MUX"):
+                self.bgp_map["ASN_MUX"] = sw.get("ASN", 0)
+
+            if sw_type != switch_type:
                 continue
 
             sw_make = sw.get("Make", "").lower()
@@ -99,29 +114,38 @@ class StandardJSONBuilder:
     # Build VLAN section
     # ------------------------------------------------------------------ #
     def build_vlans(self, switch_type: str):
+        self.vlan_map.clear()
         vlans_out = []
         supernets = self.input_data.get("InputData", {}).get("Supernets", [])
 
         for net in supernets:
             group_name  = net.get("GroupName", "").upper()
+            vlan_name  = net.get("Name", "").upper()
             ipv4        = net.get("IPv4", {})
             vlan_id     = ipv4.get("VlanId") or ipv4.get("VLANID") or 0
             if vlan_id == 0:
                 continue                                # skip invalid IDs
 
-            # BMC: only keep interface for GroupName "BMC" or "UNUSED_VLAN" or "NATIVEVLAN"
-            if switch_type == BMC and group_name.upper() not in (BMC, UNUSED_VLAN, NATIVE_VLAN):
-                continue
-
             # Construct M,C,S Mapping, GroupName hardcode defined
             if group_name.startswith("HNVPA"):
-                self.vlan_map["HNVPA"].append(vlan_id)
+                self.vlan_map["C"].append(vlan_id)
             elif group_name.startswith("INFRA"):
                 self.vlan_map["M"].append(vlan_id)
             elif group_name.startswith("TENANT"):
                 self.vlan_map["C"].append(vlan_id)
             elif group_name.startswith("L3FORWARD"):
                 self.vlan_map["C"].append(vlan_id)
+            elif group_name.startswith("STORAGE"):
+                self.vlan_map["S"].append(vlan_id)
+            elif group_name.startswith("UNUSED"):
+                self.vlan_map["UNUSED"].append(vlan_id)
+            elif group_name.startswith("NATIVE"):
+                self.vlan_map["NATIVE"].append(vlan_id)
+            # collect TOR1 and TOR2 specific storage VLANs
+            if vlan_name.endswith(TOR1):
+                self.vlan_map["S1"].append(vlan_id)
+            elif vlan_name.endswith(TOR2):
+                self.vlan_map["S2"].append(vlan_id)
 
             # collect IP / GW
             ip          = ""
@@ -182,7 +206,7 @@ class StandardJSONBuilder:
             return
 
         make = switch.get("make", "").lower()
-        model = switch.get("model", "").lower()
+        model = switch.get("model", "").upper()
         template_path = Path("input/switch_interface_templates") / make / f"{model}.json"
 
         if not template_path.exists():
@@ -191,50 +215,147 @@ class StandardJSONBuilder:
         with open(template_path) as f:
             template_data = json.load(f)
 
-        self._build_interfaces_from_template(template_data)
-        self._build_port_channels_from_template(template_data)
+        self._build_interfaces_from_template(switch_type, template_data)
+        self._build_port_channels_from_template(switch_type, template_data)
 
-    def _build_interfaces_from_template(self, template_data: dict):
-        vlan_map = {
-            "M": "7",
-            "C": "6,201,301,401",
-            "S1": "501-516",
-            "S2": "711,712"
-        }
-
-        def expand_vlans(raw):
-            if not raw:
-                return ""
-            return ",".join([
-                vlan_map.get(part.strip(), part.strip())
-                for part in raw.replace("|", ",").split(",")
-            ])
-
+    def _build_interfaces_from_template(self, switch_type: str, template_data: dict):
+        """
+        Build interfaces from template data, processing both Common and deployment pattern specific interfaces.
+        """
         templates = template_data.get("interface_templates", {})
-        profile = templates.get("FullyConverged", [])
-        common = templates.get("Common", {})
+        common_templates = templates.get("common", [])
+        pattern_templates = templates.get(self.deployment_pattern, [])
+
+        # Build IP mapping for BGP and L3 interfaces
+        self._build_ip_mapping()
+
+        # Debug output
+        print(f"VLAN Map: {dict(self.vlan_map)}")
+        print(f"IP Map: {dict(self.ip_map)}")
+        print(f"Deployment Pattern: {self.deployment_pattern}")
 
         interfaces = []
-        for name in ["Unused", "Trunk_TO_BMC_SWITCH", "Loopback0", "P2P_Border2", "P2P_Border1"]:
-            iface = deepcopy(common[name])
-            if name == "Loopback0":
-                iface["ipv4"] = "100.71.85.21/32"
-            elif name == "P2P_Border1":
-                iface["ipv4"] = "100.71.85.2/30"
-            elif name == "P2P_Border2":
-                iface["ipv4"] = "100.71.85.10/30"
-            interfaces.append(iface)
 
-        for tmpl in profile:
-            new_iface = deepcopy(tmpl)
-            new_iface["name"] = "Hyperconverged"
-            new_iface["native_vlan"] = vlan_map.get(new_iface["native_vlan"], new_iface["native_vlan"])
-            new_iface["tagged_vlans"] = expand_vlans(new_iface["tagged_vlans"])
-            interfaces.insert(1, new_iface)
+        # Process Common interfaces
+        for template in common_templates:
+            interface = self._process_interface_template(switch_type, template)
+            if interface:
+                interfaces.append(interface)
+
+        # Process deployment pattern specific interfaces
+        for template in pattern_templates:
+            interface = self._process_interface_template(switch_type, template)
+            if interface:
+                interfaces.append(interface)
 
         self.sections["interfaces"] = interfaces
 
-    def _build_port_channels_from_template(self, template_data: dict):
+    def _build_ip_mapping(self):
+        """
+        Build IP mapping from supernets for L3 interface configuration.
+        """
+        self.ip_map.clear()
+        supernets = self.input_data.get("InputData", {}).get("Supernets", [])
+        
+        for net in supernets:
+            group_name = net.get("GroupName", "").upper()
+            vlan_name = net.get("Name", "").upper()
+            ipv4 = net.get("IPv4", {})
+            ip_subnet = ipv4.get("Subnet", "")
+            cidr = ipv4.get("Cidr", 0)
+            first_ip = ipv4.get("FirstAddress", "")
+            last_ip = ipv4.get("LastAddress", "")
+
+            if group_name.startswith("HNVPA"):
+                self.ip_map["HNVPA"].append(ip_subnet)
+            elif group_name.startswith("INFRA"):
+                self.ip_map["M"].append(ip_subnet)
+            elif group_name.startswith("TENANT"):
+                self.ip_map["C"].append(ip_subnet)
+            elif group_name.startswith("L3FORWARD"):
+                self.ip_map["C"].append(ip_subnet)
+            elif vlan_name.endswith(TOR1) and vlan_name.startswith("P2P_BORDER1"):
+                self.ip_map["P2P_BORDER1_TOR1"].append(f"{last_ip}/{cidr}")
+                self.ip_map["P2P_TOR1_BORDER1"].append(f"{first_ip}")
+            elif vlan_name.endswith(TOR1) and vlan_name.startswith("P2P_BORDER2"):
+                self.ip_map["P2P_BORDER2_TOR1"].append(f"{last_ip}/{cidr}")
+                self.ip_map["P2P_TOR1_BORDER2"].append(f"{first_ip}")
+            elif vlan_name.endswith(TOR2) and vlan_name.startswith("P2P_BORDER1"):
+                self.ip_map["P2P_BORDER1_TOR2"].append(f"{last_ip}/{cidr}")
+                self.ip_map["P2P_TOR2_BORDER1"].append(f"{first_ip}")
+            elif vlan_name.endswith(TOR2) and vlan_name.startswith("P2P_BORDER2"):
+                self.ip_map["P2P_BORDER2_TOR2"].append(f"{last_ip}/{cidr}")
+                self.ip_map["P2P_TOR2_BORDER2"].append(f"{first_ip}")
+            elif vlan_name.endswith(TOR1) and vlan_name.startswith("LOOPBACK"):
+                self.ip_map["LOOPBACK0_TOR1"].append(ip_subnet)
+            elif vlan_name.endswith(TOR2) and vlan_name.startswith("LOOPBACK"):
+                self.ip_map["LOOPBACK0_TOR2"].append(ip_subnet)
+            elif vlan_name.endswith(TOR2) and vlan_name.startswith("LOOPBACK"):
+                self.ip_map["LOOPBACK0_TOR2"].append(ip_subnet)
+            elif vlan_name.startswith("P2P_IBGP"):
+                self.ip_map["P2P_IBGP_TOR1"].append(first_ip)
+                self.ip_map["P2P_IBGP_TOR2"].append(last_ip)
+
+    def _process_interface_template(self , switch_type: str, template: dict) -> dict:
+        """
+        Process a single interface template and return the configured interface.
+        """
+        interface = deepcopy(template)
+        
+        # Handle VLAN reference resolution for trunk interfaces
+        if interface.get("type") == "Trunk":
+            if "native_vlan" in interface:
+                interface["native_vlan"] = self._resolve_interface_vlans(switch_type, interface["native_vlan"])
+            
+            if "tagged_vlans" in interface:
+                interface["tagged_vlans"] = self._resolve_interface_vlans(switch_type, interface["tagged_vlans"])
+
+        # Handle IP assignment for L3 interfaces
+        if interface.get("type") == "L3" and interface.get("ipv4") == "":
+            interface["ipv4"] = self._get_l3_ip_for_interface(switch_type, interface)
+
+        return interface
+
+    def _resolve_interface_vlans(self, switch_type: str, vlans_name_string: str) -> str:
+        """
+        Resolve VLANs for interface configurations from name string to actual VLAN IDs.
+        """
+        if not vlans_name_string:
+            return ""
+            
+        resolved_vlans = []
+        vlan_parts = vlans_name_string.split(",")
+        
+        for part in vlan_parts:
+            part = part.strip()
+            if "S" in part:
+                # if TOR1 then resolve to S1, else S2
+                if switch_type == TOR1:
+                    resolved_vlans.extend([str(vid) for vid in self.vlan_map["S1"]])
+                elif switch_type == TOR2:
+                    resolved_vlans.extend([str(vid) for vid in self.vlan_map["S2"]])
+            elif part in self.vlan_map and self.vlan_map[part]:
+                # Direct mapping from vlan_map
+                resolved_vlans.extend([str(vid) for vid in self.vlan_map[part]])
+            else:
+                # Literal VLAN ID or unknown symbol - keep as is
+                resolved_vlans.append(part)
+        
+        return ",".join(resolved_vlans)
+
+    def _get_l3_ip_for_interface(self, switch_type: str, interface: dict) -> str:
+        """
+        Get appropriate IP address for L3 interfaces based on interface name/type.
+        """
+        intf_name = interface.get("name", "")
+        ip_map_key = (f"{intf_name}_{switch_type}").upper()
+
+        if ip_map_key in self.ip_map:
+            return self.ip_map[ip_map_key][0]
+
+        return ""
+
+    def _build_port_channels_from_template(self, switch_type: str, template_data: dict):
         port_channels = template_data.get("port_channels", [])
         enriched_pcs = []
 
@@ -242,11 +363,9 @@ class StandardJSONBuilder:
             pc_copy = deepcopy(pc)
 
             # Enrich with values based on ID
-            if pc_copy["id"] == 50:
-                pc_copy["ipv4"] = "100.71.85.17/30"
-            if pc_copy["id"] == 101:
-                pc_copy["description"] = "L2_LACP_Peer"
-                pc_copy["tagged_vlans"] = "7,125"
+            if pc_copy["description"] == "P2P_IBGP" and pc_copy["type"] == "L3":
+                ip_map_key = (f"P2P_IBGP_{switch_type}").upper()
+                pc_copy["ipv4"] = self.ip_map[ip_map_key][0]
 
             enriched_pcs.append(pc_copy)
 
@@ -265,43 +384,53 @@ class StandardJSONBuilder:
             print(f"[!] No switch info for BGP")
             return
 
+        # Build networks list by flattening all network entries
+        networks = [
+            self.ip_map.get(f"P2P_BORDER1_{switch_type.upper()}", [""])[0],
+            self.ip_map.get(f"P2P_BORDER2_{switch_type.upper()}", [""])[0],
+            self.ip_map.get(f"LOOPBACK0_{switch_type.upper()}", [""])[0],
+        ]
+        # Extend with all tenant/compute networks from "C" key
+        networks.extend(self.ip_map.get("C", []))
+
+        # iBGP Peer IPs
+        ibgp_ip = ""
+        if switch_type == TOR1:
+            ibgp_ip = self.ip_map.get(f"P2P_IBGP_TOR2", [""])[0]
+        elif switch_type == TOR2:
+            ibgp_ip = self.ip_map.get(f"P2P_IBGP_TOR1", [""])[0]
+
         bgp = {
-            "asn": 65242,
-            "router_id": "{{ loopback_ip }}",  # Replace with parsed loopback IP
-            "networks": [
-                "{{ p2p_border1_subnet }}",
-                "{{ p2p_border2_subnet }}",
-                "{{ ibgp_subnet }}",
-                "{{ loopback_ip }}/32",
-                "{{ pod_pool_prefix }}"
-            ],
+            "asn": self.bgp_map.get("ASN_TOR", 0),
+            "router_id": self.ip_map.get(f"LOOPBACK0_{switch_type.upper()}", [""])[0].split('/')[0],
+            "networks": networks,
             "neighbors": [
                 {
-                    "ip": "{{ p2p_border1_ip }}",
+                    "ip": self.ip_map.get(f"P2P_{switch_type.upper()}_BORDER1", [""])[0],
                     "description": "TO_Border1",
-                    "remote_as": 64846,
+                    "remote_as": self.bgp_map.get("ASN_BORDER", 0),
                     "af_ipv4_unicast": {
                         "prefix_list_in": "DefaultRoute"
                     }
                 },
                 {
-                    "ip": "{{ p2p_border2_ip }}",
+                    "ip": self.ip_map.get(f"P2P_{switch_type.upper()}_BORDER2", [""])[0],
                     "description": "TO_Border2",
-                    "remote_as": 64846,
+                    "remote_as": self.bgp_map.get("ASN_BORDER", 0),
                     "af_ipv4_unicast": {
                         "prefix_list_in": "DefaultRoute"
                     }
                 },
                 {
-                    "ip": "{{ ibgp_peer_ip }}",
+                    "ip": ibgp_ip,
                     "description": "iBGP_PEER",
-                    "remote_as": 65242,
+                    "remote_as": self.bgp_map.get("ASN_TOR", 0),
                     "af_ipv4_unicast": {}
                 },
                 {
-                    "ip": "{{ hnvpa_subnet }}",
+                    "ip": self.ip_map.get("HNVPA", [""])[0],
                     "description": "TO_HNVPA",
-                    "remote_as": 65112,
+                    "remote_as": self.bgp_map.get("ASN_MUX", 0),
                     "update_source": "Loopback0",
                     "ebgp_multihop": 3,
                     "af_ipv4_unicast": {
@@ -350,7 +479,7 @@ class StandardJSONBuilder:
     # ------------------------------------------------------------------ #
     # Generate all sections for a specific switch type
     def generate_for_switch(self, switch_type):
-        self.build_switch()
+        self.build_switch(switch_type)
         self.build_vlans(switch_type)
         self.build_interfaces(switch_type)
         return self.sections
@@ -364,9 +493,9 @@ def convert_switch_input_json(input_data: dict, output_dir: str = DEFAULT_OUTPUT
 
     builder = StandardJSONBuilder(input_data)
 
-    for sw_type in TARGET_SWITCH_TYPES:
+    for sw_type in SWITCH_TYPES:
         builder.sections = {}               # reset between runs
-        builder.build_switch()
+        builder.build_switch(sw_type)
         builder.build_vlans(sw_type)
         builder.build_interfaces(sw_type)
         builder.build_bgp(sw_type)

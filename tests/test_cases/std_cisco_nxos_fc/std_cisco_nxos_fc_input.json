@@ -44,7 +44,7 @@
     },
     {
       "vlan_id": 99,
-      "name": "Native_Vlan"
+      "name": "NativeVlan"
     },
     {
       "vlan_id": 125,
@@ -354,5 +354,160 @@
       "vlan_id": 712,
       "name": "Storage_712_TOR2"
     }
-  ]
+  ],
+  "interfaces": [
+    {
+      "name": "Unused",
+      "type": "Access",
+      "description": "initial unused for all interfaces then config as defined",
+      "intf_type": "Ethernet",
+      "start_intf": "1/1",
+      "end_intf": "1/54",
+      "access_vlan": "2",
+      "shutdown": true
+    },
+    {
+      "name": "Loopback0",
+      "type": "L3",
+      "intf_type": "loopback",
+      "intf": "loopback0",
+      "ipv4": "100.71.85.21/32"
+    },
+    {
+      "name": "P2P_Border1",
+      "type": "L3",
+      "intf_type": "Ethernet",
+      "intf": "1/48",
+      "ipv4": "100.71.85.2/30"
+    },
+    {
+      "name": "P2P_Border2",
+      "type": "L3",
+      "intf_type": "Ethernet",
+      "intf": "1/47",
+      "ipv4": "100.71.85.10/30"
+    },
+    {
+      "name": "Trunk_TO_BMC_SWITCH",
+      "type": "Trunk",
+      "intf_type": "Ethernet",
+      "intf": "1/49",
+      "native_vlan": "99",
+      "tagged_vlans": "125"
+    },
+    {
+      "name": "HyperConverged_To_Host",
+      "type": "Trunk",
+      "intf_type": "Ethernet",
+      "start_intf": "1/1",
+      "end_intf": "1/16",
+      "native_vlan": "7",
+      "tagged_vlans": "7,6,201,301,401,501,502,503,504,505,506,507,508,509,510,511,512,513,514,515,516,711",
+      "service_policy": {
+        "qos_input": "AZLOCAL-QOS-MAP"
+      }
+    }
+  ],
+  "port_channels": [
+    {
+      "id": 50,
+      "description": "iBGP_Peer",
+      "type": "L3",
+      "ipv4": "",
+      "members": [
+        "1/41",
+        "1/42"
+      ]
+    },
+    {
+      "id": 101,
+      "description": "ToR_Peer_Link",
+      "type": "Trunk",
+      "native_vlan": "99",
+      "tagged_vlans": "",
+      "members": [
+        "1/49",
+        "1/50",
+        "1/51"
+      ]
+    }
+  ],
+  "bgp": {
+    "asn": 65242,
+    "router_id": "100.71.85.21",
+    "networks": [
+      "100.71.85.2/30",
+      "100.71.85.10/30",
+      "100.71.85.21/32",
+      "100.69.177.0/24",
+      "100.69.178.0/25",
+      "100.69.178.128/25",
+      "100.69.179.0/28",
+      "100.69.179.16/28",
+      "100.69.179.32/28",
+      "100.69.179.48/28",
+      "100.69.179.64/28",
+      "100.69.179.80/28",
+      "100.69.179.96/28",
+      "100.69.179.112/28",
+      "100.69.179.128/28",
+      "100.69.179.144/28",
+      "100.69.179.160/28",
+      "100.69.179.176/28",
+      "100.69.179.192/28",
+      "100.69.179.208/28",
+      "100.69.179.224/28",
+      "100.69.179.240/28"
+    ],
+    "neighbors": [
+      {
+        "ip": "100.71.85.1",
+        "description": "TO_Border1",
+        "remote_as": 64846,
+        "af_ipv4_unicast": {
+          "prefix_list_in": "DefaultRoute"
+        }
+      },
+      {
+        "ip": "100.71.85.9",
+        "description": "TO_Border2",
+        "remote_as": 64846,
+        "af_ipv4_unicast": {
+          "prefix_list_in": "DefaultRoute"
+        }
+      },
+      {
+        "ip": "100.71.85.18",
+        "description": "iBGP_PEER",
+        "remote_as": 65242,
+        "af_ipv4_unicast": {}
+      },
+      {
+        "ip": "100.71.131.0/25",
+        "description": "TO_HNVPA",
+        "remote_as": 65112,
+        "update_source": "Loopback0",
+        "ebgp_multihop": 3,
+        "af_ipv4_unicast": {
+          "prefix_list_out": "DefaultRoute"
+        }
+      }
+    ]
+  },
+  "prefix_lists": {
+    "DefaultRoute": [
+      {
+        "seq": 10,
+        "action": "permit",
+        "prefix": "0.0.0.0/0"
+      },
+      {
+        "seq": 50,
+        "action": "deny",
+        "prefix": "0.0.0.0/0",
+        "prefix_filter": "le 32"
+      }
+    ]
+  },
+  "qos": true
 }

@@ -6,7 +6,7 @@
       {
         "Id": "Env01",
         "Site": "rr1",
-        "RackName": "s46r21",
+        "RackName": "s46r21STR",
         "NodeCount": 16,
         "ConnectType": "connected",
         "ClusterUnits": [
@@ -14,13 +14,13 @@
             "Name": "Cl01",
             "NodeCount": 4,
             "RackId": "Rack01",
-            "NamingPrefix": "s46r2101",
-            "PhysicalNamingPrefix": "s46r2101",
-            "Topology": "HyperConverged",
+            "NamingPrefix": "s46r21STR01",
+            "PhysicalNamingPrefix": "s46r21STR01",
+            "Topology": "SWITCHED",
             "CompanyName": "Microsoft",
             "RegionName": "Redmond",
-            "DomainFQDN": "s46r2101.masd.stbtest.microsoft.com",
-            "ExternalDomainFQDN": "ext-s46r2101.masd.stbtest.microsoft.com",
+            "DomainFQDN": "s46r21STR01.masd.stbtest.microsoft.com",
+            "ExternalDomainFQDN": "ext-s46r21STR01.masd.stbtest.microsoft.com",
             "InfraAzureEnvironment": "AzureCloud",
             "InfraAzureDirectoryTenantName": "msazurestack.microsoft.com"
           },
@@ -28,13 +28,13 @@
             "Name": "Cl02",
             "NodeCount": 4,
             "RackId": "Rack01",
-            "NamingPrefix": "s46r2102",
-            "PhysicalNamingPrefix": "s46r2102",
-            "Topology": "HyperConverged",
+            "NamingPrefix": "s46r21STR02",
+            "PhysicalNamingPrefix": "s46r21STR02",
+            "Topology": "SWITCHED",
             "CompanyName": "Microsoft",
             "RegionName": "Redmond",
-            "DomainFQDN": "s46r2102.masd.stbtest.microsoft.com",
-            "ExternalDomainFQDN": "ext-s46r2102.masd.stbtest.microsoft.com",
+            "DomainFQDN": "s46r21STR02.masd.stbtest.microsoft.com",
+            "ExternalDomainFQDN": "ext-s46r21STR02.masd.stbtest.microsoft.com",
             "InfraAzureEnvironment": "AzureCloud",
             "InfraAzureDirectoryTenantName": "msazurestack.microsoft.com"
           },
@@ -42,13 +42,13 @@
             "Name": "Cl03",
             "NodeCount": 4,
             "RackId": "Rack01",
-            "NamingPrefix": "s46r2103",
-            "PhysicalNamingPrefix": "s46r2103",
-            "Topology": "HyperConverged",
+            "NamingPrefix": "s46r21STR03",
+            "PhysicalNamingPrefix": "s46r21STR03",
+            "Topology": "SWITCHED",
             "CompanyName": "Microsoft",
             "RegionName": "Redmond",
-            "DomainFQDN": "s46r2103.masd.stbtest.microsoft.com",
-            "ExternalDomainFQDN": "ext-s46r2103.masd.stbtest.microsoft.com",
+            "DomainFQDN": "s46r21STR03.masd.stbtest.microsoft.com",
+            "ExternalDomainFQDN": "ext-s46r21STR03.masd.stbtest.microsoft.com",
             "InfraAzureEnvironment": "AzureCloud",
             "InfraAzureDirectoryTenantName": "msazurestack.microsoft.com"
           },
@@ -56,13 +56,13 @@
             "Name": "Cl04",
             "NodeCount": 4,
             "RackId": "Rack01",
-            "NamingPrefix": "s46r2104",
-            "PhysicalNamingPrefix": "s46r2104",
-            "Topology": "HyperConverged",
+            "NamingPrefix": "s46r21STR04",
+            "PhysicalNamingPrefix": "s46r21STR04",
+            "Topology": "SWITCHED",
             "CompanyName": "Microsoft",
             "RegionName": "Redmond",
-            "DomainFQDN": "s46r2104.masd.stbtest.microsoft.com",
-            "ExternalDomainFQDN": "ext-s46r2104.masd.stbtest.microsoft.com",
+            "DomainFQDN": "s46r21STR04.masd.stbtest.microsoft.com",
+            "ExternalDomainFQDN": "ext-s46r21STR04.masd.stbtest.microsoft.com",
             "InfraAzureEnvironment": "AzureCloud",
             "InfraAzureDirectoryTenantName": "msazurestack.microsoft.com"
           }
@@ -86,27 +86,27 @@
       },
       {
         "Make": "Cisco",
-        "Model": "93180YC-FX3",
+        "Model": "93180YC-FX",
         "Type": "TOR1",
         "Hostname": "s46-r21-93180hl-24-1a",
         "ASN": 65242,
-        "Firmware": "10.3(4a)"
+        "Firmware": "9.3(11)"
       },
       {
         "Make": "Cisco",
-        "Model": "93180YC-FX3",
+        "Model": "93180YC-FX",
         "Type": "TOR2",
         "Hostname": "s46-r21-93180hl-24-1b",
         "ASN": 65242,
-        "Firmware": "10.3(4a)"
+        "Firmware": "9.3(11)"
       },
       {
         "Make": "Cisco",
-        "Model": "9348GC-FX3",
+        "Model": "9348GC-FXP",
         "Type": "BMC",
         "Hostname": "s46-r21-9348bmc-24-1",
         "ASN": null,
-        "Firmware": "10.3(4a)"
+        "Firmware": "9.3(11)"
       },
       {
         "Make": "Microsoft",
@@ -117,7 +117,7 @@
         "Firmware": null
       }
     ],
-    "DeploymentPattern": "HyperConverged",
+    "DeploymentPattern": "SWITCHED",
     "SwitchUplink": "BGP",
     "HostConnectivity": "BGP",
     "Supernets": [
@@ -1667,15 +1667,15 @@
         }
       },
       {
-        "GroupName": "Native_Vlan",
-        "Name": "Native_Vlan",
+        "GroupName": "NativeVlan",
+        "Name": "NativeVlan",
         "VLANID": 99,
-        "Description": "Native_Vlan",
+        "Description": "NativeVlan",
         "IPv4": {
           "SwitchSVI": false,
-          "Name": "Native_Vlan",
+          "Name": "NativeVlan",
           "VLANID": 99,
-          "NetworkType": "Native_Vlan"
+          "NetworkType": "NativeVlan"
         }
       }
     ],
