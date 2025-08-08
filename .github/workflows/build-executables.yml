@@ -18,7 +18,7 @@ jobs:
         include:
           - os: windows-latest
             artifact_name: network-config-generator.exe
-            asset_name: network-config-generator-windows-amd64.exe
+            asset_name: network-config-generator-windows-amd64
           - os: ubuntu-latest
             artifact_name: network-config-generator
             asset_name: network-config-generator-linux-amd64
@@ -59,7 +59,23 @@ jobs:
           pyinstaller network_config_generator.spec --name network-config-generator --clean
         } else {
           Write-Host "Building with manual configuration..."
-          pyinstaller --onefile --clean --name network-config-generator --add-data "input;input" --hidden-import=jinja2 --hidden-import=jinja2.ext --hidden-import=convertors --hidden-import=convertors.convertors_lab_switch_json --collect-submodules=convertors --paths=src src/main.py
+          pyinstaller --onefile --clean --name network-config-generator `
+            --add-data "input;input" `
+            --hidden-import=jinja2 `
+            --hidden-import=jinja2.ext `
+            --hidden-import=convertors `
+            --hidden-import=convertors.convertors_lab_switch_json `
+            --collect-submodules=convertors `
+            --paths=src `
+            --strip `
+            --exclude-module=tkinter `
+            --exclude-module=matplotlib `
+            --exclude-module=numpy `
+            --exclude-module=scipy `
+            --exclude-module=pandas `
+            --exclude-module=PIL `
+            --exclude-module=cv2 `
+            src/main.py
         }
         Write-Host "Checking build results..."
         Get-ChildItem dist/ -Force
@@ -82,8 +98,18 @@ jobs:
             --hidden-import=convertors.convertors_lab_switch_json \
             --collect-submodules=convertors \
             --paths=src \
+            --strip \
+            --exclude-module=tkinter \
+            --exclude-module=matplotlib \
+            --exclude-module=numpy \
+            --exclude-module=scipy \
+            --exclude-module=pandas \
+            --exclude-module=PIL \
+            --exclude-module=cv2 \
             src/main.py
         fi
+        echo "Checking build results..."
+        ls -la dist/
       shell: bash
 
     - name: Test executable (Windows)
@@ -144,7 +170,7 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/v')
       with:
         files: |
-          ./artifacts/network-config-generator-windows-amd64.exe/network-config-generator.exe
+          ./artifacts/network-config-generator-windows-amd64/network-config-generator.exe
           ./artifacts/network-config-generator-linux-amd64/network-config-generator
         body: |
           ## Network Switch Config Generator ${{ github.ref_name }}
