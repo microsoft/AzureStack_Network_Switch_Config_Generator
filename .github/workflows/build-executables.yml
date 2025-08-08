@@ -61,6 +61,8 @@ jobs:
           Write-Host "Building with manual configuration..."
           pyinstaller --onefile --clean --name network-config-generator --add-data "input;input" --hidden-import=jinja2 --hidden-import=jinja2.ext --hidden-import=convertors --hidden-import=convertors.convertors_lab_switch_json --collect-submodules=convertors --paths=src src/main.py
         }
+        Write-Host "Checking build results..."
+        Get-ChildItem dist/ -Force
       shell: powershell
 
     - name: Build executable with PyInstaller (Unix)
@@ -87,14 +89,30 @@ jobs:
     - name: Test executable (Windows)
       if: matrix.os == 'windows-latest'
       run: |
-        ./dist/network-config-generator.exe --help
-      shell: cmd
+        Write-Host "Testing Windows executable..."
+        if (Test-Path "dist/network-config-generator.exe") {
+          Write-Host "Executable found, running help command..."
+          & "dist/network-config-generator.exe" --help
+        } else {
+          Write-Host "ERROR: Executable not found!"
+          Get-ChildItem dist/ -Force
+          exit 1
+        }
+      shell: powershell
 
     - name: Test executable (Unix)
       if: matrix.os != 'windows-latest'
       run: |
-        chmod +x ./dist/network-config-generator
-        ./dist/network-config-generator --help
+        echo "Testing Unix executable..."
+        if [ -f "dist/network-config-generator" ]; then
+          echo "Executable found, making it executable and running help command..."
+          chmod +x ./dist/network-config-generator
+          ./dist/network-config-generator --help
+        else
+          echo "ERROR: Executable not found!"
+          ls -la dist/
+          exit 1
+        fi
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
