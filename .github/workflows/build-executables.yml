@@ -1,0 +1,168 @@
+name: Build Executables
+
+on:
+  push:
+    branches: [ main, dev/nl/newDesignv1 ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            artifact_name: network-config-generator.exe
+            asset_name: network-config-generator-windows-amd64.exe
+          - os: ubuntu-latest
+            artifact_name: network-config-generator
+            asset_name: network-config-generator-linux-amd64
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'  # Use Python 3.11 for better compatibility
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        pip install -r requirements.txt || echo "No requirements.txt found, installing basic dependencies"
+        pip install jinja2 pathlib
+
+    - name: Create requirements.txt if not exists
+      run: |
+        if [ ! -f requirements.txt ]; then
+          echo "jinja2>=3.0.0" > requirements.txt
+          echo "pathlib" >> requirements.txt
+        fi
+      shell: bash
+
+    - name: Test the application
+      run: |
+        python src/main.py --help
+      shell: bash
+
+    - name: Build executable with PyInstaller
+      run: |
+        # Try using existing spec file first, fall back to manual build
+        if [ -f "network_config_generator.spec" ]; then
+          echo "Using existing spec file..."
+          pyinstaller network_config_generator.spec --name network-config-generator
+        else
+          echo "Building with manual configuration..."
+          pyinstaller --onefile \
+            --name network-config-generator \
+            --add-data "input:input" \
+            --hidden-import=jinja2 \
+            --hidden-import=jinja2.ext \
+            --collect-submodules=convertors \
+            --paths=src \
+            src/main.py
+        fi
+      shell: bash
+
+    - name: Test executable (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        ./dist/network-config-generator.exe --help
+      shell: cmd
+
+    - name: Test executable (Unix)
+      if: matrix.os != 'windows-latest'
+      run: |
+        chmod +x ./dist/network-config-generator
+        ./dist/network-config-generator --help
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.asset_name }}
+        path: dist/${{ matrix.artifact_name }}
+
+  # Create release if this is a tag
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: ./artifacts
+
+    - name: Display structure of downloaded files
+      run: ls -la ./artifacts
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: Release ${{ github.ref_name }}
+        body: |
+          ## Network Switch Config Generator ${{ github.ref_name }}
+          
+          ### Download Instructions
+          1. Download the appropriate executable for your operating system
+          2. Make it executable (Linux/macOS): `chmod +x network-config-generator`
+          3. Run: `./network-config-generator --help`
+          
+          ### Usage Examples
+          ```bash
+          # Convert lab format and generate configs
+          ./network-config-generator --input_json lab_input.json --output_folder output/
+          
+          # Use standard format directly
+          ./network-config-generator --input_json standard_input.json --output_folder output/
+          
+          # Use custom convertor
+          ./network-config-generator --input_json lab_input.json --convertor my.custom.convertor
+          ```
+          
+          ### Features
+          - ✅ Auto-detects input format (lab vs standard)
+          - ✅ Converts lab format to standard format automatically
+          - ✅ Generates network switch configurations
+          - ✅ Supports custom convertors
+          - ✅ Multi-switch support
+          - ✅ Cross-platform executables
+          
+        draft: false
+        prerelease: false
+
+    - name: Upload Windows Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifacts/network-config-generator-windows-amd64.exe/network-config-generator.exe
+        asset_name: network-config-generator-windows-amd64.exe
+        asset_content_type: application/octet-stream
+
+    - name: Upload Linux Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifacts/network-config-generator-linux-amd64/network-config-generator
+        asset_name: network-config-generator-linux-amd64
+        asset_content_type: application/octet-stream
