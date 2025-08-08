@@ -28,7 +28,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'  # Use Python 3.11 for better compatibility
 
@@ -84,7 +84,7 @@ jobs:
         ./dist/network-config-generator --help
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.asset_name }}
         path: dist/${{ matrix.artifact_name }}
@@ -101,7 +101,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Download all artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         path: ./artifacts
 
@@ -109,19 +109,18 @@ jobs:
       run: ls -la ./artifacts
 
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/v')
       with:
-        tag_name: ${{ github.ref_name }}
-        release_name: Release ${{ github.ref_name }}
+        files: |
+          ./artifacts/network-config-generator-windows-amd64.exe/network-config-generator.exe
+          ./artifacts/network-config-generator-linux-amd64/network-config-generator
         body: |
           ## Network Switch Config Generator ${{ github.ref_name }}
           
           ### Download Instructions
           1. Download the appropriate executable for your operating system
-          2. Make it executable (Linux/macOS): `chmod +x network-config-generator`
+          2. Make it executable (Linux): `chmod +x network-config-generator`
           3. Run: `./network-config-generator --help`
           
           ### Usage Examples
@@ -143,26 +142,5 @@ jobs:
           - ✅ Supports custom convertors
           - ✅ Multi-switch support
           - ✅ Cross-platform executables
-          
         draft: false
         prerelease: false
-
-    - name: Upload Windows Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./artifacts/network-config-generator-windows-amd64.exe/network-config-generator.exe
-        asset_name: network-config-generator-windows-amd64.exe
-        asset_content_type: application/octet-stream
-
-    - name: Upload Linux Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./artifacts/network-config-generator-linux-amd64/network-config-generator
-        asset_name: network-config-generator-linux-amd64
-        asset_content_type: application/octet-stream
