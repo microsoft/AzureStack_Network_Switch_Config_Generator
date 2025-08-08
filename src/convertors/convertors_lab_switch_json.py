@@ -9,7 +9,7 @@ TOR1, TOR2                   = "TOR1", "TOR2"
 BMC                          = "BMC"
 
 CISCO, NXOS                  = "cisco", "nxos"
-DELL,  OS10                  = "dell",  "os10"
+DELL,  OS10                  = "dellemc",  "os10"
 
 OUTPUT_FILE_EXTENSION        = ".json"
 DEFAULT_OUTPUT_DIR           = "output"
@@ -229,10 +229,10 @@ class StandardJSONBuilder:
         # Build IP mapping for BGP and L3 interfaces
         self._build_ip_mapping()
 
-        # Debug output
-        print(f"VLAN Map: {dict(self.vlan_map)}")
-        print(f"IP Map: {dict(self.ip_map)}")
-        print(f"Deployment Pattern: {self.deployment_pattern}")
+        # # Debug output
+        # print(f"VLAN Map: {dict(self.vlan_map)}")
+        # print(f"IP Map: {dict(self.ip_map)}")
+        # print(f"Deployment Pattern: {self.deployment_pattern}")
 
         interfaces = []
 

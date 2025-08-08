@@ -3,5 +3,5 @@ pyinstaller --onefile src/main.py `
   --add-data "input/templates;input/templates"
 
 
-pytest -s .\tests\test_generator.py
-pytest -s .\tests\test_convertors.py
+pytest -s .\tests\test_generator.py -v
+pytest -s .\tests\test_convertors.py -v
