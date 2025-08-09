@@ -30,7 +30,8 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'  # Use Python 3.11 for better compatibility
+        python-version: '3.11'
+        cache: 'pip'
 
     - name: Install dependencies
       run: |
@@ -67,18 +68,17 @@ jobs:
             --hidden-import=convertors.convertors_lab_switch_json `
             --collect-submodules=convertors `
             --paths=src `
-            --strip `
-            --exclude-module=tkinter `
-            --exclude-module=matplotlib `
-            --exclude-module=numpy `
-            --exclude-module=scipy `
-            --exclude-module=pandas `
-            --exclude-module=PIL `
-            --exclude-module=cv2 `
             src/main.py
         }
         Write-Host "Checking build results..."
-        Get-ChildItem dist/ -Force
+        Get-ChildItem dist/ -Force -ErrorAction SilentlyContinue
+        if (Test-Path "dist/network-config-generator.exe") {
+          $size = (Get-Item "dist/network-config-generator.exe").Length / 1MB
+          Write-Host "Executable size: $($size.ToString('F2')) MB"
+        } else {
+          Write-Host "ERROR: Executable was not created!"
+          exit 1
+        }
       shell: powershell
 
     - name: Build executable with PyInstaller (Unix)
@@ -98,14 +98,6 @@ jobs:
             --hidden-import=convertors.convertors_lab_switch_json \
             --collect-submodules=convertors \
             --paths=src \
-            --strip \
-            --exclude-module=tkinter \
-            --exclude-module=matplotlib \
-            --exclude-module=numpy \
-            --exclude-module=scipy \
-            --exclude-module=pandas \
-            --exclude-module=PIL \
-            --exclude-module=cv2 \
             src/main.py
         fi
         echo "Checking build results..."
