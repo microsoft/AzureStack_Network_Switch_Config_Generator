@@ -126,39 +126,46 @@ flowchart LR
 
 ```plaintext
 root/
-├── docs/
-│   └── architecture.md             # Design documentation
-├── input/
-│   ├── standard_input.json         # Standard input file
-│   └── templates/
-│       └── cisco/
-│           └── nxos/
-│               ├── full_config.j2           # Merge all templates into one
-│               ├── feature1.j2              # Default feature template
-│               ├── feature2.j2
-│               ├── system.j2
-│               └── 10/                      # NX-OS version 10 specific templates
-│                   ├── version_feature1.j2  # Versioned feature template
-│                   └── version_system.j2    # Versioned system template
-├── src/
-│   ├── __init__.py
+├── .devcontainer/                  # Development container configuration
+├── .github/                        # GitHub Actions workflows
+├── build/                          # Build artifacts and executables
+├── docs/                           # Documentation files
+│   ├── CONVERTOR_GUIDE.md          # Guide for creating custom convertors
+│   ├── EXECUTABLE_USAGE.md         # Standalone executable usage guide
+│   ├── TEMPLATE_GUIDE.md           # Jinja2 template development guide
+│   ├── TOOL_DESIGN.md              # Architecture and design documentation
+│   └── TROUBLESHOOTING.md          # Common issues and solutions
+├── input/                          # Input files and templates
+│   ├── standard_input.json         # Standard format input example
+│   ├── jinja2_templates/           # Jinja2 template files
+│   │   ├── cisco/
+│   │   │   └── nxos/               # Cisco NX-OS templates
+│   │   │       ├── bgp.j2          # BGP configuration template
+│   │   │       ├── full_config.j2  # Combined full configuration template
+│   │   │       ├── interface.j2    # Interface configuration template
+│   │   │       ├── login.j2        # Login/user configuration template
+│   │   │       ├── port_channel.j2 # Port channel configuration template
+│   │   │       ├── prefix_list.j2  # Prefix list configuration template
+│   │   │       ├── qos.j2          # QoS configuration template
+│   │   │       ├── system.j2       # System configuration template
+│   │   │       └── vlan.j2         # VLAN configuration template
+│   │   └── dellemc/                # Dell EMC templates (vendor-specific)
+│   └── switch_interface_templates/ # Switch interface template configurations
+│       ├── cisco/
+│       └── dellemc/
+├── src/                            # Source code
 │   ├── main.py                     # Entry point for the tool
-│   ├── convertor.py                # Converts various input formats
 │   ├── generator.py                # Main generation logic
-│   └── loader.py                   # Loads and parses input
-
-├── tests/
-│   ├── test_generator.py          # Unit tests for generator logic
-│   ├── test_convertors.py         # Unit tests for input conversion
-│   ├── test_cases/
-│   │   ├── convert_switch_input_json/
-│   │   │   └── convert_switch_input.json
-│   │   ├── std_nxos_hyperconverged/
-│   │   │   └── std_nxos_hyperconverged_input.json
-│   │   ├── std_nxos_switched/
-│   │   │   └── std_nxos_switched_input.json
-│   │
-├── requirements.txt               # Python dependencies
+│   ├── loader.py                   # Input file loading and parsing
+│   └── convertors/                 # Input format converters
+│       └── convertors_lab_switch_json.py  # Lab format to standard JSON converter
+├── tests/                          # Test files
+│   ├── test_generator.py           # Unit tests for generator logic
+│   ├── test_convertors.py          # Unit tests for input conversion
+│   └── test_cases/                 # Test case data files
+├── requirements.txt                # Python dependencies
+├── network_config_generator.spec   # PyInstaller build specification
+└── _old/                           # Legacy Go implementation (archived)
 
 ```
 
@@ -213,28 +220,39 @@ The tool accepts the following input parameters:
 
 | Parameter            | Description                                                                 |
 |----------------------|-----------------------------------------------------------------------------|
-| `--input_std_json`   | **Required**. Path to the standard input JSON file.                      |
-| `--template_folder`  | Optional. Path to the Jinja2 templates folder. <br>Default: `input/templates` |
-| `--output_folder`    | Optional. Directory to save the generated configuration files. <br>Default: current working directory (`.`). |
-
+| `--input_json`       | **Required**. Path to the input JSON file (lab format or standard format). |
+| `--output_folder`    | **Required**. Directory to save the generated configuration files.         |
+| `--convertor`        | Optional. Custom convertor module (e.g., `my.custom.convertor`).          |
 
 ### Option 1: Run with Python (for Python users)
 
 If you're comfortable with Python, you can clone the repository and run the tool directly using the source code:
 
 ```bash
-# Example
-python src/main.py --input_std_json your_standard_input.json --template_folder templates/ --output_folder outputs
+# Auto-detect format and generate configs
+python src/main.py --input_json your_input.json --output_folder outputs/
+
+# Use with lab format (will be auto-converted)
+python src/main.py --input_json lab_input.json --output_folder outputs/
+
+# Use with standard format (direct processing)
+python src/main.py --input_json standard_input.json --output_folder outputs/
+
+# Use custom convertor for specialized formats
+python src/main.py --input_json custom_input.json --output_folder outputs/ --convertor my.custom.convertor
 ```
 
-### Option 2: Use the Precompiled .exe (no Python needed)
+### Option 2: Use the Precompiled Executable (no Python needed)
 
-A standalone executable (`.exe`) is available in the [Releases](https://github.com/YourRepo/releases) section.  
-This version is compiled using **PyInstaller** and does **not require Python** or any additional dependencies to run.
+Standalone executables are available in the [Releases](https://github.com/microsoft/AzureStack_Network_Switch_Config_Generator/releases) section.  
+These are compiled using **PyInstaller** and do **not require Python** or any additional dependencies.
 
 ```bash
-# Example
-.\network_config_generator.exe --input_std_json your_standard_input.json --template_folder templates/ --output_folder outputs
+# Windows
+.\network-config-generator-windows-amd64.exe --input_json your_input.json --output_folder outputs\
+
+# Linux
+./network-config-generator-linux-amd64 --input_json your_input.json --output_folder outputs/
 ```
 
 ---
