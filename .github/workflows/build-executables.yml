@@ -58,7 +58,7 @@ jobs:
         if (Test-Path "src/network_config_generator.spec") {
           Write-Host "Using existing spec file..."
           cd src
-          pyinstaller network_config_generator.spec --name network-config-generator --clean
+          pyinstaller network_config_generator.spec --clean
         } else {
           Write-Host "Building with manual configuration..."
           pyinstaller --onefile --clean --name network-config-generator `
@@ -88,7 +88,7 @@ jobs:
         if [ -f "src/network_config_generator.spec" ]; then
           echo "Using existing spec file..."
           cd src
-          pyinstaller network_config_generator.spec --name network-config-generator --clean
+          pyinstaller network_config_generator.spec --clean
         else
           echo "Building with manual configuration..."
           pyinstaller --onefile --clean \
