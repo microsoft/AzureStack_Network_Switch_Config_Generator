@@ -53,7 +53,7 @@ jobs:
       shell: bash
 
     - name: Build executable with PyInstaller (Windows)
-      if: runner.os == 'Windows'
+      if: matrix.os == 'windows-latest'
       run: |
         if (Test-Path "src/network_config_generator.spec") {
           Write-Host "Using existing spec file..."
@@ -83,7 +83,7 @@ jobs:
       shell: powershell
 
     - name: Build executable with PyInstaller (Unix)
-      if: runner.os != 'Windows'
+      if: matrix.os != 'windows-latest'
       run: |
         if [ -f "src/network_config_generator.spec" ]; then
           echo "Using existing spec file..."
@@ -110,12 +110,15 @@ jobs:
       if: matrix.os == 'windows-latest'
       run: |
         Write-Host "Testing Windows executable..."
-        if (Test-Path "dist/network-config-generator.exe") {
+        if (Test-Path "src/dist/network-config-generator.exe") {
           Write-Host "Executable found, running help command..."
-          & "dist/network-config-generator.exe" --help
+          & "src/dist/network-config-generator.exe" --help
         } else {
           Write-Host "ERROR: Executable not found!"
-          Get-ChildItem dist/ -Force
+          Write-Host "Checking src/dist/ directory:"
+          Get-ChildItem src/dist/ -Force -ErrorAction SilentlyContinue
+          Write-Host "Checking current directory:"
+          Get-ChildItem . -Force
           exit 1
         }
       shell: powershell
@@ -124,13 +127,16 @@ jobs:
       if: matrix.os != 'windows-latest'
       run: |
         echo "Testing Unix executable..."
-        if [ -f "dist/network-config-generator" ]; then
+        if [ -f "src/dist/network-config-generator" ]; then
           echo "Executable found, making it executable and running help command..."
-          chmod +x ./dist/network-config-generator
-          ./dist/network-config-generator --help
+          chmod +x ./src/dist/network-config-generator
+          ./src/dist/network-config-generator --help
         else
           echo "ERROR: Executable not found!"
-          ls -la dist/
+          echo "Checking src/dist/ directory:"
+          ls -la src/dist/ || echo "src/dist/ does not exist"
+          echo "Checking current directory:"
+          ls -la
           exit 1
         fi
 
@@ -138,7 +144,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.asset_name }}
-        path: dist/${{ matrix.artifact_name }}
+        path: src/dist/${{ matrix.artifact_name }}
 
   # Create release if this is a tag
   release:
