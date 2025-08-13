@@ -55,8 +55,9 @@ jobs:
     - name: Build executable with PyInstaller (Windows)
       if: runner.os == 'Windows'
       run: |
-        if (Test-Path "network_config_generator.spec") {
+        if (Test-Path "src/network_config_generator.spec") {
           Write-Host "Using existing spec file..."
+          cd src
           pyinstaller network_config_generator.spec --name network-config-generator --clean
         } else {
           Write-Host "Building with manual configuration..."
@@ -84,8 +85,9 @@ jobs:
     - name: Build executable with PyInstaller (Unix)
       if: runner.os != 'Windows'
       run: |
-        if [ -f "network_config_generator.spec" ]; then
+        if [ -f "src/network_config_generator.spec" ]; then
           echo "Using existing spec file..."
+          cd src
           pyinstaller network_config_generator.spec --name network-config-generator --clean
         else
           echo "Building with manual configuration..."

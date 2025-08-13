@@ -2,6 +2,7 @@ import json
 from copy import deepcopy
 from pathlib import Path
 from collections import defaultdict
+from loader import get_real_path
 
 # ── Static config ─────────────────────────────────────────────────────────
 SWITCH_TYPES          = ["TOR1", "TOR2"]
@@ -207,7 +208,7 @@ class StandardJSONBuilder:
 
         make = switch.get("make", "").lower()
         model = switch.get("model", "").upper()
-        template_path = Path("input/switch_interface_templates") / make / f"{model}.json"
+        template_path = get_real_path(Path("input/switch_interface_templates") / make / f"{model}.json")
 
         if not template_path.exists():
             raise FileNotFoundError(f"[!] Interface template not found: {template_path}")

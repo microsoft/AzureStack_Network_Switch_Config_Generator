@@ -51,6 +51,7 @@ var/
 # PyInstaller
 *.manifest
 *.spec
+!src/network_config_generator.spec
 
 # Unit test / coverage reports
 htmlcov/
