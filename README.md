@@ -249,10 +249,10 @@ These are compiled using **PyInstaller** and do **not require Python** or any ad
 
 ```bash
 # Windows
-.\network-config-generator-windows-amd64.exe --input_json your_input.json --output_folder outputs\
+.\network_config_generator.exe --input_json your_input.json --output_folder outputs\
 
 # Linux
-./network-config-generator-linux-amd64 --input_json your_input.json --output_folder outputs/
+./network_config_generator --input_json your_input.json --output_folder outputs/
 ```
 
 ---
