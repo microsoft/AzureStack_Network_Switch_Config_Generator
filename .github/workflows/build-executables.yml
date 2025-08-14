@@ -3,265 +3,149 @@ name: Build Executables
 on:
   push:
     branches: [ main, dev/nl/newDesignv1 ]
-    tags:
-      - 'v*'
+    tags: [ 'v*' ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:  # Allow manual trigger
+  workflow_dispatch:
 
 jobs:
   build:
     name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: windows-latest
-            artifact_name: network_config_generator.exe
+            exe_name: network_config_generator.exe
             asset_name: network-config-generator-windows-amd64
           - os: ubuntu-latest
-            artifact_name: network_config_generator
+            exe_name: network_config_generator
             asset_name: network-config-generator-linux-amd64
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-        cache: 'pip'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pyinstaller
-        pip install -r requirements.txt || echo "No requirements.txt found, installing basic dependencies"
-      shell: bash
+      - name: Install build tools (Linux only)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y upx
 
-    - name: Create requirements.txt if not exists
-      run: |
-        if [ ! -f requirements.txt ]; then
-          echo "jinja2>=3.0.0" > requirements.txt
-        fi
-      shell: bash
+      - name: Ensure requirements
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          if [ ! -f requirements.txt ]; then
+            echo "jinja2>=3.0.0" > requirements.txt
+          fi
+          pip install -r requirements.txt
+          pip install "pyinstaller==6.10.*"
 
-    - name: Test the application
-      run: |
-        python src/main.py --help
-      shell: bash
+      - name: Quick source test (run as script)
+        shell: bash
+        run: |
+          python -c "import sys; print(sys.version)"
+          python src/main.py --help
 
-    - name: Build executable with PyInstaller (Windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        if (Test-Path "src/network_config_generator.spec") {
-          Write-Host "Using existing spec file..."
-          cd src
-          pyinstaller network_config_generator.spec --clean
-        } else {
-          Write-Host "Building with manual configuration..."
-          pyinstaller --onefile --clean --name network_config_generator `
+      - name: Build (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: powershell
+        run: |
+          pyinstaller --onefile --clean --noconfirm `
+            --name network_config_generator `
             --add-data "input;input" `
-            --hidden-import=jinja2 `
-            --hidden-import=jinja2.ext `
+            --collect-all jinja2 `
             --hidden-import=convertors `
             --hidden-import=convertors.convertors_lab_switch_json `
             --collect-submodules=convertors `
             --paths=src `
             src/main.py
-        }
-        Write-Host "Checking build results..."
-        Get-ChildItem dist/ -Force -ErrorAction SilentlyContinue
-        if (Test-Path "dist/network_config_generator.exe") {
-          $size = (Get-Item "dist/network_config_generator.exe").Length / 1MB
-          Write-Host "Executable size: $($size.ToString('F2')) MB"
-        } else {
-          Write-Host "ERROR: Executable was not created!"
-          exit 1
-        }
-      shell: powershell
+          if (!(Test-Path "dist\\${{ matrix.exe_name }}")) { Write-Error "Build failed"; exit 1 }
 
-    - name: Build executable with PyInstaller (Linux)
-      if: matrix.os != 'windows-latest'
-      run: |
-        if [ -f "src/network_config_generator.spec" ]; then
-          echo "Using existing spec file..."
-          cd src
-          pyinstaller network_config_generator.spec --clean
-        else
-          echo "Building with manual configuration..."
-          pyinstaller --onefile --clean \
+      - name: Build (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          pyinstaller --onefile --clean --noconfirm \
             --name network_config_generator \
             --add-data "input:input" \
-            --hidden-import=jinja2 \
-            --hidden-import=jinja2.ext \
+            --collect-all jinja2 \
             --hidden-import=convertors \
             --hidden-import=convertors.convertors_lab_switch_json \
             --collect-submodules=convertors \
             --paths=src \
             src/main.py
-        fi
-        echo "Checking build results..."
-        ls -la dist/
-      shell: bash
+          test -f "dist/${{ matrix.exe_name }}" || (echo "Build failed" && exit 1)
+          upx --best --lzma "dist/${{ matrix.exe_name }}" || true
 
-    - name: Test executable (Windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        Write-Host "Testing Windows executable..."
-        Write-Host "Current directory contents:"
-        Get-ChildItem . -Force
-        Write-Host "Checking for executable in various locations..."
-        if (Test-Path "dist/network_config_generator.exe") {
-          Write-Host "Found in dist/ - running help command..."
-          & "dist/network_config_generator.exe" --help
-        } elseif (Test-Path "src/dist/network_config_generator.exe") {
-          Write-Host "Found in src/dist/ - running help command..."
-          & "src/dist/network_config_generator.exe" --help
-        } else {
-          Write-Host "ERROR: Executable not found in expected locations!"
-          Write-Host "Checking src/ directory:"
-          Get-ChildItem src/ -Force -ErrorAction SilentlyContinue
-          Write-Host "Checking src/dist/ directory:"
-          Get-ChildItem src/dist/ -Force -ErrorAction SilentlyContinue
-          exit 1
-        }
-      shell: powershell
+      - name: Smoke test executable
+        shell: bash
+        run: |
+          chmod +x "dist/${{ matrix.exe_name }}" || true
+          "dist/${{ matrix.exe_name }}" --help || (echo "Executable failed to run" && exit 1)
 
-    - name: Test executable (Linux)
-      if: matrix.os != 'windows-latest'
-      run: |
-        echo "Testing Linux executable..."
-        echo "Current directory contents:"
-        ls -la
-        echo "Checking for executable in various locations..."
-        if [ -f "dist/network_config_generator" ]; then
-          echo "Found in dist/ - making it executable and running help command..."
-          chmod +x ./dist/network_config_generator
-          ./dist/network_config_generator --help
-        elif [ -f "src/dist/network_config_generator" ]; then
-          echo "Found in src/dist/ - making it executable and running help command..."
-          chmod +x ./src/dist/network_config_generator
-          ./src/dist/network_config_generator --help
-        elif [ -f "network_config_generator" ]; then
-          echo "Found in current directory - making it executable and running help command..."
-          chmod +x ./network_config_generator
-          ./network_config_generator --help
-        else
-          echo "ERROR: Executable not found in expected locations!"
-          echo "Checking src/ directory:"
-          ls -la src/ || echo "src/ does not exist"
-          echo "Checking src/dist/ directory:"
-          ls -la src/dist/ || echo "src/dist/ does not exist"
-          echo "Looking for any network*config*generator files:"
-          find . -name "*network*config*generator*" -type f 2>/dev/null || echo "No matching files found"
-          exit 1
-        fi
+      - name: Stage artifact
+        shell: bash
+        run: |
+          mkdir -p artifact_staging
+          cp "dist/${{ matrix.exe_name }}" "artifact_staging/"
+          ls -la artifact_staging
 
-    - name: Prepare artifact
-      shell: bash
-      run: |
-        echo "Preparing clean artifact structure..."
-        # Create a clean directory for the artifact
-        mkdir -p artifact_staging
-        
-        # Find and copy the executable to the staging directory
-        if [ "${{ matrix.os }}" = "windows-latest" ]; then
-          echo "Looking for Windows executable..."
-          if [ -f "src/dist/network_config_generator.exe" ]; then
-            echo "Found in src/dist/"
-            cp src/dist/network_config_generator.exe artifact_staging/
-          elif [ -f "dist/network_config_generator.exe" ]; then
-            echo "Found in dist/"
-            cp dist/network_config_generator.exe artifact_staging/
-          elif [ -f "network_config_generator.exe" ]; then
-            echo "Found in current directory"
-            cp network_config_generator.exe artifact_staging/
-          else
-            echo "ERROR: Could not find network_config_generator.exe"
-            find . -name "*.exe" -type f
-            exit 1
-          fi
-        else
-          echo "Looking for Linux executable..."
-          if [ -f "src/dist/network_config_generator" ]; then
-            echo "Found in src/dist/"
-            cp src/dist/network_config_generator artifact_staging/
-          elif [ -f "dist/network_config_generator" ]; then
-            echo "Found in dist/"
-            cp dist/network_config_generator artifact_staging/
-          elif [ -f "network_config_generator" ]; then
-            echo "Found in current directory"
-            cp network_config_generator artifact_staging/
-          else
-            echo "ERROR: Could not find network_config_generator"
-            find . -name "network_config_generator" -type f
-            exit 1
-          fi
-        fi
-        
-        echo "Artifact staging directory contents:"
-        ls -la artifact_staging/
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset_name }}
+          path: artifact_staging/
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ matrix.asset_name }}
-        path: artifact_staging/
+  # release:
+  #   name: Create Release
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   if: startsWith(github.ref, 'refs/tags/v')
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-  # Create release if this is a tag
-  release:
-    name: Create Release
-    needs: build
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+  #     - name: Download artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         path: ./artifacts
 
-    - name: Download all artifacts
-      uses: actions/download-artifact@v4
-      with:
-        path: ./artifacts
+  #     - name: Show downloaded files
+  #       run: ls -Rla ./artifacts
 
-    - name: Display structure of downloaded files
-      run: ls -la ./artifacts
+  #     - name: Create GitHub Release
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         files: |
+  #           ./artifacts/network-config-generator-windows-amd64/network_config_generator.exe
+  #           ./artifacts/network-config-generator-linux-amd64/network_config_generator
+  #         body: |
+  #           ## Network Switch Config Generator ${{ github.ref_name }}
 
-    - name: Create Release
-      uses: softprops/action-gh-release@v2
-      if: startsWith(github.ref, 'refs/tags/v')
-      with:
-        files: |
-          ./artifacts/network-config-generator-windows-amd64/network_config_generator.exe
-          ./artifacts/network-config-generator-linux-amd64/network_config_generator
-        body: |
-          ## Network Switch Config Generator ${{ github.ref_name }}
-          
-          ### Download Instructions
-          1. Download the appropriate executable for your operating system
-          2. Make it executable (Linux): `chmod +x network-config-generator`
-          3. Run: `./network-config-generator --help`
-          
-          ### Usage Examples
-          ```bash
-          # Convert lab format and generate configs
-          ./network-config-generator --input_json lab_input.json --output_folder output/
-          
-          # Use standard format directly
-          ./network-config-generator --input_json standard_input.json --output_folder output/
-          
-          # Use custom convertor
-          ./network-config-generator --input_json lab_input.json --convertor my.custom.convertor
-          ```
-          
-          ### Features
-          - ✅ Auto-detects input format (lab vs standard)
-          - ✅ Converts lab format to standard format automatically
-          - ✅ Generates network switch configurations
-          - ✅ Supports custom convertors
-          - ✅ Multi-switch support
-          - ✅ Cross-platform executables
-        draft: false
-        prerelease: false
+  #           ### Download
+  #           1) Grab the file for your OS
+  #           2) (Linux) Make it executable: `chmod +x network_config_generator`
+  #           3) Run: `./network_config_generator --help`
+
+  #           ### Usage
+  #           ```bash
+  #           ./network_config_generator --input_json lab_input.json --output_folder output/
+  #           ./network_config_generator --input_json standard_input.json --output_folder output/
+  #           ./network_config_generator --input_json lab_input.json --convertor my.custom.convertor
+  #           ```
+
+  #           ### Features
+  #           - Auto-detects input format (lab vs standard)
+  #           - Converts lab format to standard automatically
+  #           - Generates network switch configurations
+  #           - Custom convertors & multi-switch support
+  #           - Cross-platform executables
