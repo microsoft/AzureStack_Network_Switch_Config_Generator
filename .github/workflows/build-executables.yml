@@ -17,10 +17,10 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            artifact_name: network-config-generator.exe
+            artifact_name: network_config_generator.exe
             asset_name: network-config-generator-windows-amd64
           - os: ubuntu-latest
-            artifact_name: network-config-generator
+            artifact_name: network_config_generator
             asset_name: network-config-generator-linux-amd64
 
     steps:
@@ -113,12 +113,12 @@ jobs:
         Write-Host "Current directory contents:"
         Get-ChildItem . -Force
         Write-Host "Checking for executable in various locations..."
-        if (Test-Path "dist/network-config-generator.exe") {
+        if (Test-Path "dist/network_config_generator.exe") {
           Write-Host "Found in dist/ - running help command..."
-          & "dist/network-config-generator.exe" --help
-        } elseif (Test-Path "src/dist/network-config-generator.exe") {
+          & "dist/network_config_generator.exe" --help
+        } elseif (Test-Path "src/dist/network_config_generator.exe") {
           Write-Host "Found in src/dist/ - running help command..."
-          & "src/dist/network-config-generator.exe" --help
+          & "src/dist/network_config_generator.exe" --help
         } else {
           Write-Host "ERROR: Executable not found in expected locations!"
           Write-Host "Checking src/ directory:"
@@ -136,22 +136,26 @@ jobs:
         echo "Current directory contents:"
         ls -la
         echo "Checking for executable in various locations..."
-        if [ -f "dist/network-config-generator" ]; then
+        if [ -f "dist/network_config_generator" ]; then
           echo "Found in dist/ - making it executable and running help command..."
-          chmod +x ./dist/network-config-generator
-          ./dist/network-config-generator --help
-        elif [ -f "src/dist/network-config-generator" ]; then
+          chmod +x ./dist/network_config_generator
+          ./dist/network_config_generator --help
+        elif [ -f "src/dist/network_config_generator" ]; then
           echo "Found in src/dist/ - making it executable and running help command..."
-          chmod +x ./src/dist/network-config-generator
-          ./src/dist/network-config-generator --help
+          chmod +x ./src/dist/network_config_generator
+          ./src/dist/network_config_generator --help
+        elif [ -f "network_config_generator" ]; then
+          echo "Found in current directory - making it executable and running help command..."
+          chmod +x ./network_config_generator
+          ./network_config_generator --help
         else
           echo "ERROR: Executable not found in expected locations!"
           echo "Checking src/ directory:"
           ls -la src/ || echo "src/ does not exist"
           echo "Checking src/dist/ directory:"
           ls -la src/dist/ || echo "src/dist/ does not exist"
-          echo "Looking for any network-config-generator files:"
-          find . -name "*network-config-generator*" -type f 2>/dev/null || echo "No matching files found"
+          echo "Looking for any network*config*generator files:"
+          find . -name "*network*config*generator*" -type f 2>/dev/null || echo "No matching files found"
           exit 1
         fi
 
@@ -160,6 +164,7 @@ jobs:
       with:
         name: ${{ matrix.asset_name }}
         path: |
+          ${{ matrix.artifact_name }}
           dist/${{ matrix.artifact_name }}
           src/dist/${{ matrix.artifact_name }}
 
