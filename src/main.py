@@ -99,9 +99,6 @@ def main():
         help="Directory to save generated config files (default: current directory)"
     )
 
-    parser.add_argument("--temp_conversion_dir", default="temp_converted",
-        help="Directory to store converted standard format files when conversion is needed. Files are kept for future reuse. (default: temp_converted)")
-
     parser.add_argument("--convertor", default="convertors.convertors_lab_switch_json",
         help="Python module path for the convertor to use when input is not in standard format. Only used if conversion is needed. (default: convertors.convertors_lab_switch_json)")
 
@@ -110,7 +107,6 @@ def main():
     # Resolve paths
     input_json_path = Path(args.input_json).resolve()
     output_folder_path = Path(args.output_folder).resolve()
-    temp_conversion_dir = Path(args.temp_conversion_dir).resolve()
     template_folder_arg = Path(args.template_folder)
 
     # Only use get_real_path if user did NOT override default
@@ -151,13 +147,10 @@ def main():
     else:
         print("⚠️  Input is in lab format - conversion required")
         try:
-            # Create temp directory for conversion
-            temp_conversion_dir.mkdir(parents=True, exist_ok=True)
-            
-            # Convert to standard format using specified convertor
+            # Convert to standard format using output folder
             standard_format_files = convert_to_standard_format(
                 input_json_path, 
-                str(temp_conversion_dir),
+                str(output_folder_path),
                 args.convertor
             )
         except Exception as e:
@@ -201,12 +194,6 @@ def main():
         except Exception as e:
             print(f"❌ Failed to generate configs for {std_file.name}: {e}")
             total_failed += 1
-
-    # === Cleanup temp files if conversion was used ===
-    if conversion_used and temp_conversion_dir.exists():
-        print(f"\n🧹 Cleaning up temporary conversion directory: {temp_conversion_dir}")
-        shutil.rmtree(temp_conversion_dir, ignore_errors=True)
-        print("📄 Standard JSON files have been copied to each switch's output directory for troubleshooting")
 
     # === Summary ===
     print(f"\n🎯 Summary:")
