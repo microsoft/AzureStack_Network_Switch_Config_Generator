@@ -73,8 +73,8 @@ jobs:
         }
         Write-Host "Checking build results..."
         Get-ChildItem dist/ -Force -ErrorAction SilentlyContinue
-        if (Test-Path "dist/network-config-generator.exe") {
-          $size = (Get-Item "dist/network-config-generator.exe").Length / 1MB
+        if (Test-Path "dist/network_config_generator.exe") {
+          $size = (Get-Item "dist/network_config_generator.exe").Length / 1MB
           Write-Host "Executable size: $($size.ToString('F2')) MB"
         } else {
           Write-Host "ERROR: Executable was not created!"
