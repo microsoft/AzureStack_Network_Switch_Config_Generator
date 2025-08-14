@@ -147,10 +147,14 @@ def main():
     else:
         print("⚠️  Input is in lab format - conversion required")
         try:
-            # Convert to standard format using output folder
+            # Create temporary subdirectory for conversion within output folder
+            temp_conversion_subdir = output_folder_path / ".temp_conversion"
+            temp_conversion_subdir.mkdir(parents=True, exist_ok=True)
+            
+            # Convert to standard format using temporary subdirectory
             standard_format_files = convert_to_standard_format(
                 input_json_path, 
-                str(output_folder_path),
+                str(temp_conversion_subdir),
                 args.convertor
             )
         except Exception as e:
@@ -194,6 +198,22 @@ def main():
         except Exception as e:
             print(f"❌ Failed to generate configs for {std_file.name}: {e}")
             total_failed += 1
+
+    # === Cleanup conversion artifacts ===
+    if conversion_used:
+        # Clean up temporary conversion subdirectory
+        temp_conversion_subdir = output_folder_path / ".temp_conversion"
+        if temp_conversion_subdir.exists():
+            print(f"\n🧹 Cleaning up temporary conversion directory...")
+            shutil.rmtree(temp_conversion_subdir, ignore_errors=True)
+        
+        # Clean up any JSON files in the root output directory (these are the converted files)
+        for json_file in output_folder_path.glob("*.json"):
+            try:
+                json_file.unlink()
+                print(f"🗑️  Removed: {json_file.name}")
+            except Exception:
+                pass  # Ignore errors if file is already gone or locked
 
     # === Summary ===
     print(f"\n🎯 Summary:")
