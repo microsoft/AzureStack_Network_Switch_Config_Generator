@@ -82,7 +82,7 @@ jobs:
         }
       shell: powershell
 
-    - name: Build executable with PyInstaller (Unix)
+    - name: Build executable with PyInstaller (Linux)
       if: matrix.os != 'windows-latest'
       run: |
         if [ -f "src/network_config_generator.spec" ]; then
@@ -129,10 +129,10 @@ jobs:
         }
       shell: powershell
 
-    - name: Test executable (Unix)
+    - name: Test executable (Linux)
       if: matrix.os != 'windows-latest'
       run: |
-        echo "Testing Unix executable..."
+        echo "Testing Linux executable..."
         echo "Current directory contents:"
         ls -la
         echo "Checking for executable in various locations..."
@@ -159,14 +159,56 @@ jobs:
           exit 1
         fi
 
+    - name: Prepare artifact
+      shell: bash
+      run: |
+        echo "Preparing clean artifact structure..."
+        # Create a clean directory for the artifact
+        mkdir -p artifact_staging
+        
+        # Find and copy the executable to the staging directory
+        if [ "${{ matrix.os }}" = "windows-latest" ]; then
+          echo "Looking for Windows executable..."
+          if [ -f "src/dist/network_config_generator.exe" ]; then
+            echo "Found in src/dist/"
+            cp src/dist/network_config_generator.exe artifact_staging/
+          elif [ -f "dist/network_config_generator.exe" ]; then
+            echo "Found in dist/"
+            cp dist/network_config_generator.exe artifact_staging/
+          elif [ -f "network_config_generator.exe" ]; then
+            echo "Found in current directory"
+            cp network_config_generator.exe artifact_staging/
+          else
+            echo "ERROR: Could not find network_config_generator.exe"
+            find . -name "*.exe" -type f
+            exit 1
+          fi
+        else
+          echo "Looking for Linux executable..."
+          if [ -f "src/dist/network_config_generator" ]; then
+            echo "Found in src/dist/"
+            cp src/dist/network_config_generator artifact_staging/
+          elif [ -f "dist/network_config_generator" ]; then
+            echo "Found in dist/"
+            cp dist/network_config_generator artifact_staging/
+          elif [ -f "network_config_generator" ]; then
+            echo "Found in current directory"
+            cp network_config_generator artifact_staging/
+          else
+            echo "ERROR: Could not find network_config_generator"
+            find . -name "network_config_generator" -type f
+            exit 1
+          fi
+        fi
+        
+        echo "Artifact staging directory contents:"
+        ls -la artifact_staging/
+
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.asset_name }}
-        path: |
-          ${{ matrix.artifact_name }}
-          dist/${{ matrix.artifact_name }}
-          src/dist/${{ matrix.artifact_name }}
+        path: artifact_staging/
 
   # Create release if this is a tag
   release:
