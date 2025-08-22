@@ -338,9 +338,14 @@ class StandardJSONBuilder:
             elif part in self.vlan_map and self.vlan_map[part]:
                 # Direct mapping from vlan_map
                 resolved_vlans.extend([str(vid) for vid in self.vlan_map[part]])
+            elif part in self.vlan_map and not self.vlan_map[part]:
+                # Known VLAN symbol but empty list - skip this part
+                continue
             else:
-                # Literal VLAN ID or unknown symbol - keep as is
-                resolved_vlans.append(part)
+                # Literal VLAN ID - keep as is (only if it's numeric)
+                if part.isdigit():
+                    resolved_vlans.append(part)
+                # Unknown symbols are skipped (not added)
         
         return ",".join(resolved_vlans)
 
