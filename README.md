@@ -16,8 +16,6 @@
     - [Choose Your Path](#choose-your-path)
     - [Basic Usage](#basic-usage)
     - [Quick Examples](#quick-examples)
-  - [Documentation Guide](#documentation-guide)
-    - [For Different User Types](#for-different-user-types)
   - [What's Improved in This Version](#whats-improved-in-this-version)
     - [Key Enhancements](#key-enhancements)
 
@@ -32,6 +30,7 @@ This tool generates vendor-specific network switch configurations (e.g., Cisco N
 - **Just want to use it?** → [`docs/EXECUTABLE_USAGE.md`](docs/EXECUTABLE_USAGE.md)
 - **Need to convert your data format?** → [`docs/CONVERTOR_GUIDE.md`](docs/CONVERTOR_GUIDE.md)  
 - **Want to customize templates?** → [`docs/TEMPLATE_GUIDE.md`](docs/TEMPLATE_GUIDE.md)
+- **Need to create/modify switch templates?** → [`docs/SWITCH_INTERFACE_TEMPLATE.md`](docs/SWITCH_INTERFACE_TEMPLATE.md)
 - **Having issues?** → [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md)
 
 ---
@@ -159,8 +158,8 @@ root/
 ├── docs/                           # Documentation files
 │   ├── CONVERTOR_GUIDE.md          # Guide for creating custom convertors
 │   ├── EXECUTABLE_USAGE.md         # Standalone executable usage guide
+│   ├── SWITCH_INTERFACE_TEMPLATE.md # Switch interface template guide
 │   ├── TEMPLATE_GUIDE.md           # Jinja2 template development guide
-│   ├── TOOL_DESIGN.md              # Architecture and design documentation
 │   └── TROUBLESHOOTING.md          # Common issues and solutions
 ├── input/                          # Input files and templates
 │   ├── standard_input.json         # Standard format input example
@@ -238,6 +237,7 @@ router bgp {{ bgp.asn }}
 | **Use the precompiled executable** (no coding needed) | [`docs/EXECUTABLE_USAGE.md`](docs/EXECUTABLE_USAGE.md) |
 | **Convert my custom input format** | [`docs/CONVERTOR_GUIDE.md`](docs/CONVERTOR_GUIDE.md) |
 | **Create or modify configuration templates** | [`docs/TEMPLATE_GUIDE.md`](docs/TEMPLATE_GUIDE.md) |
+| **Create or modify switch interface templates** | [`docs/SWITCH_INTERFACE_TEMPLATE.md`](docs/SWITCH_INTERFACE_TEMPLATE.md) |
 | **Understand the tool's architecture** | [`docs/TOOL_DESIGN.md`](docs/TOOL_DESIGN.md) |
 | **Fix issues or troubleshoot** | [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) |
 
@@ -266,25 +266,6 @@ python src/main.py --input_json your_input.json --output_folder outputs/
 
 > [!IMPORTANT]
 > **Tip:** The tool automatically detects if your input is in standard format or needs conversion!
-
----
-
-## Documentation Guide
-
-### For Different User Types
-
-**Network Engineers**  
-- Start with [`docs/EXECUTABLE_USAGE.md`](docs/EXECUTABLE_USAGE.md) - Download and use standalone executables without installing Python
-- Check [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) - Common issues, error messages, and step-by-step solutions
-
-**System Integrators**  
-- Read [`docs/CONVERTOR_GUIDE.md`](docs/CONVERTOR_GUIDE.md) - Create custom converters to transform your data formats into the tool's standard format
-- Review [`docs/TEMPLATE_GUIDE.md`](docs/TEMPLATE_GUIDE.md) - Customize Jinja2 templates for different vendors and configuration requirements
-
-**Developers & Contributors**  
-- Study [`docs/TOOL_DESIGN.md`](docs/TOOL_DESIGN.md) - Understand the modular architecture, pipeline design, and core components
-- Use [`docs/TEMPLATE_GUIDE.md`](docs/TEMPLATE_GUIDE.md) - Advanced template development, variable structure, and testing
-- Reference [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) - Debug issues and understand error handling
 
 ---
 
