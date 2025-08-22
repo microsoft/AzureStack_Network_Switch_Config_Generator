@@ -207,13 +207,8 @@ def main():
             print(f"\n🧹 Cleaning up temporary conversion directory...")
             shutil.rmtree(temp_conversion_subdir, ignore_errors=True)
         
-        # Clean up any JSON files in the root output directory (these are the converted files)
-        for json_file in output_folder_path.glob("*.json"):
-            try:
-                json_file.unlink()
-                print(f"🗑️  Removed: {json_file.name}")
-            except Exception:
-                pass  # Ignore errors if file is already gone or locked
+        # Keep the original converted JSON files in the root directory for user verification
+        print("� Original converted JSON files kept in output directory for verification")
 
     # === Summary ===
     print(f"\n🎯 Summary:")

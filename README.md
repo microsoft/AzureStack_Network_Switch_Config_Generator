@@ -1,13 +1,42 @@
-
 # Network Configuration Generation Tool
 
-## 📘 Overview
+- [Network Configuration Generation Tool](#network-configuration-generation-tool)
+  - [Overview](#overview)
+  - [Quick Navigation](#quick-navigation)
+  - [Goals](#goals)
+  - [Design Architecture](#design-architecture)
+    - [Overall Flow](#overall-flow)
+    - [Other User-Defined Input Support](#other-user-defined-input-support)
+    - [Workflow Detail](#workflow-detail)
+  - [Directory Structure](#directory-structure)
+  - [Input \& Output Examples](#input--output-examples)
+    - [Sample Input JSON](#sample-input-json)
+    - [Sample Template (Jinja2)](#sample-template-jinja2)
+  - [Quick Start](#quick-start)
+    - [Choose Your Path](#choose-your-path)
+    - [Basic Usage](#basic-usage)
+    - [Quick Examples](#quick-examples)
+  - [Documentation Guide](#documentation-guide)
+    - [For Different User Types](#for-different-user-types)
+  - [What's Improved in This Version](#whats-improved-in-this-version)
+    - [Key Enhancements](#key-enhancements)
 
-This tool aims to generate vendor-specific network switch configurations (e.g., Cisco NX-OS, Dell OS10) using JSON input and Jinja2 templates. It supports optional packaging for environments where Python is not pre-installed.
+## Overview
+
+This tool generates vendor-specific network switch configurations (e.g., Cisco NX-OS, Dell OS10) using JSON input and Jinja2 templates. It supports both source code usage and standalone executables for environments without Python.
+
+## Quick Navigation
+
+**First time here?** Choose your path:
+
+- **Just want to use it?** → [`docs/EXECUTABLE_USAGE.md`](docs/EXECUTABLE_USAGE.md)
+- **Need to convert your data format?** → [`docs/CONVERTOR_GUIDE.md`](docs/CONVERTOR_GUIDE.md)  
+- **Want to customize templates?** → [`docs/TEMPLATE_GUIDE.md`](docs/TEMPLATE_GUIDE.md)
+- **Having issues?** → [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md)
 
 ---
 
-## 🎯 Goals
+## Goals
 
 - Support configuration generation for **multiple switch vendors**
 - Allow users to define **input variables** in a structured JSON format
@@ -17,7 +46,7 @@ This tool aims to generate vendor-specific network switch configurations (e.g., 
 
 ---
 
-## 🧱 Design Architecture
+## Design Architecture
 
 ### Overall Flow
 ```mermaid
@@ -38,10 +67,10 @@ flowchart LR
     end
 ```
 
-> **Note:**  
+> [!NOTE]  
 > The structure and format of the **JSON input file must remain fixed** to match the variables used in the Jinja2 templates, but you can safely update **values** as needed, either manually or programmatically.
 
-#### Other User-Defined Input Support
+### Other User-Defined Input Support
 
 To support a wide range of input data formats, the system allows users to define their own converters. These converters transform any non-standard input into a unified JSON structure. Sample converters are provided in the repository as references to help users get started.
 
@@ -65,10 +94,9 @@ flowchart LR
         U3
         U4
     end
-
 ```
-Each input type should be handled by a user-defined converter script (e.g., convertor1.py). These scripts are responsible for converting the input into the standardized JSON format. Example converter scripts are included in the repo to illustrate expected structure and behavior.
 
+Each input type should be handled by a user-defined converter script (e.g., convertor1.py). These scripts are responsible for converting the input into the standardized JSON format. Example converter scripts are included in the repo to illustrate expected structure and behavior.
 
 ### Workflow Detail
 ```mermaid
@@ -121,8 +149,7 @@ flowchart LR
     end
 ```
 
-
-## 🗂️ Directory Structure
+## Directory Structure
 
 ```plaintext
 root/
@@ -166,113 +193,106 @@ root/
 ├── requirements.txt                # Python dependencies
 ├── network_config_generator.spec   # PyInstaller build specification
 └── _old/                           # Legacy Go implementation (archived)
-
 ```
 
 ---
 
-## 🔧 Input (Example)
+## Input & Output Examples
 
-### Standard Input JSON (Example)
+### Sample Input JSON
 ```json
 {
   "hostname": "tor-switch-1",
   "interfaces": [
-    { "name": "Ethernet1/1", "vlan": 711, "description": "Compute1" },
-    { "name": "Ethernet1/2", "vlan": 712, "description": "Storage1" }
+    { "name": "Ethernet1/1", "vlan": 711, "description": "Compute1" }
   ],
   "vlans": [
-    { "id": 711, "name": "Compute" },
-    { "id": 712, "name": "Storage" }
+    { "id": 711, "name": "Compute" }
   ],
   "bgp": {
     "asn": 65001,
-    "router_id": "192.168.0.1",
-    "neighbors": [
-      { "ip": "192.168.0.2", "remote_as": 65002 }
-    ]
+    "router_id": "192.168.0.1"
   }
 }
 ```
 
----
-
-### Input Jinja2 Template (Example)
-
-Example: `templates/nxos/bgp.j2`
-
+### Sample Template (Jinja2)
 ```jinja2
 router bgp {{ bgp.asn }}
   router-id {{ bgp.router_id }}
-{% for neighbor in bgp.neighbors %}
-  neighbor {{ neighbor.ip }}
-    remote-as {{ neighbor.remote_as }}
-{% endfor %}
 ```
+
+> [!NOTE]
+> **Need more details?** See [`docs/TEMPLATE_GUIDE.md`](docs/TEMPLATE_GUIDE.md) for complete examples and template development guide.
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
-### 📥 Input Parameters
+### Choose Your Path
 
-The tool accepts the following input parameters:
+**New to this tool?** Start here based on what you want to do:
 
-| Parameter            | Description                                                                 |
-|----------------------|-----------------------------------------------------------------------------|
-| `--input_json`       | **Required**. Path to the input JSON file (lab format or standard format). |
-| `--output_folder`    | **Required**. Directory to save the generated configuration files.         |
-| `--convertor`        | Optional. Custom convertor module (e.g., `my.custom.convertor`).          |
+| I want to... | Go to |
+|--------------|--------|
+| **Use the precompiled executable** (no coding needed) | [`docs/EXECUTABLE_USAGE.md`](docs/EXECUTABLE_USAGE.md) |
+| **Convert my custom input format** | [`docs/CONVERTOR_GUIDE.md`](docs/CONVERTOR_GUIDE.md) |
+| **Create or modify configuration templates** | [`docs/TEMPLATE_GUIDE.md`](docs/TEMPLATE_GUIDE.md) |
+| **Understand the tool's architecture** | [`docs/TOOL_DESIGN.md`](docs/TOOL_DESIGN.md) |
+| **Fix issues or troubleshoot** | [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) |
 
-### Option 1: Run with Python (for Python users)
+### Basic Usage
 
-If you're comfortable with Python, you can clone the repository and run the tool directly using the source code:
+The tool accepts these parameters:
+
+| Parameter         | Required | Description |
+|-------------------|----------|-------------|
+| `--input_json`    | ✅ Yes   | Path to your input JSON file |
+| `--output_folder` | ✅ Yes   | Directory to save generated configs |
+| `--convertor`     | ❌ No    | Custom converter for non-standard formats |
+
+### Quick Examples
 
 ```bash
-# Auto-detect format and generate configs
+# Basic usage - auto-detects input format
 python src/main.py --input_json your_input.json --output_folder outputs/
 
-# Use with lab format (will be auto-converted)
-python src/main.py --input_json lab_input.json --output_folder outputs/
-
-# Use with standard format (direct processing)
-python src/main.py --input_json standard_input.json --output_folder outputs/
-
-# Use custom convertor for specialized formats
-python src/main.py --input_json custom_input.json --output_folder outputs/ --convertor my.custom.convertor
-```
-
-### Option 2: Use the Precompiled Executable (no Python needed)
-
-Standalone executables are available in the [Releases](https://github.com/microsoft/AzureStack_Network_Switch_Config_Generator/releases) section.  
-These are compiled using **PyInstaller** and do **not require Python** or any additional dependencies.
-
-```bash
-# Windows
+# Using the standalone executable (Windows)
 .\network_config_generator.exe --input_json your_input.json --output_folder outputs\
 
-# Linux
+# Using the standalone executable (Linux)
 ./network_config_generator --input_json your_input.json --output_folder outputs/
 ```
 
----
-
-## Customization and Extensibility
-
-### Templates
-
-### Convertors
-
-### Test Cases
-
+> [!IMPORTANT]
+> **Tip:** The tool automatically detects if your input is in standard format or needs conversion!
 
 ---
 
-## 🚀 What’s Improved in This Version
+## Documentation Guide
 
-We’ve significantly redesigned the tool architecture to make it more modular, maintainable, and user-friendly. While the original version used **Go templates**, the new version is built with **Python + Jinja2** and brings several key improvements:
+### For Different User Types
 
-### ✅ Key Enhancements
+**Network Engineers**  
+- Start with [`docs/EXECUTABLE_USAGE.md`](docs/EXECUTABLE_USAGE.md) - Download and use standalone executables without installing Python
+- Check [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) - Common issues, error messages, and step-by-step solutions
+
+**System Integrators**  
+- Read [`docs/CONVERTOR_GUIDE.md`](docs/CONVERTOR_GUIDE.md) - Create custom converters to transform your data formats into the tool's standard format
+- Review [`docs/TEMPLATE_GUIDE.md`](docs/TEMPLATE_GUIDE.md) - Customize Jinja2 templates for different vendors and configuration requirements
+
+**Developers & Contributors**  
+- Study [`docs/TOOL_DESIGN.md`](docs/TOOL_DESIGN.md) - Understand the modular architecture, pipeline design, and core components
+- Use [`docs/TEMPLATE_GUIDE.md`](docs/TEMPLATE_GUIDE.md) - Advanced template development, variable structure, and testing
+- Reference [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) - Debug issues and understand error handling
+
+---
+
+## What's Improved in This Version
+
+We've significantly redesigned the tool architecture to make it more modular, maintainable, and user-friendly. While the original version used **Go templates**, the new version is built with **Python + Jinja2** and brings several key improvements:
+
+### Key Enhancements
 
 - **Modular Output Generation**  
   Instead of producing a single full configuration, the tool now supports generating individual configuration sections (e.g., VLANs, interfaces, BGP) based on your input needs—making review, debugging, and reuse much easier.
@@ -281,11 +301,9 @@ We’ve significantly redesigned the tool architecture to make it more modular, 
   All logic is now in editable Python and Jinja2 templates—no compilation needed. You can easily update the templates or logic without rebuilding any binary.
 
 - **Cleaner and More Flexible Logic**  
-  We’ve removed hardcoded rules and added more structured parsing logic, which makes the tool easier to extend, test, and adapt to different network designs or vendors.
+  We've removed hardcoded rules and added more structured parsing logic, which makes the tool easier to extend, test, and adapt to different network designs or vendors.
 
 - **Open to Contributions**  
   The new structure makes it easy for contributors to add new templates or enhance existing ones. If you support a new vendor or configuration style, you can simply submit a template pull request.
 
-This upgrade is not just a technology shift—it’s a foundation for faster iteration, better collaboration, and easier maintenance.
-
-
+This upgrade is not just a technology shift—it's a foundation for faster iteration, better collaboration, and easier maintenance.

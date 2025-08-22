@@ -1,52 +1,225 @@
-# Template Customization Guide
+# Customizing Configuration Templates
 
-## 🎨 Overview
+## 🤔 Do I Need This?
 
-This guide shows you how to create and customize Jinja2 templates for generating network switch configurations. The template system is designed to be flexible, extensible, and vendor-agnostic.
+**You need to read this if:**
+- You want to support a new switch vendor
+- You need to modify the generated configuration format
+- You want to add new configuration sections
+- You're getting errors about missing templates
 
-## 📁 Template Structure
+**You DON'T need this if:**
+- You're happy with Cisco NX-OS or Dell OS10 templates
+- You just want to generate configs with existing templates
+
+## 📁 How Templates Work
 
 Templates are organized by vendor and firmware:
 
 ```
 input/jinja2_templates/
 ├── cisco/
-│   └── nxos/
-│       ├── interfaces.j2
-│       ├── vlans.j2
-│       ├── bgp.j2
-│       ├── prefix_lists.j2
-│       └── qos.j2
-├── dellemc/
-│   └── os10/
-│       ├── interfaces.j2
-│       ├── vlans.j2
-│       └── bgp.j2
-└── your_vendor/            # Custom vendor support
-    └── your_firmware/
-        └── *.j2
+│   └── nxos/                    ← Your switch's "make" and "firmware"
+│       ├── bgp.j2               ← Generates BGP configuration
+│       ├── interface.j2         ← Generates interface configuration  
+│       ├── vlan.j2              ← Generates VLAN configuration
+│       └── full_config.j2       ← Combines everything
+└── dellemc/
+    └── os10/
+        ├── bgp.j2
+        └── vlan.j2
 ```
 
-## 🏷️ Template Discovery
+**How the tool picks templates:**
+1. Looks at your switch data: `"make": "cisco", "firmware": "nxos"`
+2. Finds folder: `input/jinja2_templates/cisco/nxos/`
+3. Uses all `.j2` files in that folder
 
-The tool automatically discovers templates based on switch metadata:
+## 📝 Simple Example
 
+Let's create a basic VLAN template:
+
+**Your data:**
 ```json
 {
-  "switch": {
-    "make": "cisco",           # Maps to folder: cisco/
-    "firmware": "nxos",        # Maps to folder: cisco/nxos/
-    "model": "93180yc-fx",
-    "hostname": "switch-1"
-  }
+  "vlans": [
+    {"vlan_id": 100, "name": "Servers"},
+    {"vlan_id": 200, "name": "Storage"}
+  ]
 }
 ```
 
-**Template Path**: `input/jinja2_templates/cisco/nxos/*.j2`
+**Template (`vlans.j2`):**
+```jinja2
+! VLAN Configuration
+{% for vlan in vlans %}
+vlan {{ vlan.vlan_id }}
+  name {{ vlan.name }}
+{% endfor %}
+```
 
-## 📝 Basic Template Example
+**Generated output:**
+```
+! VLAN Configuration
+vlan 100
+  name Servers
+vlan 200
+  name Storage
+```
 
-### Simple VLAN Template (`vlans.j2`)
+## 🛠️ Creating Your First Template
+
+### Step 1: Choose Your Vendor Folder
+```bash
+# For a new vendor, create:
+mkdir -p input/jinja2_templates/your_vendor/your_firmware/
+
+# For existing vendor with new firmware:
+mkdir -p input/jinja2_templates/cisco/your_new_firmware/
+```
+
+### Step 2: Create a Simple Template
+Create `input/jinja2_templates/your_vendor/your_firmware/vlan.j2`:
+
+```jinja2
+{# This is a comment - won't appear in output #}
+! Generated VLAN Configuration
+! Switch: {{ switch.hostname }}
+
+{% if vlans %}
+{% for vlan in vlans %}
+vlan {{ vlan.vlan_id }}
+  name {{ vlan.name }}
+  {% if vlan.description %}
+  description {{ vlan.description }}
+  {% endif %}
+{% endfor %}
+{% else %}
+! No VLANs configured
+{% endif %}
+```
+
+### Step 3: Test It
+```bash
+# Make sure your switch data has:
+# "make": "your_vendor", "firmware": "your_firmware"
+./network_config_generator --input_json your_data.json --output_folder test/
+```
+
+### Step 4: Check the Output
+Look for `test/your_switch/generated_vlan` file.
+
+## 📋 Available Data in Templates
+
+Your templates can access all data from your input JSON:
+
+### Switch Information
+```jinja2
+{{ switch.hostname }}        # Switch name
+{{ switch.make }}           # cisco, dellemc, etc.
+{{ switch.firmware }}       # nxos, os10, etc.
+{{ switch.model }}          # Optional: switch model
+```
+
+### VLANs
+```jinja2
+{% for vlan in vlans %}
+{{ vlan.vlan_id }}          # VLAN number
+{{ vlan.name }}             # VLAN name
+{{ vlan.description }}      # Optional description
+{% endfor %}
+```
+
+### Interfaces
+```jinja2
+{% for interface in interfaces %}
+{{ interface.name }}        # Ethernet1/1, etc.
+{{ interface.vlan }}        # VLAN assignment
+{{ interface.description }} # Port description
+{{ interface.type }}        # access, trunk, etc.
+{% endfor %}
+```
+
+### BGP (if configured)
+```jinja2
+{{ bgp.asn }}              # AS number
+{{ bgp.router_id }}        # Router ID
+{% for neighbor in bgp.neighbors %}
+{{ neighbor.ip }}          # Neighbor IP
+{{ neighbor.remote_as }}   # Neighbor AS
+{% endfor %}
+```
+
+## 💡 Template Tips
+
+### 1. Use Comments
+```jinja2
+{# This comment explains what this section does #}
+! This comment appears in the generated config
+```
+
+### 2. Handle Missing Data
+```jinja2
+{% if vlans %}
+  {# Generate VLAN config #}
+{% else %}
+  ! No VLANs to configure
+{% endif %}
+```
+
+### 3. Format Numbers
+```jinja2
+interface Ethernet1/{{ "%02d"|format(interface.number) }}
+{# Formats 1 as "01", 2 as "02", etc. #}
+```
+
+### 4. Default Values
+```jinja2
+{{ interface.description | default("No description") }}
+```
+
+## 🆘 Common Issues
+
+**"Template not found"**
+- Check folder structure matches your switch's `make` and `firmware`
+- Verify `.j2` file extension
+
+**"Variable not found"**  
+- Check your input JSON has the expected data structure
+- Use `{% if variable %}` to handle optional data
+
+**"Syntax error"**
+- Check Jinja2 syntax: `{{ }}` for variables, `{% %}` for logic
+- Make sure all `{% if %}` have matching `{% endif %}`
+
+## � Advanced Features
+
+### Include Other Templates
+```jinja2
+{# Include common header in all templates #}
+{% include 'header.j2' %}
+```
+
+### Loops with Conditions
+```jinja2
+{% for interface in interfaces if interface.type == "trunk" %}
+interface {{ interface.name }}
+  switchport mode trunk
+{% endfor %}
+```
+
+### Macros for Repeated Code
+```jinja2
+{% macro interface_config(iface) %}
+interface {{ iface.name }}
+  description {{ iface.description }}
+  switchport access vlan {{ iface.vlan }}
+{% endmacro %}
+
+{% for interface in interfaces %}
+{{ interface_config(interface) }}
+{% endfor %}
+```
 
 ```jinja2
 {# vlans.j2 - Generate VLAN configuration #}

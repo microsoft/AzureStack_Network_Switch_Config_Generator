@@ -1,9 +1,0 @@
-{
-    "Static": [
-      {
-        "Network": "Any",
-        "NextHop": "BMC",
-        "Name": "GlobalDefaultRoute"
-      }
-    ]
-  }

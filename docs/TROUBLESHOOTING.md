@@ -1,52 +1,162 @@
 # Troubleshooting Guide
 
-## 🚨 Common Issues and Solutions
+## � Quick Fixes
 
-### Input Format Issues
+### ❌ "Input is in lab format - conversion required"
 
-#### **Error: "Input is in lab format - conversion required"**
-**Problem**: The tool detected that your input is not in standard format.
+**What it means:** Your data format is different from what the tool expects.
 
-**Solutions**:
-1. **Use the default convertor** (recommended):
-   ```bash
-   ./network-config-generator --input_json your_lab_input.json --output_folder configs/
-   ```
+**Quick fix:**
+```bash
+# Just run it anyway - tool will auto-convert
+./network_config_generator --input_json your_file.json --output_folder configs/
+```
 
-2. **Specify a custom convertor**:
-   ```bash
-   ./network-config-generator --input_json your_input.json --convertor my.custom.convertor
-   ```
-
-3. **Check your input format**:
-   - Standard format should have: `{"switch": {...}, "vlans": [...], ...}`
-   - Lab format typically has: `{"Version": "...", "Description": "...", "InputData": {...}}`
+**If that doesn't work:**
+1. Check if your JSON has keys like `Version`, `Description`, `InputData`
+2. Try using a custom converter: `--convertor your.custom.converter`
 
 ---
 
-#### **Error: "Failed to convert to standard format"**
-**Problem**: The convertor failed to process your input.
+### ❌ "Failed to convert to standard format"
 
-**Solutions**:
-1. **Check convertor exists**: Verify that the convertor module is in the `convertors/` directory
+**What it means:** The converter couldn't understand your data format.
 
-2. **Verify input file structure**:
+**Step-by-step fix:**
+
+1. **Check your input file is valid JSON:**
+   ```bash
+   # Test if JSON is valid
+   python -m json.tool your_file.json
+   ```
+
+2. **Look at your data structure:**
+   - Does it have the expected format for your converter?
+   - Are all required fields present?
+
+3. **Try the default path first:**
+   ```bash
+   # Don't specify a converter - let tool auto-detect
+   ./network_config_generator --input_json your_file.json --output_folder configs/
+   ```
+
+4. **If using custom converter, check it exists:**
+   - File should be in: `src/convertors/your_converter.py`
+   - Should have function: `convert_switch_input_json()`
+
+---
+
+### ❌ "Template folder not found"
+
+**What it means:** Tool can't find the configuration templates.
+
+**Quick fix:**
+```bash
+# Make sure you're running from the right directory
+cd path/to/AzureStack_Network_Switch_Config_Generator
+./network_config_generator --input_json your_file.json --output_folder configs/
+```
+
+**If still not working:**
+- Check that `input/jinja2_templates/` folder exists
+- Verify it has subfolders like `cisco/nxos/` or `dellemc/os10/`
+
+---
+
+### ❌ "No configs generated" or Empty output
+
+**Possible causes:**
+
+1. **Wrong switch vendor/firmware in your data:**
    ```json
    {
-     "Version": "1.0.0",
-     "Description": "...",
-     "InputData": {
-       "Switches": [...],
-       "Supernets": [...]
+     "switch": {
+       "make": "cisco",      // Must match template folder name
+       "firmware": "nxos"    // Must match template subfolder
      }
    }
    ```
 
-3. **Check for missing required fields** in your input data
+2. **Missing template files:**
+   - Check `input/jinja2_templates/cisco/nxos/` has `.j2` files
+   - Try with a known working vendor (cisco/nxos)
 
-4. **Enable debug mode** by adding verbose output to understand the conversion process
+3. **Empty data sections:**
+   - If no VLANs in your data, no VLAN config will be generated
+   - Check that your input has data in the sections you expect
 
 ---
+
+### ❌ Permission errors
+
+**Windows:**
+```cmd
+# Run as Administrator, or move to a folder you own
+mkdir C:\MyConfigs
+.\network_config_generator.exe --input_json data.json --output_folder C:\MyConfigs\
+```
+
+**Linux:**
+```bash
+# Make sure output folder is writable
+mkdir ~/configs
+./network_config_generator --input_json data.json --output_folder ~/configs/
+```
+
+---
+
+## 🔧 Debug Steps
+
+### 1. Start with a simple test
+```bash
+# Use the provided example file first
+./network_config_generator --input_json input/standard_input.json --output_folder test_output/
+```
+
+### 2. Check what files were created
+```bash
+# Look for these in your output folder:
+ls -la your_output_folder/
+# Should see: switch folders + JSON files
+```
+
+### 3. Examine the converted JSON files
+```bash
+# Look at the std_*.json files in each switch folder
+cat output_folder/switch-01/std_switch-01.json
+```
+
+### 4. Verify your input format
+```json
+# Standard format should look like:
+{
+  "switch": { "hostname": "...", "make": "...", "firmware": "..." },
+  "vlans": [...],
+  "interfaces": [...],
+  "bgp": {...}
+}
+
+# Lab format typically looks like:
+{
+  "Version": "1.0",
+  "Description": "...",
+  "InputData": {
+    "Switches": [...],
+    "Supernets": [...]
+  }
+}
+```
+
+## 📞 Still Need Help?
+
+1. **Check examples:** Look at files in `input/` folder
+2. **Read other guides:**
+   - [CONVERTOR_GUIDE.md](CONVERTOR_GUIDE.md) - For custom data formats
+   - [TEMPLATE_GUIDE.md](TEMPLATE_GUIDE.md) - For template issues
+3. **Create an issue** on GitHub with:
+   - Your input file (remove sensitive data)
+   - Full error message
+   - What you expected to happen
 
 ### Template Issues
 
