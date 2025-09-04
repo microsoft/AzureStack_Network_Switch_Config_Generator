@@ -1,3 +1,4 @@
+{% if qos is defined -%}
 ! qos.j2
 {# -------- ECN (Explicit Congestion Notification) -------- #}
 wred ecn
@@ -55,3 +56,4 @@ policy-map type queuing AZLOCAL_ETS
 system qos
   trust-map dot1p AZLOCAL_DOT1P_TRUST
   ets mode on
+{%- endif %}

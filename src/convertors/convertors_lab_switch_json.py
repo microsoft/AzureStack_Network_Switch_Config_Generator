@@ -406,44 +406,50 @@ class StandardJSONBuilder:
         elif switch_type == TOR2:
             ibgp_ip = self.ip_map.get(f"P2P_IBGP_TOR1", [""])[0]
 
+        neighbors = [
+            {
+                "ip": self.ip_map.get(f"P2P_{switch_type.upper()}_BORDER1", [""])[0],
+                "description": "TO_Border1",
+                "remote_as": self.bgp_map.get("ASN_BORDER", 0),
+                "af_ipv4_unicast": {
+                    "prefix_list_in": "DefaultRoute"
+                }
+            },
+            {
+                "ip": self.ip_map.get(f"P2P_{switch_type.upper()}_BORDER2", [""])[0],
+                "description": "TO_Border2",
+                "remote_as": self.bgp_map.get("ASN_BORDER", 0),
+                "af_ipv4_unicast": {
+                    "prefix_list_in": "DefaultRoute"
+                }
+            },
+            {
+                "ip": ibgp_ip,
+                "description": "iBGP_PEER",
+                "remote_as": self.bgp_map.get("ASN_TOR", 0),
+                "af_ipv4_unicast": {}
+            }
+        ]
+
+        # Add HNVPA neighbor if ASN_MUX is defined
+        asn_mux = self.bgp_map.get("ASN_MUX", 0)
+        if asn_mux:
+            neighbors.append({
+                "ip": self.ip_map.get("HNVPA", [""])[0],
+                "description": "TO_HNVPA",
+                "remote_as": asn_mux,
+                "update_source": "Loopback0",
+                "ebgp_multihop": 3,
+                "af_ipv4_unicast": {
+                    "prefix_list_out": "DefaultRoute"
+                }
+            })
+
         bgp = {
             "asn": self.bgp_map.get("ASN_TOR", 0),
             "router_id": self.ip_map.get(f"LOOPBACK0_{switch_type.upper()}", [""])[0].split('/')[0],
             "networks": networks,
-            "neighbors": [
-                {
-                    "ip": self.ip_map.get(f"P2P_{switch_type.upper()}_BORDER1", [""])[0],
-                    "description": "TO_Border1",
-                    "remote_as": self.bgp_map.get("ASN_BORDER", 0),
-                    "af_ipv4_unicast": {
-                        "prefix_list_in": "DefaultRoute"
-                    }
-                },
-                {
-                    "ip": self.ip_map.get(f"P2P_{switch_type.upper()}_BORDER2", [""])[0],
-                    "description": "TO_Border2",
-                    "remote_as": self.bgp_map.get("ASN_BORDER", 0),
-                    "af_ipv4_unicast": {
-                        "prefix_list_in": "DefaultRoute"
-                    }
-                },
-                {
-                    "ip": ibgp_ip,
-                    "description": "iBGP_PEER",
-                    "remote_as": self.bgp_map.get("ASN_TOR", 0),
-                    "af_ipv4_unicast": {}
-                },
-                {
-                    "ip": self.ip_map.get("HNVPA", [""])[0],
-                    "description": "TO_HNVPA",
-                    "remote_as": self.bgp_map.get("ASN_MUX", 0),
-                    "update_source": "Loopback0",
-                    "ebgp_multihop": 3,
-                    "af_ipv4_unicast": {
-                        "prefix_list_out": "DefaultRoute"
-                    }
-                }
-            ]
+            "neighbors": neighbors
         }
 
         self.sections["bgp"] = bgp
@@ -528,3 +534,32 @@ def convert_switch_input_json(input_data: dict, output_dir: str = DEFAULT_OUTPUT
             json.dump(final_json, f, indent=2)
 
         print(f"[✓] Wrote {out_file}")
+
+    # Convert BMC switches
+    try:
+        from .convertors_bmc_switch_json import convert_bmc_switches
+        convert_bmc_switches(input_data, output_dir)
+    except ImportError as e:
+        print(f"[!] BMC converter not available: {e}")
+    except Exception as e:
+        print(f"[!] Error converting BMC switches: {e}")
+
+
+def convert_all_switches_json(input_data: dict, output_dir: str = DEFAULT_OUTPUT_DIR):
+    """
+    Convert all switches (ToRs and BMC) to standard JSON format.
+    This function calls both ToR and BMC conversion functions.
+    """
+    print("[*] Converting ToR switches...")
+    convert_switch_input_json(input_data, output_dir)
+    
+    # Import and call BMC converter (separate module for clean separation)
+    try:
+        from .convertors_bmc_switch_json import convert_bmc_switches
+        print("[*] Converting BMC switches...")
+        convert_bmc_switches(input_data, output_dir)
+    except ImportError as e:
+        print(f"[!] BMC converter not available: {e}")
+    
+    print("[✓] All switch conversions completed.")
+
