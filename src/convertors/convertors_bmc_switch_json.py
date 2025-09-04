@@ -138,6 +138,20 @@ class BMCSwitchConverter:
             List of VLAN dictionaries
         """
         vlans_out = []
+        
+        # Always add VLAN 2 (UNUSED_VLAN) for BMC switches - hardcoded requirement (shutdown)
+        vlans_out.append({
+            "vlan_id": 2,
+            "name": "UNUSED_VLAN",
+            "shutdown": True
+        })
+        
+        # Always add VLAN 7 (Infra_7) for BMC switches - hardcoded requirement
+        vlans_out.append({
+            "vlan_id": 7,
+            "name": "Infra_7"
+        })
+        
         supernets = self.input_data.get("InputData", {}).get("Supernets", [])
         
         for net in supernets:
@@ -146,6 +160,10 @@ class BMCSwitchConverter:
             vlan_id = ipv4.get("VlanId") or ipv4.get("VLANID") or 0
             
             if vlan_id == 0:
+                continue
+            
+            # Skip VLAN 2 and VLAN 7 since they're already hardcoded above
+            if vlan_id == 2 or vlan_id == 7:
                 continue
             
             # Only include BMC-relevant VLANs (can be customized)

@@ -1,6 +1,6 @@
 {
     "make": "Cisco",
-    "model": "93108TC-FX3P",
+    "model": "93108TC-FX3",
     "type": "TOR",
   "interface_templates": {
     "common": [
@@ -93,7 +93,7 @@
       }
     ]
   },
-    "port_channels": [
+  "port_channels": [
     {
       "id": 50,
       "description": "P2P_IBGP",
@@ -106,7 +106,6 @@
       "description": "ToR_Peer_Link",
       "type": "Trunk",
       "native_vlan": "99",
-      "tagged_vlans": "",
       "members": ["1/49", "1/50", "1/51"]
     }
   ]

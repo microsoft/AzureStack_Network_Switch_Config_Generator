@@ -5,7 +5,11 @@
 {% for vlan in vlans -%}
 interface vlan{{ vlan.vlan_id }}
   description {{ vlan.name }}
+  {% if vlan.shutdown is defined and vlan.shutdown -%}
+  shutdown
+  {%- else -%}
   no shutdown
+  {%- endif %}
 {% endfor %}
 
 {# -------- Step 2: VLAN interfaces with IP and optional settings -------- #}
@@ -13,7 +17,11 @@ interface vlan{{ vlan.vlan_id }}
 interface vlan{{ vlan.vlan_id }}
   description {{ vlan.name }}
   mtu {{ vlan.interface.mtu }}
+  {% if vlan.shutdown is defined and vlan.shutdown -%}
+  shutdown
+  {%- else -%}
   no shutdown
+  {%- endif %}
   ip address {{ vlan.interface.ip }}/{{ vlan.interface.cidr }}
 
   {#- -------- Optional: DHCP relay configuration -------- #}

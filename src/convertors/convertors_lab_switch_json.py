@@ -161,6 +161,10 @@ class StandardJSONBuilder:
 
             vlan_entry = deepcopy(VLAN_TEMPLATE)
             vlan_entry.update(vlan_id=vlan_id, name=ipv4.get("Name"))
+            
+            # Mark UNUSED VLANs as shutdown
+            if group_name.startswith("UNUSED"):
+                vlan_entry["shutdown"] = True
 
             # add interface only if IP present & non-blank
             if ip.strip() and ipv4.get("Cidr"):

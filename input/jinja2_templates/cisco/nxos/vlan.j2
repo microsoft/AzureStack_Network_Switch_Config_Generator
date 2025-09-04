@@ -4,6 +4,9 @@
 {% for vlan in vlans -%}
 vlan {{ vlan.vlan_id }}
   name {{ vlan.name }}
+  {% if vlan.shutdown is defined and vlan.shutdown -%}
+  shutdown
+  {%- endif %}
 {% endfor %}
 
 {# -------- VLAN Interfaces (SVIs) -------- #}
@@ -11,7 +14,11 @@ vlan {{ vlan.vlan_id }}
 interface vlan{{ vlan.vlan_id }}
   description {{ vlan.name }}
   mtu {{ vlan.interface.mtu }}
+  {% if vlan.shutdown is defined and vlan.shutdown -%}
+  shutdown
+  {%- else -%}
   no shutdown
+  {%- endif %}
   ip address {{ vlan.interface.ip }}/{{ vlan.interface.cidr }}
   no ip redirects
   no ipv6 redirects

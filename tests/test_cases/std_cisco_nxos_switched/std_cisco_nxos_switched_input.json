@@ -10,7 +10,8 @@
   "vlans": [
     {
       "vlan_id": 2,
-      "name": "UNUSED_VLAN"
+      "name": "UNUSED_VLAN",
+      "shutdown": true
     },
     {
       "vlan_id": 6,
