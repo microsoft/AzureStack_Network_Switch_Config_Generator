@@ -426,6 +426,7 @@ function New-SubnetPlanFromConfig {
       - Enhanced output showing subnet names and purposes
       - Supports both file-based and direct JSON string input
       - Network definition can be included in JSON configuration for single-file setup
+      - Supports both host count requirements and direct CIDR prefix specification
       - Validates configuration and provides detailed error messages
       
   .PARAMETER Network
@@ -442,14 +443,14 @@ function New-SubnetPlanFromConfig {
       Cannot be used together with -ConfigPath parameter.
 
   .EXAMPLE
-      # Create a configuration file with network defined in JSON
+      # Create a configuration file with network defined in JSON using host requirements
       $config = @{
         network = "192.168.1.0/24"
         subnets = @(
-          @{ name = "Management"; description = "Network management and monitoring"; hostRequirement = 15 }
-          @{ name = "Production"; description = "Production web servers"; hostRequirement = 50 }
-          @{ name = "Database"; description = "Database cluster"; hostRequirement = 8 }
-          @{ name = "Backup"; description = "Backup and storage network"; hostRequirement = 5 }
+          @{ name = "Management"; description = "Network management and monitoring"; hosts = 15 }
+          @{ name = "Production"; description = "Production web servers"; hosts = 50 }
+          @{ name = "Database"; description = "Database cluster"; hosts = 8 }
+          @{ name = "Backup"; description = "Backup and storage network"; hosts = 5 }
         )
       }
       $config | ConvertTo-Json -Depth 3 | Out-File "network-config.json"
@@ -461,14 +462,29 @@ function New-SubnetPlanFromConfig {
       New-SubnetPlanFromConfig -Network "10.0.1.0/24" -ConfigPath "network-config.json"
 
   .EXAMPLE
+      # Create a configuration file using CIDR prefixes directly
+      $configWithCidr = @{
+        network = "192.168.1.0/24"
+        subnets = @(
+          @{ name = "csu-edge-transport-compute"; vlan = "203"; cidr = "28" }
+          @{ name = "csu-exchange-compute"; vlan = "102"; cidr = "27" }
+          @{ name = "msu-compute"; vlan = "302"; cidr = "27" }
+          @{ name = "csu-edge-transport-management"; vlan = "101"; cidr = "27" }
+        )
+      }
+      $configWithCidr | ConvertTo-Json -Depth 3 | Out-File "network-cidr-config.json"
+      
+      New-SubnetPlanFromConfig -ConfigPath "network-cidr-config.json"
+
+  .EXAMPLE
       # Use direct JSON string with network definition
       $jsonConfig = @'
       {
         "network": "10.0.0.0/22",
         "subnets": [
-          { "name": "MGMT", "description": "Management VLAN", "hostRequirement": 25 },
-          { "name": "DMZ", "description": "Demilitarized Zone", "hostRequirement": 10 },
-          { "name": "LAN", "description": "Internal LAN", "hostRequirement": 100 }
+          { "name": "MGMT", "description": "Management VLAN", "hosts": 25 },
+          { "name": "DMZ", "description": "Demilitarized Zone", "hosts": 10 },
+          { "name": "LAN", "description": "Internal LAN", "hosts": 100 }
         ]
       }
       '@
@@ -481,8 +497,8 @@ function New-SubnetPlanFromConfig {
       {
         "network": "192.168.1.0/24",
         "subnets": [
-          { "name": "DMZ", "vlan": 10, "zone": "External", "hostRequirement": 30 },
-          { "name": "LAN", "vlan": 20, "zone": "Internal", "hostRequirement": 50 }
+          { "name": "DMZ", "vlan": 10, "zone": "External", "hosts": 30 },
+          { "name": "LAN", "vlan": 20, "zone": "Internal", "hosts": 50 }
         ]
       }
       '@
@@ -500,16 +516,22 @@ function New-SubnetPlanFromConfig {
         "network": "192.168.1.0/24",      // Optional - parent network in CIDR format
         "subnets": [
           {
-            "name": "SubnetName",           // Required
-            "hostRequirement": 15,          // Required  
+            "name": "SubnetName",           // Required - subnet identifier
+            "hosts": 15,                    // Option 1: Number of hosts needed (auto-calculates prefix)
+            "cidr": "27",                   // Option 2: Direct CIDR prefix specification (use only one)
             "vlan": 101,                    // Optional - any custom property
             "zone": "DMZ",                  // Optional - any custom property
             "environment": "Production",    // Optional - any custom property
-            "priority": "High"              // Optional - any custom property
+            "priority": "High",             // Optional - any custom property
+            "description": "Purpose"        // Optional - subnet description
             // Add any custom properties you need!
           }
         ]
       }
+      
+      Subnet Size Specification (choose one):
+      - hosts: Specify number of hosts needed, function calculates optimal subnet size
+      - cidr: Directly specify the CIDR prefix length (e.g., "28" for /28 subnet)
       
       Network Definition Priority:
       1. -Network parameter (if specified) - highest priority
@@ -517,7 +539,7 @@ function New-SubnetPlanFromConfig {
       3. Error if neither is provided
       
       The output table will automatically show all properties defined in your JSON.
-      Only 'hostRequirement' and 'network' are reserved - all other properties become display columns.
+      Only 'hosts', 'cidr', and 'network' are reserved - all other properties become display columns.
   #>
   [CmdletBinding(DefaultParameterSetName = 'FilePath')]
   param(
@@ -576,8 +598,9 @@ function New-SubnetPlanFromConfig {
       throw "Invalid configuration: 'subnets' array is empty"
     }
     
-    # Build host requirements hashtable from configuration
+    # Build requirements hashtable from configuration (supporting both hostRequirement and cidr)
     $hostRequirements = @{}
+    $prefixRequirements = @{}
     $subnetNames = @{}
     $subnetDescriptions = @{}
     
@@ -587,60 +610,111 @@ function New-SubnetPlanFromConfig {
       if (-not $subnet.name) {
         throw "Invalid configuration: Subnet missing 'name' field"
       }
-      if (-not $subnet.hostRequirement) {
-        throw "Invalid configuration: Subnet '$($subnet.name)' missing 'hostRequirement' field"
+      
+      # Check for either hosts or cidr field
+      $hasHosts = $subnet.hosts -ne $null
+      $hasCidr = $subnet.cidr -ne $null
+      
+      if (-not $hasHosts -and -not $hasCidr) {
+        throw "Invalid configuration: Subnet '$($subnet.name)' missing both 'hosts' and 'cidr' fields. One of them is required."
       }
       
-      $hostCount = [int]$subnet.hostRequirement
+      if ($hasHosts -and $hasCidr) {
+        throw "Invalid configuration: Subnet '$($subnet.name)' has both 'hosts' and 'cidr' fields. Only one should be specified."
+      }
+      
       $subnetName = $subnet.name
       $description = if ($subnet.description) { $subnet.description } else { "" }
       
-      $verboseMessage = "  $subnetName`: $hostCount hosts"
-      if ($description) { $verboseMessage += " - $description" }
-      Write-Verbose $verboseMessage
-      
-      # Track subnet names and descriptions for later use
-      $key = $hostCount
-      while ($subnetNames.ContainsKey($key)) { $key++ }  # Handle duplicate host counts
-      $subnetNames[$key] = $subnetName
-      $subnetDescriptions[$key] = $description
-      
-      # Build host requirements for the core function
-      if ($hostRequirements.ContainsKey($hostCount)) {
-        $hostRequirements[$hostCount] += 1
+      if ($hasHosts) {
+        # Process host requirement (existing logic)
+        $hostCount = [int]$subnet.hosts
+        $verboseMessage = "  $subnetName`: $hostCount hosts (calculated prefix)"
+        if ($description) { $verboseMessage += " - $description" }
+        Write-Verbose $verboseMessage
+        
+        # Track subnet names and descriptions for later use
+        $key = $hostCount
+        while ($subnetNames.ContainsKey($key)) { $key++ }  # Handle duplicate host counts
+        $subnetNames[$key] = $subnetName
+        $subnetDescriptions[$key] = $description
+        
+        # Build host requirements for the core function
+        if ($hostRequirements.ContainsKey($hostCount)) {
+          $hostRequirements[$hostCount] += 1
+        } else {
+          $hostRequirements[$hostCount] = 1
+        }
       } else {
-        $hostRequirements[$hostCount] = 1
+        # Process CIDR prefix (new logic)
+        $prefixLength = [int]$subnet.cidr
+        
+        # Validate CIDR prefix range
+        if ($prefixLength -lt 1 -or $prefixLength -gt 32) {
+          throw "Invalid configuration: Subnet '$subnetName' has invalid CIDR prefix '$prefixLength'. Must be between 1 and 32."
+        }
+        
+        $hostCapacity = [Math]::Max(0, [Math]::Pow(2, 32 - $prefixLength) - 2)
+        $verboseMessage = "  $subnetName`: /$prefixLength ($hostCapacity usable hosts)"
+        if ($description) { $verboseMessage += " - $description" }
+        Write-Verbose $verboseMessage
+        
+        # Track subnet names and descriptions for later use
+        $key = $prefixLength
+        while ($subnetNames.ContainsKey($key)) { $key += 0.1 }  # Handle duplicate prefixes
+        $subnetNames[$key] = $subnetName
+        $subnetDescriptions[$key] = $description
+        
+        # Build prefix requirements for the core function
+        if ($prefixRequirements.ContainsKey($prefixLength)) {
+          $prefixRequirements[$prefixLength] += 1
+        } else {
+          $prefixRequirements[$prefixLength] = 1
+        }
       }
     }
     
     # Call the core subnet planning function and capture results without display
     Write-Verbose "Calling New-SubnetPlan with processed requirements"
-    $hostRequirementsForPlan = @{}
-    foreach ($subnet in $config.subnets) {
-      $hostCount = [int]$subnet.hostRequirement
-      # Calculate minimum prefix length needed
+    
+    # Combine host requirements and prefix requirements
+    $combinedPrefixRequirements = @{}
+    
+    # Process host requirements (convert to prefix requirements)
+    foreach ($hostCount in $hostRequirements.Keys) {
       $requiredAddresses = $hostCount + 2
       $bitsNeeded = [Math]::Ceiling([Math]::Log($requiredAddresses, 2))
       $prefix = 32 - $bitsNeeded
       if ($prefix -lt 1) { $prefix = 1 }
       if ($prefix -gt 30) { $prefix = 30 }
       
-      if ($hostRequirementsForPlan.ContainsKey($prefix)) {
-        $hostRequirementsForPlan[$prefix] += 1
+      $count = $hostRequirements[$hostCount]
+      if ($combinedPrefixRequirements.ContainsKey($prefix)) {
+        $combinedPrefixRequirements[$prefix] += $count
       } else {
-        $hostRequirementsForPlan[$prefix] = 1
+        $combinedPrefixRequirements[$prefix] = $count
+      }
+    }
+    
+    # Process direct CIDR prefix requirements
+    foreach ($prefix in $prefixRequirements.Keys) {
+      $count = $prefixRequirements[$prefix]
+      if ($combinedPrefixRequirements.ContainsKey($prefix)) {
+        $combinedPrefixRequirements[$prefix] += $count
+      } else {
+        $combinedPrefixRequirements[$prefix] = $count
       }
     }
     
     # Get raw results from New-SubnetPlan
-    $rawResults = New-SubnetPlan -Network $networkToUse -PrefixRequirements $hostRequirementsForPlan
+    $rawResults = New-SubnetPlan -Network $networkToUse -PrefixRequirements $combinedPrefixRequirements
     
-    # Detect all custom properties from JSON configuration (excluding hostRequirement and network)
+    # Detect all custom properties from JSON configuration (excluding hosts, cidr, and network)
     $customProperties = @()
     if ($config.subnets.Count -gt 0) {
       $firstSubnet = $config.subnets[0]
       $allProperties = $firstSubnet.PSObject.Properties.Name
-      $customProperties = $allProperties | Where-Object { $_ -ne 'hostRequirement' -and $_ -ne 'network' }
+      $customProperties = $allProperties | Where-Object { $_ -ne 'hosts' -and $_ -ne 'cidr' -and $_ -ne 'network' }
       Write-Verbose "Detected custom properties: $($customProperties -join ', ')"
     }
     
@@ -658,7 +732,14 @@ function New-SubnetPlanFromConfig {
     $assignedIndex = 0
     
     # Process assigned subnets first, matching them with configuration
-    $sortedSubnets = $config.subnets | Sort-Object { -[int]$_.hostRequirement }  # Largest first to match allocation order
+    # Sort subnets by size (largest first) to match allocation order
+    $sortedSubnets = $config.subnets | Sort-Object { 
+      if ($_.hosts) { 
+        -[int]$_.hosts  # Largest host requirement first
+      } else { 
+        [int]$_.cidr  # Smallest CIDR prefix first (which means largest subnet)
+      } 
+    }
     
     foreach ($result in $rawResults) {
       if ($result.Name -eq 'Assigned' -and $assignedIndex -lt $sortedSubnets.Count) {

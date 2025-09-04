@@ -49,9 +49,9 @@ Get-Help New-SubnetPlanFromConfig -Full
 {
   "network": "192.168.1.0/24",
   "subnets": [
-    { "name": "Management", "vlan": 101, "hostRequirement": 30 },
-    { "name": "Users", "vlan": 102, "hostRequirement": 100 },
-    { "name": "Servers", "vlan": 103, "hostRequirement": 20 }
+    { "name": "Management", "vlan": 101, "hosts": 30 },
+    { "name": "Users", "vlan": 102, "hosts": 100 },
+    { "name": "Servers", "vlan": 103, "hosts": 20 }
   ]
 }
 
@@ -73,6 +73,46 @@ Available       192.168.1.192/26    26 192.168.1.192 192.168.1.255 192.168.1.193
 ```
 
 **You get:** Professional table with subnet names, VLANs, IP ranges, and everything labeled clearly.
+
+#### 🔧 **JSON Configuration Flexibility**
+
+**Two ways to specify subnet sizes in JSON:**
+
+**Option A: By Host Count** (most common)
+```json
+{
+  "network": "192.168.1.0/24",
+  "subnets": [
+    { "name": "Management", "vlan": 101, "hosts": 30 },
+    { "name": "DMZ", "vlan": 102, "hosts": 50 }
+  ]
+}
+```
+
+**Option B: By CIDR Prefix** (for network experts)
+```json
+{
+  "network": "192.168.1.0/24", 
+  "subnets": [
+    { "name": "Management", "vlan": 101, "cidr": "27" },
+    { "name": "DMZ", "vlan": 102, "cidr": "26" }
+  ]
+}
+```
+
+**Mixed Approach** (you can combine both in one file!)
+```json
+{
+  "network": "192.168.1.0/24",
+  "subnets": [
+    { "name": "Management", "vlan": 101, "hosts": 30 },
+    { "name": "DMZ", "vlan": 102, "cidr": "26" },
+    { "name": "Servers", "vlan": 103, "hosts": 15 }
+  ]
+}
+```
+
+💡 **Pro Tip:** Use `hosts` when you know how many devices you need. Use `cidr` when you need exact subnet sizes.
 
 ---
 
