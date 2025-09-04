@@ -1,0 +1,157 @@
+name: Build Executables
+
+on:
+  push:
+    branches: [ main, dev/nl/newDesignv1 ]
+    tags: [ 'v*' ]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            exe_name: network_config_generator.exe
+            asset_name: network-config-generator-windows-amd64
+          - os: ubuntu-latest
+            exe_name: network_config_generator
+            asset_name: network-config-generator-linux-amd64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install build tools (Linux only)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y upx
+
+      - name: Ensure requirements
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          if [ ! -f requirements.txt ]; then
+            echo "jinja2>=3.0.0" > requirements.txt
+          fi
+          pip install -r requirements.txt
+          pip install "pyinstaller==6.10.*"
+
+      - name: Quick source test (run as script)
+        shell: bash
+        run: |
+          python -c "import sys; print(sys.version)"
+          python src/main.py --help
+
+      - name: Build (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: powershell
+        run: |
+          pyinstaller --onefile --clean --noconfirm `
+            --name network_config_generator `
+            --add-data "input;input" `
+            --collect-all jinja2 `
+            --hidden-import=convertors `
+            --hidden-import=convertors.convertors_lab_switch_json `
+            --collect-submodules=convertors `
+            --paths=src `
+            src/main.py
+          if (!(Test-Path "dist\\${{ matrix.exe_name }}")) { Write-Error "Build failed"; exit 1 }
+
+      - name: Build (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          pyinstaller --onefile --clean --noconfirm \
+            --name network_config_generator \
+            --add-data "input:input" \
+            --collect-all jinja2 \
+            --hidden-import=convertors \
+            --hidden-import=convertors.convertors_lab_switch_json \
+            --collect-submodules=convertors \
+            --paths=src \
+            src/main.py
+          test -f "dist/${{ matrix.exe_name }}" || (echo "Build failed" && exit 1)
+          upx --best --lzma "dist/${{ matrix.exe_name }}" || true
+
+      - name: Smoke test executable
+        shell: bash
+        run: |
+          chmod +x "dist/${{ matrix.exe_name }}" || true
+          "dist/${{ matrix.exe_name }}" --help || (echo "Executable failed to run" && exit 1)
+
+      - name: Stage artifact
+        shell: bash
+        run: |
+          mkdir -p artifact_staging
+          cp "dist/${{ matrix.exe_name }}" "artifact_staging/"
+          ls -la artifact_staging
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset_name }}
+          path: artifact_staging/
+
+  # release:
+  #   name: Create Release
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   if: startsWith(github.ref, 'refs/tags/v')
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+
+  #     - name: Download artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         path: ./artifacts
+
+  #     - name: Show downloaded files
+  #       run: ls -Rla ./artifacts
+
+  #     - name: Create GitHub Release
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         files: |
+  #           ./artifacts/network-config-generator-windows-amd64/network_config_generator.exe
+  #           ./artifacts/network-config-generator-linux-amd64/network_config_generator
+  #         body: |
+  #           ## Network Switch Config Generator ${{ github.ref_name }}
+
+  #           ### Download
+  #           1) Grab the file for your OS
+  #           2) (Linux) Make it executable: `chmod +x network_config_generator`
+  #           3) Run: `./network_config_generator --help`
+
+  #           ### Usage
+  #           ```bash
+  #           ./network_config_generator --input_json lab_input.json --output_folder output/
+  #           ./network_config_generator --input_json standard_input.json --output_folder output/
+  #           ./network_config_generator --input_json lab_input.json --convertor my.custom.convertor
+  #           ```
+
+  #           ### Features
+  #           - Auto-detects input format (lab vs standard)
+  #           - Converts lab format to standard automatically
+  #           - Generates network switch configurations
+  #           - Custom convertors & multi-switch support
+  #           - Cross-platform executables

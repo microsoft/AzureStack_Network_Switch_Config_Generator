@@ -1,8 +1,0 @@
-copy running-config bootflash:///Before_WANSIM.config
-
-feature tunnel
-{{ template "wansim_gre" . -}}
-{{ template "prefixlist" . -}}
-{{ template "full_wansim_bgp" . }}
-
-copy running-config bootflash:///After_WANSIM.config
