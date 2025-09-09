@@ -368,9 +368,18 @@ function New-UniqueOutputFileName {
         $makeString = ($deviceMakes -join "-").Replace(" ", "")
         $modelString = ($deviceModels -join "-").Replace(" ", "").Replace("/", "-")
         
-        # Generate base filename with device info
-        $deviceInfo = "$makeString-$modelString-$($deviceCount)dev"
-        $baseFileName = Join-Path -Path (Get-Location) -ChildPath "$inputBaseName-$deviceInfo-portmap.$extension"
+        # For CSV format with single device, include device name in filename
+        if ($OutputFormat.ToLower() -eq "csv" -and $deviceCount -eq 1) {
+            $deviceName = $Devices[0].deviceName
+            $sanitizedDeviceName = $deviceName -replace '[^\w\-.]', '_'
+            $deviceInfo = "$sanitizedDeviceName-$makeString-$modelString"
+            $baseFileName = Join-Path -Path (Get-Location) -ChildPath "$inputBaseName-$deviceInfo-portmap.$extension"
+        }
+        else {
+            # Generate base filename with device info (for multi-device or non-CSV formats)
+            $deviceInfo = "$makeString-$modelString-$($deviceCount)dev"
+            $baseFileName = Join-Path -Path (Get-Location) -ChildPath "$inputBaseName-$deviceInfo-portmap.$extension"
+        }
     }
     
     # Check if file exists and create unique name if needed
@@ -831,23 +840,24 @@ function ConvertTo-CsvOutput {
         # Get connections for this device
         $deviceConnections = if ($ConnectionMappings) { 
             $ConnectionMappings | Where-Object { $_.SourceDevice -eq $deviceName } | Sort-Object { [int]$_.SourcePort }
-        } else { 
+        }
+        else { 
             @() 
         }
         
         # Add connected ports
         foreach ($connection in $deviceConnections) {
             $portEntry = [PSCustomObject]@{
-                PortNumber = [int]$connection.SourcePort
-                Port = $connection.SourcePort
-                Media = $connection.SourceMedia
-                Status = $connection.Status
+                PortNumber        = [int]$connection.SourcePort
+                Port              = $connection.SourcePort
+                Media             = $connection.SourceMedia
+                Status            = $connection.Status
                 DestinationDevice = $connection.DestinationDevice
-                DestinationPort = $connection.DestinationPort
-                DestinationMedia = $connection.DestinationMedia
-                Type = $connection.ConnectionType
-                Notes = if ($connection.Notes) { $connection.Notes } else { "" }
-                IsConnected = $true
+                DestinationPort   = $connection.DestinationPort
+                DestinationMedia  = $connection.DestinationMedia
+                Type              = $connection.ConnectionType
+                Notes             = if ($connection.Notes) { $connection.Notes } else { "" }
+                IsConnected       = $true
             }
             $allPortEntries.Add($portEntry)
         }
@@ -857,16 +867,16 @@ function ConvertTo-CsvOutput {
             foreach ($port in $portInfo.UnusedPorts) {
                 $details = $portInfo.PortDetails[$port]
                 $portEntry = [PSCustomObject]@{
-                    PortNumber = [int]$port
-                    Port = $port
-                    Media = $details.MediaType
-                    Status = "Unused"
+                    PortNumber        = [int]$port
+                    Port              = $port
+                    Media             = $details.MediaType
+                    Status            = "Unused"
                     DestinationDevice = ""
-                    DestinationPort = ""
-                    DestinationMedia = ""
-                    Type = ""
-                    Notes = "Available"
-                    IsConnected = $false
+                    DestinationPort   = ""
+                    DestinationMedia  = ""
+                    Type              = ""
+                    Notes             = "Available"
+                    IsConnected       = $false
                 }
                 $allPortEntries.Add($portEntry)
             }

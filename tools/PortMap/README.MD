@@ -68,9 +68,9 @@ Creates individual CSV files for each device with comprehensive metadata and str
 
 **Example Files Generated:**
 
-- `sample-network-config-Cisco-93180YC-FX3-1dev-portmap.csv` (TOR-1 device)
-- `sample-network-config-Dell-S5248F-ON-1dev-portmap.csv` (TOR-2 device)  
-- `sample-network-config-Cisco-N9K-C93360YC-FX2-1dev-portmap.csv` (SPINE-1 device)
+- `sample-network-config-TOR-1-Cisco-93180YC-FX3-portmap.csv` (TOR-1 device)
+- `sample-network-config-TOR-2-Dell-S5248F-ON-portmap.csv` (TOR-2 device)
+- `sample-network-config-SPINE-1-Cisco-N9K-C93360YC-FX2-portmap.csv` (SPINE-1 device)
 
 **CSV Structure:**
 
@@ -204,24 +204,24 @@ The CSV output format has unique behavior compared to other formats:
 CSV files follow this naming convention:
 
 ```text
-{input-config-name}-{manufacturer}-{model}-1dev-portmap[-increment].csv
+{input-config-name}-{deviceName}-{manufacturer}-{model}-portmap[-increment].csv
 ```
 
 #### Examples
 
 For a 3-device configuration, CSV output creates:
 
-- `sample-config-Cisco-93180YC-FX3-1dev-portmap.csv` (TOR-1)
-- `sample-config-Dell-S5248F-ON-1dev-portmap.csv` (TOR-2)  
-- `sample-config-Cisco-N9K-C93360YC-FX2-1dev-portmap.csv` (SPINE-1)
+- `sample-config-TOR-1-Cisco-93180YC-FX3-portmap.csv` (TOR-1 device)
+- `sample-config-TOR-2-Dell-S5248F-ON-portmap.csv` (TOR-2 device)
+- `sample-config-SPINE-1-Cisco-N9K-C93360YC-FX2-portmap.csv` (SPINE-1 device)
 
 #### CSV vs Other Formats
 
-| Format   | Output Type | Files Created | File Naming |
-|----------|-------------|---------------|-------------|
-| Markdown | Consolidated | 1 file | Multi-device filename |
-| JSON     | Consolidated | 1 file | Multi-device filename |
-| CSV      | Individual | 1 per device | Single-device filename |
+| Format   | Output Type  | Files Created | File Naming               |
+| -------- | ------------ | ------------- | ------------------------- |
+| Markdown | Consolidated | 1 file        | Multi-device filename     |
+| JSON     | Consolidated | 1 file        | Multi-device filename     |
+| CSV      | Individual   | 1 per device  | Device name + device info |
 
 ## Usage
 
@@ -237,7 +237,7 @@ For a 3-device configuration, CSV output creates:
 # Generate individual CSV files per device with comprehensive metadata
 .\PortMap.ps1 -InputFile "network-config.json" -OutputFormat CSV
 
-# Generate individual CSV files per device including unused ports  
+# Generate individual CSV files per device including unused ports
 .\PortMap.ps1 -InputFile "network-config.json" -OutputFormat CSV -ShowUnused
 
 # Generate single JSON file for integration with other tools
@@ -257,7 +257,9 @@ For a 3-device configuration, CSV output creates:
 
 ### Automatic File Naming
 
-The tool generates intelligent output filenames that include:
+The tool generates intelligent output filenames:
+
+**For Markdown and JSON (consolidated formats):**
 
 - Input filename (without extension)
 - Device manufacturers (e.g., "Cisco-Dell")
@@ -266,7 +268,19 @@ The tool generates intelligent output filenames that include:
 - Tool identifier ("portmap")
 - Incremental numbering to prevent overwrites
 
-**Example**: `sample-network-config-Cisco-Dell-93180YC-FX3-N9K-C93360YC-FX2-S5248F-ON-3dev-portmap.md`
+**For CSV (individual device files):**
+
+- Input filename (without extension)
+- **Device name** (e.g., "TOR-1", "SPINE-1")
+- Device manufacturer
+- Device model
+- Tool identifier ("portmap")
+- Incremental numbering to prevent overwrites
+
+**Examples**:
+
+- Markdown: `sample-network-config-Cisco-Dell-93180YC-FX3-N9K-C93360YC-FX2-S5248F-ON-3dev-portmap.md`
+- CSV: `sample-network-config-TOR-1-Cisco-93180YC-FX3-portmap.csv`
 
 ## Integration with AzureStack Network Switch Config Generator
 
@@ -341,9 +355,9 @@ Document existing network configurations for compliance and auditing:
 
 **CSV Output (Individual Files Per Device):**
 
-- `sample-network-config-Cisco-93180YC-FX3-1dev-portmap.csv` (TOR-1 device)
-- `sample-network-config-Dell-S5248F-ON-1dev-portmap.csv` (TOR-2 device)  
-- `sample-network-config-Cisco-N9K-C93360YC-FX2-1dev-portmap.csv` (SPINE-1 device)
+- `sample-network-config-TOR-1-Cisco-93180YC-FX3-portmap.csv` (TOR-1 device)
+- `sample-network-config-TOR-2-Dell-S5248F-ON-portmap.csv` (TOR-2 device)
+- `sample-network-config-SPINE-1-Cisco-N9K-C93360YC-FX2-portmap.csv` (SPINE-1 device)
 
 ### Device Summary Table (All Formats)
 
@@ -481,6 +495,7 @@ For issues and questions:
 
 - Sequential port ordering with connected and unused ports integrated
 - Intelligent automatic file naming with device and parameter information
+- **CSV output includes device names in filenames** for easy identification and organization
 - Incremental file management to prevent overwrites
 - Comprehensive metadata embedding in all output formats
 - Robust error handling and configurable logging
