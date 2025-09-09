@@ -295,7 +295,7 @@ function Expand-NetworkPortRange {
         return @([int]$Range)
     }
     else {
-        Write-PortMapLog "Invalid port range format: $Range. Expected format: '1-48' or '25'" -Level Warning
+        Write-PortMapLog "Invalid port range format: '$Range'. Expected format: '1-48' or '25'. Decimal values like '3.0' are not supported." -Level Warning
         return @()
     }
 }
@@ -488,12 +488,37 @@ function New-ConnectionMappings {
     $connectionMappings = [System.Collections.Generic.List[object]]::new()
     
     foreach ($connection in $Connections) {
-        $sourcePorts = Expand-NetworkPortRange -Range $connection.sourcePorts
-        $destPorts = if ($connection.destinationPorts) { 
-            Expand-NetworkPortRange -Range $connection.destinationPorts 
+        try {
+            # Parse source ports with error context
+            $sourcePorts = Expand-NetworkPortRange -Range $connection.sourcePorts
+            if (-not $sourcePorts -or @($sourcePorts).Count -eq 0) {
+                throw "Failed to parse source ports: '$($connection.sourcePorts)'"
+            }
+            
+            # Parse destination ports with error context
+            $destPorts = if ($connection.destinationPorts) { 
+                $destPortsResult = Expand-NetworkPortRange -Range $connection.destinationPorts
+                # Allow empty results for destination ports (port 0 or invalid formats are handled gracefully)
+                if ($null -eq $destPortsResult) {
+                    Write-PortMapLog "Could not parse destination ports '$($connection.destinationPorts)' for connection from '$($connection.sourceDevice)' to '$($connection.destinationDevice)', using port 0 as placeholder" -Level Warning
+                    @(0) * @($sourcePorts).Count
+                }
+                elseif (@($destPortsResult).Count -eq 0) {
+                    Write-PortMapLog "Destination ports '$($connection.destinationPorts)' for connection from '$($connection.sourceDevice)' to '$($connection.destinationDevice)' resulted in empty range, using port 0 as placeholder" -Level Warning
+                    @(0) * @($sourcePorts).Count
+                }
+                else {
+                    $destPortsResult
+                }
+            }
+            else { 
+                @(0) * @($sourcePorts).Count 
+            }
         }
-        else { 
-            @(0) * @($sourcePorts).Count 
+        catch {
+            $errorMsg = "Connection processing failed - SourceDevice: '$($connection.sourceDevice)', SourcePorts: '$($connection.sourcePorts)', DestinationDevice: '$($connection.destinationDevice)', DestinationPorts: '$($connection.destinationPorts)'. Error: $($_.Exception.Message)"
+            Write-PortMapLog $errorMsg -Level Error
+            throw $errorMsg
         }
         
         for ($i = 0; $i -lt @($sourcePorts).Count; $i++) {
