@@ -11,7 +11,7 @@ This tool solves critical documentation challenges in network design by:
 - **Comprehensive Physical Documentation**: Creating detailed artifacts of switch physical cable configurations with complete metadata
 - **Sequential Port Mapping**: Providing logically ordered port documentation with connected and unused ports in numerical sequence
 - **Advanced Port Analysis**: Tracking port utilization, media types, connection status, and availability
-- **Professional Output Generation**: Producing multiple output formats with intelligent file naming and embedded metadata
+- **Professional Output Generation**: Producing multiple output formats with intelligent file naming and embedded metadata (where applicable)
 - **Integration Ready**: Generating outputs that seamlessly integrate with switch configuration generators and network management tools
 
 ## Features
@@ -22,13 +22,13 @@ This tool solves critical documentation challenges in network design by:
 - **Sequential Port Display**: Shows all ports in numerical order (1, 2, 3...) with connected and unused ports properly integrated
 - **Advanced Port Utilization Analysis**: Identifies and categorizes used, unused, and available ports across all devices
 - **Device Inventory Management**: Maintains detailed device make/model information alongside comprehensive port mappings
-- **Multiple Output Formats**: Supports JSON, CSV, and Markdown formats with consistent formatting and metadata
+- **Multiple Output Formats**: Supports JSON, CSV, and Markdown formats with consistent formatting (metadata in JSON/Markdown)
 
 ### Advanced Features
 
 - **Intelligent File Naming**: Automatic generation of descriptive output filenames including device information, manufacturers, and parameters
 - **Incremental File Management**: Automatic incremental numbering to prevent file overwrites
-- **Embedded Metadata**: Complete input parameters, generation details, and device context included in all outputs
+- **Embedded Metadata**: Complete input parameters, generation details, and device context included in Markdown and JSON outputs
 - **Sequential Port Ordering**: All ports displayed in logical numerical sequence regardless of connection status
 - **Professional Formatting**: Network engineering-standard documentation format with clear status indicators
 
@@ -57,14 +57,15 @@ Professional network documentation format with per-device organization:
 
 #### 2. CSV Format - Individual Files Per Device
 
-Creates individual CSV files for each device with comprehensive metadata and structured data:
+Creates individual CSV files for each device with clean, structured port data:
 
 **File Structure:**
 
 - **One CSV file per device** with device-specific naming
-- **Metadata section** with device details, port counts, and generation information
+- **Clean header row** with essential column names
 - **Sequential port data** with connected and unused ports in numerical order
 - **Complete connection details** for each port including media types and destinations
+- **No metadata rows** - focuses purely on port connection data
 
 **Example Files Generated:**
 
@@ -75,11 +76,11 @@ Creates individual CSV files for each device with comprehensive metadata and str
 **CSV Structure:**
 
 ```csv
-"Section","DeviceName","Make","Model","Location","TotalPorts","UsedPorts","UnusedPorts"...
-"Metadata","TOR-1","Cisco","93180YC-FX3","Rack A, Position 42","52","28","24"...
-"---","---","---","---","---","---","---","---"...
-"Port","TOR-1","Cisco","93180YC-FX3","Rack A, Position 42","","","","","","","","1","SFP28","Active","Server-Nodes","0","SFP28","Server","Compute nodes 1-16"
-"Port","TOR-1","Cisco","93180YC-FX3","Rack A, Position 42","","","","","","","","26","SFP28","Unused","","","","","Available"
+"DeviceName","Make","Model","Location","Port","Media","Status","DestinationDevice","DestinationPort","DestinationMedia","Type","Notes"
+"TOR-1","Cisco","93180YC-FX3","Rack A, Position 42","1","SFP28","Active","Server-Nodes","0","SFP28","Server","Compute nodes 1-16"
+"TOR-1","Cisco","93180YC-FX3","Rack A, Position 42","2","SFP28","Active","Server-Nodes","0","SFP28","Server","Compute nodes 1-16"
+"TOR-1","Cisco","93180YC-FX3","Rack A, Position 42","26","SFP28","Unused","","","","","Available"
+"TOR-1","Cisco","93180YC-FX3","Rack A, Position 42","27","SFP28","Unused","","","","","Available"
 ```
 
 #### 3. JSON Format - Consolidated Output
@@ -197,7 +198,7 @@ The CSV output format has unique behavior compared to other formats:
 
 - **One CSV file per device** rather than a single consolidated file
 - **Device-specific filenames** automatically generated for each device
-- **Self-contained data** - each CSV includes complete device context and metadata
+- **Clean data format** - each CSV focuses on port connection data without metadata overhead
 
 #### File Naming Pattern
 
@@ -234,7 +235,7 @@ For a 3-device configuration, CSV output creates:
 # Generate Markdown with unused ports included (sequential ordering)
 .\PortMap.ps1 -InputFile "network-config.json" -OutputFormat Markdown -ShowUnused
 
-# Generate individual CSV files per device with comprehensive metadata
+# Generate individual CSV files per device with clean port data
 .\PortMap.ps1 -InputFile "network-config.json" -OutputFormat CSV
 
 # Generate individual CSV files per device including unused ports
@@ -326,7 +327,7 @@ Export individual CSV files per device for detailed analysis and reporting:
 
 ```powershell
 .\PortMap.ps1 -InputFile "network-inventory.json" -OutputFormat CSV -ShowUnused
-# Creates one CSV file per device with complete port data and metadata
+# Creates one CSV file per device with clean port connection data
 # Example outputs: TOR-1.csv, TOR-2.csv, SPINE-1.csv
 ```
 
@@ -390,15 +391,17 @@ Document existing network configurations for compliance and auditing:
 | 52   | QSFP28 | **Unused** | -                  | -                | -                 | -            | Available                |
 ```
 
-### Embedded Metadata (All Formats)
+### Embedded Metadata (Markdown and JSON Formats)
 
-All outputs include comprehensive metadata:
+Markdown and JSON outputs include comprehensive metadata:
 
 - Generation timestamp and tool version
 - Input file name and parameters used
 - Device count, manufacturers, and models
 - Generated by user and computer information
 - Processing summary with port utilization statistics
+
+**Note**: CSV format focuses on clean data without embedded metadata for optimal spreadsheet compatibility.
 
 ## Error Handling & Logging
 
@@ -489,15 +492,16 @@ For issues and questions:
 
 - Complete port mapping functionality with device inventory
 - Multiple output formats: Markdown, CSV, and JSON with consistent formatting
-- Professional documentation generation with embedded metadata
+- Professional documentation generation with embedded metadata (Markdown/JSON)
 
 **Advanced Features:**
 
 - Sequential port ordering with connected and unused ports integrated
 - Intelligent automatic file naming with device and parameter information
 - **CSV output includes device names in filenames** for easy identification and organization
+- **Clean CSV format without metadata** for optimal spreadsheet compatibility
 - Incremental file management to prevent overwrites
-- Comprehensive metadata embedding in all output formats
+- Comprehensive metadata embedding in Markdown and JSON output formats
 - Robust error handling and configurable logging
 
 **PowerShell Best Practices:**

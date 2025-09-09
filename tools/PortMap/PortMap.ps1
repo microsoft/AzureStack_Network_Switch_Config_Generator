@@ -809,55 +809,7 @@ function ConvertTo-CsvOutput {
         $portInfo = $DevicePortInfo[$deviceName]
         $csvData = [System.Collections.Generic.List[object]]::new()
         
-        # Add metadata header for this device
-        $metadataRow = [PSCustomObject]@{
-            Section           = "Metadata"
-            DeviceName        = $device.deviceName
-            Make              = $device.deviceMake
-            Model             = $device.deviceModel
-            Location          = $device.location ?? ""
-            TotalPorts        = $portInfo.TotalPorts
-            UsedPorts         = if ($portInfo.UsedPorts) { @($portInfo.UsedPorts).Count } else { 0 }
-            UnusedPorts       = if ($portInfo.UnusedPorts) { @($portInfo.UnusedPorts).Count } else { 0 }
-            Generated         = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
-            Tool              = "PortMap v1.0"
-            InputFile         = if ($InputFile) { Split-Path -Leaf $InputFile } else { 'Unknown' }
-            GeneratedBy       = "$env:USERNAME@$env:COMPUTERNAME"
-            Port              = ""
-            Media             = ""
-            Status            = ""
-            DestinationDevice = ""
-            DestinationPort   = ""
-            DestinationMedia  = ""
-            Type              = ""
-            Notes             = ""
-        }
-        $csvData.Add($metadataRow)
-        
-        # Add separator row
-        $separatorRow = [PSCustomObject]@{
-            Section           = "---"
-            DeviceName        = "---"
-            Make              = "---"
-            Model             = "---"
-            Location          = "---"
-            TotalPorts        = "---"
-            UsedPorts         = "---"
-            UnusedPorts       = "---"
-            Generated         = "---"
-            Tool              = "---"
-            InputFile         = "---"
-            GeneratedBy       = "---"
-            Port              = "---"
-            Media             = "---"
-            Status            = "---"
-            DestinationDevice = "---"
-            DestinationPort   = "---"
-            DestinationMedia  = "---"
-            Type              = "---"
-            Notes             = "---"
-        }
-        $csvData.Add($separatorRow)
+        # CSV output excludes metadata - only port data
         
         # Create unified port list for this device (similar to Markdown logic)
         $allPortEntries = [System.Collections.Generic.List[object]]::new()
@@ -911,18 +863,10 @@ function ConvertTo-CsvOutput {
         $sortedPortEntries = $allPortEntries | Sort-Object PortNumber
         foreach ($portEntry in $sortedPortEntries) {
             $csvRow = [PSCustomObject]@{
-                Section           = "Port"
                 DeviceName        = $deviceName
                 Make              = $device.deviceMake
                 Model             = $device.deviceModel
                 Location          = $device.location ?? ""
-                TotalPorts        = ""
-                UsedPorts         = ""
-                UnusedPorts       = ""
-                Generated         = ""
-                Tool              = ""
-                InputFile         = ""
-                GeneratedBy       = ""
                 Port              = $portEntry.Port
                 Media             = $portEntry.Media
                 Status            = $portEntry.Status
