@@ -295,7 +295,7 @@ function Expand-NetworkPortRange {
         return @([int]$Range)
     }
     else {
-        Write-PortMapLog "Invalid port range format: '$Range'. Expected format: '1-48' or '25'. Decimal values like '3.0' are not supported." -Level Warning
+        Write-PortMapLog "Invalid port range format: '$Range'. Expected format: '0-48' or '25'. Decimal values like '3.0' are not supported." -Level Warning
         return @()
     }
 }
@@ -491,7 +491,7 @@ function New-ConnectionMappings {
         try {
             # Parse source ports with error context
             $sourcePorts = Expand-NetworkPortRange -Range $connection.sourcePorts
-            if (-not $sourcePorts -or @($sourcePorts).Count -eq 0) {
+            if ($null -eq $sourcePorts -or @($sourcePorts).Count -eq 0) {
                 throw "Failed to parse source ports: '$($connection.sourcePorts)'"
             }
             
