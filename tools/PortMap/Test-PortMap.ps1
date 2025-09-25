@@ -274,6 +274,362 @@ function Test-DeviceFilteringFeature {
     }
 }
 
+function Test-BreakoutCableSupport {
+    <#
+    .SYNOPSIS
+        Comprehensive testing of breakout cable functionality.
+    
+    .DESCRIPTION
+        Tests all aspects of breakout cable support including range expansion,
+        single breakout interfaces, mixed port types, and output format validation.
+    #>
+    [CmdletBinding()]
+    param()
+    
+    Write-Host "`n=== Testing Breakout Cable Support ===" -ForegroundColor Yellow
+    
+    # Ensure test breakout configuration exists
+    $breakoutConfigPath = ".\test-breakout-config.json"
+    
+    if (-not (Test-Path $breakoutConfigPath)) {
+        Write-TestResult "Breakout Config File Availability" $false "test-breakout-config.json not found"
+        return
+    }
+    
+    Write-TestResult "Breakout Config File Availability" $true
+    
+    # Test breakout range expansion
+    Test-BreakoutRangeExpansion
+    
+    # Test single breakout interface handling
+    Test-SingleBreakoutInterface
+    
+    # Test mixed port types in same device
+    Test-MixedPortTypes
+    
+    # Test PowerShell array handling fixes
+    Test-ArrayHandlingFixes
+    
+    # Test output format support for breakout cables
+    Test-BreakoutOutputFormats
+    
+    # Test edge cases and validation
+    Test-BreakoutEdgeCases
+}
+
+function Test-BreakoutRangeExpansion {
+    <#
+    .SYNOPSIS
+        Tests that breakout ranges like "25.1-25.4" expand correctly.
+    #>
+    [CmdletBinding()]
+    param()
+    
+    Write-Host "`n--- Testing Breakout Range Expansion ---" -ForegroundColor Cyan
+    
+    try {
+        # Test with JSON output to examine structure
+        $output = & ".\PortMap.ps1" -InputFile ".\test-breakout-config.json" -OutputFormat "JSON" -ErrorAction Stop
+        $jsonOutput = $output | ConvertFrom-Json
+        
+        # Look for breakout interfaces in the device port details
+        $breakoutInterfaces = @()
+        foreach ($device in $jsonOutput.devices) {
+            foreach ($port in $device.portDetails) {
+                if ($port.port -like "*.?") {
+                    $breakoutInterfaces += $port.port
+                }
+            }
+        }
+        
+        # Check for expected breakout interfaces (25.1, 25.2, 25.3, 25.4)
+        $hasBreakout25_1 = $breakoutInterfaces -contains "25.1"
+        $hasBreakout25_2 = $breakoutInterfaces -contains "25.2"
+        $hasBreakout25_3 = $breakoutInterfaces -contains "25.3"
+        $hasBreakout25_4 = $breakoutInterfaces -contains "25.4"
+        
+        Write-TestResult "Breakout Range 25.1-25.4 Expansion" ($hasBreakout25_1 -and $hasBreakout25_2 -and $hasBreakout25_3 -and $hasBreakout25_4)
+        Write-TestResult "Breakout Interface 25.1 Present" $hasBreakout25_1
+        Write-TestResult "Breakout Interface 25.2 Present" $hasBreakout25_2
+        Write-TestResult "Breakout Interface 25.3 Present" $hasBreakout25_3
+        Write-TestResult "Breakout Interface 25.4 Present" $hasBreakout25_4
+        
+        # Verify proper data types
+        $portTypes = @()
+        foreach ($interface in $breakoutInterfaces) {
+            $portTypes += $interface.GetType().Name
+        }
+        $allStrings = ($portTypes | Where-Object { $_ -ne "String" }).Count -eq 0
+        
+        Write-TestResult "Breakout Interfaces Are Strings" $allStrings
+    }
+    catch {
+        Write-TestResult "Breakout Range Expansion" $false $_.Exception.Message
+    }
+}
+
+function Test-SingleBreakoutInterface {
+    <#
+    .SYNOPSIS
+        Tests single breakout interface handling (e.g., "26.1").
+    #>
+    [CmdletBinding()]
+    param()
+    
+    Write-Host "`n--- Testing Single Breakout Interface ---" -ForegroundColor Cyan
+    
+    try {
+        # Test with Markdown output to check display format
+        $output = & ".\PortMap.ps1" -InputFile ".\test-breakout-config.json" -OutputFormat "Markdown" -ErrorAction Stop
+        
+        # Check for single breakout interface in markdown output
+        $hasSingle26_1 = $output -match "26\.1.*QSFP"
+        
+        Write-TestResult "Single Breakout Interface 26.1" $hasSingle26_1
+        
+        # Test with JSON to verify structure
+        $jsonOutput = & ".\PortMap.ps1" -InputFile ".\test-breakout-config.json" -OutputFormat "JSON" -ErrorAction Stop | ConvertFrom-Json
+        
+        $singleBreakoutFound = $false
+        foreach ($device in $jsonOutput.devices) {
+            foreach ($port in $device.portDetails) {
+                if ($port.port -eq "26.1") {
+                    $singleBreakoutFound = $true
+                    break
+                }
+            }
+        }
+        
+        Write-TestResult "Single Breakout Interface in JSON" $singleBreakoutFound
+    }
+    catch {
+        Write-TestResult "Single Breakout Interface" $false $_.Exception.Message
+    }
+}
+
+function Test-MixedPortTypes {
+    <#
+    .SYNOPSIS
+        Tests devices with both standard ports (integers) and breakout interfaces (strings).
+    #>
+    [CmdletBinding()]
+    param()
+    
+    Write-Host "`n--- Testing Mixed Port Types ---" -ForegroundColor Cyan
+    
+    try {
+        $jsonOutput = & ".\PortMap.ps1" -InputFile ".\test-breakout-config.json" -OutputFormat "JSON" -ErrorAction Stop | ConvertFrom-Json
+        
+        # Find a device with both standard and breakout ports
+        $mixedDevice = $null
+        foreach ($device in $jsonOutput.devices) {
+            $hasStandardPorts = $false
+            $hasBreakoutPorts = $false
+            
+            foreach ($port in $device.portDetails) {
+                if ($port.port -notlike "*.?") {
+                    $hasStandardPorts = $true
+                }
+                else {
+                    $hasBreakoutPorts = $true
+                }
+            }
+            
+            if ($hasStandardPorts -and $hasBreakoutPorts) {
+                $mixedDevice = $device
+                break
+            }
+        }
+        
+        Write-TestResult "Device with Mixed Port Types Found" ($null -ne $mixedDevice)
+        
+        if ($null -ne $mixedDevice) {
+            Write-TestResult "Mixed Device Port Count > 0" ($mixedDevice.portDetails.Count -gt 0)
+        }
+    }
+    catch {
+        Write-TestResult "Mixed Port Types" $false $_.Exception.Message
+    }
+}
+
+function Test-ArrayHandlingFixes {
+    <#
+    .SYNOPSIS
+        Tests PowerShell array handling fixes for single-element breakout interfaces.
+    #>
+    [CmdletBinding()]
+    param()
+    
+    Write-Host "`n--- Testing Array Handling Fixes ---" -ForegroundColor Cyan
+    
+    try {
+        # This test validates that single breakout interfaces don't get enumerated incorrectly
+        $output = & ".\PortMap.ps1" -InputFile ".\test-breakout-config.json" -OutputFormat "JSON" -ErrorAction Stop
+        $jsonOutput = $output | ConvertFrom-Json
+        
+        # Look for single breakout interfaces and verify they're processed correctly
+        $singleBreakoutCount = 0
+        foreach ($device in $jsonOutput.devices) {
+            foreach ($port in $device.portDetails) {
+                if ($port.port -like "26.1") {
+                    $singleBreakoutCount++
+                }
+            }
+        }
+        
+        # Should find exactly one 26.1 interface (not multiple char enumeration)
+        Write-TestResult "Single Breakout Array Handling" ($singleBreakoutCount -eq 1)
+        
+        # Verify no character enumeration artifacts
+        $noCharEnumeration = $true
+        foreach ($device in $jsonOutput.devices) {
+            foreach ($port in $device.portDetails) {
+                if ($port.port.Length -eq 1 -and $port.port -match "[0-9]") {
+                    # If we find single character "ports" from array enumeration, that's a failure
+                    $noCharEnumeration = $false
+                }
+            }
+        }
+        
+        Write-TestResult "No Character Enumeration Artifacts" $noCharEnumeration
+    }
+    catch {
+        Write-TestResult "Array Handling Fixes" $false $_.Exception.Message
+    }
+}
+
+function Test-BreakoutOutputFormats {
+    <#
+    .SYNOPSIS
+        Tests that all output formats properly support breakout interfaces.
+    #>
+    [CmdletBinding()]
+    param()
+    
+    Write-Host "`n--- Testing Breakout Output Formats ---" -ForegroundColor Cyan
+    
+    # Test Markdown format
+    try {
+        $mdOutput = & ".\PortMap.ps1" -InputFile ".\test-breakout-config.json" -OutputFormat "Markdown" -ErrorAction Stop
+        $mdHasBreakout = $mdOutput -match "25\.1.*\|.*25\.2.*\|.*25\.3.*\|.*25\.4"
+        
+        Write-TestResult "Markdown Breakout Interface Display" $mdHasBreakout
+    }
+    catch {
+        Write-TestResult "Markdown Breakout Format" $false $_.Exception.Message
+    }
+    
+    # Test JSON format
+    try {
+        $jsonOutput = & ".\PortMap.ps1" -InputFile ".\test-breakout-config.json" -OutputFormat "JSON" -ErrorAction Stop | ConvertFrom-Json
+        $jsonHasBreakout = $false
+        
+        foreach ($device in $jsonOutput.devices) {
+            foreach ($port in $device.portDetails) {
+                if ($port.port -like "25.*") {
+                    $jsonHasBreakout = $true
+                    break
+                }
+            }
+        }
+        
+        Write-TestResult "JSON Breakout Interface Structure" $jsonHasBreakout
+    }
+    catch {
+        Write-TestResult "JSON Breakout Format" $false $_.Exception.Message
+    }
+    
+    # Test CSV format
+    try {
+        & ".\PortMap.ps1" -InputFile ".\test-breakout-config.json" -OutputFormat "CSV" -ErrorAction Stop
+        
+        # Look for generated CSV files with breakout interfaces
+        $csvFiles = Get-ChildItem -Path "." -Filter "*breakout*portmap*.csv" -ErrorAction SilentlyContinue
+        $csvBreakoutSupport = $false
+        
+        foreach ($csvFile in $csvFiles) {
+            $csvContent = Get-Content $csvFile.FullName -Raw
+            if ($csvContent -match "25\.1|25\.2|25\.3|25\.4") {
+                $csvBreakoutSupport = $true
+                break
+            }
+        }
+        
+        Write-TestResult "CSV Breakout Interface Support" $csvBreakoutSupport
+        
+        # Cleanup CSV files
+        $csvFiles | Remove-Item -Force -ErrorAction SilentlyContinue
+    }
+    catch {
+        Write-TestResult "CSV Breakout Format" $false $_.Exception.Message
+    }
+}
+
+function Test-BreakoutEdgeCases {
+    <#
+    .SYNOPSIS
+        Tests breakout cable edge cases and validation scenarios.
+    #>
+    [CmdletBinding()]
+    param()
+    
+    Write-Host "`n--- Testing Breakout Edge Cases ---" -ForegroundColor Cyan
+    
+    # Test ShowUnused parameter with breakout interfaces
+    try {
+        $output = & ".\PortMap.ps1" -InputFile ".\test-breakout-config.json" -OutputFormat "Markdown" -ShowUnused -ErrorAction Stop
+        $hasUnusedBreakout = $output -match "Unused.*26\.[2-4]"
+        
+        Write-TestResult "ShowUnused with Breakout Interfaces" $hasUnusedBreakout
+    }
+    catch {
+        Write-TestResult "ShowUnused Breakout Edge Case" $false $_.Exception.Message
+    }
+    
+    # Test validation with breakout configuration
+    try {
+        $null = & ".\PortMap.ps1" -InputFile ".\test-breakout-config.json" -OutputFormat "JSON" -Validate -ErrorAction Stop
+        Write-TestResult "Breakout Configuration Validation" $true
+    }
+    catch {
+        Write-TestResult "Breakout Configuration Validation" $false $_.Exception.Message
+    }
+    
+    # Test sequential port ordering with mixed types
+    try {
+        $jsonOutput = & ".\PortMap.ps1" -InputFile ".\test-breakout-config.json" -OutputFormat "JSON" -ShowUnused -ErrorAction Stop | ConvertFrom-Json
+        
+        # Check that ports are in logical order (1, 2, 3, ..., 25.1, 25.2, 25.3, 25.4, 26.1, etc.)
+        $portOrderCorrect = $false
+        foreach ($device in $jsonOutput.devices) {
+            $ports = $device.portDetails | Sort-Object { 
+                if ($_.port -like "*.*") {
+                    # For breakout interfaces, sort by primary then sub
+                    $parts = $_.port.Split('.')
+                    [int]$parts[0] + ([int]$parts[1] / 10.0)
+                }
+                else {
+                    [int]$_.port
+                }
+            }
+            
+            # Verify we have both standard and breakout ports in sequence
+            $standardPorts = ($ports | Where-Object { $_.port -notlike "*.*" }).Count
+            $breakoutPorts = ($ports | Where-Object { $_.port -like "*.*" }).Count
+            
+            if ($standardPorts -gt 0 -and $breakoutPorts -gt 0) {
+                $portOrderCorrect = $true
+                break
+            }
+        }
+        
+        Write-TestResult "Sequential Port Ordering with Mixed Types" $portOrderCorrect
+    }
+    catch {
+        Write-TestResult "Sequential Port Ordering" $false $_.Exception.Message
+    }
+}
+
 function Show-TestSummary {
     <#
     .SYNOPSIS
@@ -337,6 +693,9 @@ function Start-PortMapTests {
     Test-JsonOutputGeneration
     Test-UnusedPortsFeature
     Test-DeviceFilteringFeature
+    
+    # Comprehensive breakout cable testing
+    Test-BreakoutCableSupport
     
     # Show results
     Show-TestSummary

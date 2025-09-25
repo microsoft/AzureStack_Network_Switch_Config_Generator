@@ -1,10 +1,112 @@
-# PortMap Tool
+# 🔧 PortMap Tool
 
-## Overview
+[![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B%20%7C%207.0%2B-blue?logo=powershell)](https://docs.microsoft.com/en-us/powershell/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](../../LICENSE)
+[![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)](README.MD)
+[![Breakout Cables](https://img.shields.io/badge/Breakout%20Cables-Supported-orange)](README.MD#breakout-cable-support)
+[![Tests](https://img.shields.io/badge/Tests-Comprehensive-success)](README.MD#testing--validation)
+[![Formats](https://img.shields.io/badge/Output-MD%20%7C%20CSV%20%7C%20JSON-informational)](README.MD#output-formats)
+
+> 🌟 **Key Features**: Professional network documentation • QSFP breakout cable support • Multiple output formats • Sequential port ordering • Comprehensive testing suite
+
+## 📋 Table of Contents
+
+- [🔧 PortMap Tool](#-portmap-tool)
+  - [📋 Table of Contents](#-table-of-contents)
+  - [📖 Overview](#-overview)
+  - [⚡ Quick Start](#-quick-start)
+  - [🎯 Purpose](#-purpose)
+  - [✨ Features](#-features)
+    - [Core Functionality](#core-functionality)
+    - [Advanced Features](#advanced-features)
+    - [🔗 Breakout Cable Support](#-breakout-cable-support)
+      - [Supported Breakout Formats](#supported-breakout-formats)
+      - [Breakout Cable Examples](#breakout-cable-examples)
+      - [Breakout Connection Mapping](#breakout-connection-mapping)
+    - [📄 Output Formats](#-output-formats)
+      - [1. Markdown Tables](#1-markdown-tables)
+      - [2. CSV Format - Individual Files Per Device](#2-csv-format---individual-files-per-device)
+      - [3. JSON Format - Consolidated Output](#3-json-format---consolidated-output)
+  - [👥 Target Audience](#-target-audience)
+  - [📝 Input Requirements](#-input-requirements)
+    - [Device Configuration JSON](#device-configuration-json)
+    - [Port Range Formats](#port-range-formats)
+      - [Standard Port Ranges](#standard-port-ranges)
+      - [Breakout Cable Ranges](#breakout-cable-ranges)
+      - [Mixed Configurations](#mixed-configurations)
+  - [⚙️ Installation \& Dependencies](#️-installation--dependencies)
+    - [Prerequisites](#prerequisites)
+    - [Dependencies](#dependencies)
+    - [Key Features \& Recent Improvements](#key-features--recent-improvements)
+      - [Breakout Cable Support (v1.0)](#breakout-cable-support-v10)
+      - [Sequential Port Integration](#sequential-port-integration)
+      - [Intelligent File Naming](#intelligent-file-naming)
+      - [Professional Markdown Output](#professional-markdown-output)
+      - [Comprehensive Metadata](#comprehensive-metadata)
+    - [CSV Output Behavior](#csv-output-behavior)
+      - [Individual Files Per Device](#individual-files-per-device)
+      - [File Naming Pattern](#file-naming-pattern)
+      - [Examples](#examples)
+      - [CSV vs Other Formats](#csv-vs-other-formats)
+  - [🚀 Usage](#-usage)
+    - [Basic Usage](#basic-usage)
+    - [📡 Breakout Cable Usage Examples](#-breakout-cable-usage-examples)
+    - [Automatic File Naming](#automatic-file-naming)
+  - [🔄 Integration with AzureStack Network Switch Config Generator](#-integration-with-azurestack-network-switch-config-generator)
+  - [💼 Use Cases](#-use-cases)
+    - [1. Network Design Documentation](#1-network-design-documentation)
+    - [2. Breakout Cable Documentation](#2-breakout-cable-documentation)
+    - [3. Port Utilization Analysis](#3-port-utilization-analysis)
+    - [4. Configuration Generator Input](#4-configuration-generator-input)
+    - [5. Device-Specific Spreadsheet Analysis](#5-device-specific-spreadsheet-analysis)
+    - [6. Network Auditing](#6-network-auditing)
+  - [📊 Output Examples](#-output-examples)
+    - [Sample Output Files](#sample-output-files)
+    - [Device Summary Table (All Formats)](#device-summary-table-all-formats)
+    - [Sequential Port Mapping with Breakout Cables (Markdown with -ShowUnused)](#sequential-port-mapping-with-breakout-cables-markdown-with--showunused)
+    - [Embedded Metadata (Markdown and JSON Formats)](#embedded-metadata-markdown-and-json-formats)
+  - [🛠️ Error Handling \& Logging](#️-error-handling--logging)
+    - [Error Detection](#error-detection)
+    - [Breakout Cable Validation](#breakout-cable-validation)
+    - [Logging Features](#logging-features)
+    - [Robust Operation](#robust-operation)
+  - [🧪 Testing \& Validation](#-testing--validation)
+    - [Automated Testing](#automated-testing)
+    - [Breakout Cable Testing](#breakout-cable-testing)
+    - [Validation Features](#validation-features)
+    - [Sample Configurations](#sample-configurations)
+  - [🤝 Contributing](#-contributing)
+    - [Development Guidelines](#development-guidelines)
+    - [Breakout Cable Development Notes](#breakout-cable-development-notes)
+  - [📞 Support](#-support)
+    - [🐛 Found a Bug?](#-found-a-bug)
+    - [💡 Feature Requests](#-feature-requests)
+    - [🆘 Need Help?](#-need-help)
+  - [� Related Projects](#-related-projects)
+    - [🏗️ Architecture Overview](#️-architecture-overview)
+  - [�📚 Version History](#-version-history)
+    - [**v1.0** (Current)](#v10-current)
+
+## 📖 Overview
 
 The PortMap tool is a comprehensive network documentation utility designed to generate professional-grade documentation for physical port assignments and cable connections across network devices. It creates detailed documentation artifacts that describe the complete physical cabling configuration of network switches, serving as essential documentation for network design, implementation, and maintenance.
 
-## Purpose
+## ⚡ Quick Start
+
+```powershell
+# 1️⃣ Generate Markdown documentation
+.\PortMap.ps1 -InputFile "your-config.json" -OutputFormat Markdown
+
+# 2️⃣ Include unused ports in sequential order
+.\PortMap.ps1 -InputFile "your-config.json" -OutputFormat Markdown -ShowUnused
+
+# 3️⃣ Test with breakout cable sample
+.\PortMap.ps1 -InputFile "test-breakout-config.json" -OutputFormat Markdown
+```
+
+> 📋 **Prerequisites**: PowerShell 5.1+ and a valid JSON configuration file describing your network devices.
+
+## 🎯 Purpose
 
 This tool solves critical documentation challenges in network design by:
 
@@ -15,7 +117,7 @@ This tool solves critical documentation challenges in network design by:
 - **Professional Output Generation**: Producing multiple output formats with intelligent file naming and embedded metadata (where applicable)
 - **Integration Ready**: Generating outputs that seamlessly integrate with switch configuration generators and network management tools
 
-## Features
+## ✨ Features
 
 ### Core Functionality
 
@@ -35,7 +137,7 @@ This tool solves critical documentation challenges in network design by:
 - **Sequential Port Ordering**: All ports displayed in logical numerical sequence regardless of connection status
 - **Professional Formatting**: Network engineering-standard documentation format with clear status indicators
 
-### Breakout Cable Support
+### 🔗 Breakout Cable Support
 
 The PortMap tool provides comprehensive support for QSFP breakout cables commonly used in modern network designs:
 
@@ -97,7 +199,7 @@ The PortMap tool provides comprehensive support for QSFP breakout cables commonl
 }
 ```
 
-### Output Formats
+### 📄 Output Formats
 
 #### 1. Markdown Tables
 
@@ -169,13 +271,13 @@ Machine-readable format with complete breakout interface support:
 }
 ```
 
-## Target Audience
+## 👥 Target Audience
 
 - **Network Engineers**: Primary users for designing and documenting physical network layouts with breakout cables
 - **System Administrators**: For understanding and maintaining network infrastructure including breakout connections
 - **Documentation Teams**: For creating network design artifacts and compliance documentation
 
-## Input Requirements
+## 📝 Input Requirements
 
 ### Device Configuration JSON
 
@@ -273,7 +375,7 @@ Devices can contain both standard ports and breakout interfaces:
 }
 ```
 
-## Installation & Dependencies
+## ⚙️ Installation & Dependencies
 
 ### Prerequisites
 
@@ -364,7 +466,7 @@ For a 3-device configuration with breakout cables, CSV output creates:
 | JSON     | Consolidated | 1 file        | Multi-device filename     | ✅ Full          |
 | CSV      | Individual   | 1 per device  | Device name + device info | ✅ Full          |
 
-## Usage
+## 🚀 Usage
 
 ### Basic Usage
 
@@ -388,7 +490,7 @@ For a 3-device configuration with breakout cables, CSV output creates:
 # -OutputFile parameter is ignored for CSV format as it creates multiple files
 ```
 
-### Breakout Cable Examples
+### 📡 Breakout Cable Usage Examples
 
 ```powershell
 # Test breakout cable functionality with sample configuration
@@ -401,15 +503,22 @@ For a 3-device configuration with breakout cables, CSV output creates:
 .\PortMap.ps1 -InputFile "test-breakout-config.json" -OutputFormat JSON
 ```
 
-### Command Line Parameters
+<details>
+<summary><strong>📝 Command Line Parameters</strong></summary>
 
-- `-InputFile`: Path to the input JSON configuration file (required)
-- `-OutputFormat`: Output format - Markdown, CSV, or JSON (required)
-- `-OutputFile`: Custom output file path (applies to Markdown/JSON only; CSV creates individual files automatically)
-- `-ShowUnused`: Include unused ports in sequential order within connection tables/files
-- `-DeviceFilter`: Filter output by specific device names (comma-separated)
-- `-Validate`: Validate input configuration without generating output
-- `-Detailed`: Display detailed progress information
+| Parameter       | Type         | Required | Description                                       |
+| --------------- | ------------ | -------- | ------------------------------------------------- |
+| `-InputFile`    | String       | ✅       | Path to the input JSON configuration file         |
+| `-OutputFormat` | String       | ✅       | Output format: `Markdown`, `CSV`, or `JSON`       |
+| `-OutputFile`   | String       | ❌       | Custom output file path (Markdown/JSON only)      |
+| `-ShowUnused`   | Switch       | ❌       | Include unused ports in sequential order          |
+| `-DeviceFilter` | String Array | ❌       | Filter by specific device names (comma-separated) |
+| `-Validate`     | Switch       | ❌       | Validate configuration without generating output  |
+| `-Detailed`     | Switch       | ❌       | Display detailed progress information             |
+
+> **💡 Note**: CSV format creates individual files per device automatically. The `-OutputFile` parameter is ignored for CSV format.
+
+</details>
 
 ### Automatic File Naming
 
@@ -439,7 +548,7 @@ The tool generates intelligent output filenames:
 - CSV: `test-breakout-config-switch01-Cisco-93180YC-FX3-portmap.csv`
 - JSON: `test-breakout-config-Cisco-93180YC-FX3-1dev-portmap.json`
 
-## Integration with AzureStack Network Switch Config Generator
+## 🔄 Integration with AzureStack Network Switch Config Generator
 
 The PortMap tool integrates seamlessly with the main project:
 
@@ -449,7 +558,7 @@ The PortMap tool integrates seamlessly with the main project:
 4. **Documentation**: Provides physical layer documentation alongside generated configurations
 5. **Breakout Cable Support**: Enables proper documentation of QSFP breakout configurations for switch templates
 
-## Use Cases
+## 💼 Use Cases
 
 ### 1. Network Design Documentation
 
@@ -506,7 +615,7 @@ Document existing network configurations for compliance and auditing:
 # Professional documentation showing all ports, usage status, and availability
 ```
 
-## Output Examples
+## 📊 Output Examples
 
 ### Sample Output Files
 
@@ -572,7 +681,7 @@ Markdown and JSON outputs include comprehensive metadata:
 
 **Note**: CSV format focuses on clean data without embedded metadata for optimal spreadsheet compatibility.
 
-## Error Handling & Logging
+## 🛠️ Error Handling & Logging
 
 The tool includes comprehensive error handling and logging:
 
@@ -612,7 +721,7 @@ The tool includes comprehensive error handling and logging:
 - Incremental file naming to prevent overwrites
 - Input validation with clear error messages
 
-## Testing & Validation
+## 🧪 Testing & Validation
 
 ### Automated Testing
 
@@ -661,9 +770,11 @@ The tool includes multiple sample configurations:
   - Mixed standard and breakout ports in the same device
   - Various connection types with breakout interfaces
 
-## Contributing
+## 🤝 Contributing
 
-This tool is part of the AzureStack Network Switch Config Generator project. Please follow the project's contribution guidelines and coding standards.
+This tool is part of the **AzureStack Network Switch Config Generator** project. Please follow the project's contribution guidelines and coding standards.
+
+> 👋 **New Contributors Welcome!** We appreciate contributions of all sizes. Check out our [contributing guide](../../CONTRIBUTING.md) and [code of conduct](../../CODE_OF_CONDUCT.md).
 
 ### Development Guidelines
 
@@ -685,17 +796,58 @@ When extending breakout cable functionality:
 - Test with both range and single breakout interface configurations
 - Ensure output formats properly display breakout interfaces
 
-## Support
+## 📞 Support
 
 For issues and questions:
 
-1. Check the main project's troubleshooting guide
-2. Review input JSON format requirements (including breakout cable formats)
-3. Validate device configuration syntax
-4. **Test with provided breakout cable sample configuration**
-5. Consult the project's support documentation
+1. 📖 Check the main project's [troubleshooting guide](../docs/TROUBLESHOOTING.md)
+2. 📋 Review input JSON format requirements (including breakout cable formats)
+3. ✅ Validate device configuration syntax
+4. 🧪 **Test with provided breakout cable sample configuration**
+5. 📚 Consult the project's [support documentation](../../SUPPORT.md)
 
-## Version History
+### 🐛 Found a Bug?
+
+- 🔍 Search existing [issues](../../issues) first
+- 📝 Create a [new issue](../../issues/new) with detailed description
+- 📎 Include your configuration file (sanitized)
+- 📊 Attach generated output samples
+
+### 💡 Feature Requests
+
+- 💭 Check [discussions](../../discussions) for similar ideas
+- 🚀 Submit feature requests via [issues](../../issues/new)
+- 🤝 Consider contributing the feature yourself!
+
+### 🆘 Need Help?
+
+- 💬 Join project [discussions](../../discussions)
+- 📖 Review the [project wiki](../../wiki)
+- 🔗 Check related tools in the [AzureStack ecosystem](#-related-projects)
+
+## � Related Projects
+
+This tool is part of a comprehensive network configuration ecosystem:
+
+| Project                                        | Description                                       | Status                                                                                                |
+| ---------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| **AzureStack Network Switch Config Generator** | Main project for generating switch configurations | [![Status](https://img.shields.io/badge/Status-Active-green)](../../README.md)                        |
+| **IP Assignment Tool**                         | Automated IP address management                   | [![Tool](https://img.shields.io/badge/Tool-Available-blue)](../IPAssignment/README.md)                |
+| **Environment Detail Assignment**              | Environment configuration management              | [![Tool](https://img.shields.io/badge/Tool-Available-blue)](../EnvironmentDetailAssignment/README.md) |
+
+### 🏗️ Architecture Overview
+
+```mermaid
+graph TD
+    A[JSON Config] --> B[PortMap Tool]
+    B --> C[Markdown Docs]
+    B --> D[CSV Reports]
+    B --> E[JSON Data]
+    E --> F[Switch Config Generator]
+    F --> G[Device Configurations]
+```
+
+## �📚 Version History
 
 ### **v1.0** (Current)
 
