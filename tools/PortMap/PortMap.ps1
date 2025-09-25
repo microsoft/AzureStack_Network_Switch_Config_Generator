@@ -260,27 +260,63 @@ function Test-NetworkConfiguration {
 function Expand-NetworkPortRange {
     <#
     .SYNOPSIS
-        Expands port range notation into individual port numbers.
+        Expands port range notation into individual port numbers or breakout interfaces.
     
     .DESCRIPTION
         Converts port range strings like "1-48" into arrays of individual port numbers.
-        Also handles single port numbers.
+        Also handles single port numbers and breakout cable interfaces (e.g., "1.1-1.4").
+        Breakout cables use the format [primary].[sub] where QSFP interfaces can be
+        split into multiple sub-interfaces.
     
     .PARAMETER Range
-        The port range string to expand (e.g., "1-48" or "25").
+        The port range string to expand. Examples:
+        - "1-48" (standard range)
+        - "25" (single port)
+        - "1.1-1.4" (breakout cable range)
+        - "1.1" (single breakout interface)
     
     .OUTPUTS
-        System.Int32[]
-        Array of individual port numbers.
+        System.Object[]
+        Array of individual port identifiers (integers for standard ports, strings for breakout interfaces).
     #>
     [CmdletBinding()]
-    [OutputType([int[]])]
+    [OutputType([object[]])]
     param(
         [Parameter(Mandatory = $true)]
         [string]$Range
     )
     
-    if ($Range -match '^(\d+)-(\d+)$') {
+    # Handle breakout cable ranges (e.g., "1.1-1.4")
+    if ($Range -match '^(\d+)\.(\d+)-(\d+)\.(\d+)$') {
+        $startPrimary = [int]$matches[1]
+        $startSub = [int]$matches[2]
+        $endPrimary = [int]$matches[3]
+        $endSub = [int]$matches[4]
+        
+        # Validate that primary interfaces match for breakout cables
+        if ($startPrimary -ne $endPrimary) {
+            Write-PortMapLog "Breakout cable range '$Range' spans multiple primary interfaces ($startPrimary to $endPrimary). This may not be intended." -Level Warning
+        }
+        
+        if ($startSub -gt $endSub) {
+            Write-PortMapLog "Invalid breakout range: start sub-interface ($startSub) is greater than end sub-interface ($endSub)" -Level Warning
+            return @()
+        }
+        
+        # Generate breakout sub-interfaces
+        $interfaces = [System.Collections.Generic.List[string]]::new()
+        for ($sub = $startSub; $sub -le $endSub; $sub++) {
+            $interfaces.Add("$startPrimary.$sub")
+        }
+        return $interfaces.ToArray()
+    }
+    # Handle single breakout interface (e.g., "1.1")
+    elseif ($Range -match '^(\d+)\.(\d+)$') {
+        # Use Write-Output with -NoEnumerate to preserve array structure
+        Write-Output -NoEnumerate @($Range)
+    }
+    # Handle standard port ranges (e.g., "1-48")
+    elseif ($Range -match '^(\d+)-(\d+)$') {
         $start = [int]$matches[1]
         $end = [int]$matches[2]
         
@@ -291,11 +327,12 @@ function Expand-NetworkPortRange {
         
         return $start..$end
     }
+    # Handle single standard port (e.g., "25")
     elseif ($Range -match '^\d+$') {
         return @([int]$Range)
     }
     else {
-        Write-PortMapLog "Invalid port range format: '$Range'. Expected format: '0-48' or '25'. Decimal values like '3.0' are not supported." -Level Warning
+        Write-PortMapLog "Invalid port range format: '$Range'. Expected formats: '1-48', '25', '1.1-1.4', or '1.1'." -Level Warning
         return @()
     }
 }
@@ -431,8 +468,8 @@ function Get-NetworkDevicePortInfo {
     
     $portInfo = @{
         TotalPorts  = 0
-        UsedPorts   = [System.Collections.Generic.List[int]]::new()
-        UnusedPorts = [System.Collections.Generic.List[int]]::new()
+        UsedPorts   = [System.Collections.Generic.List[object]]::new()
+        UnusedPorts = [System.Collections.Generic.List[object]]::new()
         PortDetails = @{}
     }
     
@@ -866,7 +903,7 @@ function ConvertTo-CsvOutput {
                 DeviceName        = $deviceName
                 Make              = $device.deviceMake
                 Model             = $device.deviceModel
-                Location          = $device.location ?? ""
+                Location          = if ($device.PSObject.Properties.Name -contains 'location') { $device.location } elseif ($device.rack -and $device.rackUnit) { "$($device.rack)/$($device.rackUnit)" } elseif ($device.rack) { $device.rack } else { "" }
                 Port              = $portEntry.Port
                 Media             = $portEntry.Media
                 Status            = $portEntry.Status
@@ -972,7 +1009,7 @@ function ConvertTo-JsonOutput {
             deviceName  = $device.deviceName
             deviceMake  = $device.deviceMake
             deviceModel = $device.deviceModel
-            location    = $device.location ?? ""
+            location    = if ($device.PSObject.Properties.Name -contains 'location') { $device.location } elseif ($device.rack -and $device.rackUnit) { "$($device.rack)/$($device.rackUnit)" } elseif ($device.rack) { $device.rack } else { "" }
             portSummary = [ordered]@{
                 totalPorts         = $portInfo.TotalPorts
                 usedPorts          = if ($portInfo.UsedPorts) { @($portInfo.UsedPorts).Count } else { 0 }

@@ -11,6 +11,7 @@ This tool solves critical documentation challenges in network design by:
 - **Comprehensive Physical Documentation**: Creating detailed artifacts of switch physical cable configurations with complete metadata
 - **Sequential Port Mapping**: Providing logically ordered port documentation with connected and unused ports in numerical sequence
 - **Advanced Port Analysis**: Tracking port utilization, media types, connection status, and availability
+- **Breakout Cable Support**: Full support for QSFP breakout cables with sub-interface notation (e.g., 1.1, 1.2, 1.3, 1.4)
 - **Professional Output Generation**: Producing multiple output formats with intelligent file naming and embedded metadata (where applicable)
 - **Integration Ready**: Generating outputs that seamlessly integrate with switch configuration generators and network management tools
 
@@ -20,84 +21,165 @@ This tool solves critical documentation challenges in network design by:
 
 - **Physical-to-Physical Mapping**: Maps source device ports to destination device ports with comprehensive media type and connection information
 - **Sequential Port Display**: Shows all ports in numerical order (1, 2, 3...) with connected and unused ports properly integrated
+- **Breakout Cable Interface Support**: Handles QSFP breakout cables with sub-interface notation (25.1-25.4, 26.1, etc.)
 - **Advanced Port Utilization Analysis**: Identifies and categorizes used, unused, and available ports across all devices
 - **Device Inventory Management**: Maintains detailed device make/model information alongside comprehensive port mappings
 - **Multiple Output Formats**: Supports JSON, CSV, and Markdown formats with consistent formatting (metadata in JSON/Markdown)
 
 ### Advanced Features
 
+- **Mixed Interface Types**: Seamlessly handles both standard ports (integers) and breakout interfaces (strings) in the same device
 - **Intelligent File Naming**: Automatic generation of descriptive output filenames including device information, manufacturers, and parameters
 - **Incremental File Management**: Automatic incremental numbering to prevent file overwrites
 - **Embedded Metadata**: Complete input parameters, generation details, and device context included in Markdown and JSON outputs
 - **Sequential Port Ordering**: All ports displayed in logical numerical sequence regardless of connection status
 - **Professional Formatting**: Network engineering-standard documentation format with clear status indicators
 
+### Breakout Cable Support
+
+The PortMap tool provides comprehensive support for QSFP breakout cables commonly used in modern network designs:
+
+#### Supported Breakout Formats
+
+- **Breakout Ranges**: `"25.1-25.4"` → Individual interfaces: 25.1, 25.2, 25.3, 25.4
+- **Single Breakout Interfaces**: `"26.1"` → Single sub-interface: 26.1
+- **Mixed Configurations**: Standard ports and breakout interfaces in the same device
+
+#### Breakout Cable Examples
+
+```json
+{
+  "portRanges": [
+    {
+      "range": "1-24",
+      "mediaType": "SFP28",
+      "speed": "25G",
+      "description": "Standard 25G ports"
+    },
+    {
+      "range": "25.1-25.4",
+      "mediaType": "QSFP_4x25G",
+      "speed": "25G",
+      "description": "QSFP cable split into 4x25G interfaces"
+    },
+    {
+      "range": "26.1",
+      "mediaType": "QSFP_4x25G",
+      "speed": "25G",
+      "description": "Single breakout interface"
+    }
+  ]
+}
+```
+
+#### Breakout Connection Mapping
+
+```json
+{
+  "connections": [
+    {
+      "sourceDevice": "switch01",
+      "sourcePorts": "25.1-25.4",
+      "destinationDevice": "host02",
+      "sourceMedia": "QSFP_4x25G",
+      "connectionType": "Host",
+      "notes": "Breakout cable to host with 4x25G interfaces"
+    },
+    {
+      "sourceDevice": "switch01",
+      "sourcePorts": "26.1",
+      "destinationDevice": "host03",
+      "sourceMedia": "QSFP_4x25G",
+      "connectionType": "Host",
+      "notes": "Single breakout interface"
+    }
+  ]
+}
+```
+
 ### Output Formats
 
 #### 1. Markdown Tables
 
-Professional network documentation format with per-device organization:
+Professional network documentation format with per-device organization, including breakout interfaces:
 
 ```markdown
-### TOR-1
+### switch01
 
-**Device:** TOR-1 (Cisco 93180YC-FX3)
-**Total Ports:** 52
-**Connected Ports:** 28
-**Unused Ports:** 24
+**Device:** switch01 (Cisco 93180YC-FX3)
+**Total Ports:** 34
+**Connected Ports:** 9
 
-| Port | Media | Status     | Destination Device | Destination Port | Destination Media | Type    | Notes                 |
-| ---- | ----- | ---------- | ------------------ | ---------------- | ----------------- | ------- | --------------------- |
-| 1    | SFP28 | Active     | Server-Nodes       | 0                | SFP28             | Server  | Compute nodes 1-16    |
-| 2    | SFP28 | Active     | Server-Nodes       | 0                | SFP28             | Server  | Compute nodes 1-16    |
-| 25   | SFP28 | Active     | LoadBalancer-1     | 0                | SFP28             | Network | Primary load balancer |
-| 26   | SFP28 | **Unused** | -                  | -                | -                 | -       | Available             |
-| 27   | SFP28 | **Unused** | -                  | -                | -                 | -       | Available             |
+| Port | Media      | Status | Destination Device | Type | Notes                      |
+| ---- | ---------- | ------ | ------------------ | ---- | -------------------------- |
+| 1    | SFP28      | Active | host01             | Host | Standard connections       |
+| 25.1 | QSFP_4x25G | Active | host02             | Host | Breakout cable connections |
+| 25.2 | QSFP_4x25G | Active | host02             | Host | Breakout cable connections |
+| 25.3 | QSFP_4x25G | Active | host02             | Host | Breakout cable connections |
+| 25.4 | QSFP_4x25G | Active | host02             | Host | Breakout cable connections |
+| 26.1 | QSFP_4x25G | Active | host03             | Host | Single breakout interface  |
 ```
 
 #### 2. CSV Format - Individual Files Per Device
 
-Creates individual CSV files for each device with clean, structured port data:
-
-**File Structure:**
-
-- **One CSV file per device** with device-specific naming
-- **Clean header row** with essential column names
-- **Sequential port data** with connected and unused ports in numerical order
-- **Complete connection details** for each port including media types and destinations
-- **No metadata rows** - focuses purely on port connection data
-
-**Example Files Generated:**
-
-- `sample-network-config-TOR-1-Cisco-93180YC-FX3-portmap.csv` (TOR-1 device)
-- `sample-network-config-TOR-2-Dell-S5248F-ON-portmap.csv` (TOR-2 device)
-- `sample-network-config-SPINE-1-Cisco-N9K-C93360YC-FX2-portmap.csv` (SPINE-1 device)
-
-**CSV Structure:**
+Handles both standard and breakout interfaces in clean CSV format:
 
 ```csv
-"DeviceName","Make","Model","Location","Port","Media","Status","DestinationDevice","DestinationPort","DestinationMedia","Type","Notes"
-"TOR-1","Cisco","93180YC-FX3","Rack A, Position 42","1","SFP28","Active","Server-Nodes","0","SFP28","Server","Compute nodes 1-16"
-"TOR-1","Cisco","93180YC-FX3","Rack A, Position 42","2","SFP28","Active","Server-Nodes","0","SFP28","Server","Compute nodes 1-16"
-"TOR-1","Cisco","93180YC-FX3","Rack A, Position 42","26","SFP28","Unused","","","","","Available"
-"TOR-1","Cisco","93180YC-FX3","Rack A, Position 42","27","SFP28","Unused","","","","","Available"
+"DeviceName","Make","Model","Location","Port","Media","Status","DestinationDevice","Type","Notes"
+"switch01","Cisco","93180YC-FX3","R01/U42-U43","25.1","QSFP_4x25G","Active","host02","Host","Breakout cable connections"
+"switch01","Cisco","93180YC-FX3","R01/U42-U43","25.2","QSFP_4x25G","Active","host02","Host","Breakout cable connections"
+"switch01","Cisco","93180YC-FX3","R01/U42-U43","26.1","QSFP_4x25G","Active","host03","Host","Single breakout interface"
 ```
 
 #### 3. JSON Format - Consolidated Output
 
-Machine-readable format with complete device and connection information for integration with configuration generators and other network tools. JSON output creates a single consolidated file with all devices.
+Machine-readable format with complete breakout interface support:
+
+```json
+{
+  "devices": [
+    {
+      "deviceName": "switch01",
+      "portDetails": [
+        {
+          "port": "25.1",
+          "mediaType": "QSFP_4x25G",
+          "speed": "25G",
+          "isUsed": true,
+          "connection": "host02"
+        },
+        {
+          "port": "26.1",
+          "mediaType": "QSFP_4x25G",
+          "speed": "25G",
+          "isUsed": true,
+          "connection": "host03"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "SourceDevice": "switch01",
+      "SourcePort": "25.1",
+      "SourceMedia": "QSFP_4x25G",
+      "DestinationDevice": "host02"
+    }
+  ]
+}
+```
 
 ## Target Audience
 
-- **Network Engineers**: Primary users for designing and documenting physical network layouts
-- **System Administrators**: For understanding and maintaining network infrastructure
+- **Network Engineers**: Primary users for designing and documenting physical network layouts with breakout cables
+- **System Administrators**: For understanding and maintaining network infrastructure including breakout connections
 - **Documentation Teams**: For creating network design artifacts and compliance documentation
 
 ## Input Requirements
 
 ### Device Configuration JSON
 
-The tool requires a JSON file describing devices at a high level:
+The tool requires a JSON file describing devices at a high level, with full breakout cable support:
 
 ```json
 {
@@ -114,7 +196,19 @@ The tool requires a JSON file describing devices at a high level:
           "description": "25G interfaces supporting SFP28"
         },
         {
-          "range": "49-52",
+          "range": "49.1-49.4",
+          "mediaType": "QSFP_4x25G",
+          "speed": "25G",
+          "description": "QSFP breakout cable - 4x25G interfaces"
+        },
+        {
+          "range": "50.1",
+          "mediaType": "QSFP_4x25G",
+          "speed": "25G",
+          "description": "Single QSFP breakout interface"
+        },
+        {
+          "range": "51-52",
           "mediaType": "QSFP28",
           "speed": "100G",
           "description": "100G interfaces supporting QSFP28"
@@ -128,17 +222,53 @@ The tool requires a JSON file describing devices at a high level:
       "sourcePorts": "1-9",
       "sourceMedia": "SFP28",
       "destinationDevice": "Node1-Node9",
-      "destinationPorts": "0",
-      "destinationMedia": "SFP28"
+      "connectionType": "Host"
     },
     {
       "sourceDevice": "TOR-1",
-      "sourcePorts": "16",
-      "sourceMedia": "SFP28",
-      "destinationDevice": "LoadBalancer1",
-      "destinationPorts": "0",
-      "destinationMedia": "SFP28"
+      "sourcePorts": "49.1-49.4",
+      "sourceMedia": "QSFP_4x25G",
+      "destinationDevice": "BreakoutHost1",
+      "connectionType": "Host",
+      "notes": "QSFP breakout cable to host with 4x25G"
+    },
+    {
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "50.1",
+      "sourceMedia": "QSFP_4x25G",
+      "destinationDevice": "BreakoutHost2",
+      "connectionType": "Host",
+      "notes": "Single breakout interface"
     }
+  ]
+}
+```
+
+### Port Range Formats
+
+The tool supports multiple port range formats:
+
+#### Standard Port Ranges
+
+- **Single Port**: `"25"` → Port 25
+- **Range**: `"1-48"` → Ports 1, 2, 3, ..., 48
+
+#### Breakout Cable Ranges
+
+- **Breakout Range**: `"25.1-25.4"` → Breakout interfaces 25.1, 25.2, 25.3, 25.4
+- **Single Breakout**: `"26.1"` → Single breakout interface 26.1
+
+#### Mixed Configurations
+
+Devices can contain both standard ports and breakout interfaces:
+
+```json
+{
+  "portRanges": [
+    { "range": "1-24", "mediaType": "SFP28" },
+    { "range": "25.1-25.4", "mediaType": "QSFP_4x25G" },
+    { "range": "26.1-26.4", "mediaType": "QSFP_4x25G" },
+    { "range": "33-34", "mediaType": "QSFP28" }
   ]
 }
 ```
@@ -148,7 +278,7 @@ The tool requires a JSON file describing devices at a high level:
 ### Prerequisites
 
 - PowerShell 5.1 or PowerShell Core 7.0+ (cross-platform compatible)
-- JSON configuration file describing your network devices and connections
+- JSON configuration file describing your network devices and connections (with optional breakout cables)
 - Write permissions to the output directory
 
 ### Dependencies
@@ -156,8 +286,16 @@ The tool requires a JSON file describing devices at a high level:
 - No external PowerShell modules required
 - Uses built-in PowerShell JSON and CSV cmdlets
 - Leverages .NET Framework/Core collections for optimal performance
+- Enhanced array handling for mixed port types (integers and strings)
 
 ### Key Features & Recent Improvements
+
+#### Breakout Cable Support (v1.0)
+
+- **Full QSFP Breakout Support**: Handles QSFP cables split into multiple sub-interfaces
+- **Mixed Port Types**: Seamlessly processes both standard ports (integers) and breakout interfaces (strings)
+- **Intelligent Range Parsing**: Supports `"25.1-25.4"` and `"26.1"` formats alongside standard ranges
+- **Robust Array Handling**: Fixed PowerShell array enumeration issues with single-element breakout interfaces
 
 #### Sequential Port Integration
 
@@ -180,6 +318,7 @@ Per-device organization with:
 - Unified port tables showing connected and unused ports
 - Clear status indicators and availability information
 - Network engineering documentation standards
+- **Breakout interface support** with proper sub-interface display
 
 #### Comprehensive Metadata
 
@@ -199,6 +338,7 @@ The CSV output format has unique behavior compared to other formats:
 - **One CSV file per device** rather than a single consolidated file
 - **Device-specific filenames** automatically generated for each device
 - **Clean data format** - each CSV focuses on port connection data without metadata overhead
+- **Breakout interface support** - properly handles mixed port types in CSV format
 
 #### File Naming Pattern
 
@@ -210,19 +350,19 @@ CSV files follow this naming convention:
 
 #### Examples
 
-For a 3-device configuration, CSV output creates:
+For a 3-device configuration with breakout cables, CSV output creates:
 
-- `sample-config-TOR-1-Cisco-93180YC-FX3-portmap.csv` (TOR-1 device)
+- `sample-config-TOR-1-Cisco-93180YC-FX3-portmap.csv` (TOR-1 device with breakout ports)
 - `sample-config-TOR-2-Dell-S5248F-ON-portmap.csv` (TOR-2 device)
 - `sample-config-SPINE-1-Cisco-N9K-C93360YC-FX2-portmap.csv` (SPINE-1 device)
 
 #### CSV vs Other Formats
 
-| Format   | Output Type  | Files Created | File Naming               |
-| -------- | ------------ | ------------- | ------------------------- |
-| Markdown | Consolidated | 1 file        | Multi-device filename     |
-| JSON     | Consolidated | 1 file        | Multi-device filename     |
-| CSV      | Individual   | 1 per device  | Device name + device info |
+| Format   | Output Type  | Files Created | File Naming               | Breakout Support |
+| -------- | ------------ | ------------- | ------------------------- | ---------------- |
+| Markdown | Consolidated | 1 file        | Multi-device filename     | ✅ Full          |
+| JSON     | Consolidated | 1 file        | Multi-device filename     | ✅ Full          |
+| CSV      | Individual   | 1 per device  | Device name + device info | ✅ Full          |
 
 ## Usage
 
@@ -248,13 +388,28 @@ For a 3-device configuration, CSV output creates:
 # -OutputFile parameter is ignored for CSV format as it creates multiple files
 ```
 
+### Breakout Cable Examples
+
+```powershell
+# Test breakout cable functionality with sample configuration
+.\PortMap.ps1 -InputFile "test-breakout-config.json" -OutputFormat Markdown
+
+# Generate CSV files showing breakout interfaces per device
+.\PortMap.ps1 -InputFile "test-breakout-config.json" -OutputFormat CSV -ShowUnused
+
+# Generate JSON with complete breakout interface metadata
+.\PortMap.ps1 -InputFile "test-breakout-config.json" -OutputFormat JSON
+```
+
 ### Command Line Parameters
 
 - `-InputFile`: Path to the input JSON configuration file (required)
 - `-OutputFormat`: Output format - Markdown, CSV, or JSON (required)
 - `-OutputFile`: Custom output file path (applies to Markdown/JSON only; CSV creates individual files automatically)
 - `-ShowUnused`: Include unused ports in sequential order within connection tables/files
-- `-LogLevel`: Logging verbosity - Info, Warning, Error (default: Info)
+- `-DeviceFilter`: Filter output by specific device names (comma-separated)
+- `-Validate`: Validate input configuration without generating output
+- `-Detailed`: Display detailed progress information
 
 ### Automatic File Naming
 
@@ -280,17 +435,19 @@ The tool generates intelligent output filenames:
 
 **Examples**:
 
-- Markdown: `sample-network-config-Cisco-Dell-93180YC-FX3-N9K-C93360YC-FX2-S5248F-ON-3dev-portmap.md`
-- CSV: `sample-network-config-TOR-1-Cisco-93180YC-FX3-portmap.csv`
+- Markdown: `test-breakout-config-Cisco-93180YC-FX3-1dev-portmap.md`
+- CSV: `test-breakout-config-switch01-Cisco-93180YC-FX3-portmap.csv`
+- JSON: `test-breakout-config-Cisco-93180YC-FX3-1dev-portmap.json`
 
 ## Integration with AzureStack Network Switch Config Generator
 
 The PortMap tool integrates seamlessly with the main project:
 
 1. **JSON Output**: Can be consumed by the main switch configuration generator
-2. **Template Integration**: Port mapping data can inform Jinja2 template generation
+2. **Template Integration**: Port mapping data (including breakout interfaces) can inform Jinja2 template generation
 3. **Validation**: Ensures physical design matches logical configuration requirements
 4. **Documentation**: Provides physical layer documentation alongside generated configurations
+5. **Breakout Cable Support**: Enables proper documentation of QSFP breakout configurations for switch templates
 
 ## Use Cases
 
@@ -303,7 +460,16 @@ Create comprehensive physical layer documentation for network designs with profe
 # Generates: datacenter-design-[manufacturers]-[models]-[count]dev-portmap.md
 ```
 
-### 2. Port Utilization Analysis
+### 2. Breakout Cable Documentation
+
+Document QSFP breakout cable configurations for high-density deployments:
+
+```powershell
+.\PortMap.ps1 -InputFile "breakout-design.json" -OutputFormat Markdown -ShowUnused
+# Shows all ports including breakout interfaces (25.1, 25.2, 25.3, 25.4) in sequence
+```
+
+### 3. Port Utilization Analysis
 
 Analyze complete port usage including unused ports in sequential order:
 
@@ -312,7 +478,7 @@ Analyze complete port usage including unused ports in sequential order:
 # Shows all ports 1,2,3... with connected and unused ports integrated
 ```
 
-### 3. Configuration Generator Input
+### 4. Configuration Generator Input
 
 Generate structured JSON data for switch configuration tools:
 
@@ -321,7 +487,7 @@ Generate structured JSON data for switch configuration tools:
 # Creates machine-readable data with complete device and connection metadata
 ```
 
-### 4. Device-Specific Spreadsheet Analysis
+### 5. Device-Specific Spreadsheet Analysis
 
 Export individual CSV files per device for detailed analysis and reporting:
 
@@ -331,7 +497,7 @@ Export individual CSV files per device for detailed analysis and reporting:
 # Example outputs: TOR-1.csv, TOR-2.csv, SPINE-1.csv
 ```
 
-### 5. Network Auditing
+### 6. Network Auditing
 
 Document existing network configurations for compliance and auditing:
 
@@ -348,7 +514,7 @@ Document existing network configurations for compliance and auditing:
 
 **Markdown Output (Consolidated):**
 
-- `sample-network-config-Cisco-Dell-93180YC-FX3-N9K-C93360YC-FX2-S5248F-ON-3dev-portmap.md`
+- `test-breakout-config-Cisco-93180YC-FX3-1dev-portmap.md`
 
 **JSON Output (Consolidated):**
 
@@ -356,39 +522,41 @@ Document existing network configurations for compliance and auditing:
 
 **CSV Output (Individual Files Per Device):**
 
-- `sample-network-config-TOR-1-Cisco-93180YC-FX3-portmap.csv` (TOR-1 device)
-- `sample-network-config-TOR-2-Dell-S5248F-ON-portmap.csv` (TOR-2 device)
-- `sample-network-config-SPINE-1-Cisco-N9K-C93360YC-FX2-portmap.csv` (SPINE-1 device)
+- `test-breakout-config-switch01-Cisco-93180YC-FX3-portmap.csv` (switch01 device with breakout interfaces)
 
 ### Device Summary Table (All Formats)
 
-| Device Name | Make  | Model        | Total Ports | Used Ports | Unused Ports |
-| ----------- | ----- | ------------ | ----------- | ---------- | ------------ |
-| TOR-1       | Cisco | 93180YC-FX3  | 52          | 28         | 24           |
-| TOR-2       | Dell  | S5248F-ON    | 54          | 22         | 32           |
-| SPINE-1     | Cisco | N9K-C93360YC | 96          | 0          | 96           |
+| Device Name | Make  | Model       | Total Ports | Used Ports | Unused Ports |
+| ----------- | ----- | ----------- | ----------- | ---------- | ------------ |
+| switch01    | Cisco | 93180YC-FX3 | 34          | 9          | 25           |
 
-### Sequential Port Mapping (Markdown with -ShowUnused)
+### Sequential Port Mapping with Breakout Cables (Markdown with -ShowUnused)
 
 ```markdown
-### TOR-1
+### switch01
 
-**Device:** TOR-1 (Cisco 93180YC-FX3)
-**Total Ports:** 52
-**Connected Ports:** 28
-**Unused Ports:** 24
+**Device:** switch01 (Cisco 93180YC-FX3)
+**Total Ports:** 34
+**Connected Ports:** 9
+**Unused Ports:** 25
 
-| Port | Media  | Status     | Destination Device | Destination Port | Destination Media | Type         | Notes                    |
-| ---- | ------ | ---------- | ------------------ | ---------------- | ----------------- | ------------ | ------------------------ |
-| 1    | SFP28  | Active     | Server-Nodes       | 0                | SFP28             | Server       | Compute nodes 1-16       |
-| 2    | SFP28  | Active     | Server-Nodes       | 0                | SFP28             | Server       | Compute nodes 1-16       |
-| 25   | SFP28  | Active     | LoadBalancer-1     | 0                | SFP28             | Network      | Primary load balancer    |
-| 26   | SFP28  | **Unused** | -                  | -                | -                 | -            | Available                |
-| 27   | SFP28  | **Unused** | -                  | -                | -                 | -            | Available                |
-| 49   | QSFP28 | Active     | SPINE-1            | 1                | QSFP28            | Uplink       | Primary uplinks to spine |
-| 50   | QSFP28 | Active     | SPINE-1            | 2                | QSFP28            | Uplink       | Primary uplinks to spine |
-| 51   | QSFP28 | Active     | TOR-2              | 51               | QSFP28            | Inter-Switch | MLAG peer link           |
-| 52   | QSFP28 | **Unused** | -                  | -                | -                 | -            | Available                |
+| Port | Media      | Status     | Destination Device | Destination Port | Destination Media | Type | Notes                      |
+| ---- | ---------- | ---------- | ------------------ | ---------------- | ----------------- | ---- | -------------------------- |
+| 1    | SFP28      | Active     | host01             | 1                | SFP28             | Host | Standard connections       |
+| 2    | SFP28      | Active     | host01             | 2                | SFP28             | Host | Standard connections       |
+| 3    | SFP28      | Active     | host01             | 3                | SFP28             | Host | Standard connections       |
+| 4    | SFP28      | Active     | host01             | 4                | SFP28             | Host | Standard connections       |
+| 5    | SFP28      | **Unused** | -                  | -                | -                 | -    | Available                  |
+| 25.1 | QSFP_4x25G | Active     | host02             | 1                | SFP28             | Host | Breakout cable connections |
+| 25.2 | QSFP_4x25G | Active     | host02             | 2                | SFP28             | Host | Breakout cable connections |
+| 25.3 | QSFP_4x25G | Active     | host02             | 3                | SFP28             | Host | Breakout cable connections |
+| 25.4 | QSFP_4x25G | Active     | host02             | 4                | SFP28             | Host | Breakout cable connections |
+| 26.1 | QSFP_4x25G | Active     | host03             | 1                | SFP28             | Host | Single breakout interface  |
+| 26.2 | QSFP_4x25G | **Unused** | -                  | -                | -                 | -    | Available                  |
+| 26.3 | QSFP_4x25G | **Unused** | -                  | -                | -                 | -    | Available                  |
+| 26.4 | QSFP_4x25G | **Unused** | -                  | -                | -                 | -    | Available                  |
+| 33   | QSFP28     | **Unused** | -                  | -                | -                 | -    | Available                  |
+| 34   | QSFP28     | **Unused** | -                  | -                | -                 | -    | Available                  |
 ```
 
 ### Embedded Metadata (Markdown and JSON Formats)
@@ -400,6 +568,7 @@ Markdown and JSON outputs include comprehensive metadata:
 - Device count, manufacturers, and models
 - Generated by user and computer information
 - Processing summary with port utilization statistics
+- **Breakout interface counts** and utilization
 
 **Note**: CSV format focuses on clean data without embedded metadata for optimal spreadsheet compatibility.
 
@@ -412,9 +581,17 @@ The tool includes comprehensive error handling and logging:
 - Invalid JSON input files with detailed syntax error reporting
 - Missing or malformed device configurations
 - Port range conflicts and overlapping assignments
+- **Invalid breakout interface formats** with helpful format examples
 - Media type mismatches between source and destination
 - Invalid output format specifications
 - File permission and path validation issues
+
+### Breakout Cable Validation
+
+- **Range Format Validation**: Ensures breakout ranges follow `X.Y-X.Z` format
+- **Primary Interface Consistency**: Warns if breakout ranges span multiple primary interfaces
+- **Sub-interface Range Validation**: Validates that start sub-interface ≤ end sub-interface
+- **Mixed Port Type Handling**: Properly processes devices with both standard and breakout ports
 
 ### Logging Features
 
@@ -422,12 +599,15 @@ The tool includes comprehensive error handling and logging:
 - Detailed processing information with timestamps
 - File operation status and output location details
 - Processing statistics and validation results
+- **Breakout interface processing** logs with detailed progress
 - Comprehensive error messages with resolution guidance
 
 ### Robust Operation
 
 - Graceful handling of missing optional fields
 - Safe array and object property access (PowerShell best practices)
+- **Enhanced array handling** for mixed port types (integers and strings)
+- **PowerShell array enumeration fixes** for single-element breakout interfaces
 - Automatic creation of output directories
 - Incremental file naming to prevent overwrites
 - Input validation with clear error messages
@@ -439,29 +619,47 @@ The tool includes comprehensive error handling and logging:
 The tool includes comprehensive automated testing:
 
 ```powershell
-# Run the included test suite
+# Run the included test suite (includes breakout cable tests)
 .\Test-PortMap.ps1
 
 # Manual testing with sample configuration
 .\PortMap.ps1 -InputFile "sample-network-config.json" -OutputFormat Markdown -ShowUnused
+
+# Test breakout cable functionality
+.\PortMap.ps1 -InputFile "test-breakout-config.json" -OutputFormat Markdown -ShowUnused
 ```
+
+### Breakout Cable Testing
+
+Comprehensive test coverage for breakout cable functionality:
+
+- **Range Expansion Testing**: Validates `"25.1-25.4"` → `["25.1", "25.2", "25.3", "25.4"]`
+- **Single Breakout Testing**: Validates `"26.1"` → `["26.1"]`
+- **Mixed Port Testing**: Validates devices with both standard and breakout ports
+- **Output Format Testing**: Ensures all output formats properly handle breakout interfaces
+- **Array Handling Testing**: Validates PowerShell array enumeration fixes
+- **Connection Mapping Testing**: Ensures breakout interfaces properly map to destinations
 
 ### Validation Features
 
 - JSON schema validation for input configurations
 - Port range overlap detection
+- **Breakout interface format validation** with clear error messages
 - Media type compatibility checking
 - Output file integrity verification
 - Processing statistics validation
+- **Mixed port type validation** (integers and strings)
 
 ### Sample Configurations
 
-The tool includes `sample-network-config.json` demonstrating:
+The tool includes multiple sample configurations:
 
-- Multiple device types (Cisco and Dell switches)
-- Different port configurations (SFP28, QSFP28)
-- Various connection types (server, storage, uplink, inter-switch)
-- Mixed utilized and unused ports
+- `sample-network-config.json`: Standard configuration with mixed device types
+- `test-breakout-config.json`: **Comprehensive breakout cable configuration** demonstrating:
+  - Breakout ranges (`"25.1-25.4"`, `"26.1-26.4"`)
+  - Single breakout interfaces (`"26.1"`)
+  - Mixed standard and breakout ports in the same device
+  - Various connection types with breakout interfaces
 
 ## Contributing
 
@@ -472,17 +670,30 @@ This tool is part of the AzureStack Network Switch Config Generator project. Ple
 - Maintain PowerShell best practices and StrictMode compatibility
 - Include comprehensive comment-based help for all functions
 - Add appropriate error handling and logging
+- **Test breakout cable functionality** with provided test configurations
 - Update tests for new functionality
 - Follow consistent code formatting and naming conventions
+- **Use proper array handling** for mixed port types (integers and strings)
+
+### Breakout Cable Development Notes
+
+When extending breakout cable functionality:
+
+- Use `Write-Output -NoEnumerate` for single-element arrays to prevent PowerShell enumeration
+- Handle mixed port types (integers and strings) in all functions
+- Validate breakout interface formats with clear error messages
+- Test with both range and single breakout interface configurations
+- Ensure output formats properly display breakout interfaces
 
 ## Support
 
 For issues and questions:
 
 1. Check the main project's troubleshooting guide
-2. Review input JSON format requirements
+2. Review input JSON format requirements (including breakout cable formats)
 3. Validate device configuration syntax
-4. Consult the project's support documentation
+4. **Test with provided breakout cable sample configuration**
+5. Consult the project's support documentation
 
 ## Version History
 
@@ -493,6 +704,16 @@ For issues and questions:
 - Complete port mapping functionality with device inventory
 - Multiple output formats: Markdown, CSV, and JSON with consistent formatting
 - Professional documentation generation with embedded metadata (Markdown/JSON)
+- **Full breakout cable support** with sub-interface notation
+
+**Breakout Cable Features:**
+
+- **Breakout Range Support**: `"25.1-25.4"` expands to individual sub-interfaces
+- **Single Breakout Interface Support**: `"26.1"` handled as individual interface
+- **Mixed Port Type Support**: Seamlessly handles both standard ports (integers) and breakout interfaces (strings)
+- **PowerShell Array Fix**: Resolved array enumeration issues with single-element breakout interfaces using `Write-Output -NoEnumerate`
+- **All Output Format Support**: Markdown, CSV, and JSON properly display breakout interfaces
+- **Intelligent Port Sorting**: Proper numerical sorting of mixed port types
 
 **Advanced Features:**
 
@@ -503,12 +724,14 @@ For issues and questions:
 - Incremental file management to prevent overwrites
 - Comprehensive metadata embedding in Markdown and JSON output formats
 - Robust error handling and configurable logging
+- **Enhanced validation** for breakout cable configurations
 
 **PowerShell Best Practices:**
 
 - StrictMode compatibility and safe property access
 - Comment-based help with detailed parameter documentation
 - Proper error handling with try/catch blocks
+- **Enhanced array handling** for mixed data types (integers and strings)
 - Efficient data structures and processing algorithms
 - Cross-platform PowerShell 5.1+ and Core 7.0+ support
 
@@ -518,7 +741,8 @@ For issues and questions:
 - Per-device organization with clear status indicators
 - Complete processing statistics and generation details
 - Integration-ready JSON output with full device context
+- **Breakout interface documentation** with proper sub-interface display
 
 ---
 
-**Note**: This tool is designed to work alongside the main AzureStack Network Switch Config Generator and follows the same architectural patterns and coding standards.
+**Note**: This tool is designed to work alongside the main AzureStack Network Switch Config Generator and follows the same architectural patterns and coding standards. The breakout cable support enables proper documentation of QSFP breakout configurations commonly used in modern high-density network deployments.
