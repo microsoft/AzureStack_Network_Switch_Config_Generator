@@ -1,11 +1,14 @@
 {
-  "network": "192.168.1.0/24",
+  "network": "192.168.0.0/23",
   "subnets": [
-    { "name": "csu-edge-transport-compute", "vlan": "203", "hosts": "10" },
-    { "name": "csu-exchange-compute","vlan": "102", "hosts": "30" },
-    { "name": "msu-compute","vlan": "302", "hosts": "30" },
-    { "name": "csu-edge-transport-management","vlan": "101", "hosts": "30" },
-    { "name": "msu-management","vlan": "201", "hosts": "20" },
-    { "name": "csu-exchange-management","vlan": "301", "hosts": "60" }
+    { "Name": "External", "vlan": "501", "hosts": "5" },
+    { "Name": "DMZ", "vlan": "500", "hosts": "5" },
+    { "name": "csu-edge-transport-compute", "vlan": "203", "hosts": "40" },
+    { "name": "csu-exchange-compute","vlan": "102", "hosts": "40" },
+    { "name": "msu-compute","vlan": "302", "hosts": "40" },
+    { "name": "csu-edge-transport-management","vlan": "101", "hosts": "20" },
+    { "name": "msu-management","vlan": "201", "hosts": "27" },
+    { "name": "csu-exchange-management","vlan": "301", "hosts": "20" },
+    { "name": "BMC","vlan": "125", "hosts": "34" }
   ]
 }
