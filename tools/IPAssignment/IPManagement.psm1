@@ -41,9 +41,15 @@ function New-SubnetPlanByHosts {
       
       Mixed requirements: 60 hosts (/26), 25 hosts (/27), 2×10 hosts (/28 each), 3×5 hosts (/29 each).
 
+  .EXAMPLE
+      New-SubnetPlanByHosts -Network "192.168.1.0/24" -HostRequirements @{ 25 = 2; 11 = 2 } -AsJson
+      
+      Returns the subnet plan in JSON format for API consumption or further processing.
+
   .OUTPUTS
       Array of PSCustomObject containing detailed subnet information including
       network addresses, broadcast addresses, usable host ranges, and allocation status.
+      When -AsJson is specified, returns JSON string representation of the data.
 
   .NOTES
       Host count calculation:
@@ -59,7 +65,10 @@ function New-SubnetPlanByHosts {
     
     [Parameter(Mandatory = $true, HelpMessage = "Hashtable of host counts and required quantities")]
     [ValidateNotNullOrEmpty()]
-    [hashtable]$HostRequirements
+    [hashtable]$HostRequirements,
+    
+    [Parameter(Mandatory = $false, HelpMessage = "Output results in JSON format")]
+    [switch]$AsJson
   )
 
   # Begin processing with input validation and parameter setup
@@ -106,14 +115,22 @@ function New-SubnetPlanByHosts {
     # Add to prefix counts (handle multiple host counts that map to same prefix)
     if ($PrefixRequirements.ContainsKey($optimalPrefix)) {
       $PrefixRequirements[$optimalPrefix] += $requiredSubnets
-    } else {
+    }
+    else {
       $PrefixRequirements[$optimalPrefix] = $requiredSubnets
     }
   }
   
   # Call the optimized subnet planning function with calculated prefix lengths
   Write-Verbose "Calling New-SubnetPlan with calculated prefix requirements"
-  return New-SubnetPlan -Network $Network -PrefixRequirements $PrefixRequirements
+  $result = New-SubnetPlan -Network $Network -PrefixRequirements $PrefixRequirements
+  
+  if ($AsJson) {
+    return $result | ConvertTo-Json -Depth 10
+  }
+  else {
+    return $result
+  }
 }
 
 function New-SubnetPlan {
@@ -161,9 +178,15 @@ function New-SubnetPlan {
       
       Mixed subnet sizes: 1×/26 (62 hosts), 3×/28 (14 hosts each), 2×/29 (6 hosts each).
 
+  .EXAMPLE
+      New-SubnetPlan -Network "192.168.1.0/24" -PrefixRequirements @{ 26 = 2; 28 = 1 } -AsJson
+      
+      Returns the subnet plan in JSON format suitable for APIs or automated processing.
+
   .OUTPUTS
       Array of PSCustomObject containing comprehensive subnet information including
       network addresses, broadcast addresses, usable host ranges, and allocation status.
+      When -AsJson is specified, returns JSON string representation of the data.
 
   .NOTES
       The function uses a greedy bin-packing algorithm to achieve optimal space utilization.
@@ -178,7 +201,10 @@ function New-SubnetPlan {
     
     [Parameter(Mandatory = $true, HelpMessage = "Hashtable of prefix lengths and required quantities")]
     [ValidateNotNullOrEmpty()]
-    [hashtable]$PrefixRequirements
+    [hashtable]$PrefixRequirements,
+    
+    [Parameter(Mandatory = $false, HelpMessage = "Output results in JSON format")]
+    [switch]$AsJson
   )
 
   # Begin processing with input validation and parameter setup
@@ -394,11 +420,17 @@ function New-SubnetPlan {
     
     Write-Verbose "Subnet allocation completed successfully. Total subnets created: $($allocatedSubnets.Count)"
     
+    # Handle JSON output format
+    if ($AsJson) {
+      return $summaryView | ConvertTo-Json -Depth 10
+    }
+    
     # Check if output is being captured (assigned to variable) or piped
     if ($MyInvocation.Line -match '\$\w+\s*=' -or $MyInvocation.Line -match '\|') {
       # Return data objects when captured or piped
       return $summaryView
-    } else {
+    }
+    else {
       # Display clean table when run directly with proper spacing
       $tableOutput = $summaryView | Format-Table -AutoSize | Out-String
       Write-Host $tableOutput.TrimEnd()
@@ -506,9 +538,16 @@ function New-SubnetPlanFromConfig {
       New-SubnetPlanFromConfig -JsonConfig $customConfig
       # Output will show: name, vlan, zone, Subnet, Prefix, Network, etc.
 
+  .EXAMPLE
+      # Export subnet plan to JSON for API integration or automation
+      New-SubnetPlanFromConfig -ConfigPath "network-config.json" -AsJson | Out-File "subnet-plan.json"
+      
+      Generates the subnet plan and exports it to a JSON file for consumption by other tools.
+
   .OUTPUTS
       Array of PSCustomObject with dynamic properties based on JSON configuration.
       Columns automatically adjust to show all properties defined in the JSON.
+      When -AsJson is specified, returns JSON string representation of the data.
 
   .NOTES
       JSON Configuration Format (Dynamic Properties):
@@ -553,7 +592,10 @@ function New-SubnetPlanFromConfig {
     
     [Parameter(Mandatory = $true, ParameterSetName = 'JsonString', HelpMessage = "JSON configuration string")]
     [ValidateNotNullOrEmpty()]
-    [string]$JsonConfig
+    [string]$JsonConfig,
+    
+    [Parameter(Mandatory = $false, HelpMessage = "Output results in JSON format")]
+    [switch]$AsJson
   )
 
   Write-Verbose "Starting subnet planning from JSON configuration"
@@ -563,7 +605,8 @@ function New-SubnetPlanFromConfig {
     if ($PSCmdlet.ParameterSetName -eq 'FilePath') {
       Write-Verbose "Loading configuration from file: $ConfigPath"
       $jsonContent = Get-Content -Path $ConfigPath -Raw
-    } else {
+    }
+    else {
       Write-Verbose "Using provided JSON configuration string"
       $jsonContent = $JsonConfig
     }
@@ -575,7 +618,8 @@ function New-SubnetPlanFromConfig {
     if ($Network) {
       $networkToUse = $Network
       Write-Verbose "Using network from parameter: $Network"
-    } elseif ($config.network) {
+    }
+    elseif ($config.network) {
       $networkToUse = $config.network
       Write-Verbose "Using network from JSON configuration: $($config.network)"
       
@@ -583,7 +627,8 @@ function New-SubnetPlanFromConfig {
       if ($networkToUse -notmatch '^(\d{1,3}\.){3}\d{1,3}/([1-2]?[0-9]|3[0-2])$') {
         throw "Invalid network format in JSON configuration: '$networkToUse'. Expected format: 'x.x.x.x/yy'"
       }
-    } else {
+    }
+    else {
       throw "Network must be specified either as parameter -Network or in JSON configuration as 'network' field"
     }
     
@@ -612,8 +657,8 @@ function New-SubnetPlanFromConfig {
       }
       
       # Check for either hosts or cidr field
-      $hasHosts = $subnet.hosts -ne $null
-      $hasCidr = $subnet.cidr -ne $null
+      $hasHosts = $null -ne $subnet.hosts
+      $hasCidr = $null -ne $subnet.cidr
       
       if (-not $hasHosts -and -not $hasCidr) {
         throw "Invalid configuration: Subnet '$($subnet.name)' missing both 'hosts' and 'cidr' fields. One of them is required."
@@ -642,10 +687,12 @@ function New-SubnetPlanFromConfig {
         # Build host requirements for the core function
         if ($hostRequirements.ContainsKey($hostCount)) {
           $hostRequirements[$hostCount] += 1
-        } else {
+        }
+        else {
           $hostRequirements[$hostCount] = 1
         }
-      } else {
+      }
+      else {
         # Process CIDR prefix (new logic)
         $prefixLength = [int]$subnet.cidr
         
@@ -668,7 +715,8 @@ function New-SubnetPlanFromConfig {
         # Build prefix requirements for the core function
         if ($prefixRequirements.ContainsKey($prefixLength)) {
           $prefixRequirements[$prefixLength] += 1
-        } else {
+        }
+        else {
           $prefixRequirements[$prefixLength] = 1
         }
       }
@@ -691,7 +739,8 @@ function New-SubnetPlanFromConfig {
       $count = $hostRequirements[$hostCount]
       if ($combinedPrefixRequirements.ContainsKey($prefix)) {
         $combinedPrefixRequirements[$prefix] += $count
-      } else {
+      }
+      else {
         $combinedPrefixRequirements[$prefix] = $count
       }
     }
@@ -701,7 +750,8 @@ function New-SubnetPlanFromConfig {
       $count = $prefixRequirements[$prefix]
       if ($combinedPrefixRequirements.ContainsKey($prefix)) {
         $combinedPrefixRequirements[$prefix] += $count
-      } else {
+      }
+      else {
         $combinedPrefixRequirements[$prefix] = $count
       }
     }
@@ -724,7 +774,7 @@ function New-SubnetPlanFromConfig {
       
       # Universal standardization: Capitalize first letter, lowercase the rest
       if ($PropertyName.Length -eq 0) { return $PropertyName }
-      return $PropertyName.Substring(0,1).ToUpper() + $PropertyName.Substring(1).ToLower()
+      return $PropertyName.Substring(0, 1).ToUpper() + $PropertyName.Substring(1).ToLower()
     }
     
     # Enhance results with dynamic properties from configuration
@@ -735,8 +785,9 @@ function New-SubnetPlanFromConfig {
     # Sort subnets by size (largest first) to match allocation order
     $sortedSubnets = $config.subnets | Sort-Object { 
       if ($_.hosts) { 
-        -[int]$_.hosts  # Largest host requirement first
-      } else { 
+        - [int]$_.hosts  # Largest host requirement first
+      }
+      else { 
         [int]$_.cidr  # Smallest CIDR prefix first (which means largest subnet)
       } 
     }
@@ -753,7 +804,8 @@ function New-SubnetPlanFromConfig {
           $standardizedName = Get-StandardizedPropertyName -PropertyName $property
           $value = if ($subnetConfig.PSObject.Properties[$property]) { 
             $subnetConfig.PSObject.Properties[$property].Value 
-          } else { 
+          }
+          else { 
             "" 
           }
           $properties[$standardizedName] = $value
@@ -773,7 +825,8 @@ function New-SubnetPlanFromConfig {
         $enhancedResult = [PSCustomObject]$properties
         $enhancedResults += $enhancedResult
         $assignedIndex++
-      } else {
+      }
+      else {
         # Available subnets - build with standardized property names
         $properties = [ordered]@{}
         
@@ -800,7 +853,7 @@ function New-SubnetPlanFromConfig {
       }
     }
     
-    Write-Verbose "Enhanced subnet plan created with $(($enhancedResults | Where-Object Category -eq 'Assigned').Count) named subnets"
+    Write-Verbose "Enhanced subnet plan created with $(($enhancedResults | Where-Object Category -EQ 'Assigned').Count) named subnets"
     
     # Create dynamic summary view based on detected properties with standardized names
     # Build the property list dynamically: custom properties first, then network details
@@ -815,10 +868,16 @@ function New-SubnetPlanFromConfig {
     $uniqueProperties = $displayProperties | Select-Object -Unique
     $summaryView = $enhancedResults | Select-Object $uniqueProperties
     
+    # Handle JSON output format
+    if ($AsJson) {
+      return $summaryView | ConvertTo-Json -Depth 10
+    }
+    
     # Check if output is being captured or piped
     if ($MyInvocation.Line -match '\$\w+\s*=' -or $MyInvocation.Line -match '\|') {
       return $summaryView
-    } else {
+    }
+    else {
       # Display dynamic table with all detected properties
       $tableOutput = $summaryView | Format-Table -AutoSize | Out-String
       Write-Host $tableOutput.TrimEnd()

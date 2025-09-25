@@ -4,7 +4,7 @@
 
 🎯 **Automatically divides your network into subnets** - no manual calculations needed!
 
-- Takes a big network (like `192.168.1.0/24`) 
+- Takes a big network (like `192.168.1.0/24`)
 - Splits it into smaller subnets based on your needs
 - Shows you exactly what IP ranges to use
 - Calculates everything automatically - no subnet math required!
@@ -14,19 +14,21 @@
 ## 🚀 Getting Started
 
 ### Step 1: Import the Module
+
 ```powershell
 # Load the IP Management tool
 Import-Module .\IPManagement.psm1
 ```
 
 ### Step 2: Get Help Anytime
+
 ```powershell
 # See all available functions
 Get-Command -Module IPManagement
 
 # Get detailed help for any function
 Get-Help New-SubnetPlanFromConfig -Examples
-Get-Help New-SubnetPlanByHosts -Examples  
+Get-Help New-SubnetPlanByHosts -Examples
 Get-Help New-SubnetPlan -Examples
 
 # Get full documentation
@@ -40,6 +42,7 @@ Get-Help New-SubnetPlanFromConfig -Full
 ## Three Ways to Use It (Pick One)
 
 ### 🏆 **Option 1: JSON Configuration** (RECOMMENDED)
+
 **Best for:** Real projects with named subnets
 
 **When to use:** When you want professional documentation and have multiple subnets with names/VLANs/descriptions.
@@ -63,6 +66,7 @@ New-SubnetPlanFromConfig -Network "10.0.1.0/24" -ConfigPath "network.json"
 ```
 
 **Sample Output:**
+
 ```
 Name       Vlan Subnet           Prefix Network       Broadcast     FirstHost     EndHost       UsableHosts
 ----       ---- ------           ------ -------       ---------     ---------     -------       -----------
@@ -79,6 +83,7 @@ Available       192.168.1.192/26    26 192.168.1.192 192.168.1.255 192.168.1.193
 **Two ways to specify subnet sizes in JSON:**
 
 **Option A: By Host Count** (most common)
+
 ```json
 {
   "network": "192.168.1.0/24",
@@ -90,9 +95,10 @@ Available       192.168.1.192/26    26 192.168.1.192 192.168.1.255 192.168.1.193
 ```
 
 **Option B: By CIDR Prefix** (for network experts)
+
 ```json
 {
-  "network": "192.168.1.0/24", 
+  "network": "192.168.1.0/24",
   "subnets": [
     { "name": "Management", "vlan": 101, "cidr": "27" },
     { "name": "DMZ", "vlan": 102, "cidr": "26" }
@@ -101,6 +107,7 @@ Available       192.168.1.192/26    26 192.168.1.192 192.168.1.255 192.168.1.193
 ```
 
 **Mixed Approach** (you can combine both in one file!)
+
 ```json
 {
   "network": "192.168.1.0/24",
@@ -117,6 +124,7 @@ Available       192.168.1.192/26    26 192.168.1.192 192.168.1.255 192.168.1.193
 ---
 
 ### 🎯 **Option 2: Host Count** (SIMPLE)
+
 **Best for:** Quick calculations
 
 **When to use:** When you just know "I need X hosts" and want a fast answer.
@@ -127,6 +135,7 @@ New-SubnetPlanByHosts -Network "192.168.1.0/24" -HostRequirements @{ 50 = 2; 10 
 ```
 
 **Sample Output:**
+
 ```
 Name     Subnet           Prefix Network       Broadcast     FirstHost     EndHost       UsableHosts
 ----     ------           ------ -------       ---------     ---------     -------       -----------
@@ -143,6 +152,7 @@ Available 192.168.1.192/26   26 192.168.1.192 192.168.1.255 192.168.1.193 192.16
 ---
 
 ### ⚙️ **Option 3: Technical Prefixes** (ADVANCED)
+
 **Best for:** Network experts who know CIDR
 
 **When to use:** When you know exactly what subnet sizes you want (like /26, /28).
@@ -153,6 +163,7 @@ New-SubnetPlan -Network "192.168.1.0/24" -PrefixRequirements @{ 26 = 2; 28 = 3 }
 ```
 
 **Sample Output:**
+
 ```
 Name      Subnet           Prefix Network       Broadcast     FirstHost     EndHost       UsableHosts
 ----      ------           ------ -------       ---------     ---------     -------       -----------
@@ -166,3 +177,59 @@ Available 192.168.1.192/26    26 192.168.1.192 192.168.1.255 192.168.1.193 192.1
 ```
 
 **You get:** Precise control over subnet sizes with technical CIDR notation.
+
+---
+
+## 📊 JSON Output for APIs and Automation
+
+All functions support JSON output using the `-AsJson` parameter - perfect for:
+
+- **API Integration:** Consume data in web applications and REST APIs
+- **Infrastructure as Code:** Use with Terraform, ARM templates, or Ansible
+- **Data Export:** Save results to files for documentation or further processing
+- **PowerShell Automation:** Pass structured data between scripts
+
+### Quick Examples
+
+```powershell
+# Get JSON output for API consumption
+$jsonResult = New-SubnetPlanByHosts -Network "192.168.1.0/24" -HostRequirements @{ 50 = 2; 10 = 3 } -AsJson
+
+# Export to file for documentation or other tools
+New-SubnetPlanFromConfig -ConfigPath "network.json" -AsJson | Out-File "subnet-plan.json"
+
+# Parse JSON in PowerShell for further processing
+$data = New-SubnetPlan -Network "10.0.0.0/22" -PrefixRequirements @{ 26 = 4 } -AsJson | ConvertFrom-Json
+foreach ($subnet in $data) {
+    Write-Host "Subnet: $($subnet.Subnet) has $($subnet.UsableHosts) usable hosts"
+}
+```
+
+### Sample JSON Output
+
+```json
+[
+  {
+    "Name": "Assigned",
+    "Subnet": "192.168.1.0/26",
+    "Prefix": 26,
+    "Network": "192.168.1.0",
+    "Broadcast": "192.168.1.63",
+    "FirstHost": "192.168.1.1",
+    "EndHost": "192.168.1.62",
+    "UsableHosts": 62
+  },
+  {
+    "Name": "Available",
+    "Subnet": "192.168.1.64/26",
+    "Prefix": 26,
+    "Network": "192.168.1.64",
+    "Broadcast": "192.168.1.127",
+    "FirstHost": "192.168.1.65",
+    "EndHost": "192.168.1.126",
+    "UsableHosts": 62
+  }
+]
+```
+
+💡 **Pro Tip:** JSON output maintains all the same data as table output but in a structured format perfect for automation!
