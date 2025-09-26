@@ -1,0 +1,620 @@
+{
+  "metadata": {
+    "description": "B25 M365 Test Lab network configuration for PortMap tool",
+    "version": "1.0",
+    "created": "2025-22-09",
+    "environment": "B25-M365-Lab"
+  },
+  "devices": [
+    {
+      "deviceName": "Firewall-1",
+      "deviceMake": "paloalto",
+      "deviceModel": "pa-5410",
+      "location": "B25",
+      "portRanges": [
+        {
+          "range": "1-8",
+          "mediaType": "SFP+",
+          "speed": "10G",
+          "description": "1/10-Gbps connectivity with SFP+ transceivers"
+        },
+        {
+          "range": "9-24",
+          "mediaType": "SFP28",
+          "speed": "25G",
+          "description": "1,10, or 25-Gbps connectivity with SFP28 transceivers"
+        },
+        {
+          "range": "41-44",
+          "mediaType": "QSFP28",
+          "speed": "100G",
+          "description": "100-Gbps connectivity with QSFP28 transceivers"
+        }
+      ]
+    },
+    {
+      "deviceName": "LoadBalancer-1",
+      "deviceMake": "F5",
+      "deviceModel": "R5920-DF",
+      "location": "B25",
+      "portRanges": [
+        {
+          "range": "1-2",
+          "mediaType": "QSFP28",
+          "speed": "100G",
+          "description": "100-Gbps connectivity with QSFP28 transceivers"
+        },
+        {
+          "range": "3-10",
+          "mediaType": "SFP28",
+          "speed": "25G",
+          "description": "8 SFP29 ports supporting 1, 10, or 25-Gbps connectivity with SFP28 transceivers"
+        }
+      ]
+    },
+    {
+      "deviceName": "TOR-1",
+      "deviceMake": "Dell",
+      "deviceModel": "5232F-ON",
+      "location": "RR1",
+      "portRanges": [
+        {
+          "range": "1-32",
+          "mediaType": "QSFP28",
+          "speed": "100G",
+          "description": "1, 10, or 25-Gbps connectivity with SFP28 transceivers"
+        },
+        {
+          "range": "49-54",
+          "mediaType": "QSFP28",
+          "speed": "100G",
+          "description": "6 uplink ports can be configured as 40 or 100-Gbps Ethernet connectivity with QSFP28 transceivers"
+        }
+      ]
+    },
+    {
+      "deviceName": "TOR-2",
+      "deviceMake": "Dell",
+      "deviceModel": "5232F-ON",
+      "location": "RR1",
+      "portRanges": [
+        {
+          "range": "1-48",
+          "mediaType": "SFP28",
+          "speed": "25G",
+          "description": "1, 10, or 25-Gbps connectivity with SFP28 transceivers"
+        },
+        {
+          "range": "49-54",
+          "mediaType": "QSFP28",
+          "speed": "100G",
+          "description": "6 uplink ports can be configured as 40 or 100-Gbps Ethernet connectivity with QSFP28 transceivers"
+        }
+      ]
+    },
+    {
+      "deviceName": "BMC-1",
+      "deviceMake": "Cisco",
+      "deviceModel": "9348GC-FX3",
+      "location": "RR1",
+      "portRanges": [
+        {
+          "range": "1-48",
+          "mediaType": "BASE-T",
+          "speed": "1G",
+          "description": "10-Mbps, 100-Mbps, or 1-Gbps ports connectivity with 1GBASE-T interface"
+        },
+        {
+          "range": "49-54",
+          "mediaType": "SFP28 ",
+          "speed": "25G",
+          "description": "4 ports can be configured as 1/10/25-Gbps Ethernet connectivity with SFP28 transceivers"
+        },
+        {
+          "range": "55-56",
+          "mediaType": "QSFP28",
+          "speed": "100G",
+          "description": "2 ports can be configured as 40/100-Gbps Ethernet connectivity with QSFP28 transceivers"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "description": "Firewall OOB Management",
+      "sourceDevice": "Firewall-1",
+      "sourcePorts": "0",
+      "sourceMedia": "BASE-T",
+      "destinationDevice": "BMC-1",
+      "destinationPorts": "44",
+      "destinationMedia": "BASE-T",
+      "connectionType": "OOB-Mgmt",
+      "notes": "Out of Band Management"
+    },
+    {
+      "description": "TOR to Firewall",
+      "sourceDevice": "Firewall-1",
+      "sourcePorts": "41",
+      "sourceMedia": "QSFP28",
+      "destinationDevice": "TOR-1",
+      "destinationPorts": "54",
+      "destinationMedia": "QFP28",
+      "connectionType": "Network",
+      "notes": "Link to TOR"
+    },
+    {
+      "description": "TOR to Firewall",
+      "sourceDevice": "Firewall-1",
+      "sourcePorts": "42",
+      "sourceMedia": "QSFP28",
+      "destinationDevice": "TOR-2",
+      "destinationPorts": "54",
+      "destinationMedia": "QFP28",
+      "connectionType": "Network",
+      "notes": "Link to TOR"
+    },
+    {
+      "description": "Firewall to Internet",
+      "sourceDevice": "Firewall-1",
+      "sourcePorts": "43",
+      "sourceMedia": "QSFP28",
+      "destinationDevice": "EdgeNetwork",
+      "destinationPorts": "1",
+      "destinationMedia": "QFP28",
+      "connectionType": "Edge",
+      "notes": "Link to External"
+    },
+    {
+      "description": "Firewall to Internet",
+      "sourceDevice": "Firewall-1",
+      "sourcePorts": "44",
+      "sourceMedia": "QSFP28",
+      "destinationDevice": "EdgeNetwork",
+      "destinationPorts": "2",
+      "destinationMedia": "QFP28",
+      "connectionType": "Edge",
+      "notes": "Link to External"
+    },
+    {
+      "description": "Load Balancer OOB Management",
+      "sourceDevice": "LoadBalancer-1",
+      "sourcePorts": "0",
+      "sourceMedia": "BASE-T",
+      "destinationDevice": "BMC-1",
+      "destinationPorts": "43",
+      "destinationMedia": "BASE-T",
+      "connectionType": "OOB-Mgmt",
+      "notes": "Out of Band Management"
+    },
+    {
+      "description": "TOR to Load Balancer",
+      "sourceDevice": "LoadBalancer-1",
+      "sourcePorts": "1",
+      "sourceMedia": "QSFP28",
+      "destinationDevice": "TOR-1",
+      "destinationPorts": "53",
+      "destinationMedia": "QFP28",
+      "connectionType": "Network",
+      "notes": "Link to TOR"
+    },
+    {
+      "description": "TOR to Load Balancer",
+      "sourceDevice": "LoadBalancer-1",
+      "sourcePorts": "2",
+      "sourceMedia": "QSFP28",
+      "destinationDevice": "TOR-2",
+      "destinationPorts": "53",
+      "destinationMedia": "QFP28",
+      "connectionType": "Network",
+      "notes": "Link to TOR"
+    },
+    {
+      "description": "SharePoint connections to TOR",
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "1-3",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Nodes-AX-660",
+      "destinationPorts": "0",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "SharePoint nodes 1-3"
+    },
+    {
+      "description": "Mailbox connections to TOR",
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "4-7",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Nodes-AX-660",
+      "destinationPorts": "0",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "Mailbox nodes 1-4"
+    },
+    {
+      "description": "Edge Transport connections to TOR",
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "8-9",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Nodes-AX-660",
+      "destinationPorts": "0",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "Edge Transport nodes 1-2"
+    },
+    {
+      "description": "AD connections to TOR",
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "10",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Nodes-AX-660",
+      "destinationPorts": "0",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "AD node"
+    },
+    {
+      "description": "Firewall connections to TOR",
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "11",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Nodes-AX-660",
+      "destinationPorts": "0",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "Software Firewall nodes 1"
+    },
+    {
+      "description": "Load Balancer connections to TOR",
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "12",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Nodes-AX-660",
+      "destinationPorts": "0",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "Software Load Balancer nodes 1"
+    },
+    {
+      "description": "SharePoint Storage connections to TOR",
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "17-19",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Nodes-AX-660",
+      "destinationPorts": "0",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "SharePoint Storage nodes 1-3"
+    },
+    {
+      "description": "TOR iBGP Peer Link",
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "41-42",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "TOR-2",
+      "destinationPorts": "41-42",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "TOR iBGP Peer Link"
+    },
+    {
+      "description": "TOR to BMC-1",
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "44",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "BMC-1",
+      "destinationPorts": "47",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "TOR to BMC Link"
+    },
+    {
+      "description": "TOR to lab management network",
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "47",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Lab-Core1-Switch",
+      "destinationPorts": "1",
+      "destinationMedia": "SFP28",
+      "connectionType": "Mgmt-Uplink",
+      "notes": "Management network uplink"
+    },
+    {
+      "description": "TOR to lab management network",
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "48",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Lab-Core2-Switch",
+      "destinationPorts": "2",
+      "destinationMedia": "SFP28",
+      "connectionType": "Mgmt-Uplink",
+      "notes": "Management network uplink"
+    },
+    {
+      "description": "TOR to TOR HSRP Peer",
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "49-50",
+      "sourceMedia": "QSFP28",
+      "destinationDevice": "TOR-2",
+      "destinationPorts": "49-50",
+      "destinationMedia": "SFP28",
+      "connectionType": "Mgmt-Uplink",
+      "notes": "HSRP Peer Link"
+    },
+    {
+      "description": "Physical Load balancer connection",
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "53",
+      "sourceMedia": "QSFP28",
+      "destinationDevice": "LoadBalancer-1",
+      "destinationPorts": "0",
+      "destinationMedia": "QSFP28",
+      "connectionType": "Network",
+      "notes": "Physical Load balancer"
+    },
+    {
+      "description": "TOR-1 to FIREWALL-1 uplink",
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "54",
+      "sourceMedia": "QSFP28",
+      "destinationDevice": "Firewall-1",
+      "destinationPorts": "0",
+      "destinationMedia": "QSFP28",
+      "connectionType": "Uplink",
+      "notes": "Primary uplinks to firewall"
+    },
+    {
+      "description": "TOR-1 to Management to BMC-1",
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "0",
+      "sourceMedia": "BASE-T",
+      "destinationDevice": "BMC-1",
+      "destinationPorts": "41",
+      "destinationMedia": "BASE-T",
+      "connectionType": "Management",
+      "notes": "Out of Band Management"
+    },
+
+    {
+      "description": "SharePoint connections to TOR",
+      "sourceDevice": "TOR-2",
+      "sourcePorts": "1-3",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Nodes-AX-660",
+      "destinationPorts": "1",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "SharePoint nodes 1-3"
+    },
+    {
+      "description": "Mailbox connections to TOR",
+      "sourceDevice": "TOR-2",
+      "sourcePorts": "4-7",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Nodes-AX-660",
+      "destinationPorts": "1",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "Mailbox nodes 1-4"
+    },
+    {
+      "description": "Edge Transport connections to TOR",
+      "sourceDevice": "TOR-2",
+      "sourcePorts": "8-9",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Nodes-AX-660",
+      "destinationPorts": "1",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "Edge Transport nodes 1-2"
+    },
+    {
+      "description": "AD connections to TOR",
+      "sourceDevice": "TOR-2",
+      "sourcePorts": "10",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Nodes-AX-660",
+      "destinationPorts": "1",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "AD nodes 1-2"
+    },
+    {
+      "description": "Firewall connections to TOR",
+      "sourceDevice": "TOR-2",
+      "sourcePorts": "11",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Nodes-AX-660",
+      "destinationPorts": "1",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "Software Firewall nodes 1"
+    },
+    {
+      "description": "Load Balancer connections to TOR",
+      "sourceDevice": "TOR-2",
+      "sourcePorts": "12",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Nodes-AX-660",
+      "destinationPorts": "1",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "Software Load Balancer nodes 1"
+    },
+    {
+      "description": "SharePoint Storage connections to TOR",
+      "sourceDevice": "TOR-2",
+      "sourcePorts": "17-19",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Nodes-AX-660",
+      "destinationPorts": "1",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "SharePoint Storage nodes 1-3"
+    },
+    {
+      "description": "TOR iBGP Peer Link",
+      "sourceDevice": "TOR-2",
+      "sourcePorts": "41-42",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "TOR-1",
+      "destinationPorts": "41-42",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "TOR iBGP Peer Link"
+    },
+    {
+      "description": "TOR to BMC-1",
+      "sourceDevice": "TOR-2",
+      "sourcePorts": "44",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "BMC-1",
+      "destinationPorts": "48",
+      "destinationMedia": "SFP28",
+      "connectionType": "Server",
+      "notes": "TOR to BMC Link"
+    },
+    {
+      "description": "TOR to lab management network",
+      "sourceDevice": "TOR-2",
+      "sourcePorts": "47",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Lab-Core1-Switch",
+      "destinationPorts": "1",
+      "destinationMedia": "SFP28",
+      "connectionType": "Mgmt-Uplink",
+      "notes": "Management network uplink"
+    },
+    {
+      "description": "TOR to TOR HSRP Peer",
+      "sourceDevice": "TOR-2",
+      "sourcePorts": "49-50",
+      "sourceMedia": "QSFP28",
+      "destinationDevice": "TOR-1",
+      "destinationPorts": "49-50",
+      "destinationMedia": "SFP28",
+      "connectionType": "Mgmt-Uplink",
+      "notes": "HSRP Peer Link"
+    },
+    {
+      "description": "Physical Load balancer connection",
+      "sourceDevice": "TOR-2",
+      "sourcePorts": "53",
+      "sourceMedia": "QSFP28",
+      "destinationDevice": "LoadBalancer-1",
+      "destinationPorts": "1",
+      "destinationMedia": "QSFP28",
+      "connectionType": "Network",
+      "notes": "Physical Load balancer"
+    },
+    {
+      "description": "Physical Load balancer connection",
+      "sourceDevice": "TOR-2",
+      "sourcePorts": "53",
+      "sourceMedia": "QSFP28",
+      "destinationDevice": "LoadBalancer-1",
+      "destinationPorts": "1",
+      "destinationMedia": "QSFP28",
+      "connectionType": "Network",
+      "notes": "Physical Load balancer"
+    },
+    {
+      "description": "TOR-2 to FIREWALL-1 uplink",
+      "sourceDevice": "TOR-2",
+      "sourcePorts": "54",
+      "sourceMedia": "QSFP28",
+      "destinationDevice": "Firewall-1",
+      "destinationPorts": "1",
+      "destinationMedia": "QSFP28",
+      "connectionType": "Uplink",
+      "notes": "Primary uplinks to firewall"
+    },
+    {
+      "description": "TOR-2 to Management to BMC-1",
+      "sourceDevice": "TOR-2",
+      "sourcePorts": "0",
+      "sourceMedia": "BASE-T",
+      "destinationDevice": "BMC-1",
+      "destinationPorts": "42",
+      "destinationMedia": "BASE-T",
+      "connectionType": "Management",
+      "notes": "Out of Band Management"
+    },
+    {
+      "description": "BMC Connections",
+      "sourceDevice": "BMC-1",
+      "sourcePorts": "1-12",
+      "sourceMedia": "BASE-T",
+      "destinationDevice": "Nodes-BMC-AX-760",
+      "destinationPorts": "0",
+      "destinationMedia": "BASE-T",
+      "connectionType": "BMC",
+      "notes": "BMC connections for Out of Band (OOB) management"
+    },
+    {
+      "description": "Out of Band Management for TOR-1",
+      "sourceDevice": "BMC-1",
+      "sourcePorts": "41",
+      "sourceMedia": "BASE-T",
+      "destinationDevice": "TOR-1 Out of Band Management",
+      "destinationPorts": "0",
+      "destinationMedia": "BASE-T",
+      "connectionType": "Management",
+      "notes": "Management link to TOR-1"
+    },
+    {
+      "description": "Out of Band Management for TOR-2",
+      "sourceDevice": "BMC-1",
+      "sourcePorts": "42",
+      "sourceMedia": "BASE-T",
+      "destinationDevice": "TOR-2 Out of Band Management",
+      "destinationPorts": "0",
+      "destinationMedia": "BASE-T",
+      "connectionType": "Management",
+      "notes": "Management link to TOR-2"
+    },
+    {
+      "description": "Out of Band Management for LoadBalancer-1",
+      "sourceDevice": "BMC-1",
+      "sourcePorts": "43",
+      "sourceMedia": "BASE-T",
+      "destinationDevice": "LoadBalancer-1 Out of Band Management",
+      "destinationPorts": "0",
+      "destinationMedia": "BASE-T",
+      "connectionType": "Management",
+      "notes": "Management link to LoadBalancer-1"
+    },
+    {
+      "description": "Out of Band Management for Firewall-1",
+      "sourceDevice": "BMC-1",
+      "sourcePorts": "44",
+      "sourceMedia": "BASE-T",
+      "destinationDevice": "Firewall-1 Out of Band Management",
+      "destinationPorts": "0",
+      "destinationMedia": "BASE-T",
+      "connectionType": "Management",
+      "notes": "Management link to Firewall-1"
+    },
+    {
+      "description": "BMC to BMCNetwork uplink",
+      "sourceDevice": "BMC-1",
+      "sourcePorts": "49",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "TOR-1",
+      "destinationPorts": "1",
+      "destinationMedia": "SFP28",
+      "connectionType": "Uplink",
+      "notes": "Uplink to TOR-1 for BMC management traffic"
+    },
+    {
+      "description": "BMC to BMCNetwork uplink",
+      "sourceDevice": "BMC-1",
+      "sourcePorts": "50",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "TOR-2",
+      "destinationPorts": "2",
+      "destinationMedia": "SFP28",
+      "connectionType": "Uplink",
+      "notes": "Uplink to TOR-2 for BMC management traffic"
+    }
+  ]
+}
