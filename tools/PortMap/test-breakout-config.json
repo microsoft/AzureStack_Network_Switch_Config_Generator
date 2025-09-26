@@ -1,0 +1,89 @@
+{
+  "devices": [
+    {
+      "deviceName": "switch01",
+      "deviceMake": "Cisco",
+      "deviceModel": "93180YC-FX3",
+      "rack": "R01",
+      "rackUnit": "U42-U43",
+      "portRanges": [
+        {
+          "range": "1-24",
+          "mediaType": "SFP28",
+          "speed": "25G",
+          "description": "Standard 25G ports for host connections"
+        },
+        {
+          "range": "25.1-25.4",
+          "mediaType": "QSFP_4x25G",
+          "speed": "25G",
+          "description": "QSFP cable split into 4x25G interfaces for host ports using 25G"
+        },
+        {
+          "range": "26.1-26.4",
+          "mediaType": "QSFP_4x25G",
+          "speed": "25G",
+          "description": "QSFP cable split into 4x25G interfaces for host ports using 25G"
+        },
+        {
+          "range": "33-34",
+          "mediaType": "QSFP28",
+          "speed": "100G",
+          "description": "Uplink ports to spine switches"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "sourceDevice": "switch01",
+      "sourcePorts": "1-4",
+      "destinationDevice": "host01",
+      "destinationPorts": "1-4",
+      "sourceMedia": "SFP28",
+      "destinationMedia": "SFP28",
+      "connectionType": "Host",
+      "notes": "Standard host connections"
+    },
+    {
+      "sourceDevice": "switch01",
+      "sourcePorts": "25.1-25.4",
+      "destinationDevice": "host02",
+      "destinationPorts": "1-4",
+      "sourceMedia": "QSFP_4x25G",
+      "destinationMedia": "SFP28",
+      "connectionType": "Host",
+      "notes": "Breakout cable connections to host"
+    },
+    {
+      "sourceDevice": "switch01",
+      "sourcePorts": "26.1",
+      "destinationDevice": "host03",
+      "destinationPorts": "1",
+      "sourceMedia": "QSFP_4x25G",
+      "destinationMedia": "SFP28",
+      "connectionType": "Host",
+      "notes": "Single breakout interface connection"
+    },
+    {
+      "sourceDevice": "switch01",
+      "sourcePorts": "5-8",
+      "destinationDevice": "host04",
+      "destinationPorts": "1-4",
+      "sourceMedia": "SFP28",
+      "destinationMedia": "SFP28",
+      "connectionType": "Host",
+      "notes": "Additional standard connections for mixed port testing"
+    },
+    {
+      "sourceDevice": "switch01",
+      "sourcePorts": "33",
+      "destinationDevice": "spine01",
+      "destinationPorts": "1",
+      "sourceMedia": "QSFP28",
+      "destinationMedia": "QSFP28",
+      "connectionType": "Uplink",
+      "notes": "Uplink connection to spine switch"
+    }
+  ]
+}
