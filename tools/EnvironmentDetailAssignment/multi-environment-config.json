@@ -1,0 +1,123 @@
+{
+  "globalDefaults": {
+    "ntpServers": ["time.nist.gov", "pool.ntp.org"],
+    "dnsServers": ["8.8.8.8", "8.8.4.4"],
+    "snmpCommunity": "azurestack",
+    "deviceTypes": ["TOR", "SPINE", "LEAF", "BORDER"]
+  },
+  "environments": {
+    "Development": {
+      "networkPrefix": "192.168.10.0/24",
+      "vlanBase": 100,
+      "deviceSuffix": "dev",
+      "managementVlan": 101,
+      "ntpServers": ["192.168.10.1"],
+      "devices": {
+        "TOR-1": {
+          "managementIP": "192.168.10.10",
+          "location": "Lab-Rack-01",
+          "deviceType": "TOR"
+        },
+        "SPINE-1": {
+          "managementIP": "192.168.10.20",
+          "location": "Lab-Rack-01",
+          "deviceType": "SPINE"
+        }
+      }
+    },
+    "Staging": {
+      "networkPrefix": "192.168.20.0/24",
+      "vlanBase": 200,
+      "deviceSuffix": "stage",
+      "managementVlan": 201,
+      "ntpServers": ["192.168.20.1"],
+      "devices": {
+        "TOR-1": {
+          "managementIP": "192.168.20.10",
+          "location": "Stage-Rack-01",
+          "deviceType": "TOR"
+        },
+        "TOR-2": {
+          "managementIP": "192.168.20.11",
+          "location": "Stage-Rack-02",
+          "deviceType": "TOR"
+        },
+        "SPINE-1": {
+          "managementIP": "192.168.20.20",
+          "location": "Stage-Rack-01",
+          "deviceType": "SPINE"
+        }
+      }
+    },
+    "Production": {
+      "networkPrefix": "10.0.0.0/16",
+      "vlanBase": 1000,
+      "deviceSuffix": "prod",
+      "managementVlan": 1001,
+      "ntpServers": ["10.0.1.1", "10.0.1.2"],
+      "dnsServers": ["10.0.1.3", "10.0.1.4"],
+      "devices": {
+        "TOR-1": {
+          "managementIP": "10.0.1.10",
+          "location": "DC1-Rack-01",
+          "deviceType": "TOR"
+        },
+        "TOR-2": {
+          "managementIP": "10.0.1.11",
+          "location": "DC1-Rack-02", 
+          "deviceType": "TOR"
+        },
+        "TOR-3": {
+          "managementIP": "10.0.1.12",
+          "location": "DC1-Rack-03",
+          "deviceType": "TOR"
+        },
+        "SPINE-1": {
+          "managementIP": "10.0.1.20",
+          "location": "DC1-Core",
+          "deviceType": "SPINE"
+        },
+        "SPINE-2": {
+          "managementIP": "10.0.1.21",
+          "location": "DC1-Core",
+          "deviceType": "SPINE"
+        },
+        "BORDER-1": {
+          "managementIP": "10.0.1.30",
+          "location": "DC1-Edge",
+          "deviceType": "BORDER"
+        }
+      }
+    },
+    "DR": {
+      "networkPrefix": "10.1.0.0/16",
+      "vlanBase": 2000,
+      "deviceSuffix": "dr",
+      "managementVlan": 2001,
+      "ntpServers": ["10.1.1.1", "10.1.1.2"],
+      "dnsServers": ["10.1.1.3", "10.1.1.4"],
+      "devices": {
+        "TOR-1": {
+          "managementIP": "10.1.1.10",
+          "location": "DR-Site-Rack-01",
+          "deviceType": "TOR"
+        },
+        "SPINE-1": {
+          "managementIP": "10.1.1.20",
+          "location": "DR-Site-Core",
+          "deviceType": "SPINE"
+        },
+        "BORDER-1": {
+          "managementIP": "10.1.1.30",
+          "location": "DR-Site-Edge",
+          "deviceType": "BORDER"
+        }
+      }
+    }
+  },
+  "parameterTemplates": {
+    "hostnamePattern": "{deviceName}-{environment}",
+    "vlanAssignment": "{vlanBase} + {deviceIndex}",
+    "loopbackPattern": "{networkPrefix}.{deviceIndex}/32"
+  }
+}
