@@ -67,7 +67,7 @@ New-SubnetPlanFromConfig -Network "10.0.1.0/24" -ConfigPath "network.json"
 
 **Sample Output:**
 
-```
+```text
 Name       Vlan Subnet           Prefix Network       Broadcast     FirstHost     EndHost       UsableHosts
 ----       ---- ------           ------ -------       ---------     ---------     -------       -----------
 Users       102 192.168.1.0/25      25 192.168.1.0   192.168.1.127 192.168.1.1   192.168.1.126        126
@@ -121,6 +121,79 @@ Available       192.168.1.192/26    26 192.168.1.192 192.168.1.255 192.168.1.193
 
 💡 **Pro Tip:** Use `hosts` when you know how many devices you need. Use `cidr` when you need exact subnet sizes.
 
+#### 🆕 Named IP Assignments (per subnet)
+
+Need specific hosts (gateway, VIPs, BMC, etc.) to land on predictable addresses? Add an `IPAssignments` array to any subnet and the tool will:
+
+- Reserve hosts by position (starting at 1 = first usable IP)
+- Show each named assignment inline with the subnet
+- Highlight unused address ranges between assignments
+- Include the broadcast address so nothing gets overlooked
+
+```json
+{
+  "network": "10.0.0.0/24",
+  "subnets": [
+    {
+      "name": "Mgmt",
+      "vlan": 110,
+      "cidr": "28",
+      "IPAssignments": [
+        { "Name": "Gateway", "Position": 1 },
+        { "Name": "VMM", "Position": 3 }
+      ]
+    }
+  ]
+}
+```
+
+```powershell
+$json = Get-Content '.\mgmt-subnet.json' -Raw
+New-SubnetPlanFromConfig -JsonConfig $json
+```
+
+**Sample Output:**
+
+```text
+Name  Vlan Subnet         Label         IP                       Prefix Mask             Category
+----  ---- ------         -----         --                       ------ ----             --------
+Mgmt  110  10.0.0.0/28    Network       10.0.0.0                  /28   255.255.255.240  Network
+Mgmt  110  10.0.0.0/28    Gateway       10.0.0.1                  /28   255.255.255.240  Assignment
+Mgmt  110  10.0.0.0/28    Unused Range  10.0.0.2 - 10.0.0.2       /28   255.255.255.240  Unused
+Mgmt  110  10.0.0.0/28    VMM           10.0.0.3                  /28   255.255.255.240  Assignment
+Mgmt  110  10.0.0.0/28    Unused Range  10.0.0.4 - 10.0.0.14      /28   255.255.255.240  Unused
+Mgmt  110  10.0.0.0/28    Broadcast     10.0.0.15                 /28   255.255.255.240  Broadcast
+Available     10.0.0.16/28 Available Range 10.0.0.17 - 10.0.0.30  /28   255.255.255.240  Available
+```
+
+🔎 **How positions work:** position `1` = first usable host, `2` = second usable host, and so on. Positions must be unique and stay within the usable host count of the subnet.
+
+#### 🗂️ Export the Plan Automatically (New!)
+
+Want clean artifacts for handoffs or automation? `New-SubnetPlanFromConfig` now saves the detailed plan directly to disk:
+
+- `-ExportJsonPath` → writes the full detail table to JSON (perfect for tooling and APIs)
+- `-ExportCsvPath` → CSV formatted output for spreadsheets and reporting
+- `-ExportMarkdownPath` → Markdown table that drops straight into wikis and docs
+
+You can use any or all of them in a single run. The cmdlet creates folders on the fly, so paths like `output\plans\` just work.
+
+```powershell
+# Save the plan while still seeing a formatted table in the console
+New-SubnetPlanFromConfig -ConfigPath "network.json" `
+  -ExportJsonPath ".\output\network-plan.json" `
+  -ExportCsvPath ".\output\network-plan.csv" `
+  -ExportMarkdownPath ".\output\network-plan.md"
+```
+
+```powershell
+# Combine inline JSON with Markdown export
+$json = Get-Content '.\mgmt-subnet.json' -Raw
+New-SubnetPlanFromConfig -JsonConfig $json -ExportMarkdownPath '.\output\mgmt-plan.md'
+```
+
+✅ Console output still shows the pretty table (unless you pipe/assign it), while files capture the full detail for later.
+
 ---
 
 ### 🎯 **Option 2: Host Count** (SIMPLE)
@@ -136,7 +209,7 @@ New-SubnetPlanByHosts -Network "192.168.1.0/24" -HostRequirements @{ 50 = 2; 10 
 
 **Sample Output:**
 
-```
+```text
 Name     Subnet           Prefix Network       Broadcast     FirstHost     EndHost       UsableHosts
 ----     ------           ------ -------       ---------     ---------     -------       -----------
 Assigned 192.168.1.0/26      26 192.168.1.0   192.168.1.63  192.168.1.1   192.168.1.62           62
@@ -164,7 +237,7 @@ New-SubnetPlan -Network "192.168.1.0/24" -PrefixRequirements @{ 26 = 2; 28 = 3 }
 
 **Sample Output:**
 
-```
+```text
 Name      Subnet           Prefix Network       Broadcast     FirstHost     EndHost       UsableHosts
 ----      ------           ------ -------       ---------     ---------     -------       -----------
 Assigned  192.168.1.0/26      26 192.168.1.0   192.168.1.63  192.168.1.1   192.168.1.62           62

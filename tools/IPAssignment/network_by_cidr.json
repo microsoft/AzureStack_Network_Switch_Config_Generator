@@ -1,11 +1,36 @@
 {
   "network": "192.168.1.0/24",
   "subnets": [
-    { "name": "csu-edge-transport-compute", "vlan": "203", "cidr": "28" },
-    { "name": "csu-exchange-compute","vlan": "102", "cidr": "27" },
-    { "name": "msu-compute","vlan": "302", "cidr": "27" },
-    { "name": "csu-edge-transport-management","vlan": "101", "cidr": "27" },
-    { "name": "msu-management","vlan": "201", "cidr": "27" },
-    { "name": "csu-exchange-management","vlan": "301", "cidr": "26" }
+    {
+      "name": "csu-edge-transport-compute",
+      "vlan": "203",
+      "cidr": "28",
+      "IPAssignments": [
+        { "Name": "Gateway", "Position": 1 },
+        { "Name": "TOR1", "Position": 2 },
+        { "Name": "TOR2", "Position": 3 },
+        { "Name": "SMTPServer", "Position": 5 },
+        { "Name": "VIP", "Position": 4 }
+      ]
+    },
+    {
+      "name": "csu-exchange-compute",
+      "vlan": "102",
+      "cidr": "27",
+      "IPAssignments": [
+        { "Name": "Gateway", "Position": 1 },
+        { "Name": "TOR1", "Position": 2 },
+        { "Name": "TOR2", "Position": 3 },
+        { "Name": "Mailbox1", "Position": 5 },
+        { "Name": "Mailbox2", "Position": 6 },
+        { "Name": "Mailbox3", "Position": 7 },
+        { "Name": "Mailbox4", "Position": 8 },
+        { "Name": "VIP", "Position": 4 }
+      ]
+    },
+    { "name": "msu-compute", "vlan": "302", "cidr": "27" },
+    { "name": "csu-edge-transport-management", "vlan": "101", "cidr": "27" },
+    { "name": "msu-management", "vlan": "201", "cidr": "27" },
+    { "name": "csu-exchange-management", "vlan": "301", "cidr": "26" }
   ]
 }
