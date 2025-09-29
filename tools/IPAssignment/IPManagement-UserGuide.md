@@ -68,15 +68,15 @@ New-SubnetPlanFromConfig -Network "10.0.1.0/24" -ConfigPath "network.json"
 **Sample Output:**
 
 ```text
-Name       Vlan Subnet           Prefix Network       Broadcast     FirstHost     EndHost       UsableHosts
-----       ---- ------           ------ -------       ---------     ---------     -------       -----------
-Users       102 192.168.1.0/25      25 192.168.1.0   192.168.1.127 192.168.1.1   192.168.1.126        126
-Management  101 192.168.1.128/27    27 192.168.1.128 192.168.1.159 192.168.1.129 192.168.1.158         30
-Servers     103 192.168.1.160/27    27 192.168.1.160 192.168.1.191 192.168.1.161 192.168.1.190         30
-Available       192.168.1.192/26    26 192.168.1.192 192.168.1.255 192.168.1.193 192.168.1.254         62
+Name       Vlan Subnet           Prefix Network       Broadcast     FirstHost     EndHost       UsableHosts TotalIPs
+----       ---- ------           ------ -------       ---------     ---------     -------       ----------- --------
+Users       102 192.168.1.0/25      25 192.168.1.0   192.168.1.127 192.168.1.1   192.168.1.126        126      128
+Management  101 192.168.1.128/27    27 192.168.1.128 192.168.1.159 192.168.1.129 192.168.1.158         30       32
+Servers     103 192.168.1.160/27    27 192.168.1.160 192.168.1.191 192.168.1.161 192.168.1.190         30       32
+Available       192.168.1.192/26    26 192.168.1.192 192.168.1.255 192.168.1.193 192.168.1.254         62       64
 ```
 
-**You get:** Professional table with subnet names, VLANs, IP ranges, and everything labeled clearly.
+**You get:** Professional table with subnet names, VLANs, IP ranges, and everything labeled clearly—plus the `TotalIPs` column so you can immediately see the total address count in each block.
 
 #### 🔧 **JSON Configuration Flexibility**
 
@@ -155,15 +155,15 @@ New-SubnetPlanFromConfig -JsonConfig $json
 **Sample Output:**
 
 ```text
-Name  Vlan Subnet         Label         IP                       Prefix Mask             Category
-----  ---- ------         -----         --                       ------ ----             --------
-Mgmt  110  10.0.0.0/28    Network       10.0.0.0                  /28   255.255.255.240  Network
-Mgmt  110  10.0.0.0/28    Gateway       10.0.0.1                  /28   255.255.255.240  Assignment
-Mgmt  110  10.0.0.0/28    Unused Range  10.0.0.2 - 10.0.0.2       /28   255.255.255.240  Unused
-Mgmt  110  10.0.0.0/28    VMM           10.0.0.3                  /28   255.255.255.240  Assignment
-Mgmt  110  10.0.0.0/28    Unused Range  10.0.0.4 - 10.0.0.14      /28   255.255.255.240  Unused
-Mgmt  110  10.0.0.0/28    Broadcast     10.0.0.15                 /28   255.255.255.240  Broadcast
-Available     10.0.0.16/28 Available Range 10.0.0.17 - 10.0.0.30  /28   255.255.255.240  Available
+Name  Vlan Subnet         Label         IP                       TotalIPs Prefix Mask             Category
+----  ---- ------         -----         --                       -------- ------ ----             --------
+Mgmt  110  10.0.0.0/28    Network       10.0.0.0                        1 /28   255.255.255.240  Network
+Mgmt  110  10.0.0.0/28    Gateway       10.0.0.1                        1 /28   255.255.255.240  Assignment
+Mgmt  110  10.0.0.0/28    Unused Range  10.0.0.2 - 10.0.0.2             1 /28   255.255.255.240  Unused
+Mgmt  110  10.0.0.0/28    VMM           10.0.0.3                        1 /28   255.255.255.240  Assignment
+Mgmt  110  10.0.0.0/28    Unused Range  10.0.0.4 - 10.0.0.14           11 /28   255.255.255.240  Unused
+Mgmt  110  10.0.0.0/28    Broadcast     10.0.0.15                       1 /28   255.255.255.240  Broadcast
+Available     10.0.0.16/28 Available Range 10.0.0.17 - 10.0.0.30       14 /28   255.255.255.240  Available
 ```
 
 🔎 **How positions work:** position `1` = first usable host, `2` = second usable host, and so on. Positions must be unique and stay within the usable host count of the subnet.
@@ -210,14 +210,14 @@ New-SubnetPlanByHosts -Network "192.168.1.0/24" -HostRequirements @{ 50 = 2; 10 
 **Sample Output:**
 
 ```text
-Name     Subnet           Prefix Network       Broadcast     FirstHost     EndHost       UsableHosts
-----     ------           ------ -------       ---------     ---------     -------       -----------
-Assigned 192.168.1.0/26      26 192.168.1.0   192.168.1.63  192.168.1.1   192.168.1.62           62
-Assigned 192.168.1.64/26     26 192.168.1.64  192.168.1.127 192.168.1.65  192.168.1.126          62
-Assigned 192.168.1.128/28    28 192.168.1.128 192.168.1.143 192.168.1.129 192.168.1.142          14
-Available 192.168.1.144/28   28 192.168.1.144 192.168.1.159 192.168.1.145 192.168.1.158          14
-Available 192.168.1.160/27   27 192.168.1.160 192.168.1.191 192.168.1.161 192.168.1.190          30
-Available 192.168.1.192/26   26 192.168.1.192 192.168.1.255 192.168.1.193 192.168.1.254          62
+Name     Subnet           Prefix Network       Broadcast     FirstHost     EndHost       UsableHosts TotalIPs
+----     ------           ------ -------       ---------     ---------     -------       ----------- --------
+Assigned 192.168.1.0/26      26 192.168.1.0   192.168.1.63  192.168.1.1   192.168.1.62           62       64
+Assigned 192.168.1.64/26     26 192.168.1.64  192.168.1.127 192.168.1.65  192.168.1.126          62       64
+Assigned 192.168.1.128/28    28 192.168.1.128 192.168.1.143 192.168.1.129 192.168.1.142          14       16
+Available 192.168.1.144/28   28 192.168.1.144 192.168.1.159 192.168.1.145 192.168.1.158          14       16
+Available 192.168.1.160/27   27 192.168.1.160 192.168.1.191 192.168.1.161 192.168.1.190          30       32
+Available 192.168.1.192/26   26 192.168.1.192 192.168.1.255 192.168.1.193 192.168.1.254          62       64
 ```
 
 **You get:** Subnet ranges that fit your host requirements exactly.
@@ -238,15 +238,15 @@ New-SubnetPlan -Network "192.168.1.0/24" -PrefixRequirements @{ 26 = 2; 28 = 3 }
 **Sample Output:**
 
 ```text
-Name      Subnet           Prefix Network       Broadcast     FirstHost     EndHost       UsableHosts
-----      ------           ------ -------       ---------     ---------     -------       -----------
-Assigned  192.168.1.0/26      26 192.168.1.0   192.168.1.63  192.168.1.1   192.168.1.62           62
-Assigned  192.168.1.64/26     26 192.168.1.64  192.168.1.127 192.168.1.65  192.168.1.126          62
-Assigned  192.168.1.128/28    28 192.168.1.128 192.168.1.143 192.168.1.129 192.168.1.142          14
-Assigned  192.168.1.144/28    28 192.168.1.144 192.168.1.159 192.168.1.145 192.168.1.158          14
-Assigned  192.168.1.160/28    28 192.168.1.160 192.168.1.175 192.168.1.161 192.168.1.174          14
-Available 192.168.1.176/28    28 192.168.1.176 192.168.1.191 192.168.1.177 192.168.1.190          14
-Available 192.168.1.192/26    26 192.168.1.192 192.168.1.255 192.168.1.193 192.168.1.254          62
+Name      Subnet           Prefix Network       Broadcast     FirstHost     EndHost       UsableHosts TotalIPs
+----      ------           ------ -------       ---------     ---------     -------       ----------- --------
+Assigned  192.168.1.0/26      26 192.168.1.0   192.168.1.63  192.168.1.1   192.168.1.62           62       64
+Assigned  192.168.1.64/26     26 192.168.1.64  192.168.1.127 192.168.1.65  192.168.1.126          62       64
+Assigned  192.168.1.128/28    28 192.168.1.128 192.168.1.143 192.168.1.129 192.168.1.142          14       16
+Assigned  192.168.1.144/28    28 192.168.1.144 192.168.1.159 192.168.1.145 192.168.1.158          14       16
+Assigned  192.168.1.160/28    28 192.168.1.160 192.168.1.175 192.168.1.161 192.168.1.174          14       16
+Available 192.168.1.176/28    28 192.168.1.176 192.168.1.191 192.168.1.177 192.168.1.190          14       16
+Available 192.168.1.192/26    26 192.168.1.192 192.168.1.255 192.168.1.193 192.168.1.254          62       64
 ```
 
 **You get:** Precise control over subnet sizes with technical CIDR notation.
@@ -290,7 +290,8 @@ foreach ($subnet in $data) {
     "Broadcast": "192.168.1.63",
     "FirstHost": "192.168.1.1",
     "EndHost": "192.168.1.62",
-    "UsableHosts": 62
+    "UsableHosts": 62,
+    "TotalIPs": 64
   },
   {
     "Name": "Available",
@@ -300,9 +301,12 @@ foreach ($subnet in $data) {
     "Broadcast": "192.168.1.127",
     "FirstHost": "192.168.1.65",
     "EndHost": "192.168.1.126",
-    "UsableHosts": 62
+    "UsableHosts": 62,
+    "TotalIPs": 64
   }
 ]
 ```
 
 💡 **Pro Tip:** JSON output maintains all the same data as table output but in a structured format perfect for automation!
+
+🧮 **Quick glance:** The new `TotalIPs` field/column makes it easy to compare available address pools without doing mental math.

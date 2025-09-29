@@ -280,6 +280,7 @@ function New-SubnetPlan {
       FirstHost   = if ($usableStart) { Convert-IntToIp -Value $usableStart } else { $null }
       EndHost     = if ($usableEnd) { Convert-IntToIp -Value $usableEnd } else { $null }
       UsableHosts = $usableCount
+      TotalIPs    = $size
     }
   }
   
@@ -416,7 +417,7 @@ function New-SubnetPlan {
     }
     
     # Create optimized output for display
-    $summaryView = $allocatedSubnets | Select-Object Name, Subnet, Prefix, Network, Broadcast, FirstHost, EndHost, UsableHosts
+    $summaryView = $allocatedSubnets | Select-Object Name, Subnet, Prefix, Network, Broadcast, FirstHost, EndHost, UsableHosts, TotalIPs
     
     Write-Verbose "Subnet allocation completed successfully. Total subnets created: $($allocatedSubnets.Count)"
     
@@ -922,9 +923,17 @@ function New-SubnetPlanFromConfig {
         $properties['IP'] = $startIp
       }
 
+      $ipCount = if ($null -ne $EndInt) {
+        ([uint64]$EndInt) - [uint64]$StartInt + 1
+      }
+      else {
+        [uint64]1
+      }
+
       $properties['Prefix'] = "/$Prefix"
       $properties['Mask'] = $Mask
       $properties['Category'] = $Category
+      $properties['TotalIPs'] = $ipCount
 
       return [PSCustomObject]$properties
     }
@@ -1014,7 +1023,7 @@ function New-SubnetPlanFromConfig {
       }
     }
 
-    foreach ($defaultProperty in @('Label', 'IP', 'Prefix', 'Mask', 'Category')) {
+    foreach ($defaultProperty in @('Label', 'IP', 'TotalIPs', 'Prefix', 'Mask', 'Category')) {
       if ($displayProperties -notcontains $defaultProperty) {
         $displayProperties += $defaultProperty
       }
