@@ -461,6 +461,7 @@ function New-SubnetPlanFromConfig {
       - Network definition can be included in JSON configuration for single-file setup
       - Supports both host count requirements and direct CIDR prefix specification
       - Allows named IP assignments within each subnet for deterministic host placement
+      - Supports multiple primary networks in a single configuration (array of network objects)
       - Validates configuration and provides detailed error messages
       
   .PARAMETER Network
@@ -546,6 +547,32 @@ function New-SubnetPlanFromConfig {
       
       Generates the subnet plan and exports it to a JSON file for consumption by other tools.
 
+  .EXAMPLE
+      # Multiple primary networks - process independently and combine results
+      $multiNetworkConfig = @'
+      [
+        {
+          "network": "192.168.1.0/24",
+          "subnets": [
+            { "name": "csu-edge-transport-compute", "vlan": "203", "cidr": "28" },
+            { "name": "csu-exchange-compute", "vlan": "102", "cidr": "27" }
+          ]
+        },
+        {
+          "network": "10.50.1.0/24",
+          "subnets": [
+            { "name": "csu-edge-transport-management", "vlan": "101", "cidr": "27" },
+            { "name": "msu-management", "vlan": "201", "cidr": "27" }
+          ]
+        }
+      ]
+      '@
+      
+      New-SubnetPlanFromConfig -JsonConfig $multiNetworkConfig
+      
+      Processes multiple independent primary networks, each with their own subnets.
+      Results are combined into a single output showing all networks and subnets.
+
   .OUTPUTS
       Array of PSCustomObject with dynamic properties based on JSON configuration.
       Columns automatically adjust to show all properties defined in the JSON.
@@ -553,6 +580,8 @@ function New-SubnetPlanFromConfig {
 
   .NOTES
       JSON Configuration Format (Dynamic Properties):
+      
+      Single Network (Backward Compatible):
       {
         "network": "192.168.1.0/24",      // Optional - parent network in CIDR format
         "subnets": [
@@ -574,6 +603,18 @@ function New-SubnetPlanFromConfig {
         ]
       }
       
+      Multiple Networks (New):
+      [
+        {
+          "network": "192.168.1.0/24",
+          "subnets": [ /* subnets for first network */ ]
+        },
+        {
+          "network": "10.50.1.0/24",
+          "subnets": [ /* subnets for second network */ ]
+        }
+      ]
+      
       Subnet Size Specification (choose one):
       - hosts: Specify number of hosts needed, function calculates optimal subnet size
       - cidr: Directly specify the CIDR prefix length (e.g., "28" for /28 subnet)
@@ -589,6 +630,11 @@ function New-SubnetPlanFromConfig {
       IP Assignments:
       - Positions start at 1 and map to the nth usable host address (excluding network and broadcast).
       - Named assignments are rendered alongside unused address ranges for clear documentation.
+      
+      Multiple Networks:
+      - Each network is processed independently with its own subnet allocations
+      - Results from all networks are combined in the output
+      - Custom properties are merged across all networks for consistent column display
   #>
   [CmdletBinding(DefaultParameterSetName = 'FilePath')]
   param(
@@ -739,284 +785,319 @@ function New-SubnetPlanFromConfig {
 
     $config = $jsonContent | ConvertFrom-Json
 
-    $networkToUse = $null
-    if ($Network) {
-      $networkToUse = $Network
-      Write-Verbose "Using network from parameter: $Network"
-    }
-    elseif ($config.network) {
-      $networkToUse = $config.network
-      Write-Verbose "Using network from JSON configuration: $($config.network)"
-
-      if ($networkToUse -notmatch '^(\d{1,3}\.){3}\d{1,3}/([1-2]?[0-9]|3[0-2])$') {
-        throw "Invalid network format in JSON configuration: '$networkToUse'. Expected format: 'x.x.x.x/yy'"
-      }
+    # Detect if input is array of networks or single network object
+    $networkConfigs = @()
+    if ($config -is [System.Array]) {
+      Write-Verbose "Detected array of network configurations"
+      $networkConfigs = $config
     }
     else {
-      throw "Network must be specified either as parameter -Network or in JSON configuration as 'network' field"
+      Write-Verbose "Detected single network configuration"
+      $networkConfigs = @($config)
     }
 
-    Write-Verbose "Network to use for subnet planning: $networkToUse"
-
-    if (-not $config.subnets) {
-      throw "Invalid configuration: Missing 'subnets' array in JSON"
+    # Validate we have at least one network configuration
+    if ($networkConfigs.Count -eq 0) {
+      throw "Invalid configuration: No network configurations found"
     }
 
-    if ($config.subnets.Count -eq 0) {
-      throw "Invalid configuration: 'subnets' array is empty"
-    }
+    # Process each network configuration
+    $allDetailedRows = @()
+    $allCustomPropertyOrder = @()
+    $allCustomPropertyLookup = @{}
 
-    $prefixCounts = @{}
-    $metadataList = @()
-    $reservedProperties = @('network', 'hosts', 'cidr', 'ipassignments', 'subnet', 'prefix', 'broadcast', 'firsthost', 'endhost', 'usablehosts', 'category', 'mask', 'label', 'ip', 'range', 'ipvalue')
-    $customPropertyLookup = @{}
-    $customPropertyOrder = @()
-    $subnetIndex = 0
-
-    Write-Verbose "Processing subnet configuration:"
-
-    foreach ($subnet in $config.subnets) {
-      $subnetIndex++
-
-      if (-not $subnet.name) {
-        throw "Invalid configuration: Subnet missing 'name' field"
+    foreach ($networkConfig in $networkConfigs) {
+      $networkToUse = $null
+      if ($Network) {
+        $networkToUse = $Network
+        Write-Verbose "Using network from parameter: $Network"
       }
+      elseif ($networkConfig.network) {
+        $networkToUse = $networkConfig.network
+        Write-Verbose "Using network from JSON configuration: $($networkConfig.network)"
 
-      $hasHosts = $null -ne $subnet.hosts
-      $hasCidr = $null -ne $subnet.cidr
-
-      if (-not $hasHosts -and -not $hasCidr) {
-        throw "Invalid configuration: Subnet '$($subnet.name)' missing both 'hosts' and 'cidr' fields. One of them is required."
-      }
-
-      if ($hasHosts -and $hasCidr) {
-        throw "Invalid configuration: Subnet '$($subnet.name)' has both 'hosts' and 'cidr' fields. Only one should be specified."
-      }
-
-      $prefixLength = $null
-      $hostCapacity = 0
-
-      if ($hasHosts) {
-        $hostCount = [int]$subnet.hosts
-        $prefixLength = Get-PrefixForHostCountLocal -HostCount $hostCount
-        $totalAddresses = [uint32][Math]::Pow(2, 32 - $prefixLength)
-        $hostCapacity = if ($totalAddresses -gt 2) { [int]($totalAddresses - 2) } else { 0 }
-        $descriptionText = "$hostCount hosts → /$prefixLength ($hostCapacity usable hosts)"
+        if ($networkToUse -notmatch '^(\d{1,3}\.){3}\d{1,3}/([1-2]?[0-9]|3[0-2])$') {
+          throw "Invalid network format in JSON configuration: '$networkToUse'. Expected format: 'x.x.x.x/yy'"
+        }
       }
       else {
-        $prefixLength = [int]$subnet.cidr
+        throw "Network must be specified either as parameter -Network or in JSON configuration as 'network' field"
+      }
 
-        if ($prefixLength -lt 1 -or $prefixLength -gt 32) {
-          throw "Invalid configuration: Subnet '$($subnet.name)' has invalid CIDR prefix '$prefixLength'. Must be between 1 and 32."
+      Write-Verbose "Network to use for subnet planning: $networkToUse"
+
+      if (-not $networkConfig.subnets) {
+        throw "Invalid configuration: Missing 'subnets' array in JSON for network '$networkToUse'"
+      }
+
+      if ($networkConfig.subnets.Count -eq 0) {
+        throw "Invalid configuration: 'subnets' array is empty for network '$networkToUse'"
+      }
+
+      $prefixCounts = @{}
+      $metadataList = @()
+      $reservedProperties = @('network', 'hosts', 'cidr', 'ipassignments', 'subnet', 'prefix', 'broadcast', 'firsthost', 'endhost', 'usablehosts', 'category', 'mask', 'label', 'ip', 'range', 'ipvalue')
+      $customPropertyLookup = @{}
+      $customPropertyOrder = @()
+      $subnetIndex = 0
+
+      Write-Verbose "Processing subnet configuration for network ${networkToUse}"
+
+      foreach ($subnet in $networkConfig.subnets) {
+        $subnetIndex++
+
+        if (-not $subnet.name) {
+          throw "Invalid configuration: Subnet missing 'name' field"
         }
 
-        $totalAddresses = [uint32][Math]::Pow(2, 32 - $prefixLength)
-        $hostCapacity = if ($totalAddresses -gt 2) { [int]($totalAddresses - 2) } else { 0 }
-        $descriptionText = "/$prefixLength ($hostCapacity usable hosts)"
-      }
+        $hasHosts = $null -ne $subnet.hosts
+        $hasCidr = $null -ne $subnet.cidr
 
-      Write-Verbose "  $($subnet.name): $descriptionText"
-
-      if ($prefixCounts.ContainsKey($prefixLength)) {
-        $prefixCounts[$prefixLength] += 1
-      }
-      else {
-        $prefixCounts[$prefixLength] = 1
-      }
-
-      $assignmentList = @()
-      if ($subnet.IPAssignments) {
-        if (-not ($subnet.IPAssignments -is [System.Collections.IEnumerable])) {
-          throw "Invalid configuration: 'IPAssignments' for subnet '$($subnet.name)' must be an array"
+        if (-not $hasHosts -and -not $hasCidr) {
+          throw "Invalid configuration: Subnet '$($subnet.name)' missing both 'hosts' and 'cidr' fields. One of them is required."
         }
 
-        $positionTracker = @{}
-        foreach ($assignment in $subnet.IPAssignments) {
-          if (-not $assignment.Name) {
-            throw "Invalid configuration: IPAssignments entry for subnet '$($subnet.name)' missing 'Name'"
+        if ($hasHosts -and $hasCidr) {
+          throw "Invalid configuration: Subnet '$($subnet.name)' has both 'hosts' and 'cidr' fields. Only one should be specified."
+        }
+
+        $prefixLength = $null
+        $hostCapacity = 0
+
+        if ($hasHosts) {
+          $hostCount = [int]$subnet.hosts
+          $prefixLength = Get-PrefixForHostCountLocal -HostCount $hostCount
+          $totalAddresses = [uint32][Math]::Pow(2, 32 - $prefixLength)
+          $hostCapacity = if ($totalAddresses -gt 2) { [int]($totalAddresses - 2) } else { 0 }
+          $descriptionText = "$hostCount hosts → /$prefixLength ($hostCapacity usable hosts)"
+        }
+        else {
+          $prefixLength = [int]$subnet.cidr
+
+          if ($prefixLength -lt 1 -or $prefixLength -gt 32) {
+            throw "Invalid configuration: Subnet '$($subnet.name)' has invalid CIDR prefix '$prefixLength'. Must be between 1 and 32."
           }
 
-          if ($null -eq $assignment.Position) {
-            throw "Invalid configuration: IPAssignments entry '$($assignment.Name)' for subnet '$($subnet.name)' missing 'Position'"
+          $totalAddresses = [uint32][Math]::Pow(2, 32 - $prefixLength)
+          $hostCapacity = if ($totalAddresses -gt 2) { [int]($totalAddresses - 2) } else { 0 }
+          $descriptionText = "/$prefixLength ($hostCapacity usable hosts)"
+        }
+
+        Write-Verbose "  $($subnet.name): $descriptionText"
+
+        if ($prefixCounts.ContainsKey($prefixLength)) {
+          $prefixCounts[$prefixLength] += 1
+        }
+        else {
+          $prefixCounts[$prefixLength] = 1
+        }
+
+        $assignmentList = @()
+        if ($subnet.IPAssignments) {
+          if (-not ($subnet.IPAssignments -is [System.Collections.IEnumerable])) {
+            throw "Invalid configuration: 'IPAssignments' for subnet '$($subnet.name)' must be an array"
           }
 
-          $position = [int]$assignment.Position
-          if ($position -lt 1) {
-            throw "Invalid configuration: IPAssignments position for '$($assignment.Name)' in subnet '$($subnet.name)' must be 1 or greater"
-          }
+          $positionTracker = @{}
+          foreach ($assignment in $subnet.IPAssignments) {
+            if (-not $assignment.Name) {
+              throw "Invalid configuration: IPAssignments entry for subnet '$($subnet.name)' missing 'Name'"
+            }
 
-          if ($positionTracker.ContainsKey($position)) {
-            throw "Invalid configuration: Duplicate IPAssignments position '$position' found in subnet '$($subnet.name)'"
-          }
+            if ($null -eq $assignment.Position) {
+              throw "Invalid configuration: IPAssignments entry '$($assignment.Name)' for subnet '$($subnet.name)' missing 'Position'"
+            }
 
-          $positionTracker[$position] = $true
-          $assignmentList += [PSCustomObject]@{
-            Name     = [string]$assignment.Name
-            Position = $position
-          }
-        }
-      }
+            $position = [int]$assignment.Position
+            if ($position -lt 1) {
+              throw "Invalid configuration: IPAssignments position for '$($assignment.Name)' in subnet '$($subnet.name)' must be 1 or greater"
+            }
 
-      foreach ($property in $subnet.PSObject.Properties.Name) {
-        $lower = $property.ToLower()
-        if ($reservedProperties -contains $lower) {
-          continue
-        }
+            if ($positionTracker.ContainsKey($position)) {
+              throw "Invalid configuration: Duplicate IPAssignments position '$position' found in subnet '$($subnet.name)'"
+            }
 
-        if (-not $customPropertyLookup.ContainsKey($lower)) {
-          $customPropertyLookup[$lower] = $property
-          $customPropertyOrder += $property
-        }
-      }
-
-      $metadataList += [PSCustomObject]@{
-        OriginalIndex = $subnetIndex
-        Config        = $subnet
-        Prefix        = $prefixLength
-        HostCapacity  = $hostCapacity
-        IpAssignments = $assignmentList
-        Assigned      = $false
-      }
-    }
-
-    Write-Verbose "Calling New-SubnetPlan with processed requirements"
-
-    $rawResults = New-SubnetPlan -Network $networkToUse -PrefixRequirements $prefixCounts
-
-    $addRow = {
-      param(
-        $Metadata,
-        [string]$Label,
-        [uint32]$StartInt,
-        $EndInt,
-        [string]$Category,
-        [string]$SubnetValue,
-        [int]$Prefix,
-        [string]$Mask
-      )
-
-      $properties = [ordered]@{}
-      foreach ($property in $customPropertyOrder) {
-        $standardizedName = Get-StandardizedPropertyName -PropertyName $property
-        $value = ''
-
-        if ($Metadata -and $Metadata.Config.PSObject.Properties[$property]) {
-          $value = $Metadata.Config.PSObject.Properties[$property].Value
-          if ($null -eq $value) { $value = '' }
-        }
-        elseif (-not $Metadata -and $standardizedName -eq 'Name') {
-          $value = 'Available'
-        }
-
-        $properties[$standardizedName] = $value
-      }
-
-      $properties['Subnet'] = $SubnetValue
-      $properties['Label'] = $Label
-
-      $startIp = Convert-IntToIpLocal -Value $StartInt
-      if ($null -ne $EndInt) {
-        $endIp = Convert-IntToIpLocal -Value ([uint32]$EndInt)
-        $properties['IP'] = "$startIp - $endIp"
-      }
-      else {
-        $properties['IP'] = $startIp
-      }
-
-      $ipCount = if ($null -ne $EndInt) {
-        ([uint64]$EndInt) - [uint64]$StartInt + 1
-      }
-      else {
-        [uint64]1
-      }
-
-      $properties['Prefix'] = "/$Prefix"
-      $properties['Mask'] = $Mask
-      $properties['Category'] = $Category
-      $properties['TotalIPs'] = $ipCount
-
-      return [PSCustomObject]$properties
-    }
-
-    $detailedRows = @()
-
-    foreach ($result in $rawResults) {
-      if ($result.Name -eq 'Assigned') {
-        $matching = $metadataList |
-          Where-Object { -not $_.Assigned -and $_.Prefix -eq $result.Prefix } |
-          Sort-Object OriginalIndex |
-          Select-Object -First 1
-
-        if (-not $matching) {
-          throw "Unable to match allocated subnet '/$($result.Prefix)' to configuration entry"
-        }
-
-        $matching.Assigned = $true
-
-        $mask = Get-NetmaskFromPrefix -Prefix $result.Prefix
-        $networkInt = Convert-IpToIntLocal -Ip $result.Network
-        $broadcastInt = Convert-IpToIntLocal -Ip $result.Broadcast
-        $usableHostsCount = [int]$result.UsableHosts
-
-        $sortedAssignments = $matching.IpAssignments | Sort-Object Position, Name
-
-        if ($usableHostsCount -eq 0 -and $sortedAssignments.Count -gt 0) {
-          throw "Subnet '$($matching.Config.name)' does not support host assignments but IPAssignments were provided"
-        }
-
-        foreach ($assignment in $sortedAssignments) {
-          if ($assignment.Position -gt $usableHostsCount) {
-            throw "IPAssignments position '$($assignment.Position)' for subnet '$($matching.Config.name)' exceeds available host addresses ($usableHostsCount)"
+            $positionTracker[$position] = $true
+            $assignmentList += [PSCustomObject]@{
+              Name     = [string]$assignment.Name
+              Position = $position
+            }
           }
         }
 
-        $detailedRows += & $addRow $matching 'Network' $networkInt $null 'Network' $result.Subnet $result.Prefix $mask
+        foreach ($property in $subnet.PSObject.Properties.Name) {
+          $lower = $property.ToLower()
+          if ($reservedProperties -contains $lower) {
+            continue
+          }
 
-        $previousPosition = 0
-        foreach ($assignment in $sortedAssignments) {
+          if (-not $customPropertyLookup.ContainsKey($lower)) {
+            $customPropertyLookup[$lower] = $property
+            $customPropertyOrder += $property
+          }
+        }
+
+        $metadataList += [PSCustomObject]@{
+          OriginalIndex = $subnetIndex
+          Config        = $subnet
+          Prefix        = $prefixLength
+          HostCapacity  = $hostCapacity
+          IpAssignments = $assignmentList
+          Assigned      = $false
+        }
+      }
+
+      Write-Verbose "Calling New-SubnetPlan with processed requirements"
+
+      $rawResults = New-SubnetPlan -Network $networkToUse -PrefixRequirements $prefixCounts
+
+      $addRow = {
+        param(
+          $Metadata,
+          [string]$Label,
+          [uint32]$StartInt,
+          $EndInt,
+          [string]$Category,
+          [string]$SubnetValue,
+          [int]$Prefix,
+          [string]$Mask
+        )
+
+        $properties = [ordered]@{}
+        foreach ($property in $customPropertyOrder) {
+          $standardizedName = Get-StandardizedPropertyName -PropertyName $property
+          $value = ''
+
+          if ($Metadata -and $Metadata.Config.PSObject.Properties[$property]) {
+            $value = $Metadata.Config.PSObject.Properties[$property].Value
+            if ($null -eq $value) { $value = '' }
+          }
+          elseif (-not $Metadata -and $standardizedName -eq 'Name') {
+            $value = 'Available'
+          }
+
+          $properties[$standardizedName] = $value
+        }
+
+        $properties['Subnet'] = $SubnetValue
+        $properties['Label'] = $Label
+
+        $startIp = Convert-IntToIpLocal -Value $StartInt
+        if ($null -ne $EndInt) {
+          $endIp = Convert-IntToIpLocal -Value ([uint32]$EndInt)
+          $properties['IP'] = "$startIp - $endIp"
+        }
+        else {
+          $properties['IP'] = $startIp
+        }
+
+        $ipCount = if ($null -ne $EndInt) {
+          ([uint64]$EndInt) - [uint64]$StartInt + 1
+        }
+        else {
+          [uint64]1
+        }
+
+        $properties['Prefix'] = "/$Prefix"
+        $properties['Mask'] = $Mask
+        $properties['Category'] = $Category
+        $properties['TotalIPs'] = $ipCount
+
+        return [PSCustomObject]$properties
+      }
+
+      $detailedRows = @()
+
+      foreach ($result in $rawResults) {
+        if ($result.Name -eq 'Assigned') {
+          $matching = $metadataList |
+            Where-Object { -not $_.Assigned -and $_.Prefix -eq $result.Prefix } |
+            Sort-Object OriginalIndex |
+            Select-Object -First 1
+
+          if (-not $matching) {
+            throw "Unable to match allocated subnet '/$($result.Prefix)' to configuration entry"
+          }
+
+          $matching.Assigned = $true
+
+          $mask = Get-NetmaskFromPrefix -Prefix $result.Prefix
+          $networkInt = Convert-IpToIntLocal -Ip $result.Network
+          $broadcastInt = Convert-IpToIntLocal -Ip $result.Broadcast
+          $usableHostsCount = [int]$result.UsableHosts
+
+          $sortedAssignments = $matching.IpAssignments | Sort-Object Position, Name
+
+          if ($usableHostsCount -eq 0 -and $sortedAssignments.Count -gt 0) {
+            throw "Subnet '$($matching.Config.name)' does not support host assignments but IPAssignments were provided"
+          }
+
+          foreach ($assignment in $sortedAssignments) {
+            if ($assignment.Position -gt $usableHostsCount) {
+              throw "IPAssignments position '$($assignment.Position)' for subnet '$($matching.Config.name)' exceeds available host addresses ($usableHostsCount)"
+            }
+          }
+
+          $detailedRows += & $addRow $matching 'Network' $networkInt $null 'Network' $result.Subnet $result.Prefix $mask
+
+          $previousPosition = 0
+          foreach ($assignment in $sortedAssignments) {
+            if ($usableHostsCount -gt 0) {
+              $gapStart = $previousPosition + 1
+              $gapEnd = $assignment.Position - 1
+              if ($gapStart -le $gapEnd) {
+                $startInt = $networkInt + [uint32]$gapStart
+                $endInt = $networkInt + [uint32]$gapEnd
+                $detailedRows += & $addRow $matching 'Unused Range' $startInt $endInt 'Unused' $result.Subnet $result.Prefix $mask
+              }
+            }
+
+            $ipInt = $networkInt + [uint32]$assignment.Position
+            $detailedRows += & $addRow $matching $assignment.Name $ipInt $null 'Assignment' $result.Subnet $result.Prefix $mask
+            $previousPosition = $assignment.Position
+          }
+
           if ($usableHostsCount -gt 0) {
-            $gapStart = $previousPosition + 1
-            $gapEnd = $assignment.Position - 1
-            if ($gapStart -le $gapEnd) {
-              $startInt = $networkInt + [uint32]$gapStart
-              $endInt = $networkInt + [uint32]$gapEnd
+            $finalGapStart = $previousPosition + 1
+            if ($finalGapStart -le $usableHostsCount) {
+              $startInt = $networkInt + [uint32]$finalGapStart
+              $endInt = $networkInt + [uint32]$usableHostsCount
               $detailedRows += & $addRow $matching 'Unused Range' $startInt $endInt 'Unused' $result.Subnet $result.Prefix $mask
             }
           }
 
-          $ipInt = $networkInt + [uint32]$assignment.Position
-          $detailedRows += & $addRow $matching $assignment.Name $ipInt $null 'Assignment' $result.Subnet $result.Prefix $mask
-          $previousPosition = $assignment.Position
+          $detailedRows += & $addRow $matching 'Broadcast' $broadcastInt $null 'Broadcast' $result.Subnet $result.Prefix $mask
         }
+        else {
+          $mask = Get-NetmaskFromPrefix -Prefix $result.Prefix
+          $startInt = if ($result.FirstHost) { Convert-IpToIntLocal -Ip $result.FirstHost } else { Convert-IpToIntLocal -Ip $result.Network }
+          $endInt = if ($result.EndHost) { Convert-IpToIntLocal -Ip $result.EndHost } else { Convert-IpToIntLocal -Ip $result.Broadcast }
 
-        if ($usableHostsCount -gt 0) {
-          $finalGapStart = $previousPosition + 1
-          if ($finalGapStart -le $usableHostsCount) {
-            $startInt = $networkInt + [uint32]$finalGapStart
-            $endInt = $networkInt + [uint32]$usableHostsCount
-            $detailedRows += & $addRow $matching 'Unused Range' $startInt $endInt 'Unused' $result.Subnet $result.Prefix $mask
-          }
+          $detailedRows += & $addRow $null 'Available Range' $startInt $endInt $result.Name $result.Subnet $result.Prefix $mask
         }
-
-        $detailedRows += & $addRow $matching 'Broadcast' $broadcastInt $null 'Broadcast' $result.Subnet $result.Prefix $mask
       }
-      else {
-        $mask = Get-NetmaskFromPrefix -Prefix $result.Prefix
-        $startInt = if ($result.FirstHost) { Convert-IpToIntLocal -Ip $result.FirstHost } else { Convert-IpToIntLocal -Ip $result.Network }
-        $endInt = if ($result.EndHost) { Convert-IpToIntLocal -Ip $result.EndHost } else { Convert-IpToIntLocal -Ip $result.Broadcast }
 
-        $detailedRows += & $addRow $null 'Available Range' $startInt $endInt $result.Name $result.Subnet $result.Prefix $mask
+      $unmatched = $metadataList | Where-Object { -not $_.Assigned }
+      if ($unmatched.Count -gt 0) {
+        $unmatchedNames = $unmatched | ForEach-Object { $_.Config.name }
+        throw "Configured subnets could not be matched to allocation results: $($unmatchedNames -join ', ')"
       }
-    }
 
-    $unmatched = $metadataList | Where-Object { -not $_.Assigned }
-    if ($unmatched.Count -gt 0) {
-      $unmatchedNames = $unmatched | ForEach-Object { $_.Config.name }
-      throw "Configured subnets could not be matched to allocation results: $($unmatchedNames -join ', ')"
+      # Store custom properties for merging across networks
+      foreach ($property in $customPropertyOrder) {
+        $lower = $property.ToLower()
+        if (-not $allCustomPropertyLookup.ContainsKey($lower)) {
+          $allCustomPropertyLookup[$lower] = $property
+          $allCustomPropertyOrder += $property
+        }
+      }
+
+      # Add rows from this network to the combined results
+      $allDetailedRows += $detailedRows
     }
 
     $displayProperties = @('Subnet')
-    foreach ($property in $customPropertyOrder) {
+    foreach ($property in $allCustomPropertyOrder) {
       $standardized = Get-StandardizedPropertyName -PropertyName $property
       if ($displayProperties -notcontains $standardized) {
         $displayProperties += $standardized
@@ -1029,7 +1110,7 @@ function New-SubnetPlanFromConfig {
       }
     }
 
-    $summaryView = $detailedRows | Select-Object $displayProperties
+    $summaryView = $allDetailedRows | Select-Object $displayProperties
 
     $jsonOutput = $null
     if ($AsJson -or $ExportJsonPath) {

@@ -155,4 +155,126 @@ Describe 'New-SubnetPlanFromConfig' {
             if (Test-Path $exportRoot) { Remove-Item $exportRoot -Recurse -Force }
         }
     }
+
+    It 'processes multiple primary networks independently' {
+        $jsonConfig = @'
+[
+  {
+    "network": "192.168.1.0/24",
+    "subnets": [
+      {
+        "name": "csu-edge-transport-compute",
+        "vlan": "203",
+        "cidr": "28",
+        "IPAssignments": [
+          { "Name": "Gateway", "Position": 1 },
+          { "Name": "TOR1", "Position": 2 },
+          { "Name": "TOR2", "Position": 3 }
+        ]
+      },
+      {
+        "name": "csu-exchange-compute",
+        "vlan": "102",
+        "cidr": "27"
+      }
+    ]
+  },
+  {
+    "network": "10.50.1.0/24",
+    "subnets": [
+      { "name": "csu-edge-transport-management", "vlan": "101", "cidr": "27" },
+      { "name": "msu-management", "vlan": "201", "cidr": "27" }
+    ]
+  }
+]
+'@
+
+        $resultsJson = New-SubnetPlanFromConfig -JsonConfig $jsonConfig -AsJson
+        $results = $resultsJson | ConvertFrom-Json
+
+        # Verify first network (192.168.1.0/24) subnets are present
+        $computeSubnets = $results | Where-Object { $_.Subnet -match '^192\.168\.1\.' }
+        $computeSubnets | Should -Not -BeNullOrEmpty
+        
+        $edgeComputeRows = $results | Where-Object { $_.Name -eq 'csu-edge-transport-compute' }
+        $edgeComputeRows | Should -Not -BeNullOrEmpty
+        
+        $exchangeComputeRows = $results | Where-Object { $_.Name -eq 'csu-exchange-compute' }
+        $exchangeComputeRows | Should -Not -BeNullOrEmpty
+
+        # Verify IP assignments from first network
+        $edgeGateway = $results | Where-Object { $_.Name -eq 'csu-edge-transport-compute' -and $_.Label -eq 'Gateway' }
+        $edgeGateway | Should -Not -BeNullOrEmpty
+        $edgeGateway.IP | Should -Match '^192\.168\.1\.'
+
+        # Verify second network (10.50.1.0/24) subnets are present
+        $managementSubnets = $results | Where-Object { $_.Subnet -match '^10\.50\.1\.' }
+        $managementSubnets | Should -Not -BeNullOrEmpty
+        
+        $edgeMgmtRows = $results | Where-Object { $_.Name -eq 'csu-edge-transport-management' }
+        $edgeMgmtRows | Should -Not -BeNullOrEmpty
+        
+        $msuMgmtRows = $results | Where-Object { $_.Name -eq 'msu-management' }
+        $msuMgmtRows | Should -Not -BeNullOrEmpty
+
+        # Verify results include both networks
+        ($results | Where-Object { $_.Subnet -match '^192\.168\.1\.' }).Count | Should -BeGreaterThan 0
+        ($results | Where-Object { $_.Subnet -match '^10\.50\.1\.' }).Count | Should -BeGreaterThan 0
+    }
+
+    It 'processes multiple networks with IPAssignments correctly' {
+        $jsonConfig = @'
+[
+  {
+    "network": "10.0.0.0/24",
+    "subnets": [
+      {
+        "name": "Network1-Subnet1",
+        "vlan": 100,
+        "cidr": "28",
+        "IPAssignments": [
+          { "Name": "Gateway", "Position": 1 },
+          { "Name": "Server1", "Position": 2 }
+        ]
+      }
+    ]
+  },
+  {
+    "network": "172.16.0.0/24",
+    "subnets": [
+      {
+        "name": "Network2-Subnet1",
+        "vlan": 200,
+        "cidr": "28",
+        "IPAssignments": [
+          { "Name": "Gateway", "Position": 1 },
+          { "Name": "Server2", "Position": 2 }
+        ]
+      }
+    ]
+  }
+]
+'@
+
+        $resultsJson = New-SubnetPlanFromConfig -JsonConfig $jsonConfig -AsJson
+        $results = $resultsJson | ConvertFrom-Json
+
+        # Check Network1 assignments
+        $net1Gateway = $results | Where-Object { $_.Name -eq 'Network1-Subnet1' -and $_.Label -eq 'Gateway' }
+        $net1Gateway | Should -Not -BeNullOrEmpty
+        $net1Gateway.IP | Should -Be '10.0.0.1'
+        
+        $net1Server = $results | Where-Object { $_.Name -eq 'Network1-Subnet1' -and $_.Label -eq 'Server1' }
+        $net1Server | Should -Not -BeNullOrEmpty
+        $net1Server.IP | Should -Be '10.0.0.2'
+
+        # Check Network2 assignments
+        $net2Gateway = $results | Where-Object { $_.Name -eq 'Network2-Subnet1' -and $_.Label -eq 'Gateway' }
+        $net2Gateway | Should -Not -BeNullOrEmpty
+        $net2Gateway.IP | Should -Be '172.16.0.1'
+        
+        $net2Server = $results | Where-Object { $_.Name -eq 'Network2-Subnet1' -and $_.Label -eq 'Server2' }
+        $net2Server | Should -Not -BeNullOrEmpty
+        $net2Server.IP | Should -Be '172.16.0.2'
+    }
 }
