@@ -194,6 +194,64 @@ New-SubnetPlanFromConfig -JsonConfig $json -ExportMarkdownPath '.\output\mgmt-pl
 
 ✅ Console output still shows the pretty table (unless you pipe/assign it), while files capture the full detail for later.
 
+#### 🌐 Multiple Primary Networks (New!)
+
+Need to manage multiple independent networks (like separate compute and management networks)? The JSON configuration now supports an **array of network objects**, where each network is independently subnetted:
+
+```json
+[
+  {
+    "network": "192.168.1.0/24",
+    "subnets": [
+      { "name": "csu-edge-transport-compute", "vlan": "203", "cidr": "28" },
+      { "name": "csu-exchange-compute", "vlan": "102", "cidr": "27" },
+      { "name": "msu-compute", "vlan": "302", "cidr": "27" }
+    ]
+  },
+  {
+    "network": "10.50.1.0/24",
+    "subnets": [
+      { "name": "csu-edge-transport-management", "vlan": "101", "cidr": "27" },
+      { "name": "msu-management", "vlan": "201", "cidr": "27" },
+      { "name": "csu-exchange-management", "vlan": "301", "cidr": "26" }
+    ]
+  }
+]
+```
+
+```powershell
+# Process multiple networks from a file
+New-SubnetPlanFromConfig -ConfigPath "multi-network.json"
+
+# Or use inline JSON
+$multiNetworkJson = Get-Content '.\multi-network.json' -Raw
+New-SubnetPlanFromConfig -JsonConfig $multiNetworkJson
+```
+
+**Key features:**
+- Each network is processed independently with its own subnets
+- Supports all existing features (IPAssignments, VLAN tags, custom properties, etc.)
+- Results are combined into a single output table showing all networks
+- Fully backward compatible - single network objects still work as before
+
+**Sample Output:**
+
+```text
+Subnet           Name                          Vlan Label           IP                            TotalIPs
+------           ----                          ---- -----           --                            --------
+192.168.1.0/27   csu-exchange-compute          102  Network         192.168.1.0                          1
+192.168.1.0/27   csu-exchange-compute          102  Unused Range    192.168.1.1 - 192.168.1.30          30
+192.168.1.0/27   csu-exchange-compute          102  Broadcast       192.168.1.31                         1
+192.168.1.32/27  msu-compute                   302  Network         192.168.1.32                         1
+...
+10.50.1.0/26     csu-exchange-management       301  Network         10.50.1.0                            1
+10.50.1.0/26     csu-exchange-management       301  Unused Range    10.50.1.1 - 10.50.1.62              62
+10.50.1.0/26     csu-exchange-management       301  Broadcast       10.50.1.63                           1
+...
+```
+
+💡 **Use case:** Perfect for environments where you need to separately manage compute networks (192.168.x.x) and management networks (10.x.x.x), each with their own independent subnetting.
+
 ---
 
 ### 🎯 **Option 2: Host Count** (SIMPLE)
