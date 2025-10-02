@@ -277,4 +277,43 @@ Describe 'New-SubnetPlanFromConfig' {
         $net2Server | Should -Not -BeNullOrEmpty
         $net2Server.IP | Should -Be '172.16.0.2'
     }
+
+    It 'allows subnet CIDR equal to parent network CIDR (1:1 mapping)' {
+        $jsonConfig = @'
+{
+    "network": "10.60.48.128/26",
+    "subnets": [
+      {
+        "name": "BMC-Management",
+        "vlan": "125",
+        "cidr": "26"
+      }
+    ]
+}
+'@
+
+        $resultsJson = New-SubnetPlanFromConfig -JsonConfig $jsonConfig -AsJson
+        $results = $resultsJson | ConvertFrom-Json
+
+        # Should successfully create one subnet using the entire parent network
+        $subnetRows = $results | Where-Object { $_.Subnet -eq '10.60.48.128/26' }
+        $subnetRows | Should -Not -BeNullOrEmpty
+
+        # Verify the network address
+        $networkRow = $subnetRows | Where-Object { $_.Label -eq 'Network' } | Select-Object -First 1
+        $networkRow | Should -Not -BeNullOrEmpty
+        $networkRow.IP | Should -Be '10.60.48.128'
+        $networkRow.Name | Should -Be 'BMC-Management'
+        $networkRow.Vlan | Should -Be 125
+
+        # Verify the broadcast address
+        $broadcastRow = $subnetRows | Where-Object { $_.Label -eq 'Broadcast' } | Select-Object -First 1
+        $broadcastRow | Should -Not -BeNullOrEmpty
+        $broadcastRow.IP | Should -Be '10.60.48.191'
+
+        # Verify unused range exists (62 usable hosts in a /26)
+        $unusedRow = $subnetRows | Where-Object { $_.Label -eq 'Unused Range' } | Select-Object -First 1
+        $unusedRow | Should -Not -BeNullOrEmpty
+        $unusedRow.IP | Should -Be '10.60.48.129 - 10.60.48.190'
+    }
 }

@@ -348,8 +348,8 @@ function New-SubnetPlan {
     # Validate child subnet requirements and calculate total space needed
     $totalRequiredSpace = [uint32]0
     foreach ($prefixLength in $PrefixRequirements.Keys) {
-      if ($prefixLength -le $parentPrefix) {
-        throw "Child prefix /$prefixLength cannot be larger than or equal to parent prefix /$parentPrefix"
+      if ($prefixLength -lt $parentPrefix) {
+        throw "Child prefix /$prefixLength cannot be larger than parent prefix /$parentPrefix"
       }
       if ($prefixLength -lt 0 -or $prefixLength -gt 32) {
         throw "Invalid prefix length: /$prefixLength. Must be between /$($parentPrefix + 1) and /32"
