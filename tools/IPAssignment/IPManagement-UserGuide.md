@@ -230,6 +230,8 @@ Use negative positions to reference IPs from the end of the range:
 - Position `-2` = `10.0.0.14` (second to last IP)
 - Position `-1` = `10.0.0.15` (last IP, broadcast override for VLAN 0)
 
+**Note:** The tool validates that different position values don't resolve to the same IP address. For example, in a `/28` subnet (16 IPs), positions `5` and `-11` both resolve to the 5th IP address and will be rejected with an error.
+
 ##### /31 CIDR Support (RFC 3021 Point-to-Point)
 
 For point-to-point links, use `/31` subnets which have 2 usable addresses with no network/broadcast:
