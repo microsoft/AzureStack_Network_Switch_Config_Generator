@@ -1,0 +1,73 @@
+[
+  {
+    "network": "100.64.0.0/30",
+    "subnets": [
+      {
+        "name": "Point_to_Point",
+        "vlan": "0",
+        "cidr": "30",
+        "IPAssignments": [
+          { "Name": "Router1.1", "Position": 0 },
+          { "Name": "Router1.2", "Position": 1 },
+          { "Name": "Router2.1", "Position": 2 },
+          { "Name": "Router2.2", "Position": 3 }
+        ]
+      }
+    ]
+  },
+  {
+    "network": "100.64.1.0/30",
+    "subnets": [
+      {
+        "name": "Loopback",
+        "vlan": "0",
+        "cidr": "30",
+        "IPAssignments": [
+          { "Name": "TOR1", "Position": 0 },
+          { "Name": "TOR2", "Position": 1 },
+          { "Name": "TOR3", "Position": 2 },
+          { "Name": "TOR4", "Position": 3 }
+        ]
+      }
+    ]
+  },
+  {
+    "network": "100.64.1.2/32",
+    "subnets": [
+      {
+        "name": "Loopback",
+        "vlan": "0",
+        "cidr": "32",
+        "IPAssignments": [{ "Name": "TOR1", "Position": 0 }]
+      }
+    ]
+  },
+  {
+    "network": "192.168.100.0/31",
+    "subnets": [
+      {
+        "name": "P2P-Link",
+        "vlan": "0",
+        "cidr": "31",
+        "IPAssignments": [
+          { "Name": "RouterA", "Position": 0 },
+          { "Name": "RouterB", "Position": 1 }
+        ]
+      }
+    ]
+  },
+  {
+    "network": "10.0.0.0/28",
+    "subnets": [
+      {
+        "name": "NegativePositions",
+        "vlan": "0",
+        "cidr": "28",
+        "IPAssignments": [
+          { "Name": "newbroadcast", "Position": -1 },
+          { "Name": "secondtolast", "Position": -2 }
+        ]
+      }
+    ]
+  }
+]

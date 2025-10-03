@@ -266,10 +266,30 @@ function New-SubnetPlan {
     $network = $StartInt
     $broadcast = $StartInt + $size - 1
     
-    # Calculate usable address range (excluding network and broadcast for subnets > /30)
-    $usableStart = if ($size -gt 2) { $network + 1 } else { $null }
-    $usableEnd = if ($size -gt 2) { $broadcast - 1 } else { $null }
-    $usableCount = [int]([Math]::Max(0, $size - 2))
+    # Calculate usable address range
+    # /31 subnets (RFC 3021): 2 usable hosts, no network/broadcast
+    # /32 subnets: 1 usable host, no network/broadcast
+    # Other subnets: exclude network and broadcast
+    if ($Prefix -eq 31) {
+      $usableStart = $network
+      $usableEnd = $broadcast
+      $usableCount = 2
+    }
+    elseif ($Prefix -eq 32) {
+      $usableStart = $network
+      $usableEnd = $network
+      $usableCount = 1
+    }
+    elseif ($size -gt 2) {
+      $usableStart = $network + 1
+      $usableEnd = $broadcast - 1
+      $usableCount = [int]($size - 2)
+    }
+    else {
+      $usableStart = $null
+      $usableEnd = $null
+      $usableCount = 0
+    }
     
     return [PSCustomObject]@{
       Name        = $Category
@@ -898,6 +918,16 @@ function New-SubnetPlanFromConfig {
             throw "Invalid configuration: 'IPAssignments' for subnet '$($subnet.name)' must be an array"
           }
 
+          # Get VLAN value for validation
+          $vlanValue = $null
+          if ($subnet.PSObject.Properties['vlan']) {
+            $vlanValue = $subnet.vlan
+            # Convert to int if it's a string
+            if ($vlanValue -is [string]) {
+              $vlanValue = [int]$vlanValue
+            }
+          }
+
           $positionTracker = @{}
           foreach ($assignment in $subnet.IPAssignments) {
             if (-not $assignment.Name) {
@@ -909,18 +939,29 @@ function New-SubnetPlanFromConfig {
             }
 
             $position = [int]$assignment.Position
-            if ($position -lt 1) {
-              throw "Invalid configuration: IPAssignments position for '$($assignment.Name)' in subnet '$($subnet.name)' must be 1 or greater"
+            
+            # Validate position range (allow 0 and negatives)
+            # Position 0 is for Network address (VLAN 0 only)
+            # Negative positions are for last IPs (-1 = last, -2 = second-to-last, etc.)
+            # Positive positions are for regular host IPs (1 = first usable, etc.)
+            
+            # Store the original position for tracking (before conversion)
+            $originalPosition = $position
+            
+            # Validate that position 0 is only allowed for VLAN 0
+            if ($position -eq 0 -and $vlanValue -ne 0) {
+              throw "Invalid configuration: IPAssignments position 0 (Network address) for '$($assignment.Name)' in subnet '$($subnet.name)' is only allowed when VLAN is 0"
             }
 
-            if ($positionTracker.ContainsKey($position)) {
-              throw "Invalid configuration: Duplicate IPAssignments position '$position' found in subnet '$($subnet.name)'"
+            if ($positionTracker.ContainsKey($originalPosition)) {
+              throw "Invalid configuration: Duplicate IPAssignments position '$originalPosition' found in subnet '$($subnet.name)'"
             }
 
-            $positionTracker[$position] = $true
+            $positionTracker[$originalPosition] = $true
             $assignmentList += [PSCustomObject]@{
-              Name     = [string]$assignment.Name
-              Position = $position
+              Name             = [string]$assignment.Name
+              Position         = $position
+              OriginalPosition = $originalPosition
             }
           }
         }
@@ -937,6 +978,15 @@ function New-SubnetPlanFromConfig {
           }
         }
 
+        # Get VLAN value for later use
+        $vlanValue = $null
+        if ($subnet.PSObject.Properties['vlan']) {
+          $vlanValue = $subnet.vlan
+          if ($vlanValue -is [string]) {
+            $vlanValue = [int]$vlanValue
+          }
+        }
+
         $metadataList += [PSCustomObject]@{
           OriginalIndex = $subnetIndex
           Config        = $subnet
@@ -944,6 +994,7 @@ function New-SubnetPlanFromConfig {
           HostCapacity  = $hostCapacity
           IpAssignments = $assignmentList
           Assigned      = $false
+          Vlan          = $vlanValue
         }
       }
 
@@ -1025,24 +1076,93 @@ function New-SubnetPlanFromConfig {
           $networkInt = Convert-IpToIntLocal -Ip $result.Network
           $broadcastInt = Convert-IpToIntLocal -Ip $result.Broadcast
           $usableHostsCount = [int]$result.UsableHosts
+          $totalIPs = $broadcastInt - $networkInt + 1
+          $isVlan0 = ($matching.Vlan -eq 0)
+          $is31or32 = ($result.Prefix -eq 31 -or $result.Prefix -eq 32)
 
-          $sortedAssignments = $matching.IpAssignments | Sort-Object Position, Name
-
-          if ($usableHostsCount -eq 0 -and $sortedAssignments.Count -gt 0) {
-            throw "Subnet '$($matching.Config.name)' does not support host assignments but IPAssignments were provided"
-          }
-
-          foreach ($assignment in $sortedAssignments) {
-            if ($assignment.Position -gt $usableHostsCount) {
-              throw "IPAssignments position '$($assignment.Position)' for subnet '$($matching.Config.name)' exceeds available host addresses ($usableHostsCount)"
+          # Convert negative positions to absolute positions
+          # Also track special positions (0 for network, last for broadcast)
+          $processedAssignments = @()
+          $networkOverride = $null
+          $broadcastOverride = $null
+          
+          foreach ($assignment in $matching.IpAssignments) {
+            $absolutePosition = $assignment.Position
+            
+            if ($assignment.Position -lt 0) {
+              # Negative position: -1 = last IP, -2 = second to last, etc.
+              $absolutePosition = $totalIPs + $assignment.Position
+            }
+            
+            # Check after converting negative positions
+            # Position 0 = Network address (already validated as VLAN 0 only during parsing)
+            if ($absolutePosition -eq 0 -and -not $is31or32) {
+              $networkOverride = $assignment.Name
+            }
+            
+            # Check if this is trying to override broadcast (last IP in non-/31/32)
+            if (-not $is31or32 -and $absolutePosition -eq ($totalIPs - 1)) {
+              if (-not $isVlan0) {
+                throw "Invalid configuration: IPAssignments position $($assignment.Position) (Broadcast address) for '$($assignment.Name)' in subnet '$($matching.Config.name)' is only allowed when VLAN is 0"
+              }
+              $broadcastOverride = $assignment.Name
+            }
+            
+            if ($absolutePosition -lt 0 -or $absolutePosition -ge $totalIPs) {
+              throw "Invalid configuration: IPAssignments position $($assignment.Position) for '$($assignment.Name)' in subnet '$($matching.Config.name)' is out of range (resolved to $absolutePosition, max is $($totalIPs - 1))"
+            }
+            
+            $processedAssignments += [PSCustomObject]@{
+              Name             = $assignment.Name
+              Position         = $absolutePosition
+              OriginalPosition = $assignment.OriginalPosition
             }
           }
 
-          $detailedRows += & $addRow $matching 'Network' $networkInt $null 'Network' $result.Subnet $result.Prefix $mask
+          # Sort by absolute position
+          $sortedAssignments = $processedAssignments | Sort-Object Position, Name
 
-          $previousPosition = 0
+          # Validate positions don't exceed available addresses
           foreach ($assignment in $sortedAssignments) {
-            if ($usableHostsCount -gt 0) {
+            # For /31 and /32, all positions are valid host positions
+            # For VLAN 0, positions 0 and last are allowed
+            # For others, positions must be in usable range (1 to usableHostsCount)
+            if (-not $is31or32 -and -not $isVlan0) {
+              if ($assignment.Position -lt 1 -or $assignment.Position -gt $usableHostsCount) {
+                throw "IPAssignments position '$($assignment.OriginalPosition)' for subnet '$($matching.Config.name)' exceeds available host addresses ($usableHostsCount)"
+              }
+            }
+          }
+
+          # Add Network row (or override if VLAN 0 and position 0 assigned)
+          if ($is31or32) {
+            # For /31 and /32, don't add separate Network row
+          }
+          else {
+            $networkLabel = if ($networkOverride) { $networkOverride } else { 'Network' }
+            $networkCategory = if ($networkOverride) { 'Assignment' } else { 'Network' }
+            $detailedRows += & $addRow $matching $networkLabel $networkInt $null $networkCategory $result.Subnet $result.Prefix $mask
+          }
+
+          $previousPosition = if ($is31or32) { -1 } else { 0 }
+          foreach ($assignment in $sortedAssignments) {
+            # Skip if this assignment is for network or broadcast override (already added)
+            if (-not $is31or32) {
+              if ($assignment.Position -eq 0 -and $networkOverride) {
+                $previousPosition = $assignment.Position
+                continue
+              }
+              if ($assignment.Position -eq ($totalIPs - 1) -and $broadcastOverride) {
+                $previousPosition = $assignment.Position
+                continue
+              }
+            }
+            
+            # Add gap if needed
+            if ($is31or32) {
+              # For /31 and /32, no gaps concept - all IPs are usable
+            }
+            elseif ($usableHostsCount -gt 0 -or $isVlan0) {
               $gapStart = $previousPosition + 1
               $gapEnd = $assignment.Position - 1
               if ($gapStart -le $gapEnd) {
@@ -1057,16 +1177,29 @@ function New-SubnetPlanFromConfig {
             $previousPosition = $assignment.Position
           }
 
-          if ($usableHostsCount -gt 0) {
+          # Add final unused range if needed
+          if ($is31or32) {
+            # For /31 and /32, no final unused range
+          }
+          elseif ($usableHostsCount -gt 0 -or $isVlan0) {
             $finalGapStart = $previousPosition + 1
-            if ($finalGapStart -le $usableHostsCount) {
+            $finalGapEnd = if ($isVlan0 -and -not $broadcastOverride) { $totalIPs - 2 } elseif ($isVlan0 -and $broadcastOverride) { $totalIPs - 2 } else { $usableHostsCount }
+            if ($finalGapStart -le $finalGapEnd) {
               $startInt = $networkInt + [uint32]$finalGapStart
-              $endInt = $networkInt + [uint32]$usableHostsCount
+              $endInt = $networkInt + [uint32]$finalGapEnd
               $detailedRows += & $addRow $matching 'Unused Range' $startInt $endInt 'Unused' $result.Subnet $result.Prefix $mask
             }
           }
 
-          $detailedRows += & $addRow $matching 'Broadcast' $broadcastInt $null 'Broadcast' $result.Subnet $result.Prefix $mask
+          # Add Broadcast row (or override if VLAN 0 and last position assigned)
+          if ($is31or32) {
+            # For /31 and /32, don't add separate Broadcast row
+          }
+          else {
+            $broadcastLabel = if ($broadcastOverride) { $broadcastOverride } else { 'Broadcast' }
+            $broadcastCategory = if ($broadcastOverride) { 'Assignment' } else { 'Broadcast' }
+            $detailedRows += & $addRow $matching $broadcastLabel $broadcastInt $null $broadcastCategory $result.Subnet $result.Prefix $mask
+          }
         }
         else {
           $mask = Get-NetmaskFromPrefix -Prefix $result.Prefix

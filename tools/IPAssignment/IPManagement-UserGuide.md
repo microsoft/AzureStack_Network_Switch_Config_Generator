@@ -166,7 +166,116 @@ Mgmt  110  10.0.0.0/28    Broadcast     10.0.0.15                       1 /28   
 Available     10.0.0.16/28 Available Range 10.0.0.17 - 10.0.0.30       14 /28   255.255.255.240  Available
 ```
 
-🔎 **How positions work:** position `1` = first usable host, `2` = second usable host, and so on. Positions must be unique and stay within the usable host count of the subnet.
+🔎 **How positions work:** 
+- Positive positions (`1`, `2`, `3`, etc.) = first, second, third usable host addresses
+- Negative positions (`-1`, `-2`, etc.) = last, second-to-last addresses (counting backwards)
+- Position `0` = Network address (only allowed with VLAN 0)
+- Positions must be unique and stay within the available address range
+
+#### 🆕 Advanced IP Assignment Features
+
+##### VLAN 0 Support with Network/Broadcast Overrides
+
+When `vlan` is set to `0`, you can override normally reserved addresses:
+
+- **Position 0**: Assigns the network address (typically reserved)
+- **Position -1** (or last position): Assigns the broadcast address (typically reserved)
+
+This is useful for loopback addresses, point-to-point links, and other special cases where all IPs are usable.
+
+```json
+{
+  "network": "100.64.0.0/30",
+  "subnets": [
+    {
+      "name": "Point_to_Point",
+      "vlan": "0",
+      "cidr": "30",
+      "IPAssignments": [
+        { "Name": "Router1.1", "Position": 0 },
+        { "Name": "Router1.2", "Position": 1 },
+        { "Name": "Router2.1", "Position": 2 },
+        { "Name": "Router2.2", "Position": 3 }
+      ]
+    }
+  ]
+}
+```
+
+**Output:** All 4 addresses (including network and broadcast) are assigned.
+
+##### Negative Position Support
+
+Use negative positions to reference IPs from the end of the range:
+
+```json
+{
+  "network": "10.0.0.0/28",
+  "subnets": [
+    {
+      "name": "TestNetwork",
+      "vlan": "0",
+      "cidr": "28",
+      "IPAssignments": [
+        { "Name": "FirstHost", "Position": 1 },
+        { "Name": "SecondToLast", "Position": -2 },
+        { "Name": "LastHost", "Position": -1 }
+      ]
+    }
+  ]
+}
+```
+
+- Position `1` = `10.0.0.1` (first usable)
+- Position `-2` = `10.0.0.14` (second to last IP)
+- Position `-1` = `10.0.0.15` (last IP, broadcast override for VLAN 0)
+
+##### /31 CIDR Support (RFC 3021 Point-to-Point)
+
+For point-to-point links, use `/31` subnets which have 2 usable addresses with no network/broadcast:
+
+```json
+{
+  "network": "192.168.100.0/31",
+  "subnets": [
+    {
+      "name": "P2P-Link",
+      "vlan": "0",
+      "cidr": "31",
+      "IPAssignments": [
+        { "Name": "RouterA", "Position": 0 },
+        { "Name": "RouterB", "Position": 1 }
+      ]
+    }
+  ]
+}
+```
+
+**Output:** Only the 2 host assignments, no Network or Broadcast rows.
+
+##### /32 CIDR Support (Single Host)
+
+For single host addresses like loopbacks:
+
+```json
+{
+  "network": "100.64.1.2/32",
+  "subnets": [
+    {
+      "name": "Loopback",
+      "vlan": "0",
+      "cidr": "32",
+      "IPAssignments": [
+        { "Name": "TOR1", "Position": 0 }
+      ]
+    }
+  ]
+}
+```
+
+**Output:** Only the single host assignment, no Network or Broadcast rows.
+
+⚠️ **Important:** Network and broadcast overrides (position 0 and -1) are **only allowed when VLAN is 0**. Non-VLAN 0 subnets will reject these positions to prevent configuration errors.
 
 #### 🗂️ Export the Plan Automatically (New!)
 
