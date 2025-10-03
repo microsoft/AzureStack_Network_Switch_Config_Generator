@@ -316,4 +316,245 @@ Describe 'New-SubnetPlanFromConfig' {
         $unusedRow | Should -Not -BeNullOrEmpty
         $unusedRow.IP | Should -Be '10.60.48.129 - 10.60.48.190'
     }
+
+    It 'supports /31 CIDR for point-to-point links with IPAssignments' {
+        $jsonConfig = @'
+{
+  "network": "100.64.0.0/30",
+  "subnets": [
+    {
+      "name": "Point_to_Point",
+      "vlan": "0",
+      "cidr": "31",
+      "IPAssignments": [
+        { "Name": "Router1", "Position": 0 },
+        { "Name": "Router2", "Position": 1 }
+      ]
+    }
+  ]
+}
+'@
+
+        $resultsJson = New-SubnetPlanFromConfig -JsonConfig $jsonConfig -AsJson
+        $results = $resultsJson | ConvertFrom-Json
+
+        $subnetRows = $results | Where-Object { $_.Subnet -eq '100.64.0.0/31' }
+        $subnetRows | Should -Not -BeNullOrEmpty
+
+        # /31 should have no Network or Broadcast rows (RFC 3021)
+        $networkRow = $subnetRows | Where-Object { $_.Label -eq 'Network' }
+        $networkRow | Should -BeNullOrEmpty
+        
+        $broadcastRow = $subnetRows | Where-Object { $_.Label -eq 'Broadcast' }
+        $broadcastRow | Should -BeNullOrEmpty
+
+        # Should have 2 assignments
+        $router1 = $subnetRows | Where-Object { $_.Label -eq 'Router1' }
+        $router1 | Should -Not -BeNullOrEmpty
+        $router1.IP | Should -Be '100.64.0.0'
+        $router1.Category | Should -Be 'Assignment'
+
+        $router2 = $subnetRows | Where-Object { $_.Label -eq 'Router2' }
+        $router2 | Should -Not -BeNullOrEmpty
+        $router2.IP | Should -Be '100.64.0.1'
+        $router2.Category | Should -Be 'Assignment'
+    }
+
+    It 'supports /32 CIDR for single host with IPAssignments' {
+        $jsonConfig = @'
+{
+  "network": "100.64.1.2/32",
+  "subnets": [
+    {
+      "name": "Loopback",
+      "vlan": "0",
+      "cidr": "32",
+      "IPAssignments": [
+        { "Name": "TOR1", "Position": 0 }
+      ]
+    }
+  ]
+}
+'@
+
+        $resultsJson = New-SubnetPlanFromConfig -JsonConfig $jsonConfig -AsJson
+        $results = $resultsJson | ConvertFrom-Json
+
+        $subnetRows = $results | Where-Object { $_.Subnet -eq '100.64.1.2/32' }
+        $subnetRows | Should -Not -BeNullOrEmpty
+
+        # /32 should have no Network or Broadcast rows
+        $networkRow = $subnetRows | Where-Object { $_.Label -eq 'Network' }
+        $networkRow | Should -BeNullOrEmpty
+        
+        $broadcastRow = $subnetRows | Where-Object { $_.Label -eq 'Broadcast' }
+        $broadcastRow | Should -BeNullOrEmpty
+
+        # Should have 1 assignment
+        $tor1 = $subnetRows | Where-Object { $_.Label -eq 'TOR1' }
+        $tor1 | Should -Not -BeNullOrEmpty
+        $tor1.IP | Should -Be '100.64.1.2'
+        $tor1.Category | Should -Be 'Assignment'
+    }
+
+    It 'supports VLAN 0 with network and broadcast address overrides' {
+        $jsonConfig = @'
+{
+  "network": "100.64.0.0/30",
+  "subnets": [
+    {
+      "name": "Point_to_Point",
+      "vlan": "0",
+      "cidr": "30",
+      "IPAssignments": [
+        { "Name": "Router1.1", "Position": 0 },
+        { "Name": "Router1.2", "Position": 1 },
+        { "Name": "Router2.1", "Position": 2 },
+        { "Name": "Router2.2", "Position": 3 }
+      ]
+    }
+  ]
+}
+'@
+
+        $resultsJson = New-SubnetPlanFromConfig -JsonConfig $jsonConfig -AsJson
+        $results = $resultsJson | ConvertFrom-Json
+
+        $subnetRows = $results | Where-Object { $_.Subnet -eq '100.64.0.0/30' }
+        $subnetRows | Should -Not -BeNullOrEmpty
+
+        # Position 0 should override Network address
+        $router11 = $subnetRows | Where-Object { $_.Label -eq 'Router1.1' }
+        $router11 | Should -Not -BeNullOrEmpty
+        $router11.IP | Should -Be '100.64.0.0'
+        $router11.Category | Should -Be 'Assignment'
+
+        # Position 3 should override Broadcast address
+        $router22 = $subnetRows | Where-Object { $_.Label -eq 'Router2.2' }
+        $router22 | Should -Not -BeNullOrEmpty
+        $router22.IP | Should -Be '100.64.0.3'
+        $router22.Category | Should -Be 'Assignment'
+
+        # All 4 positions should be assignments
+        $assignments = $subnetRows | Where-Object { $_.Category -eq 'Assignment' }
+        $assignments.Count | Should -Be 4
+    }
+
+    It 'supports negative positions for IPAssignments' {
+        $jsonConfig = @'
+{
+  "network": "10.0.0.0/28",
+  "subnets": [
+    {
+      "name": "Test-Negative",
+      "vlan": "0",
+      "cidr": "28",
+      "IPAssignments": [
+        { "Name": "FirstHost", "Position": 1 },
+        { "Name": "SecondToLast", "Position": -2 },
+        { "Name": "LastHost", "Position": -1 }
+      ]
+    }
+  ]
+}
+'@
+
+        $resultsJson = New-SubnetPlanFromConfig -JsonConfig $jsonConfig -AsJson
+        $results = $resultsJson | ConvertFrom-Json
+
+        $subnetRows = $results | Where-Object { $_.Subnet -eq '10.0.0.0/28' }
+        $subnetRows | Should -Not -BeNullOrEmpty
+
+        # Position 1 = first usable host
+        $firstHost = $subnetRows | Where-Object { $_.Label -eq 'FirstHost' }
+        $firstHost | Should -Not -BeNullOrEmpty
+        $firstHost.IP | Should -Be '10.0.0.1'
+
+        # Position -2 = second to last IP (10.0.0.13 in a /28 with 16 IPs: 0-15)
+        $secondToLast = $subnetRows | Where-Object { $_.Label -eq 'SecondToLast' }
+        $secondToLast | Should -Not -BeNullOrEmpty
+        $secondToLast.IP | Should -Be '10.0.0.14'
+
+        # Position -1 = last IP (broadcast in regular subnet, overridden for VLAN 0)
+        $lastHost = $subnetRows | Where-Object { $_.Label -eq 'LastHost' }
+        $lastHost | Should -Not -BeNullOrEmpty
+        $lastHost.IP | Should -Be '10.0.0.15'
+        $lastHost.Category | Should -Be 'Assignment'
+    }
+
+    It 'rejects position 0 for non-VLAN 0 subnets' {
+        $jsonConfig = @'
+{
+  "network": "10.0.0.0/28",
+  "subnets": [
+    {
+      "name": "Test-Invalid",
+      "vlan": "100",
+      "cidr": "28",
+      "IPAssignments": [
+        { "Name": "NetworkOverride", "Position": 0 }
+      ]
+    }
+  ]
+}
+'@
+
+        { New-SubnetPlanFromConfig -JsonConfig $jsonConfig -AsJson } | Should -Throw "*position 0*only allowed when VLAN is 0*"
+    }
+
+    It 'rejects broadcast override for non-VLAN 0 subnets' {
+        $jsonConfig = @'
+{
+  "network": "10.0.0.0/28",
+  "subnets": [
+    {
+      "name": "Test-Invalid",
+      "vlan": "100",
+      "cidr": "28",
+      "IPAssignments": [
+        { "Name": "BroadcastOverride", "Position": -1 }
+      ]
+    }
+  ]
+}
+'@
+
+        { New-SubnetPlanFromConfig -JsonConfig $jsonConfig -AsJson } | Should -Throw "*Broadcast address*only allowed when VLAN is 0*"
+    }
+
+    It 'supports multiple /30 subnets with VLAN 0 for loopback addresses' {
+        $jsonConfig = @'
+{
+  "network": "100.64.1.0/30",
+  "subnets": [
+    {
+      "name": "Loopback",
+      "vlan": "0",
+      "cidr": "30",
+      "IPAssignments": [
+        { "Name": "TOR1", "Position": 0 },
+        { "Name": "TOR2", "Position": 1 },
+        { "Name": "TOR3", "Position": 2 },
+        { "Name": "TOR4", "Position": 3 }
+      ]
+    }
+  ]
+}
+'@
+
+        $resultsJson = New-SubnetPlanFromConfig -JsonConfig $jsonConfig -AsJson
+        $results = $resultsJson | ConvertFrom-Json
+
+        $subnetRows = $results | Where-Object { $_.Subnet -eq '100.64.1.0/30' }
+        $subnetRows | Should -Not -BeNullOrEmpty
+
+        # All 4 addresses should be assignments
+        $assignments = $subnetRows | Where-Object { $_.Category -eq 'Assignment' }
+        $assignments.Count | Should -Be 4
+        
+        ($assignments | Where-Object { $_.Label -eq 'TOR1' }).IP | Should -Be '100.64.1.0'
+        ($assignments | Where-Object { $_.Label -eq 'TOR2' }).IP | Should -Be '100.64.1.1'
+        ($assignments | Where-Object { $_.Label -eq 'TOR3' }).IP | Should -Be '100.64.1.2'
+        ($assignments | Where-Object { $_.Label -eq 'TOR4' }).IP | Should -Be '100.64.1.3'
+    }
 }
