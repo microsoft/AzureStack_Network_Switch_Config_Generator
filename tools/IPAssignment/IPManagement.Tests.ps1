@@ -522,6 +522,27 @@ Describe 'New-SubnetPlanFromConfig' {
         { New-SubnetPlanFromConfig -JsonConfig $jsonConfig -AsJson } | Should -Throw "*Broadcast address*only allowed when VLAN is 0*"
     }
 
+    It 'rejects duplicate absolute positions (positive and negative resolving to same IP)' {
+        $jsonConfig = @'
+{
+  "network": "10.0.0.0/28",
+  "subnets": [
+    {
+      "name": "Test-DuplicatePosition",
+      "vlan": "100",
+      "cidr": "28",
+      "IPAssignments": [
+        { "Name": "Positive5", "Position": 5 },
+        { "Name": "Negative11", "Position": -11 }
+      ]
+    }
+  ]
+}
+'@
+
+        { New-SubnetPlanFromConfig -JsonConfig $jsonConfig -AsJson } | Should -Throw "*both resolve to the same IP address*"
+    }
+
     It 'supports multiple /30 subnets with VLAN 0 for loopback addresses' {
         $jsonConfig = @'
 {

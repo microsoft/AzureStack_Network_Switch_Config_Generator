@@ -1122,6 +1122,17 @@ function New-SubnetPlanFromConfig {
           # Sort by absolute position
           $sortedAssignments = $processedAssignments | Sort-Object Position, Name
 
+          # Validate no duplicate absolute positions (e.g., position 3 and -1 both resolving to same IP)
+          $absolutePositionTracker = @{}
+          foreach ($assignment in $processedAssignments) {
+            $posKey = [int]$assignment.Position
+            if ($absolutePositionTracker.ContainsKey($posKey)) {
+              $firstAssignment = $absolutePositionTracker[$posKey]
+              throw "Invalid configuration: IPAssignments positions '$($firstAssignment.OriginalPosition)' and '$($assignment.OriginalPosition)' both resolve to the same IP address (absolute position $posKey) in subnet '$($matching.Config.name)'"
+            }
+            $absolutePositionTracker[$posKey] = $assignment
+          }
+
           # Validate positions don't exceed available addresses
           foreach ($assignment in $sortedAssignments) {
             # For /31 and /32, all positions are valid host positions
