@@ -1,110 +1,266 @@
-# 🔧 PortMap Tool
+# PortMap Tool (Fast Network Port & Cabling Documentation)
 
-[![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B%20%7C%207.0%2B-blue?logo=powershell)](https://docs.microsoft.com/en-us/powershell/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](../../LICENSE)
-[![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)](README.MD)
-[![Breakout Cables](https://img.shields.io/badge/Breakout%20Cables-Supported-orange)](README.MD#breakout-cable-support)
-[![Tests](https://img.shields.io/badge/Tests-Comprehensive-success)](README.MD#testing--validation)
-[![Formats](https://img.shields.io/badge/Output-MD%20%7C%20CSV%20%7C%20JSON-informational)](README.MD#output-formats)
+PowerShell-based utility to turn a simple JSON or CSV description of switches and connections into clean Markdown, per‑device CSV sheets, or consolidated JSON. Optimized for quick adoption by network engineers.
 
-> 🌟 **Key Features**: Professional network documentation • QSFP breakout cable support • Multiple output formats • Sequential port ordering • Comprehensive testing suite
+Badges: PowerShell 5.1+/7, Output: Markdown | CSV | JSON, Breakout: Supported
 
-## 📋 Table of Contents
+### Table of Contents
+1. [Quick Start](#1-quick-start)
+2. [Sample Output](#2-sample-output-markdown-excerpt)
+3. [Input Field Cheatsheet](#3-input-field-cheatsheet)
+4. [Breakout & Ranges](#4-breakout--ranges)
+5. [Tips & Gotchas](#5-tips--gotchas)
+6. [Troubleshooting](#6-troubleshooting-quick)
+7. [Advanced / Design Appendix](#7-advanced--design-appendix)
+8. [License & Contributing](#8-license--contributing)
+9. [One-Line Reminder](#9-one-line-reminder)
+10. [Purpose](#-purpose)
+11. [Features](#-features)
+12. [Breakout Examples (JSON)](#-breakout-cable-support)
 
-- [🔧 PortMap Tool](#-portmap-tool)
-  - [📋 Table of Contents](#-table-of-contents)
-  - [📖 Overview](#-overview)
-  - [⚡ Quick Start](#-quick-start)
-  - [🎯 Purpose](#-purpose)
-  - [✨ Features](#-features)
-    - [Core Functionality](#core-functionality)
-    - [Advanced Features](#advanced-features)
-    - [🔗 Breakout Cable Support](#-breakout-cable-support)
-      - [Supported Breakout Formats](#supported-breakout-formats)
-      - [Breakout Cable Examples](#breakout-cable-examples)
-      - [Breakout Connection Mapping](#breakout-connection-mapping)
-    - [📄 Output Formats](#-output-formats)
-      - [1. Markdown Tables](#1-markdown-tables)
-      - [2. CSV Format - Individual Files Per Device](#2-csv-format---individual-files-per-device)
-      - [3. JSON Format - Consolidated Output](#3-json-format---consolidated-output)
-  - [👥 Target Audience](#-target-audience)
-  - [📝 Input Requirements](#-input-requirements)
-    - [Device Configuration JSON](#device-configuration-json)
-    - [Port Range Formats](#port-range-formats)
-      - [Standard Port Ranges](#standard-port-ranges)
-      - [Breakout Cable Ranges](#breakout-cable-ranges)
-      - [Mixed Configurations](#mixed-configurations)
-  - [⚙️ Installation \& Dependencies](#️-installation--dependencies)
-    - [Prerequisites](#prerequisites)
-    - [Dependencies](#dependencies)
-    - [Key Features \& Recent Improvements](#key-features--recent-improvements)
-      - [Breakout Cable Support (v1.0)](#breakout-cable-support-v10)
-      - [Sequential Port Integration](#sequential-port-integration)
-      - [Intelligent File Naming](#intelligent-file-naming)
-      - [Professional Markdown Output](#professional-markdown-output)
-      - [Comprehensive Metadata](#comprehensive-metadata)
-    - [CSV Output Behavior](#csv-output-behavior)
-      - [Individual Files Per Device](#individual-files-per-device)
-      - [File Naming Pattern](#file-naming-pattern)
-      - [Examples](#examples)
-      - [CSV vs Other Formats](#csv-vs-other-formats)
-  - [🚀 Usage](#-usage)
-    - [Basic Usage](#basic-usage)
-    - [📡 Breakout Cable Usage Examples](#-breakout-cable-usage-examples)
-    - [Automatic File Naming](#automatic-file-naming)
-  - [🔄 Integration with AzureStack Network Switch Config Generator](#-integration-with-azurestack-network-switch-config-generator)
-  - [💼 Use Cases](#-use-cases)
-    - [1. Network Design Documentation](#1-network-design-documentation)
-    - [2. Breakout Cable Documentation](#2-breakout-cable-documentation)
-    - [3. Port Utilization Analysis](#3-port-utilization-analysis)
-    - [4. Configuration Generator Input](#4-configuration-generator-input)
-    - [5. Device-Specific Spreadsheet Analysis](#5-device-specific-spreadsheet-analysis)
-    - [6. Network Auditing](#6-network-auditing)
-  - [📊 Output Examples](#-output-examples)
-    - [Sample Output Files](#sample-output-files)
-    - [Device Summary Table (All Formats)](#device-summary-table-all-formats)
-    - [Sequential Port Mapping with Breakout Cables (Markdown with -ShowUnused)](#sequential-port-mapping-with-breakout-cables-markdown-with--showunused)
-    - [Embedded Metadata (Markdown and JSON Formats)](#embedded-metadata-markdown-and-json-formats)
-  - [🛠️ Error Handling \& Logging](#️-error-handling--logging)
-    - [Error Detection](#error-detection)
-    - [Breakout Cable Validation](#breakout-cable-validation)
-    - [Logging Features](#logging-features)
-    - [Robust Operation](#robust-operation)
-  - [🧪 Testing \& Validation](#-testing--validation)
-    - [Automated Testing](#automated-testing)
-    - [Breakout Cable Testing](#breakout-cable-testing)
-    - [Validation Features](#validation-features)
-    - [Sample Configurations](#sample-configurations)
-  - [🤝 Contributing](#-contributing)
-    - [Development Guidelines](#development-guidelines)
-    - [Breakout Cable Development Notes](#breakout-cable-development-notes)
-  - [📞 Support](#-support)
-    - [🐛 Found a Bug?](#-found-a-bug)
-    - [💡 Feature Requests](#-feature-requests)
-    - [🆘 Need Help?](#-need-help)
-  - [� Related Projects](#-related-projects)
-    - [🏗️ Architecture Overview](#️-architecture-overview)
-  - [�📚 Version History](#-version-history)
-    - [**v1.0** (Current)](#v10-current)
+---
+## 1. Quick Start
 
-## 📖 Overview
+Two complete examples showing CSV and JSON workflows with full input and output.
 
-The PortMap tool is a comprehensive network documentation utility designed to generate professional-grade documentation for physical port assignments and cable connections across network devices. It creates detailed documentation artifacts that describe the complete physical cabling configuration of network switches, serving as essential documentation for network design, implementation, and maintenance.
+### Use Case 1: JSON Input  Markdown Output
 
-## ⚡ Quick Start
-
+**Command:**
 ```powershell
-# 1️⃣ Generate Markdown documentation
-.\PortMap.ps1 -InputFile "your-config.json" -OutputFormat Markdown
-
-# 2️⃣ Include unused ports in sequential order
-.\PortMap.ps1 -InputFile "your-config.json" -OutputFormat Markdown -ShowUnused
-
-# 3️⃣ Test with breakout cable sample
-.\PortMap.ps1 -InputFile "test-breakout-config.json" -OutputFormat Markdown
+./PortMap.ps1 -InputFile lab-network.json -OutputFormat Markdown
 ```
 
-> 📋 **Prerequisites**: PowerShell 5.1+ and a valid JSON configuration file describing your network devices.
+**Complete Input File (`lab-network.json`):**
+```json
+{
+  "devices": [
+    {
+      "deviceName": "TOR-1",
+      "deviceMake": "Cisco",
+      "deviceModel": "93180YC-FX3",
+      "location": "Rack A",
+      "portRanges": [
+        { "range": "1-4", "mediaType": "SFP28", "speed": "25G", "description": "Server ports" },
+        { "range": "49-50", "mediaType": "QSFP28", "speed": "100G", "description": "Uplinks" }
+      ]
+    },
+    {
+      "deviceName": "SPINE-1",
+      "deviceMake": "Cisco",
+      "deviceModel": "N9K-C93360YC-FX2",
+      "location": "Rack B",
+      "portRanges": [
+        { "range": "1-4", "mediaType": "QSFP28", "speed": "100G", "description": "Leaf connections" }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "1-2",
+      "sourceMedia": "SFP28",
+      "destinationDevice": "Server-Cluster",
+      "destinationPorts": "0",
+      "connectionType": "Server",
+      "notes": "Web servers"
+    },
+    {
+      "sourceDevice": "TOR-1",
+      "sourcePorts": "49-50",
+      "sourceMedia": "QSFP28",
+      "destinationDevice": "SPINE-1",
+      "destinationPorts": "1-2",
+      "destinationMedia": "QSFP28",
+      "connectionType": "Uplink",
+      "notes": "Primary uplinks"
+    }
+  ]
+}
+```
+
+**Complete Output (Markdown):**
+```markdown
+# Network Port Mapping Documentation
+
+**Generated on:** 2025-10-04 14:30:15  
+**Tool:** PortMap v1.0  
+**Input File:** lab-network.json  
+**Output Format:** Markdown  
+
+**Device Makes:** Cisco  
+**Device Models:** 93180YC-FX3, N9K-C93360YC-FX2  
+**Total Devices:** 2  
+
+## Device Summary
+
+| Device Name | Make  | Model            | Total Ports | Used Ports | Unused Ports |
+|-------------|-------|------------------|-------------|------------|--------------|
+| TOR-1       | Cisco | 93180YC-FX3      | 6           | 4          | 2            |
+| SPINE-1     | Cisco | N9K-C93360YC-FX2 | 4           | 0          | 4            |
+
+## Port Mapping by Device
+
+### TOR-1
+
+**Device:** TOR-1 (Cisco 93180YC-FX3)  
+**Total Ports:** 6  
+**Connected Ports:** 4  
+
+| Port | Media  | Status     | Destination Device | Destination Port | Destination Media | Type   | Notes           |
+|------|--------|------------|-------------------|------------------|-------------------|--------|-----------------|
+| 1    | SFP28  | Active     | Server-Cluster    | 0                | SFP28             | Server | Web servers     |
+| 2    | SFP28  | Active     | Server-Cluster    | 0                | SFP28             | Server | Web servers     |
+| 3    | SFP28  | **Unused** | -                 | -                | -                 | -      | Available       |
+| 4    | SFP28  | **Unused** | -                 | -                | -                 | -      | Available       |
+| 49   | QSFP28 | Active     | SPINE-1           | 1                | QSFP28            | Uplink | Primary uplinks |
+| 50   | QSFP28 | Active     | SPINE-1           | 2                | QSFP28            | Uplink | Primary uplinks |
+
+### SPINE-1
+
+**Device:** SPINE-1 (Cisco N9K-C93360YC-FX2)  
+**Total Ports:** 4  
+**Connected Ports:** 0  
+
+| Port | Media  | Status     | Destination Device | Destination Port | Destination Media | Type | Notes     |
+|------|--------|------------|-------------------|------------------|-------------------|------|-----------|
+| 1    | QSFP28 | **Unused** | -                 | -                | -                 | -    | Available |
+| 2    | QSFP28 | **Unused** | -                 | -                | -                 | -    | Available |
+| 3    | QSFP28 | **Unused** | -                 | -                | -                 | -    | Available |
+| 4    | QSFP28 | **Unused** | -                 | -                | -                 | -    | Available |
+```
+
+---
+
+### Use Case 2: CSV Input  Markdown Output
+
+**Command:**
+```powershell
+./PortMap.ps1 -DeviceCsvFile devices.csv -ConnectionCsvFile connections.csv -OutputFormat Markdown
+```
+
+**Complete Input File 1 (`devices.csv`):**
+```csv
+DeviceName,DeviceMake,DeviceModel,Location,Rack,RackUnit,PortRange,MediaType,Speed,Description
+TOR-1,Cisco,93180YC-FX3,Rack A,,,1-4,SFP28,25G,Server ports
+TOR-1,Cisco,93180YC-FX3,Rack A,,,49-50,QSFP28,100G,Uplinks
+SPINE-1,Cisco,N9K-C93360YC-FX2,Rack B,,,1-4,QSFP28,100G,Leaf connections
+```
+
+**Complete Input File 2 (`connections.csv`):**
+```csv
+SourceDevice,SourcePorts,SourceMedia,DestinationDevice,DestinationPorts,DestinationMedia,ConnectionType,Notes
+TOR-1,1-2,SFP28,Server-Cluster,0,SFP28,Server,Web servers
+TOR-1,49-50,QSFP28,SPINE-1,1-2,QSFP28,Uplink,Primary uplinks
+```
+
+**Complete Output (Markdown):** *(Same as Use Case 1 above)*
+
+---
+
+**Other Common Commands:**
+
+```powershell
+# CSV  Per-device CSV files (one file per switch)
+./PortMap.ps1 -DeviceCsvFile devices.csv -ConnectionCsvFile connections.csv -OutputFormat CSV
+
+# JSON  Consolidated JSON (machine-readable aggregate)
+./PortMap.ps1 -InputFile lab-network.json -OutputFormat JSON
+
+# Show unused ports explicitly
+./PortMap.ps1 -InputFile lab-network.json -OutputFormat Markdown -ShowUnused
+
+# Validate configuration without generating output
+./PortMap.ps1 -DeviceCsvFile devices.csv -ConnectionCsvFile connections.csv -OutputFormat JSON -Validate
+```
+
+> **Prerequisites:** PowerShell 5.1+ (or 7.x). Provide either `-InputFile` (JSON) OR `-DeviceCsvFile` + optional `-ConnectionCsvFile` (CSV).
+
+
+---
+## 2. Sample Output (Markdown Excerpt)
+```
+| Device Name | Make  | Model            | Total Ports | Used Ports | Unused Ports |
+|-------------|-------|------------------|-------------|------------|--------------|
+| TOR-1       | Cisco | 93180YC-FX3      | 52          | 28         | 24           |
+| TOR-2       | Dell  | S5248F-ON        | 54          | 22         | 32           |
+| SPINE-1     | Cisco | N9K-C93360YC-FX2 | 96          | 0          | 96           |
+```
+Port rows then list each port (including breakout sub-interfaces) with media, status, destination, type, notes.
+
+---
+## 3. Input Field Cheatsheet
+| Context | JSON Field / CSV Column | Required | Notes |
+|---------|-------------------------|----------|-------|
+| Device  | deviceName / DeviceName | Yes | Key identifier |
+| Device  | deviceMake / DeviceMake | Yes | Vendor |
+| Device  | deviceModel / DeviceModel | Yes | Platform/model |
+| Device  | portRanges / PortRange  | Yes | Ranges: 1-48, 25.1-25.4, 26.1 |
+| Device  | mediaType / MediaType   | Yes | Per range (e.g. SFP28, QSFP28, QSFP_4x25G) |
+| Device  | speed / Speed           | Rec | 10G/25G/100G |
+| Device  | description / Description | Opt | Free text |
+| Device  | location / Location     | Opt | Alt: rack + rackUnit |
+| Conn    | sourceDevice / SourceDevice | Yes | Must match a deviceName |
+| Conn    | sourcePorts / SourcePorts | Yes | Range or breakout format |
+| Conn    | destinationDevice / DestinationDevice | Yes | Logical or physical target |
+| Conn    | destinationPorts / DestinationPorts | Opt | Use 0 if N/A (fan-out) |
+| Conn    | connectionType / ConnectionType | Opt | Server / Uplink / Inter-Switch / Host |
+| Conn    | notes / Notes           | Opt | Free text annotation |
+
+---
+## 4. Breakout & Ranges
+Supported syntaxes:
+* `1-48` (sequential numeric)
+* `25` (single)
+* `25.1-25.4` (QSFP breakout lanes)
+* `26.1` (single lane)
+Mixed standard + breakout ranges on same device are fully supported.
+
+---
+## 5. Tips & Gotchas
+| Scenario | Tip |
+|----------|-----|
+| Missing destination ports | Use `0` or leave blank; tool substitutes placeholder. |
+| CSV inventory only | Omit connections file; you still get per‑device port layout. |
+| File overwrite safety | Tool auto-increments filenames if one exists. |
+| Show unused ports | Add `-ShowUnused` (Markdown / CSV). |
+| Breakout expansion sanity | If a breakout range spans different primaries (e.g. `25.1-26.4`) a warning is logged. |
+| Windows vs Core | Script targets PowerShell 5.1+, works on 7.x. |
+
+---
+## 6. Troubleshooting (Quick)
+| Symptom | Resolution |
+|---------|------------|
+| "Parameter set cannot be resolved" | You mixed JSON & CSV params—use either `-InputFile` or `-DeviceCsvFile`. |
+| Ports missing | Check PortRange typos; invalid ranges are logged as warnings. |
+| No CSV output | For `-OutputFormat CSV` ensure at least one device parsed; each device gets its own file. |
+| Validation fails | Run with `-Validate` to see structured error list. |
+
+---
+## 7. Advanced / Design (Appendix)
+Core processing flow:
+1. Parse input (JSON or build equivalent object from CSV rows)
+2. Validate mandatory device & connection fields
+3. Expand all port ranges (standard + breakout) into atomic ports
+4. Map connections (source ⇢ destination) and mark port usage
+5. Collect unused ports if `-ShowUnused`
+6. Render output (Markdown / per‑device CSV / JSON)
+
+Breakout handling: sub‑interfaces are kept as strings (`25.1`) so ordering logic sorts numerically on the primary then lane.
+
+JSON vs CSV parity: CSV rows are grouped by DeviceName; each row represents one port range block.
+
+---
+## 8. License & Contributing
+MIT licensed. Contributions welcome—focus issues/PRs on clarity, operator usability, or new lightweight formats.
+
+---
+## 9. One-Line Reminder
+"Have devices & port ranges? Feed JSON or two CSVs, pick an output, done."
+
+
+Breakout (same pattern) – just put ranges like `25.1-25.4` or `26.1` in the PortRange column.
+
+> 📋 Prerequisites: PowerShell 5.1+ (or 7.x), and either a JSON file or the two CSV files above.
 
 ## 🎯 Purpose
 
