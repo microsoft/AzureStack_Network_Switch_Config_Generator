@@ -10,7 +10,11 @@
     describe the physical cabling configuration of network switches.
 
 .PARAMETER InputFile
-    Path to the input JSON configuration file describing network devices and connections.
+    Path to the input configuration file describing network devices and connections.
+    Accepts JSON (.json) or CSV (.csv) format.
+    For CSV: Requires both devices CSV and connections CSV with naming pattern:
+      - {basename}-devices.csv (or just devices.csv)
+      - {basename}-connections.csv (or just connections.csv)
 
 .PARAMETER OutputFormat
     Output format for the port mapping data. Valid values: Markdown, CSV, JSON
@@ -36,6 +40,16 @@
 .EXAMPLE
     .\PortMap.ps1 -InputFile "rack-layout.json" -OutputFormat JSON -OutputFile "port-data.json" -ShowUnused
 
+.EXAMPLE
+    .\PortMap.ps1 -InputFile "sample-devices.csv" -OutputFormat Markdown
+    
+    Accepts CSV input. Requires both devices and connections CSV files in the same directory.
+
+.EXAMPLE
+    .\PortMap.ps1 -InputFile "network-connections.csv" -OutputFormat JSON
+    
+    CSV input can reference either the devices or connections file.
+
 .NOTES
     Version: 1.0
     Author: Network Engineering Team
@@ -47,14 +61,14 @@ param(
     [Parameter(
         Mandatory = $true,
         Position = 0,
-        HelpMessage = "Path to the input JSON configuration file describing network devices and connections"
+        HelpMessage = "Path to the input configuration file (JSON or CSV format)"
     )]
     [ValidateScript({
             if (-not (Test-Path -Path $_ -PathType Leaf)) {
                 throw "File does not exist: $_"
             }
-            if (-not ($_ -match '\.json$')) {
-                throw "File must have .json extension: $_"
+            if (-not ($_ -match '\.(json|csv)$')) {
+                throw "File must have .json or .csv extension: $_"
             }
             return $true
         })]
@@ -255,6 +269,154 @@ function Test-NetworkConfiguration {
     
     Write-PortMapLog "Configuration validation passed" -Level Info
     return $true
+}
+
+function ConvertFrom-CsvToConfiguration {
+    <#
+    .SYNOPSIS
+        Converts CSV input files to internal JSON configuration structure.
+    
+    .DESCRIPTION
+        Reads devices CSV and connections CSV files and converts them to the
+        internal JSON configuration format used by the PortMap tool.
+        
+        Expected CSV structure:
+        - Devices CSV: DeviceName, DeviceMake, DeviceModel, Location, PortRange, MediaType, Speed, Description
+        - Connections CSV: SourceDevice, SourcePorts, SourceMedia, DestinationDevice, DestinationPorts, DestinationMedia, ConnectionType, Notes
+    
+    .PARAMETER InputFile
+        Path to either the devices CSV or connections CSV file.
+        The function will automatically locate the companion file.
+    
+    .OUTPUTS
+        PSCustomObject
+        Returns a configuration object compatible with the internal JSON structure.
+    #>
+    [CmdletBinding()]
+    [OutputType([PSCustomObject])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$InputFile
+    )
+    
+    Write-PortMapLog "Converting CSV input to configuration..." -Level Info
+    
+    # Determine the base path and find both CSV files
+    $inputPath = Split-Path -Path $InputFile -Parent
+    $inputBaseName = [System.IO.Path]::GetFileNameWithoutExtension($InputFile)
+    
+    # Try to find devices and connections CSV files
+    $devicesFile = $null
+    $connectionsFile = $null
+    
+    # Check if input file is devices or connections
+    if ($InputFile -match '-devices\.csv$') {
+        $devicesFile = $InputFile
+        $connectionsFile = $InputFile -replace '-devices\.csv$', '-connections.csv'
+    }
+    elseif ($InputFile -match '-connections\.csv$') {
+        $connectionsFile = $InputFile
+        $devicesFile = $InputFile -replace '-connections\.csv$', '-devices.csv'
+    }
+    elseif ($inputBaseName -eq 'devices') {
+        $devicesFile = $InputFile
+        $connectionsFile = Join-Path -Path $inputPath -ChildPath 'connections.csv'
+    }
+    elseif ($inputBaseName -eq 'connections') {
+        $connectionsFile = $InputFile
+        $devicesFile = Join-Path -Path $inputPath -ChildPath 'devices.csv'
+    }
+    else {
+        # Try standard naming pattern in the same directory
+        $devicesFile = Join-Path -Path $inputPath -ChildPath "$inputBaseName-devices.csv"
+        $connectionsFile = Join-Path -Path $inputPath -ChildPath "$inputBaseName-connections.csv"
+        
+        # Fallback to standard names if pattern doesn't match
+        if (-not (Test-Path -Path $devicesFile)) {
+            $devicesFile = Join-Path -Path $inputPath -ChildPath 'devices.csv'
+        }
+        if (-not (Test-Path -Path $connectionsFile)) {
+            $connectionsFile = Join-Path -Path $inputPath -ChildPath 'connections.csv'
+        }
+    }
+    
+    # Validate both files exist
+    if (-not (Test-Path -Path $devicesFile)) {
+        throw "Devices CSV file not found: $devicesFile. For CSV input, both devices and connections CSV files are required."
+    }
+    if (-not (Test-Path -Path $connectionsFile)) {
+        throw "Connections CSV file not found: $connectionsFile. For CSV input, both devices and connections CSV files are required."
+    }
+    
+    Write-PortMapLog "Reading devices from: $devicesFile" -Level Info
+    Write-PortMapLog "Reading connections from: $connectionsFile" -Level Info
+    
+    # Import CSV files
+    $devicesCsv = Import-Csv -Path $devicesFile -ErrorAction Stop
+    $connectionsCsv = Import-Csv -Path $connectionsFile -ErrorAction Stop
+    
+    # Build devices array
+    $devices = [System.Collections.Generic.List[object]]::new()
+    $deviceMap = @{}
+    
+    foreach ($row in $devicesCsv) {
+        $deviceName = $row.DeviceName
+        
+        # Create device if not exists
+        if (-not $deviceMap.ContainsKey($deviceName)) {
+            $device = [PSCustomObject]@{
+                deviceName  = $deviceName
+                deviceMake  = $row.DeviceMake
+                deviceModel = $row.DeviceModel
+                location    = $row.Location
+                portRanges  = [System.Collections.Generic.List[object]]::new()
+            }
+            $deviceMap[$deviceName] = $device
+            $devices.Add($device)
+        }
+        
+        # Add port range to device
+        $portRange = [PSCustomObject]@{
+            range       = $row.PortRange
+            mediaType   = $row.MediaType
+            speed       = $row.Speed
+            description = $row.Description
+        }
+        $deviceMap[$deviceName].portRanges.Add($portRange)
+    }
+    
+    # Build connections array
+    $connections = [System.Collections.Generic.List[object]]::new()
+    
+    foreach ($row in $connectionsCsv) {
+        $connection = [PSCustomObject]@{
+            sourceDevice      = $row.SourceDevice
+            sourcePorts       = $row.SourcePorts
+            sourceMedia       = $row.SourceMedia
+            destinationDevice = $row.DestinationDevice
+            destinationPorts  = $row.DestinationPorts
+            destinationMedia  = $row.DestinationMedia
+            connectionType    = $row.ConnectionType
+            notes             = $row.Notes
+        }
+        $connections.Add($connection)
+    }
+    
+    # Create configuration object
+    $configuration = [PSCustomObject]@{
+        metadata    = [PSCustomObject]@{
+            description = "Configuration imported from CSV"
+            version     = "1.0"
+            created     = (Get-Date -Format "yyyy-MM-dd")
+            inputFormat = "CSV"
+        }
+        devices     = $devices
+        connections = $connections
+    }
+    
+    Write-PortMapLog "CSV conversion completed: $($devices.Count) devices, $($connections.Count) connections" -Level Info
+    
+    return $configuration
 }
 
 function Expand-NetworkPortRange {
@@ -1088,11 +1250,25 @@ function Start-PortMappingProcess {
         }
         
         $configContent = $null
+        $inputExtension = [System.IO.Path]::GetExtension($InputFile).ToLower()
+        
         try {
-            $configContent = Get-Content -Path $InputFile -Raw -ErrorAction Stop | ConvertFrom-Json -ErrorAction Stop
+            if ($inputExtension -eq '.csv') {
+                # CSV input - convert to internal format
+                Write-PortMapLog "Detected CSV input format" -Level Info
+                $configContent = ConvertFrom-CsvToConfiguration -InputFile $InputFile -ErrorAction Stop
+            }
+            elseif ($inputExtension -eq '.json') {
+                # JSON input - parse directly
+                Write-PortMapLog "Detected JSON input format" -Level Info
+                $configContent = Get-Content -Path $InputFile -Raw -ErrorAction Stop | ConvertFrom-Json -ErrorAction Stop
+            }
+            else {
+                throw "Unsupported file format: $inputExtension. Supported formats: .json, .csv"
+            }
         }
         catch {
-            throw "Failed to parse JSON from input file: $($_.Exception.Message)"
+            throw "Failed to parse input file: $($_.Exception.Message)"
         }
         
         if (-not (Test-NetworkConfiguration -Configuration $configContent)) {

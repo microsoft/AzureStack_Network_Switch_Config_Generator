@@ -630,6 +630,55 @@ function Test-BreakoutEdgeCases {
     }
 }
 
+function Test-CsvInputGeneration {
+    <#
+    .SYNOPSIS
+        Tests the CSV input functionality.
+    #>
+    [CmdletBinding()]
+    param()
+    
+    Write-Host "`n=== Testing CSV Input Format ===" -ForegroundColor Yellow
+    
+    # Test CSV input with devices file
+    try {
+        $jsonOutput = & ".\PortMap.ps1" -InputFile ".\sample-devices.csv" -OutputFormat "JSON" -ErrorAction Stop | ConvertFrom-Json
+        
+        $hasDevices = $jsonOutput.devices.Count -gt 0
+        $hasConnections = $jsonOutput.connections.Count -gt 0
+        
+        Write-TestResult "CSV Input (devices file)" ($hasDevices -and $hasConnections)
+    }
+    catch {
+        Write-TestResult "CSV Input (devices file)" $false $_.Exception.Message
+    }
+    
+    # Test CSV input with connections file
+    try {
+        $markdownOutput = & ".\PortMap.ps1" -InputFile ".\sample-connections.csv" -OutputFormat "Markdown" -ErrorAction Stop
+        $hasTables = $markdownOutput -match '\|.*\|'
+        
+        Write-TestResult "CSV Input (connections file)" $hasTables
+    }
+    catch {
+        Write-TestResult "CSV Input (connections file)" $false $_.Exception.Message
+    }
+    
+    # Test CSV input produces same structure as JSON input
+    try {
+        $jsonFromCsv = & ".\PortMap.ps1" -InputFile ".\sample-devices.csv" -OutputFormat "JSON" -ErrorAction Stop | ConvertFrom-Json
+        
+        $hasDeviceNames = ($jsonFromCsv.devices | Where-Object { $_.deviceName }).Count -gt 0
+        $hasPortDetails = ($jsonFromCsv.devices | Where-Object { $_.portRanges }).Count -gt 0
+        $hasConnectionDetails = ($jsonFromCsv.connections | Where-Object { $_.sourceDevice }).Count -gt 0
+        
+        Write-TestResult "CSV Input Structure Validation" ($hasDeviceNames -and $hasPortDetails -and $hasConnectionDetails)
+    }
+    catch {
+        Write-TestResult "CSV Input Structure Validation" $false $_.Exception.Message
+    }
+}
+
 function Show-TestSummary {
     <#
     .SYNOPSIS
@@ -693,6 +742,9 @@ function Start-PortMapTests {
     Test-JsonOutputGeneration
     Test-UnusedPortsFeature
     Test-DeviceFilteringFeature
+    
+    # CSV input format testing
+    Test-CsvInputGeneration
     
     # Comprehensive breakout cable testing
     Test-BreakoutCableSupport

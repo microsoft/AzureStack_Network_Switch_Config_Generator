@@ -1,0 +1,8 @@
+# Test output files
+test-output*.csv
+temp-invalid-config.json
+
+# Generated output files from tool runs
+*-portmap.md
+*-portmap.json
+*-portmap*.csv

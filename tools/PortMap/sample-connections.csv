@@ -1,0 +1,8 @@
+SourceDevice,SourcePorts,SourceMedia,DestinationDevice,DestinationPorts,DestinationMedia,ConnectionType,Notes
+TOR-1,1-16,SFP28,Server-Nodes,0,SFP28,Server,Compute nodes 1-16
+TOR-1,17-24,SFP28,Storage-Nodes,0,SFP28,Storage,Storage nodes 1-8
+TOR-1,25,SFP28,LoadBalancer-1,0,SFP28,Network,Primary load balancer
+TOR-1,49-50,QSFP28,SPINE-1,1-2,QSFP28,Uplink,Primary uplinks to spine
+TOR-2,1-20,SFP28,Server-Nodes,1,SFP28,Server,Secondary NICs for compute nodes 1-20
+TOR-2,49-50,QSFP28,SPINE-1,3-4,QSFP28,Uplink,Primary uplinks to spine
+TOR-1,51,QSFP28,TOR-2,51,QSFP28,Inter-Switch,MLAG peer link
