@@ -17,13 +17,6 @@
 
 .PARAMETER ConnectionCsvFile
     Optional path to the connections CSV file (one row per connection definition). If omitted, only device/port inventory is processed.
-    Path to the input JSON configuration file describing network devices and connections (mutually exclusive with DeviceCsvFile/ConnectionCsvFile parameter set).
-
-.PARAMETER DeviceCsvFile
-    Path to the devices CSV file (one row per port range). Required in CSV parameter set.
-
-.PARAMETER ConnectionCsvFile
-    Optional path to the connections CSV file (one row per connection definition). If omitted, only device/port inventory is processed.
 
 .PARAMETER OutputFormat
     Output format for the port mapping data. Valid values: Markdown, CSV, JSON
@@ -43,17 +36,6 @@
  .EXAMPLE
     JSON Input (original):
         .\PortMap.ps1 -InputFile "network-config.json" -OutputFormat Markdown
- .EXAMPLE
-    JSON Input (original):
-        .\PortMap.ps1 -InputFile "network-config.json" -OutputFormat Markdown
-
-.EXAMPLE
-    CSV Input (devices + connections):
-        .\PortMap.ps1 -DeviceCsvFile .\devices.csv -ConnectionCsvFile .\connections.csv -OutputFormat Markdown
-
-.EXAMPLE
-    CSV Input (devices only inventory):
-        .\PortMap.ps1 -DeviceCsvFile .\devices.csv -OutputFormat JSON -Validate
 
 .EXAMPLE
     CSV Input (devices + connections):
@@ -77,22 +59,17 @@
  Added CSV input support (DeviceCsvFile/ConnectionCsvFile) with new parameter sets:
     - JsonProcess / JsonValidate = legacy JSON input path
     - CsvProcess  / CsvValidate  = CSV input mode
+<#
+ Added CSV input support (DeviceCsvFile/ConnectionCsvFile) with new parameter sets:
+    - JsonProcess / JsonValidate = legacy JSON input path
+    - CsvProcess  / CsvValidate  = CSV input mode
 #>
-[CmdletBinding(DefaultParameterSetName = 'JsonProcess')]
 [CmdletBinding(DefaultParameterSetName = 'JsonProcess')]
 param(
     # JSON Input (original behavior)
-    # JSON Input (original behavior)
     [Parameter(
         Mandatory = $true,
         Position = 0,
-        ParameterSetName = 'JsonProcess',
-        HelpMessage = "Path to the input JSON configuration file describing network devices and connections"
-    )]
-    [Parameter(
-        Mandatory = $true,
-        Position = 0,
-        ParameterSetName = 'JsonValidate',
         ParameterSetName = 'JsonProcess',
         HelpMessage = "Path to the input JSON configuration file describing network devices and connections"
     )]
@@ -104,8 +81,10 @@ param(
     )]
     [ValidateScript({
             if ($_ -and -not (Test-Path -Path $_ -PathType Leaf)) {
+            if ($_ -and -not (Test-Path -Path $_ -PathType Leaf)) {
                 throw "File does not exist: $_"
             }
+            if ($_ -and -not ($_ -match '\.json$')) {
             if ($_ -and -not ($_ -match '\.json$')) {
                 throw "File must have .json extension: $_"
             }
@@ -115,7 +94,6 @@ param(
     [string]$InputFile,
 
     # CSV Inputs (new) - devices CSV required, connections CSV optional
-    # CSV Inputs (new) - devices CSV required, connections CSV optional
     [Parameter(
         Mandatory = $true,
         ParameterSetName = 'CsvProcess',
@@ -125,14 +103,13 @@ param(
         Mandatory = $true,
         ParameterSetName = 'CsvValidate',
         HelpMessage = "Path to devices CSV file (one row per port range)"
-        ParameterSetName = 'CsvProcess',
-        HelpMessage = "Path to devices CSV file (one row per port range)"
     )]
-    [Parameter(
-        Mandatory = $true,
-        ParameterSetName = 'CsvValidate',
-        HelpMessage = "Path to devices CSV file (one row per port range)"
-    )]
+    [ValidateScript({
+            if ($_ -and -not (Test-Path -Path $_ -PathType Leaf)) { throw "Devices CSV file does not exist: $_" }
+            if ($_ -and -not ($_ -match '\.csv$')) { throw "Devices CSV must have .csv extension: $_" }
+            return $true
+        })]
+    [string]$DeviceCsvFile,
     [ValidateScript({
             if ($_ -and -not (Test-Path -Path $_ -PathType Leaf)) { throw "Devices CSV file does not exist: $_" }
             if ($_ -and -not ($_ -match '\.csv$')) { throw "Devices CSV must have .csv extension: $_" }
@@ -150,6 +127,26 @@ param(
         ParameterSetName = 'CsvValidate',
         HelpMessage = "Optional connections CSV file"
     )]
+    [ValidateScript({
+            if ($_ -and -not (Test-Path -Path $_ -PathType Leaf)) { throw "Connections CSV file does not exist: $_" }
+            if ($_ -and -not ($_ -match '\.csv$')) { throw "Connections CSV must have .csv extension: $_" }
+            return $true
+        })]
+    [string]$ConnectionCsvFile,
+
+    # Output format (all parameter sets)
+    [Parameter(Mandatory = $true, ParameterSetName = 'JsonProcess', HelpMessage = "Output format for the port mapping data")]
+    [Parameter(Mandatory = $true, ParameterSetName = 'CsvProcess', HelpMessage = "Output format for the port mapping data")]
+    [Parameter(Mandatory = $true, ParameterSetName = 'JsonValidate')]
+    [Parameter(Mandatory = $true, ParameterSetName = 'CsvValidate')]
+    [ValidateSet("Markdown", "CSV", "JSON", IgnoreCase = $true)]
+    [Alias('Format')]
+    [string]$OutputFormat,
+
+    [Parameter(Mandatory = $false, ParameterSetName='JsonProcess')]
+    [Parameter(Mandatory = $false, ParameterSetName='CsvProcess')]
+    [Parameter(Mandatory = $false, ParameterSetName='JsonValidate')]
+    [Parameter(Mandatory = $false, ParameterSetName='CsvValidate')]
     [ValidateScript({
             if ($_ -and -not (Test-Path -Path $_ -PathType Leaf)) { throw "Connections CSV file does not exist: $_" }
             if ($_ -and -not ($_ -match '\.csv$')) { throw "Connections CSV must have .csv extension: $_" }
@@ -205,13 +202,9 @@ param(
 
     [Parameter(Mandatory = $false, ParameterSetName='JsonProcess')]
     [Parameter(Mandatory = $false, ParameterSetName='CsvProcess')]
-    [Parameter(Mandatory = $false, ParameterSetName='JsonProcess')]
-    [Parameter(Mandatory = $false, ParameterSetName='CsvProcess')]
     [Alias('Unused')]
     [switch]$ShowUnused = $false,
 
-    [Parameter(Mandatory = $false, ParameterSetName='JsonProcess')]
-    [Parameter(Mandatory = $false, ParameterSetName='CsvProcess')]
     [Parameter(Mandatory = $false, ParameterSetName='JsonProcess')]
     [Parameter(Mandatory = $false, ParameterSetName='CsvProcess')]
     [ValidateNotNullOrEmpty()]
@@ -219,16 +212,8 @@ param(
     [string[]]$DeviceFilter,
 
     # Validation switch (applies to both JSON and CSV parameter sets)
-    # Validation switch (applies to both JSON and CSV parameter sets)
     [Parameter(
         Mandatory = $false,
-        ParameterSetName = 'JsonValidate',
-        HelpMessage = "Validate the input configuration without generating output"
-    )]
-    [Parameter(
-        Mandatory = $false,
-        ParameterSetName = 'CsvValidate',
-        HelpMessage = "Validate the input configuration without generating output"
         ParameterSetName = 'JsonValidate',
         HelpMessage = "Validate the input configuration without generating output"
     )]
@@ -298,6 +283,101 @@ function Write-PortMapLog {
             $Script:ErrorCount++
         }
     }
+}
+
+function Import-PortMapCsvConfiguration {
+    <#
+    .SYNOPSIS
+        Builds the canonical configuration object from CSV input files.
+    .DESCRIPTION
+        Converts two CSV files (devices & connections) into the same structure expected
+        by JSON parsing logic: @{ devices = @(); connections = @() }
+        Devices CSV Schema (one row per port range):
+            DeviceName,DeviceMake,DeviceModel,Location,Rack,RackUnit,PortRange,MediaType,Speed,Description
+        Connections CSV Schema (one row per connection mapping block):
+            SourceDevice,SourcePorts,SourceMedia,DestinationDevice,DestinationPorts,DestinationMedia,ConnectionType,Notes
+        Notes:
+            - Rack / RackUnit are optional (alternative to Location)
+            - DestinationPorts optional (0 placeholder if missing)
+            - Speed / Description optional on connections
+    .PARAMETER DeviceCsvFile
+        Path to device CSV file.
+    .PARAMETER ConnectionCsvFile
+        Optional path to connections CSV file.
+    .OUTPUTS
+        PSCustomObject with .devices and .connections collections.
+    #>
+    [CmdletBinding()] 
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$DeviceCsvFile,
+        [Parameter(Mandatory = $false)]
+        [string]$ConnectionCsvFile
+    )
+
+    Write-PortMapLog "Parsing devices CSV: $DeviceCsvFile" -Level Info
+    $deviceRows = Import-Csv -Path $DeviceCsvFile
+
+    if (-not $deviceRows -or $deviceRows.Count -eq 0) {
+        throw "Devices CSV is empty: $DeviceCsvFile"
+    }
+
+    # Group rows by device to aggregate port ranges
+    $deviceGroups = $deviceRows | Group-Object -Property DeviceName
+    $devices = [System.Collections.Generic.List[object]]::new()
+
+    foreach ($group in $deviceGroups) {
+        $first = $group.Group | Select-Object -First 1
+        $portRanges = [System.Collections.Generic.List[object]]::new()
+        foreach ($row in $group.Group) {
+            if (-not $row.PortRange) { continue }
+            $portRanges.Add([PSCustomObject]@{ range = $row.PortRange; mediaType = $row.MediaType; speed = $row.Speed; description = $row.Description })
+        }
+
+        if ($portRanges.Count -eq 0) { Write-PortMapLog "Device '$($group.Name)' has no valid PortRange entries" -Level Warning }
+
+        $deviceObj = [PSCustomObject]@{
+            deviceName = $group.Name
+            deviceMake = $first.DeviceMake
+            deviceModel = $first.DeviceModel
+            location = if ($first.Location) { $first.Location } else { $null }
+            rack = if ($first.Rack) { $first.Rack } else { $null }
+            rackUnit = if ($first.RackUnit) { $first.RackUnit } else { $null }
+            portRanges = $portRanges
+        }
+        $devices.Add($deviceObj)
+    }
+
+    $connections = @()
+    if ($ConnectionCsvFile) {
+        if (Test-Path -Path $ConnectionCsvFile -PathType Leaf) {
+            Write-PortMapLog "Parsing connections CSV: $ConnectionCsvFile" -Level Info
+            $connectionRows = Import-Csv -Path $ConnectionCsvFile
+            $connList = [System.Collections.Generic.List[object]]::new()
+            foreach ($row in $connectionRows) {
+                if (-not $row.SourceDevice -or -not $row.SourcePorts) { 
+                    Write-PortMapLog "Skipping connection row missing SourceDevice or SourcePorts" -Level Warning
+                    continue 
+                }
+                $connList.Add([PSCustomObject]@{
+                        sourceDevice = $row.SourceDevice
+                        sourcePorts = $row.SourcePorts
+                        sourceMedia = $row.SourceMedia
+                        destinationDevice = $row.DestinationDevice
+                        destinationPorts = if ($row.DestinationPorts) { $row.DestinationPorts } else { '0' }
+                        destinationMedia = $row.DestinationMedia
+                        connectionType = $row.ConnectionType
+                        notes = $row.Notes
+                    })
+            }
+            $connections = $connList.ToArray()
+        }
+        else {
+            Write-PortMapLog "Connections CSV file not found: $ConnectionCsvFile" -Level Warning
+        }
+    }
+
+    return [PSCustomObject]@{ devices = $devices.ToArray(); connections = $connections }
 }
 
 function Import-PortMapCsvConfiguration {
@@ -593,7 +673,6 @@ function New-UniqueOutputFileName {
     [OutputType([string])]
     param(
         [Parameter(Mandatory = $false)]
-        [Parameter(Mandatory = $false)]
         [string]$InputFile,
         
         [Parameter(Mandatory = $true)]
@@ -605,11 +684,6 @@ function New-UniqueOutputFileName {
         [Parameter(Mandatory = $false)]
         [string]$OutputFile
     )
-    
-    if (-not $InputFile -or $InputFile -eq '') {
-        $InputFile = 'csv-import'
-    }
-
     
     if (-not $InputFile -or $InputFile -eq '') {
         $InputFile = 'csv-import'
@@ -720,8 +794,6 @@ function Get-NetworkDevicePortInfo {
                 MediaType   = $portRange.mediaType
                 Speed       = if ($null -ne $portRange.speed -and $portRange.speed -ne '') { $portRange.speed } else { "Unknown" }
                 Description = if ($null -ne $portRange.description -and $portRange.description -ne '') { $portRange.description } else { "No description" }
-                Speed       = if ($null -ne $portRange.speed -and $portRange.speed -ne '') { $portRange.speed } else { "Unknown" }
-                Description = if ($null -ne $portRange.description -and $portRange.description -ne '') { $portRange.description } else { "No description" }
                 IsUsed      = $false
                 Connection  = $null
             }
@@ -815,14 +887,10 @@ function New-ConnectionMappings {
                 SourceDevice      = $connection.sourceDevice
                 SourcePort        = $sourcePort
                 SourceMedia       = if ($null -ne $connection.sourceMedia -and $connection.sourceMedia -ne '') { $connection.sourceMedia } else { "Unknown" }
-                SourceMedia       = if ($null -ne $connection.sourceMedia -and $connection.sourceMedia -ne '') { $connection.sourceMedia } else { "Unknown" }
                 DestinationDevice = $connection.destinationDevice
                 DestinationPort   = $destPort
                 DestinationMedia  = if ($null -ne $connection.destinationMedia -and $connection.destinationMedia -ne '') { $connection.destinationMedia } else { "Unknown" }
-                DestinationMedia  = if ($null -ne $connection.destinationMedia -and $connection.destinationMedia -ne '') { $connection.destinationMedia } else { "Unknown" }
                 Status            = "Active"
-                ConnectionType    = if ($null -ne $connection.connectionType -and $connection.connectionType -ne '') { $connection.connectionType } else { "Unknown" }
-                Notes             = if ($null -ne $connection.notes) { $connection.notes } else { "" }
                 ConnectionType    = if ($null -ne $connection.connectionType -and $connection.connectionType -ne '') { $connection.connectionType } else { "Unknown" }
                 Notes             = if ($null -ne $connection.notes) { $connection.notes } else { "" }
             }
@@ -999,8 +1067,6 @@ function ConvertTo-MarkdownOutput {
     if ($InputFile) {
         [void]$markdownBuilder.AppendLine("**Input File:** $(Split-Path -Leaf $InputFile)")
     }
-    $effectiveFormat = if ($OutputFormat) { $OutputFormat } else { 'Markdown' }
-    [void]$markdownBuilder.AppendLine("**Output Format:** $effectiveFormat")
     $effectiveFormat = if ($OutputFormat) { $OutputFormat } else { 'Markdown' }
     [void]$markdownBuilder.AppendLine("**Output Format:** $effectiveFormat")
     [void]$markdownBuilder.AppendLine("**Generated by:** $env:USERNAME on $env:COMPUTERNAME")
@@ -1259,7 +1325,6 @@ function ConvertTo-JsonOutput {
             computerName  = $env:COMPUTERNAME
             inputFile     = if ($InputFile) { Split-Path -Leaf $InputFile } else { "Unknown" }
             outputFormat  = if ($OutputFormat) { $OutputFormat } else { "JSON" }
-            outputFormat  = if ($OutputFormat) { $OutputFormat } else { "JSON" }
             deviceSummary = [ordered]@{
                 deviceNames  = $deviceNames
                 deviceMakes  = $deviceMakes
@@ -1362,31 +1427,10 @@ function Start-PortMappingProcess {
             # Synthesize pseudo input name for metadata / filenames
             $effectiveInputFile = (Split-Path -Leaf $DeviceCsvFile)
         }
-        $effectiveInputFile = $null
-        if ($PSCmdlet.ParameterSetName -like 'Json*') {
-            Write-PortMapLog "Input file (JSON): $InputFile" -Level Info
-            $effectiveInputFile = $InputFile
-        }
-        elseif ($PSCmdlet.ParameterSetName -like 'Csv*') {
-            Write-PortMapLog "Input files (CSV): Devices=$DeviceCsvFile Connections=$ConnectionCsvFile" -Level Info
-            # Synthesize pseudo input name for metadata / filenames
-            $effectiveInputFile = (Split-Path -Leaf $DeviceCsvFile)
-        }
         Write-PortMapLog "Output format: $OutputFormat" -Level Info
         
         # Load configuration (JSON or CSV) into canonical object $configContent
-        # Load configuration (JSON or CSV) into canonical object $configContent
         $configContent = $null
-        if ($PSCmdlet.ParameterSetName -like 'Json*') {
-            Write-PortMapLog "Loading configuration from JSON: $InputFile" -Level Info
-            if (-not (Test-Path -Path $InputFile -PathType Leaf)) { throw "Input file does not exist: $InputFile" }
-            try { $configContent = Get-Content -Path $InputFile -Raw -ErrorAction Stop | ConvertFrom-Json -ErrorAction Stop }
-            catch { throw "Failed to parse JSON from input file: $($_.Exception.Message)" }
-        }
-        else {
-            Write-PortMapLog "Loading configuration from CSV files" -Level Info
-            try { $configContent = Import-PortMapCsvConfiguration -DeviceCsvFile $DeviceCsvFile -ConnectionCsvFile $ConnectionCsvFile }
-            catch { throw "Failed to parse CSV input: $($_.Exception.Message)" }
         if ($PSCmdlet.ParameterSetName -like 'Json*') {
             Write-PortMapLog "Loading configuration from JSON: $InputFile" -Level Info
             if (-not (Test-Path -Path $InputFile -PathType Leaf)) { throw "Input file does not exist: $InputFile" }
@@ -1409,7 +1453,6 @@ function Start-PortMappingProcess {
         }
         
         # Filter devices if specified
-    $devices = [array]$configContent.devices
     $devices = [array]$configContent.devices
         if ($DeviceFilter -and @($DeviceFilter).Count -gt 0) {
             $devices = $devices | Where-Object { $_.deviceName -in $DeviceFilter }
@@ -1474,14 +1517,11 @@ function Start-PortMappingProcess {
             $output = switch ($OutputFormat) {
                 "Markdown" { 
                     ConvertTo-MarkdownOutput -Devices $devices -DevicePortInfo $devicePortInfo -ConnectionMappings $connectionMappings -InputFile $effectiveInputFile -OutputFormat $OutputFormat
-                    ConvertTo-MarkdownOutput -Devices $devices -DevicePortInfo $devicePortInfo -ConnectionMappings $connectionMappings -InputFile $effectiveInputFile -OutputFormat $OutputFormat
                 }
                 "CSV" { 
                     ConvertTo-CsvOutput -Devices $devices -DevicePortInfo $devicePortInfo -ConnectionMappings $connectionMappings -InputFile $effectiveInputFile -OutputFormat $OutputFormat -ShowUnused:$ShowUnused
-                    ConvertTo-CsvOutput -Devices $devices -DevicePortInfo $devicePortInfo -ConnectionMappings $connectionMappings -InputFile $effectiveInputFile -OutputFormat $OutputFormat -ShowUnused:$ShowUnused
                 }
                 "JSON" { 
-                    ConvertTo-JsonOutput -Devices $devices -DevicePortInfo $devicePortInfo -ConnectionMappings $connectionMappings -InputFile $effectiveInputFile -OutputFormat $OutputFormat
                     ConvertTo-JsonOutput -Devices $devices -DevicePortInfo $devicePortInfo -ConnectionMappings $connectionMappings -InputFile $effectiveInputFile -OutputFormat $OutputFormat
                 }
                 default {
@@ -1503,7 +1543,6 @@ function Start-PortMappingProcess {
             try {
                 foreach ($deviceName in $output.Keys) {
                     # Generate unique filename for each device
-                    $deviceOutputFile = New-UniqueOutputFileName -InputFile $effectiveInputFile -OutputFormat $OutputFormat -Devices @($devices | Where-Object { $_.deviceName -eq $deviceName }) -OutputFile $OutputFile
                     $deviceOutputFile = New-UniqueOutputFileName -InputFile $effectiveInputFile -OutputFormat $OutputFormat -Devices @($devices | Where-Object { $_.deviceName -eq $deviceName }) -OutputFile $OutputFile
                     
                     # Create output directory if needed
@@ -1547,7 +1586,6 @@ function Start-PortMappingProcess {
         else {
             # Single file output for Markdown and JSON
             $finalOutputFile = New-UniqueOutputFileName -InputFile $effectiveInputFile -OutputFormat $OutputFormat -Devices $devices -OutputFile $OutputFile
-            $finalOutputFile = New-UniqueOutputFileName -InputFile $effectiveInputFile -OutputFormat $OutputFormat -Devices $devices -OutputFile $OutputFile
             
             try {
                 $outputDir = Split-Path -Path $finalOutputFile -Parent
@@ -1572,8 +1610,6 @@ function Start-PortMappingProcess {
                     Write-Host ""
                     Write-PortMapLog "Console Output (truncated to first 200 lines):" -Level Info
                     ($output -split "`n" | Select-Object -First 200) -join "`n" | Write-Host
-                    Write-PortMapLog "Console Output (truncated to first 200 lines):" -Level Info
-                    ($output -split "`n" | Select-Object -First 200) -join "`n" | Write-Host
                 }
             }
             catch {
@@ -1583,12 +1619,6 @@ function Start-PortMappingProcess {
         }
         
         # Display summary statistics
-        $totalPorts = 0
-        $usedPorts = 0
-        foreach ($d in $devicePortInfo.GetEnumerator()) {
-            if ($d.Value -and $d.Value.ContainsKey('TotalPorts')) { $totalPorts += [int]$d.Value.TotalPorts }
-            if ($d.Value -and $d.Value.ContainsKey('UsedPorts') -and $d.Value.UsedPorts) { $usedPorts += [int](@($d.Value.UsedPorts).Count) }
-        }
         $totalPorts = 0
         $usedPorts = 0
         foreach ($d in $devicePortInfo.GetEnumerator()) {
