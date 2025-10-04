@@ -4,18 +4,125 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](../../LICENSE)
 [![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)](README.MD)
 [![Breakout Cables](https://img.shields.io/badge/Breakout%20Cables-Supported-orange)](README.MD#breakout-cable-support)
-[![Tests](https://img.shields.io/badge/Tests-Comprehensive-success)](README.MD#testing--validation)
-[![Formats](https://img.shields.io/badge/Output-MD%20%7C%20CSV%20%7C%20JSON-informational)](README.MD#output-formats)
+[![Input Formats](https://img.shields.io/badge/Input-JSON%20%7C%20CSV-blue)](README.MD#csv-input-format)
+[![Output Formats](https://img.shields.io/badge/Output-MD%20%7C%20CSV%20%7C%20JSON-informational)](README.MD#output-formats)
 
-> 🌟 **Key Features**: Professional network documentation • QSFP breakout cable support • Multiple output formats • Sequential port ordering • Comprehensive testing suite
+> 🌟 **Key Features**: Professional network documentation • JSON & CSV input support • QSFP breakout cable support • Multiple output formats • Sequential port ordering
+
+## ⚡ Quick Start
+
+Get started with PortMap in minutes! This tool generates professional network port mapping documentation from simple input files.
+
+### 📥 Prerequisites
+
+- PowerShell 5.1+ or PowerShell Core 7.0+
+- Input configuration file (JSON or CSV format)
+
+### 🚀 Common Use Cases
+
+#### Use Case 1: Generate Markdown Documentation from JSON
+
+```powershell
+.\PortMap.ps1 -InputFile "network-config.json" -OutputFormat Markdown
+```
+
+**What it does:** Creates a professional Markdown document with port mappings for all devices.
+
+**Input:** JSON file with devices and connections  
+**Output:** `network-config-[manufacturers]-[models]-portmap.md`
+
+#### Use Case 2: Generate Markdown Documentation from CSV
+
+```powershell
+.\PortMap.ps1 -InputFile "sample-devices.csv" -OutputFormat Markdown
+```
+
+**What it does:** Creates documentation from CSV input files (requires both devices.csv and connections.csv).
+
+**Input:** CSV files (devices and connections)  
+**Output:** Markdown document with port mappings
+
+**CSV Format Examples:**
+
+**devices.csv:**
+```csv
+DeviceName,DeviceMake,DeviceModel,Location,PortRange,MediaType,Speed,Description
+TOR-1,Cisco,93180YC-FX3,Rack A,1-48,SFP28,25G,Server ports
+TOR-1,Cisco,93180YC-FX3,Rack A,49-52,QSFP28,100G,Uplink ports
+```
+
+**connections.csv:**
+```csv
+SourceDevice,SourcePorts,SourceMedia,DestinationDevice,DestinationPorts,DestinationMedia,ConnectionType,Notes
+TOR-1,1-16,SFP28,Server-Nodes,0,SFP28,Server,Compute nodes
+TOR-1,49-50,QSFP28,SPINE-1,1-2,QSFP28,Uplink,Primary uplinks
+```
+
+#### Use Case 3: Generate Individual CSV Files per Device
+
+```powershell
+.\PortMap.ps1 -InputFile "network-config.json" -OutputFormat CSV
+```
+
+**What it does:** Creates one CSV file per device for spreadsheet analysis.
+
+**Input:** JSON or CSV configuration  
+**Output:** Separate CSV files for each device (e.g., `TOR-1-portmap.csv`, `TOR-2-portmap.csv`)
+
+#### Use Case 4: Include All Ports (Used and Unused)
+
+```powershell
+.\PortMap.ps1 -InputFile "network-config.json" -OutputFormat Markdown -ShowUnused
+```
+
+**What it does:** Shows complete port inventory including unused ports.
+
+**Input:** JSON or CSV configuration  
+**Output:** Documentation with all ports in sequential order (1, 2, 3, ...) marked as Active or Unused
+
+#### Use Case 5: Generate JSON for Automation
+
+```powershell
+.\PortMap.ps1 -InputFile "datacenter-layout.json" -OutputFormat JSON
+```
+
+**What it does:** Creates machine-readable JSON output for integration with other tools.
+
+**Input:** JSON or CSV configuration  
+**Output:** Structured JSON with complete device and connection metadata
+
+### 📝 Sample Files Included
+
+Try the tool immediately with included sample files:
+
+```powershell
+# Test with JSON input
+.\PortMap.ps1 -InputFile "sample-network-config.json" -OutputFormat Markdown
+
+# Test with CSV input
+.\PortMap.ps1 -InputFile "sample-devices.csv" -OutputFormat Markdown
+
+# Test with breakout cables
+.\PortMap.ps1 -InputFile "test-breakout-config.json" -OutputFormat Markdown
+```
+
+### 💡 Quick Tips
+
+- **CSV vs JSON**: Use CSV for easier editing in Excel/spreadsheet tools, JSON for complex configurations
+- **ShowUnused**: Add `-ShowUnused` to see complete port inventory for capacity planning
+- **Multiple Devices**: The tool automatically handles multiple switches in one run
+- **Breakout Cables**: Fully supports QSFP breakout cables with sub-interface notation (e.g., 25.1-25.4)
+
+---
 
 ## 📋 Table of Contents
 
 - [🔧 PortMap Tool](#-portmap-tool)
+  - [⚡ Quick Start](#-quick-start)
   - [📋 Table of Contents](#-table-of-contents)
   - [📖 Overview](#-overview)
-  - [⚡ Quick Start](#-quick-start)
   - [🎯 Purpose](#-purpose)
+  - [📥 CSV Input Format](#-csv-input-format)
   - [✨ Features](#-features)
     - [Core Functionality](#core-functionality)
     - [Advanced Features](#advanced-features)
@@ -89,33 +196,98 @@
 
 ## 📖 Overview
 
-The PortMap tool is a comprehensive network documentation utility designed to generate professional-grade documentation for physical port assignments and cable connections across network devices. It creates detailed documentation artifacts that describe the complete physical cabling configuration of network switches, serving as essential documentation for network design, implementation, and maintenance.
+PortMap is a network documentation tool that generates professional port mapping documentation for network switches. It supports both **JSON and CSV input formats**, making it accessible to network engineers who prefer spreadsheet-based configurations.
 
-## ⚡ Quick Start
-
-```powershell
-# 1️⃣ Generate Markdown documentation
-.\PortMap.ps1 -InputFile "your-config.json" -OutputFormat Markdown
-
-# 2️⃣ Include unused ports in sequential order
-.\PortMap.ps1 -InputFile "your-config.json" -OutputFormat Markdown -ShowUnused
-
-# 3️⃣ Test with breakout cable sample
-.\PortMap.ps1 -InputFile "test-breakout-config.json" -OutputFormat Markdown
-```
-
-> 📋 **Prerequisites**: PowerShell 5.1+ and a valid JSON configuration file describing your network devices.
+**Key capabilities:**
+- 📥 **Flexible Input**: JSON or CSV format
+- 📄 **Multiple Output Formats**: Markdown, CSV, or JSON
+- 🔌 **Breakout Cable Support**: QSFP breakout interfaces (e.g., 25.1-25.4)
+- 📊 **Port Analysis**: Track used, unused, and available ports
+- 🔗 **Connection Mapping**: Physical-to-physical port connections
 
 ## 🎯 Purpose
 
 This tool solves critical documentation challenges in network design by:
 
-- **Comprehensive Physical Documentation**: Creating detailed artifacts of switch physical cable configurations with complete metadata
-- **Sequential Port Mapping**: Providing logically ordered port documentation with connected and unused ports in numerical sequence
-- **Advanced Port Analysis**: Tracking port utilization, media types, connection status, and availability
-- **Breakout Cable Support**: Full support for QSFP breakout cables with sub-interface notation (e.g., 1.1, 1.2, 1.3, 1.4)
-- **Professional Output Generation**: Producing multiple output formats with intelligent file naming and embedded metadata (where applicable)
-- **Integration Ready**: Generating outputs that seamlessly integrate with switch configuration generators and network management tools
+- **Flexible Input Options**: Accept both JSON and CSV formats for maximum accessibility
+- **Comprehensive Documentation**: Create detailed port mapping artifacts with complete metadata
+- **Port Analysis**: Track port utilization, media types, connection status, and availability
+- **Breakout Cable Support**: Full support for QSFP breakout cables with sub-interface notation
+- **Multiple Output Formats**: Generate Markdown, CSV, or JSON outputs for different use cases
+- **Integration Ready**: Outputs seamlessly integrate with switch configuration generators
+
+## 📥 CSV Input Format
+
+**New in v1.0:** PortMap now accepts CSV input in addition to JSON! This is ideal for network engineers who prefer working with spreadsheets.
+
+### How CSV Input Works
+
+CSV input requires **two files** in the same directory:
+1. **Devices CSV** (`{name}-devices.csv` or `devices.csv`)
+2. **Connections CSV** (`{name}-connections.csv` or `connections.csv`)
+
+You can specify either file as input—the tool automatically finds the companion file.
+
+### Devices CSV Format
+
+**Required columns:**
+- `DeviceName` - Unique name for the device
+- `DeviceMake` - Manufacturer (e.g., Cisco, Dell)
+- `DeviceModel` - Model number
+- `Location` - Physical location (optional but recommended)
+- `PortRange` - Port range (e.g., "1-48", "49-52", "25.1-25.4")
+- `MediaType` - Media type (e.g., SFP28, QSFP28, QSFP_4x25G)
+- `Speed` - Port speed (e.g., 25G, 100G)
+- `Description` - Description of port range
+
+**Example:**
+```csv
+DeviceName,DeviceMake,DeviceModel,Location,PortRange,MediaType,Speed,Description
+TOR-1,Cisco,93180YC-FX3,Rack A Pos 42,1-48,SFP28,25G,Server ports
+TOR-1,Cisco,93180YC-FX3,Rack A Pos 42,49-52,QSFP28,100G,Uplink ports
+```
+
+### Connections CSV Format
+
+**Required columns:**
+- `SourceDevice` - Source device name
+- `SourcePorts` - Source port range
+- `SourceMedia` - Source media type
+- `DestinationDevice` - Destination device/host name
+- `DestinationPorts` - Destination port range (use "0" if not applicable)
+- `DestinationMedia` - Destination media type
+- `ConnectionType` - Type (e.g., Server, Uplink, Storage, Inter-Switch)
+- `Notes` - Additional notes (optional)
+
+**Example:**
+```csv
+SourceDevice,SourcePorts,SourceMedia,DestinationDevice,DestinationPorts,DestinationMedia,ConnectionType,Notes
+TOR-1,1-16,SFP28,Server-Nodes,0,SFP28,Server,Compute nodes 1-16
+TOR-1,49-50,QSFP28,SPINE-1,1-2,QSFP28,Uplink,Primary uplinks to spine
+```
+
+### CSV vs JSON
+
+| Aspect | CSV | JSON |
+|--------|-----|------|
+| **Ease of editing** | ✅ Easy (Excel, spreadsheets) | ⚠️ Requires text editor |
+| **Readability** | ✅ Very readable | ⚠️ Technical format |
+| **Validation** | ⚠️ Limited | ✅ Schema validation |
+| **Complex structures** | ⚠️ Flat structure | ✅ Nested structures |
+| **Best for** | Quick edits, network engineers | Complex configs, automation |
+
+### CSV Input Examples
+
+```powershell
+# Using devices file
+.\PortMap.ps1 -InputFile "network-devices.csv" -OutputFormat Markdown
+
+# Using connections file (automatically finds devices file)
+.\PortMap.ps1 -InputFile "network-connections.csv" -OutputFormat JSON
+
+# Standard naming (looks for devices.csv and connections.csv)
+.\PortMap.ps1 -InputFile "devices.csv" -OutputFormat CSV
+```
 
 ## ✨ Features
 
@@ -279,9 +451,11 @@ Machine-readable format with complete breakout interface support:
 
 ## 📝 Input Requirements
 
+The tool accepts input in **JSON or CSV format**. See [CSV Input Format](#-csv-input-format) section above for CSV details.
+
 ### Device Configuration JSON
 
-The tool requires a JSON file describing devices at a high level, with full breakout cable support:
+JSON input requires a single file describing devices and connections, with full breakout cable support:
 
 ```json
 {
@@ -380,7 +554,7 @@ Devices can contain both standard ports and breakout interfaces:
 ### Prerequisites
 
 - PowerShell 5.1 or PowerShell Core 7.0+ (cross-platform compatible)
-- JSON configuration file describing your network devices and connections (with optional breakout cables)
+- Configuration file in JSON or CSV format describing your network devices and connections
 - Write permissions to the output directory
 
 ### Dependencies
@@ -468,7 +642,7 @@ For a 3-device configuration with breakout cables, CSV output creates:
 
 ## 🚀 Usage
 
-### Basic Usage
+### Basic Usage with JSON Input
 
 ```powershell
 # Generate Markdown documentation with automatic file naming
@@ -477,17 +651,27 @@ For a 3-device configuration with breakout cables, CSV output creates:
 # Generate Markdown with unused ports included (sequential ordering)
 .\PortMap.ps1 -InputFile "network-config.json" -OutputFormat Markdown -ShowUnused
 
-# Generate individual CSV files per device with clean port data
+# Generate individual CSV output files per device with clean port data
 .\PortMap.ps1 -InputFile "network-config.json" -OutputFormat CSV
-
-# Generate individual CSV files per device including unused ports
-.\PortMap.ps1 -InputFile "network-config.json" -OutputFormat CSV -ShowUnused
 
 # Generate single JSON file for integration with other tools
 .\PortMap.ps1 -InputFile "network-config.json" -OutputFormat JSON
+```
 
-# Note: CSV format creates individual files per device automatically
-# -OutputFile parameter is ignored for CSV format as it creates multiple files
+### Basic Usage with CSV Input
+
+```powershell
+# Generate Markdown documentation from CSV input
+.\PortMap.ps1 -InputFile "sample-devices.csv" -OutputFormat Markdown
+
+# Generate CSV output files per device from CSV input
+.\PortMap.ps1 -InputFile "sample-connections.csv" -OutputFormat CSV
+
+# Generate JSON from CSV input for automation
+.\PortMap.ps1 -InputFile "devices.csv" -OutputFormat JSON
+
+# Include unused ports in output
+.\PortMap.ps1 -InputFile "sample-devices.csv" -OutputFormat Markdown -ShowUnused
 ```
 
 ### 📡 Breakout Cable Usage Examples
@@ -840,6 +1024,7 @@ This tool is part of a comprehensive network configuration ecosystem:
 ```mermaid
 graph TD
     A[JSON Config] --> B[PortMap Tool]
+    A2[CSV Config] --> B
     B --> C[Markdown Docs]
     B --> D[CSV Reports]
     B --> E[JSON Data]
@@ -854,9 +1039,17 @@ graph TD
 **Core Features:**
 
 - Complete port mapping functionality with device inventory
+- **CSV and JSON input support** for flexible configuration management
 - Multiple output formats: Markdown, CSV, and JSON with consistent formatting
 - Professional documentation generation with embedded metadata (Markdown/JSON)
 - **Full breakout cable support** with sub-interface notation
+
+**Input Format Features:**
+
+- **CSV Input Support**: Accept configuration from CSV files (devices.csv + connections.csv)
+- **Flexible File Discovery**: Automatic detection of companion CSV files
+- **JSON Input Support**: Traditional JSON format for complex configurations
+- **Format Validation**: Comprehensive validation for both CSV and JSON inputs
 
 **Breakout Cable Features:**
 
