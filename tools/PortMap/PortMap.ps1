@@ -55,9 +55,10 @@
     Version: 1.0
     Author: Network Engineering Team
     Purpose: Part of AzureStack Network Switch Config Generator project
-<#
- Added CSV input support (DeviceCsvFile/ConnectionCsvFile) with new parameter sets:
-    - JsonProcess / JsonValidate = legacy JSON input path
+    
+.NOTES
+    CSV input support (DeviceCsvFile/ConnectionCsvFile) with parameter sets:
+    - JsonProcess / JsonValidate = JSON input path
     - CsvProcess  / CsvValidate  = CSV input mode
 #>
 [CmdletBinding(DefaultParameterSetName = 'JsonProcess')]
@@ -76,10 +77,10 @@ param(
         HelpMessage = "Path to the input JSON configuration file describing network devices and connections"
     )]
     [ValidateScript({
-            if ($_ -and -not (Test-Path -Path $_ -PathType Leaf)) {
-                throw "File does not exist: $_"
+            if (-not (Test-Path -Path $_ -PathType Leaf)) {
+                throw "JSON file does not exist: $_"
             }
-            if ($_ -and -not ($_ -match '\.json$')) {
+            if ($_ -notmatch '\.json$') {
                 throw "File must have .json extension: $_"
             }
             return $true
@@ -99,8 +100,12 @@ param(
         HelpMessage = "Path to devices CSV file (one row per port range)"
     )]
     [ValidateScript({
-            if ($_ -and -not (Test-Path -Path $_ -PathType Leaf)) { throw "Devices CSV file does not exist: $_" }
-            if ($_ -and -not ($_ -match '\.csv$')) { throw "Devices CSV must have .csv extension: $_" }
+            if (-not (Test-Path -Path $_ -PathType Leaf)) {
+                throw "Devices CSV file does not exist: $_"
+            }
+            if ($_ -notmatch '\.csv$') {
+                throw "Devices file must have .csv extension: $_"
+            }
             return $true
         })]
     [string]$DeviceCsvFile,
@@ -116,35 +121,32 @@ param(
         HelpMessage = "Optional connections CSV file"
     )]
     [ValidateScript({
-            if ($_ -and -not (Test-Path -Path $_ -PathType Leaf)) { throw "Connections CSV file does not exist: $_" }
-            if ($_ -and -not ($_ -match '\.csv$')) { throw "Connections CSV must have .csv extension: $_" }
+            if (-not (Test-Path -Path $_ -PathType Leaf)) {
+                throw "Connections CSV file does not exist: $_"
+            }
+            if ($_ -notmatch '\.csv$') {
+                throw "Connections file must have .csv extension: $_"
+            }
             return $true
         })]
     [string]$ConnectionCsvFile,
 
     # Output format (all parameter sets)
-    [Parameter(Mandatory = $true, ParameterSetName = 'JsonProcess', HelpMessage = "Output format for the port mapping data")]
-    [Parameter(Mandatory = $true, ParameterSetName = 'CsvProcess', HelpMessage = "Output format for the port mapping data")]
-    [Parameter(Mandatory = $true, ParameterSetName = 'JsonValidate')]
-    [Parameter(Mandatory = $true, ParameterSetName = 'CsvValidate')]
+    [Parameter(Mandatory = $false, ParameterSetName = 'JsonProcess', HelpMessage = "Output format for the port mapping data")]
+    [Parameter(Mandatory = $false, ParameterSetName = 'CsvProcess', HelpMessage = "Output format for the port mapping data")]
     [ValidateSet("Markdown", "CSV", "JSON", IgnoreCase = $true)]
     [Alias('Format')]
-    [string]$OutputFormat,
+    [string]$OutputFormat = "Markdown",
 
     [Parameter(Mandatory = $false, ParameterSetName='JsonProcess')]
     [Parameter(Mandatory = $false, ParameterSetName='CsvProcess')]
     [Parameter(Mandatory = $false, ParameterSetName='JsonValidate')]
     [Parameter(Mandatory = $false, ParameterSetName='CsvValidate')]
     [ValidateScript({
+            if (-not $_) { return $true }
             $directory = Split-Path -Path $_ -Parent
             if ($directory -and -not (Test-Path -Path $directory)) {
-                try {
-                    New-Item -Path $directory -ItemType Directory -Force -WhatIf | Out-Null
-                    return $true
-                }
-                catch {
-                    throw "Cannot create output directory: $directory"
-                }
+                throw "Output directory does not exist: $directory"
             }
             return $true
         })]
@@ -154,7 +156,7 @@ param(
     [Parameter(Mandatory = $false, ParameterSetName='JsonProcess')]
     [Parameter(Mandatory = $false, ParameterSetName='CsvProcess')]
     [Alias('Unused')]
-    [switch]$ShowUnused,
+    [switch]$ShowUnused = $false,
 
     [Parameter(Mandatory = $false, ParameterSetName='JsonProcess')]
     [Parameter(Mandatory = $false, ParameterSetName='CsvProcess')]
@@ -267,10 +269,25 @@ function Import-PortMapCsvConfiguration {
     )
 
     Write-PortMapLog "Parsing devices CSV: $DeviceCsvFile" -Level Info
-    $deviceRows = Import-Csv -Path $DeviceCsvFile
+    
+    try {
+        $deviceRows = Import-Csv -Path $DeviceCsvFile -ErrorAction Stop
+    }
+    catch {
+        throw "Failed to import devices CSV file '$DeviceCsvFile': $($_.Exception.Message)"
+    }
 
     if (-not $deviceRows -or $deviceRows.Count -eq 0) {
-        throw "Devices CSV is empty: $DeviceCsvFile"
+        throw "Devices CSV is empty or has no data rows: $DeviceCsvFile"
+    }
+
+    # Validate required columns
+    $requiredDeviceColumns = @('DeviceName', 'DeviceMake', 'DeviceModel', 'PortRange', 'MediaType')
+    $firstRow = $deviceRows | Select-Object -First 1
+    $missingColumns = $requiredDeviceColumns | Where-Object { -not ($firstRow.PSObject.Properties.Name -contains $_) }
+    
+    if ($missingColumns) {
+        throw "Devices CSV is missing required columns: $($missingColumns -join ', '). Required columns: $($requiredDeviceColumns -join ', ')"
     }
 
     # Group rows by device to aggregate port ranges
@@ -279,55 +296,108 @@ function Import-PortMapCsvConfiguration {
 
     foreach ($group in $deviceGroups) {
         $first = $group.Group | Select-Object -First 1
+        
+        # Validate device has required properties
+        if (-not $first.DeviceName) {
+            Write-PortMapLog "Skipping device with empty DeviceName" -Level Warning
+            continue
+        }
+        if (-not $first.DeviceMake -or -not $first.DeviceModel) {
+            Write-PortMapLog "Device '$($first.DeviceName)' is missing DeviceMake or DeviceModel" -Level Warning
+        }
+        
         $portRanges = [System.Collections.Generic.List[object]]::new()
         foreach ($row in $group.Group) {
-            if (-not $row.PortRange) { continue }
-            $portRanges.Add([PSCustomObject]@{ range = $row.PortRange; mediaType = $row.MediaType; speed = $row.Speed; description = $row.Description })
+            if (-not $row.PortRange -or [string]::IsNullOrWhiteSpace($row.PortRange)) { 
+                continue 
+            }
+            if (-not $row.MediaType -or [string]::IsNullOrWhiteSpace($row.MediaType)) {
+                Write-PortMapLog "Device '$($group.Name)' has port range '$($row.PortRange)' with missing MediaType" -Level Warning
+            }
+            
+            $portRanges.Add([PSCustomObject]@{
+                range = $row.PortRange.Trim()
+                mediaType = if ($row.MediaType) { $row.MediaType.Trim() } else { 'Unknown' }
+                speed = if ($row.Speed) { $row.Speed.Trim() } else { $null }
+                description = if ($row.Description) { $row.Description.Trim() } else { $null }
+            })
         }
 
-        if ($portRanges.Count -eq 0) { Write-PortMapLog "Device '$($group.Name)' has no valid PortRange entries" -Level Warning }
+        if ($portRanges.Count -eq 0) {
+            Write-PortMapLog "Device '$($group.Name)' has no valid PortRange entries" -Level Warning
+            continue
+        }
 
         $deviceObj = [PSCustomObject]@{
-            deviceName = $group.Name
-            deviceMake = $first.DeviceMake
-            deviceModel = $first.DeviceModel
-            location = if ($first.Location) { $first.Location } else { $null }
-            rack = if ($first.Rack) { $first.Rack } else { $null }
-            rackUnit = if ($first.RackUnit) { $first.RackUnit } else { $null }
-            portRanges = $portRanges
+            deviceName = $first.DeviceName.Trim()
+            deviceMake = if ($first.DeviceMake) { $first.DeviceMake.Trim() } else { 'Unknown' }
+            deviceModel = if ($first.DeviceModel) { $first.DeviceModel.Trim() } else { 'Unknown' }
+            location = if ($first.Location) { $first.Location.Trim() } else { $null }
+            rack = if ($first.Rack) { $first.Rack.Trim() } else { $null }
+            rackUnit = if ($first.RackUnit) { $first.RackUnit.Trim() } else { $null }
+            portRanges = $portRanges.ToArray()
         }
         $devices.Add($deviceObj)
+    }
+
+    if ($devices.Count -eq 0) {
+        throw "No valid devices found in CSV file: $DeviceCsvFile"
     }
 
     $connections = @()
     if ($ConnectionCsvFile) {
         if (Test-Path -Path $ConnectionCsvFile -PathType Leaf) {
             Write-PortMapLog "Parsing connections CSV: $ConnectionCsvFile" -Level Info
-            $connectionRows = Import-Csv -Path $ConnectionCsvFile
-            $connList = [System.Collections.Generic.List[object]]::new()
-            foreach ($row in $connectionRows) {
-                if (-not $row.SourceDevice -or -not $row.SourcePorts) { 
-                    Write-PortMapLog "Skipping connection row missing SourceDevice or SourcePorts" -Level Warning
-                    continue 
-                }
-                $connList.Add([PSCustomObject]@{
-                        sourceDevice = $row.SourceDevice
-                        sourcePorts = $row.SourcePorts
-                        sourceMedia = $row.SourceMedia
-                        destinationDevice = $row.DestinationDevice
-                        destinationPorts = if ($row.DestinationPorts) { $row.DestinationPorts } else { '0' }
-                        destinationMedia = $row.DestinationMedia
-                        connectionType = $row.ConnectionType
-                        notes = $row.Notes
-                    })
+            
+            try {
+                $connectionRows = Import-Csv -Path $ConnectionCsvFile -ErrorAction Stop
             }
-            $connections = $connList.ToArray()
+            catch {
+                throw "Failed to import connections CSV file '$ConnectionCsvFile': $($_.Exception.Message)"
+            }
+            
+            if ($connectionRows -and $connectionRows.Count -gt 0) {
+                # Validate required columns
+                $requiredConnColumns = @('SourceDevice', 'SourcePorts')
+                $firstConnRow = $connectionRows | Select-Object -First 1
+                $missingConnColumns = $requiredConnColumns | Where-Object { -not ($firstConnRow.PSObject.Properties.Name -contains $_) }
+                
+                if ($missingConnColumns) {
+                    throw "Connections CSV is missing required columns: $($missingConnColumns -join ', ')"
+                }
+                
+                $connList = [System.Collections.Generic.List[object]]::new()
+                foreach ($row in $connectionRows) {
+                    if (-not $row.SourceDevice -or [string]::IsNullOrWhiteSpace($row.SourceDevice)) { 
+                        Write-PortMapLog "Skipping connection row with empty SourceDevice" -Level Warning
+                        continue 
+                    }
+                    if (-not $row.SourcePorts -or [string]::IsNullOrWhiteSpace($row.SourcePorts)) { 
+                        Write-PortMapLog "Skipping connection row for device '$($row.SourceDevice)' with empty SourcePorts" -Level Warning
+                        continue 
+                    }
+                    
+                    $connList.Add([PSCustomObject]@{
+                        sourceDevice = $row.SourceDevice.Trim()
+                        sourcePorts = $row.SourcePorts.Trim()
+                        sourceMedia = if ($row.SourceMedia) { $row.SourceMedia.Trim() } else { 'Unknown' }
+                        destinationDevice = if ($row.DestinationDevice) { $row.DestinationDevice.Trim() } else { 'Unknown' }
+                        destinationPorts = if ($row.DestinationPorts) { $row.DestinationPorts.Trim() } else { '0' }
+                        destinationMedia = if ($row.DestinationMedia) { $row.DestinationMedia.Trim() } else { 'Unknown' }
+                        connectionType = if ($row.ConnectionType) { $row.ConnectionType.Trim() } else { 'Unknown' }
+                        notes = if ($row.Notes) { $row.Notes.Trim() } else { '' }
+                    })
+                }
+                $connections = $connList.ToArray()
+                Write-PortMapLog "Loaded $($connections.Count) connections from CSV" -Level Info
+            }
         }
         else {
             Write-PortMapLog "Connections CSV file not found: $ConnectionCsvFile" -Level Warning
         }
     }
 
+    Write-PortMapLog "Loaded $($devices.Count) devices from CSV" -Level Info
     return [PSCustomObject]@{ devices = $devices.ToArray(); connections = $connections }
 }
 
@@ -441,8 +511,11 @@ function Expand-NetworkPortRange {
     [OutputType([object[]])]
     param(
         [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [string]$Range
     )
+    
+    $Range = $Range.Trim()
     
     # Handle breakout cable ranges (e.g., "1.1-1.4")
     if ($Range -match '^(\d+)\.(\d+)-(\d+)\.(\d+)$') {
@@ -457,21 +530,19 @@ function Expand-NetworkPortRange {
         }
         
         if ($startSub -gt $endSub) {
-            Write-PortMapLog "Invalid breakout range: start sub-interface ($startSub) is greater than end sub-interface ($endSub)" -Level Warning
+            Write-PortMapLog "Invalid breakout range '$Range': start sub-interface ($startSub) is greater than end sub-interface ($endSub)" -Level Warning
             return @()
         }
         
-        # Generate breakout sub-interfaces
-        $interfaces = [System.Collections.Generic.List[string]]::new()
-        for ($sub = $startSub; $sub -le $endSub; $sub++) {
-            $interfaces.Add("$startPrimary.$sub")
+        # Generate breakout sub-interfaces efficiently
+        $interfaces = for ($sub = $startSub; $sub -le $endSub; $sub++) {
+            "$startPrimary.$sub"
         }
-        return $interfaces.ToArray()
+        return $interfaces
     }
     # Handle single breakout interface (e.g., "1.1")
     elseif ($Range -match '^(\d+)\.(\d+)$') {
-        # Use Write-Output with -NoEnumerate to preserve array structure
-        Write-Output -NoEnumerate @($Range)
+        return , @($Range)  # Use unary comma operator to prevent unwrapping
     }
     # Handle standard port ranges (e.g., "1-48")
     elseif ($Range -match '^(\d+)-(\d+)$') {
@@ -479,8 +550,12 @@ function Expand-NetworkPortRange {
         $end = [int]$matches[2]
         
         if ($start -gt $end) {
-            Write-PortMapLog "Invalid port range: start ($start) is greater than end ($end)" -Level Warning
+            Write-PortMapLog "Invalid port range '$Range': start ($start) is greater than end ($end)" -Level Warning
             return @()
+        }
+        
+        if ($start -lt 1 -or $end -gt 999) {
+            Write-PortMapLog "Port range '$Range' has unusual values (expected 1-999)" -Level Warning
         }
         
         return $start..$end
@@ -490,7 +565,7 @@ function Expand-NetworkPortRange {
         return @([int]$Range)
     }
     else {
-        Write-PortMapLog "Invalid port range format: '$Range'. Expected formats: '1-48', '25', '1.1-1.4', or '1.1'." -Level Warning
+        Write-PortMapLog "Invalid port range format: '$Range'. Expected formats: '1-48', '25', '1.1-1.4', or '1.1'" -Level Warning
         return @()
     }
 }
@@ -763,6 +838,99 @@ function New-ConnectionMappings {
     return $connectionMappings.ToArray()
 }
 
+function Get-ConsolidatedPortEntries {
+    <#
+    .SYNOPSIS
+        Creates a consolidated list of port entries for a device including connections and unused ports.
+    
+    .DESCRIPTION
+        Helper function to generate a unified, sorted list of port entries combining
+        connection data and unused port information for output generation.
+    
+    .PARAMETER DeviceName
+        Name of the device to process.
+    
+    .PARAMETER DevicePortInfo
+        Hashtable containing device port information.
+    
+    .PARAMETER ConnectionMappings
+        Array of all connection mapping objects.
+    
+    .PARAMETER IncludeUnused
+        Whether to include unused ports in the output.
+    
+    .OUTPUTS
+        System.Object[]
+        Sorted array of port entry objects.
+    #>
+    [CmdletBinding()]
+    [OutputType([object[]])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$DeviceName,
+        
+        [Parameter(Mandatory = $true)]
+        [hashtable]$DevicePortInfo,
+        
+        [Parameter(Mandatory = $false)]
+        [AllowEmptyCollection()]
+        [object[]]$ConnectionMappings = @(),
+        
+        [Parameter(Mandatory = $false)]
+        [bool]$IncludeUnused = $false
+    )
+    
+    $portInfo = $DevicePortInfo[$DeviceName]
+    $allPortEntries = [System.Collections.Generic.List[object]]::new()
+    
+    # Get connections for this device
+    $deviceConnections = if ($ConnectionMappings -and $ConnectionMappings.Count -gt 0) { 
+        $ConnectionMappings | Where-Object { $_.SourceDevice -eq $DeviceName }
+    } else { 
+        @() 
+    }
+    
+    # Add connected ports
+    foreach ($connection in $deviceConnections) {
+        $portEntry = [PSCustomObject]@{
+            PortNumber        = if ($connection.SourcePort -match '^\d+$') { [int]$connection.SourcePort } else { [int]($connection.SourcePort -replace '\..*$', '') }
+            Port              = $connection.SourcePort
+            Media             = $connection.SourceMedia
+            Status            = $connection.Status
+            DestinationDevice = $connection.DestinationDevice
+            DestinationPort   = $connection.DestinationPort
+            DestinationMedia  = $connection.DestinationMedia
+            Type              = $connection.ConnectionType
+            Notes             = if ($connection.Notes) { $connection.Notes } else { "" }
+            IsConnected       = $true
+        }
+        $allPortEntries.Add($portEntry)
+    }
+    
+    # Add unused ports if requested
+    if ($IncludeUnused -and $portInfo.UnusedPorts -and $portInfo.UnusedPorts.Count -gt 0) {
+        foreach ($port in $portInfo.UnusedPorts) {
+            $details = $portInfo.PortDetails[$port]
+            $portEntry = [PSCustomObject]@{
+                PortNumber        = if ($port -match '^\d+$') { [int]$port } else { [int]($port -replace '\..*$', '') }
+                Port              = $port
+                Media             = $details.MediaType
+                Status            = "Unused"
+                DestinationDevice = ""
+                DestinationPort   = ""
+                DestinationMedia  = ""
+                Type              = ""
+                Notes             = "Available"
+                IsConnected       = $false
+            }
+            $allPortEntries.Add($portEntry)
+        }
+    }
+    
+    # Sort by port number and return
+    return ($allPortEntries | Sort-Object PortNumber)
+}
+
 #endregion
 
 #region Output Generators
@@ -890,50 +1058,17 @@ function ConvertTo-MarkdownOutput {
             [void]$markdownBuilder.AppendLine("| Port | Media | Status | Destination Device | Destination Port | Destination Media | Type | Notes |")
             [void]$markdownBuilder.AppendLine("|------|-------|--------|-------------------|------------------|-------------------|------|-------|")
             
-            # Create a unified list of all ports to display, sorted by port number
-            $allPortEntries = [System.Collections.Generic.List[object]]::new()
+            # Use helper function to get consolidated port entries
+            $sortedPortEntries = Get-ConsolidatedPortEntries -DeviceName $deviceName -DevicePortInfo $DevicePortInfo -ConnectionMappings $ConnectionMappings -IncludeUnused $ShowUnused
             
-            # Add connected ports
-            foreach ($connection in $deviceConnections) {
-                $portEntry = [PSCustomObject]@{
-                    PortNumber        = [int]$connection.SourcePort
-                    Port              = $connection.SourcePort
-                    Media             = $connection.SourceMedia
-                    Status            = $connection.Status
-                    DestinationDevice = $connection.DestinationDevice
-                    DestinationPort   = $connection.DestinationPort
-                    DestinationMedia  = $connection.DestinationMedia
-                    Type              = $connection.ConnectionType
-                    Notes             = if ($connection.Notes) { $connection.Notes } else { "" }
-                    IsConnected       = $true
-                }
-                $allPortEntries.Add($portEntry)
-            }
-            
-            # Add unused ports if requested
-            if ($ShowUnused -and $unusedPortCount -gt 0) {
-                foreach ($port in $portInfo.UnusedPorts) {
-                    $details = $portInfo.PortDetails[$port]
-                    $portEntry = [PSCustomObject]@{
-                        PortNumber        = [int]$port
-                        Port              = $port
-                        Media             = $details.MediaType
-                        Status            = "**Unused**"
-                        DestinationDevice = "-"
-                        DestinationPort   = "-"
-                        DestinationMedia  = "-"
-                        Type              = "-"
-                        Notes             = "Available"
-                        IsConnected       = $false
-                    }
-                    $allPortEntries.Add($portEntry)
-                }
-            }
-            
-            # Sort all entries by port number and output
-            $sortedPortEntries = $allPortEntries | Sort-Object PortNumber
             foreach ($portEntry in $sortedPortEntries) {
-                [void]$markdownBuilder.AppendLine("| $($portEntry.Port) | $($portEntry.Media) | $($portEntry.Status) | $($portEntry.DestinationDevice) | $($portEntry.DestinationPort) | $($portEntry.DestinationMedia) | $($portEntry.Type) | $($portEntry.Notes) |")
+                $status = if ($portEntry.IsConnected) { $portEntry.Status } else { "**Unused**" }
+                $destDevice = if ($portEntry.DestinationDevice -and $portEntry.DestinationDevice -ne '') { $portEntry.DestinationDevice } else { "-" }
+                $destPort = if ($portEntry.DestinationPort -and $portEntry.DestinationPort -ne '' -and $portEntry.DestinationPort -ne '0') { $portEntry.DestinationPort } else { "-" }
+                $destMedia = if ($portEntry.DestinationMedia -and $portEntry.DestinationMedia -ne '') { $portEntry.DestinationMedia } else { "-" }
+                $type = if ($portEntry.Type -and $portEntry.Type -ne '') { $portEntry.Type } else { "-" }
+                
+                [void]$markdownBuilder.AppendLine("| $($portEntry.Port) | $($portEntry.Media) | $status | $destDevice | $destPort | $destMedia | $type | $($portEntry.Notes) |")
             }
         }
         else {
@@ -1006,67 +1141,25 @@ function ConvertTo-CsvOutput {
     
     foreach ($device in $Devices) {
         $deviceName = $device.deviceName
-        $portInfo = $DevicePortInfo[$deviceName]
         $csvData = [System.Collections.Generic.List[object]]::new()
         
-        # CSV output excludes metadata - only port data
+        # Use helper function to get consolidated port entries
+        $sortedPortEntries = Get-ConsolidatedPortEntries -DeviceName $deviceName -DevicePortInfo $DevicePortInfo -ConnectionMappings $ConnectionMappings -IncludeUnused $ShowUnused
         
-        # Create unified port list for this device (similar to Markdown logic)
-        $allPortEntries = [System.Collections.Generic.List[object]]::new()
-        
-        # Get connections for this device
-        $deviceConnections = if ($ConnectionMappings) { 
-            $ConnectionMappings | Where-Object { $_.SourceDevice -eq $deviceName } | Sort-Object { [int]$_.SourcePort }
-        }
-        else { 
-            @() 
-        }
-        
-        # Add connected ports
-        foreach ($connection in $deviceConnections) {
-            $portEntry = [PSCustomObject]@{
-                PortNumber        = [int]$connection.SourcePort
-                Port              = $connection.SourcePort
-                Media             = $connection.SourceMedia
-                Status            = $connection.Status
-                DestinationDevice = $connection.DestinationDevice
-                DestinationPort   = $connection.DestinationPort
-                DestinationMedia  = $connection.DestinationMedia
-                Type              = $connection.ConnectionType
-                Notes             = if ($connection.Notes) { $connection.Notes } else { "" }
-                IsConnected       = $true
-            }
-            $allPortEntries.Add($portEntry)
-        }
-        
-        # Add unused ports if requested
-        if ($ShowUnused -and $portInfo.UnusedPorts) {
-            foreach ($port in $portInfo.UnusedPorts) {
-                $details = $portInfo.PortDetails[$port]
-                $portEntry = [PSCustomObject]@{
-                    PortNumber        = [int]$port
-                    Port              = $port
-                    Media             = $details.MediaType
-                    Status            = "Unused"
-                    DestinationDevice = ""
-                    DestinationPort   = ""
-                    DestinationMedia  = ""
-                    Type              = ""
-                    Notes             = "Available"
-                    IsConnected       = $false
-                }
-                $allPortEntries.Add($portEntry)
-            }
-        }
-        
-        # Sort all entries by port number and add to CSV data
-        $sortedPortEntries = $allPortEntries | Sort-Object PortNumber
         foreach ($portEntry in $sortedPortEntries) {
             $csvRow = [PSCustomObject]@{
                 DeviceName        = $deviceName
                 Make              = $device.deviceMake
                 Model             = $device.deviceModel
-                Location          = if ($device.PSObject.Properties.Name -contains 'location') { $device.location } elseif ($device.rack -and $device.rackUnit) { "$($device.rack)/$($device.rackUnit)" } elseif ($device.rack) { $device.rack } else { "" }
+                Location          = if ($device.PSObject.Properties.Name -contains 'location' -and $device.location) { 
+                    $device.location 
+                } elseif ($device.rack -and $device.rackUnit) { 
+                    "$($device.rack)/$($device.rackUnit)" 
+                } elseif ($device.rack) { 
+                    $device.rack 
+                } else { 
+                    "" 
+                }
                 Port              = $portEntry.Port
                 Media             = $portEntry.Media
                 Status            = $portEntry.Status
@@ -1134,10 +1227,20 @@ function ConvertTo-JsonOutput {
         [string]$OutputFormat
     )
     
-    # Collect device information for metadata
-    $deviceMakes = $Devices | Select-Object -ExpandProperty deviceMake -Unique | Sort-Object
-    $deviceModels = $Devices | Select-Object -ExpandProperty deviceModel -Unique | Sort-Object
-    $deviceNames = $Devices | Select-Object -ExpandProperty deviceName | Sort-Object
+    # Collect device information for metadata - with safe property extraction
+    $deviceMakes = @()
+    $deviceModels = @()
+    $deviceNames = @()
+    
+    try {
+        $deviceMakes = $Devices | Where-Object { $null -ne $_.deviceMake } | ForEach-Object { $_.deviceMake } | Select-Object -Unique | Sort-Object
+        $deviceModels = $Devices | Where-Object { $null -ne $_.deviceModel } | ForEach-Object { $_.deviceModel } | Select-Object -Unique | Sort-Object
+        $deviceNames = $Devices | Where-Object { $null -ne $_.deviceName } | ForEach-Object { $_.deviceName } | Sort-Object
+    }
+    catch {
+        Write-PortMapLog "Warning: Error collecting device metadata: $($_.Exception.Message)" -Level Warning
+        # Continue with empty arrays
+    }
     
     $jsonOutput = [ordered]@{
         metadata    = [ordered]@{
@@ -1158,7 +1261,7 @@ function ConvertTo-JsonOutput {
         summary     = [ordered]@{
             totalDevices     = if ($Devices) { @($Devices).Count } else { 0 }
             totalConnections = if ($ConnectionMappings) { @($ConnectionMappings).Count } else { 0 }
-            totalPorts       = ($DevicePortInfo.Values | Measure-Object -Property TotalPorts -Sum).Sum
+            totalPorts       = ($DevicePortInfo.Values | ForEach-Object { if ($_.TotalPorts) { $_.TotalPorts } else { 0 } } | Measure-Object -Sum).Sum
             totalUsedPorts   = ($DevicePortInfo.Values | ForEach-Object { if ($_.UsedPorts) { @($_.UsedPorts).Count } else { 0 } } | Measure-Object -Sum).Sum
         }
         devices     = [System.Collections.Generic.List[object]]::new()
@@ -1290,31 +1393,42 @@ function Start-PortMappingProcess {
         # Build device port information
         Write-PortMapLog "Processing device port information..." -Level Info
         $devicePortInfo = @{}
+        $deviceIndex = 0
         
         foreach ($device in $devices) {
+            $deviceIndex++
+            Write-Progress -Activity "Processing Devices" -Status "Processing $($device.deviceName) ($deviceIndex of $($devices.Count))" -PercentComplete (($deviceIndex / $devices.Count) * 100)
+            
             try {
                 $devicePortInfo[$device.deviceName] = Get-NetworkDevicePortInfo -Device $device
                 Write-PortMapLog "Processed device: $($device.deviceName) ($($devicePortInfo[$device.deviceName].TotalPorts) ports)" -Level Info
             }
             catch {
+                Write-Progress -Activity "Processing Devices" -Completed
                 Write-PortMapLog "Failed to process device $($device.deviceName): $($_.Exception.Message)" -Level Error
                 throw
             }
         }
+        Write-Progress -Activity "Processing Devices" -Completed
         
         # Process connections
         Write-PortMapLog "Processing connections..." -Level Info
         $connectionMappings = @()
         
         if ($configContent.connections -and @($configContent.connections).Count -gt 0) {
+            Write-Progress -Activity "Processing Connections" -Status "Mapping connections..." -PercentComplete 0
             try {
                 $connectionMappings = New-ConnectionMappings -Connections $configContent.connections -DevicePortInfo $devicePortInfo
                 $connectionCount = if ($connectionMappings) { @($connectionMappings).Count } else { 0 }
                 Write-PortMapLog "Processed $connectionCount connections" -Level Info
             }
             catch {
+                Write-Progress -Activity "Processing Connections" -Completed
                 Write-PortMapLog "Failed to process connections: $($_.Exception.Message)" -Level Error
                 throw
+            }
+            finally {
+                Write-Progress -Activity "Processing Connections" -Completed
             }
         }
         else {
