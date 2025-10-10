@@ -81,6 +81,7 @@ jobs:
             --collect-all jinja2 `
             --hidden-import=convertors `
             --hidden-import=convertors.convertors_lab_switch_json `
+            --hidden-import=convertors.convertors_bmc_switch_json `
             --collect-submodules=convertors `
             --paths=src `
             src/main.py
@@ -96,6 +97,7 @@ jobs:
             --collect-all jinja2 \
             --hidden-import=convertors \
             --hidden-import=convertors.convertors_lab_switch_json \
+            --hidden-import=convertors.convertors_bmc_switch_json \
             --collect-submodules=convertors \
             --paths=src \
             src/main.py
