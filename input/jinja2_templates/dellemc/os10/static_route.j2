@@ -1,0 +1,8 @@
+{%- if static_routes is defined and static_routes -%}
+
+! static_route.j2
+{%- for route in static_routes %}
+ip route {{ route.prefix }} {{ route.next_hop }}
+{%- endfor %}
+
+{% endif %}

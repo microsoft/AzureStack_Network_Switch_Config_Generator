@@ -2,7 +2,10 @@ import json
 from copy import deepcopy
 from pathlib import Path
 from collections import defaultdict
-from loader import get_real_path
+try:
+    from ..loader import get_real_path  # package style
+except ImportError:
+    from loader import get_real_path  # fallback script style
 
 # Import BMC converter at module level to help PyInstaller detect it
 try:

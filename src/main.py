@@ -4,8 +4,17 @@ import sys
 import json
 import shutil
 import importlib
-from generator import generate_config
-from loader import get_real_path, load_input_json  # Only used for PyInstaller-packed assets
+
+# Support both execution styles:
+# 1. python src/main.py           (src not a package on sys.path root)
+# 2. python -m src.main           (src is a package)
+# Try relative imports first (package style), then fall back to absolute (script style).
+try:  # Package style
+    from .generator import generate_config  # type: ignore
+    from .loader import get_real_path, load_input_json  # type: ignore
+except ImportError:  # Fallback to script style
+    from generator import generate_config  # type: ignore
+    from loader import get_real_path, load_input_json  # type: ignore  # Only used for PyInstaller-packed assets
 
 # Configure UTF-8 encoding for Windows console (fixes emoji display issues in executables)
 if sys.platform == "win32":

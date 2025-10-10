@@ -1,5 +1,11 @@
 from pathlib import Path
-from loader import load_input_json, load_template
+
+# Support both execution as part of the 'src' package (python -m src.main) and
+# direct script execution (python src/main.py) by attempting relative import first.
+try:  # package style
+    from .loader import load_input_json, load_template  # type: ignore
+except ImportError:  # fallback to script style
+    from loader import load_input_json, load_template  # type: ignore
 import os
 import warnings
 
