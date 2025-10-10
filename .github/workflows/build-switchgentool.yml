@@ -77,6 +77,7 @@ jobs:
         run: |
           pyinstaller --onefile --clean --noconfirm --noupx `
             --name network_config_generator `
+            --additional-hooks-dir=. `
             --add-data "input;input" `
             --collect-all jinja2 `
             --hidden-import=convertors `
@@ -96,6 +97,7 @@ jobs:
         run: |
           pyinstaller --onefile --clean --noconfirm \
             --name network_config_generator \
+            --additional-hooks-dir=. \
             --add-data "input:input" \
             --collect-all jinja2 \
             --hidden-import=convertors \
