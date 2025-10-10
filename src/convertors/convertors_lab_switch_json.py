@@ -8,10 +8,13 @@ except ImportError:
     from loader import get_real_path  # fallback script style
 
 # Import BMC converter at module level to help PyInstaller detect it
+# Using explicit import for better PyInstaller compatibility
 try:
-    from . import convertors_bmc_switch_json
+    from .convertors_bmc_switch_json import convert_bmc_switches
+    _bmc_available = True
 except ImportError:
-    convertors_bmc_switch_json = None
+    convert_bmc_switches = None
+    _bmc_available = False
 
 # ── Static config ─────────────────────────────────────────────────────────
 SWITCH_TYPES          = ["TOR1", "TOR2"]
@@ -548,18 +551,16 @@ def convert_switch_input_json(input_data: dict, output_dir: str = DEFAULT_OUTPUT
 
         print(f"[✓] Wrote {out_file}")
 
-    # Convert BMC switches
-    try:
-        from .convertors_bmc_switch_json import convert_bmc_switches
-        convert_bmc_switches(input_data, output_dir)
-    except ImportError as e:
-        print(f"[!] BMC converter not available: {e}")
-        import traceback
-        traceback.print_exc()
-    except Exception as e:
-        print(f"[!] Error converting BMC switches: {e}")
-        import traceback
-        traceback.print_exc()
+    # Convert BMC switches using the module-level import
+    if _bmc_available and convert_bmc_switches:
+        try:
+            convert_bmc_switches(input_data, output_dir)
+        except Exception as e:
+            print(f"[!] Error converting BMC switches: {e}")
+            import traceback
+            traceback.print_exc()
+    else:
+        print(f"[!] BMC converter not available - module not imported")
 
 
 def convert_all_switches_json(input_data: dict, output_dir: str = DEFAULT_OUTPUT_DIR):
@@ -570,13 +571,7 @@ def convert_all_switches_json(input_data: dict, output_dir: str = DEFAULT_OUTPUT
     print("[*] Converting ToR switches...")
     convert_switch_input_json(input_data, output_dir)
     
-    # Import and call BMC converter (separate module for clean separation)
-    try:
-        from .convertors_bmc_switch_json import convert_bmc_switches
-        print("[*] Converting BMC switches...")
-        convert_bmc_switches(input_data, output_dir)
-    except ImportError as e:
-        print(f"[!] BMC converter not available: {e}")
-    
+    # BMC converter already called within convert_switch_input_json
+    # No need to call again here to avoid duplicate conversion
     print("[✓] All switch conversions completed.")
 
