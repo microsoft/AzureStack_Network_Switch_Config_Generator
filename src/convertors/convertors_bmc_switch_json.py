@@ -249,10 +249,15 @@ class BMCSwitchConverter:
                 template_path = get_real_path(Path("..") / template_relative)
         
         if not template_path.exists():
+            import sys
+            debug_info = f"sys.frozen={getattr(sys, 'frozen', False)}, sys._MEIPASS={getattr(sys, '_MEIPASS', 'N/A')}"
             raise FileNotFoundError(
-                f"[!] BMC interface template not found: {template_path}\n"
+                f"[!] BMC interface template not found!\n"
                 f"    Looking for model: {model} (make: {make})\n"
-                f"    Searched: {template_relative}"
+                f"    Relative path: {template_relative}\n"
+                f"    Resolved path: {template_path}\n"
+                f"    File exists: {template_path.exists()}\n"
+                f"    Debug: {debug_info}"
             )
         
         try:
