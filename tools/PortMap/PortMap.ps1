@@ -81,10 +81,8 @@ param(
     )]
     [ValidateScript({
             if ($_ -and -not (Test-Path -Path $_ -PathType Leaf)) {
-            if ($_ -and -not (Test-Path -Path $_ -PathType Leaf)) {
                 throw "File does not exist: $_"
             }
-            if ($_ -and -not ($_ -match '\.json$')) {
             if ($_ -and -not ($_ -match '\.json$')) {
                 throw "File must have .json extension: $_"
             }
@@ -110,12 +108,6 @@ param(
             return $true
         })]
     [string]$DeviceCsvFile,
-    [ValidateScript({
-            if ($_ -and -not (Test-Path -Path $_ -PathType Leaf)) { throw "Devices CSV file does not exist: $_" }
-            if ($_ -and -not ($_ -match '\.csv$')) { throw "Devices CSV must have .csv extension: $_" }
-            return $true
-        })]
-    [string]$DeviceCsvFile,
 
     [Parameter(
         Mandatory = $false,
@@ -142,48 +134,6 @@ param(
     [ValidateSet("Markdown", "CSV", "JSON", IgnoreCase = $true)]
     [Alias('Format')]
     [string]$OutputFormat,
-
-    [Parameter(Mandatory = $false, ParameterSetName='JsonProcess')]
-    [Parameter(Mandatory = $false, ParameterSetName='CsvProcess')]
-    [Parameter(Mandatory = $false, ParameterSetName='JsonValidate')]
-    [Parameter(Mandatory = $false, ParameterSetName='CsvValidate')]
-    [ValidateScript({
-            if ($_ -and -not (Test-Path -Path $_ -PathType Leaf)) { throw "Connections CSV file does not exist: $_" }
-            if ($_ -and -not ($_ -match '\.csv$')) { throw "Connections CSV must have .csv extension: $_" }
-            return $true
-        })]
-    [string]$ConnectionCsvFile,
-
-    # Output format (all parameter sets)
-    [Parameter(Mandatory = $true, ParameterSetName = 'JsonProcess', HelpMessage = "Output format for the port mapping data")]
-    [Parameter(Mandatory = $true, ParameterSetName = 'CsvProcess', HelpMessage = "Output format for the port mapping data")]
-    [Parameter(Mandatory = $true, ParameterSetName = 'JsonValidate')]
-    [Parameter(Mandatory = $true, ParameterSetName = 'CsvValidate')]
-    [ValidateSet("Markdown", "CSV", "JSON", IgnoreCase = $true)]
-    [Alias('Format')]
-    [string]$OutputFormat,
-
-    [Parameter(Mandatory = $false, ParameterSetName='JsonProcess')]
-    [Parameter(Mandatory = $false, ParameterSetName='CsvProcess')]
-    [Parameter(Mandatory = $false, ParameterSetName='JsonValidate')]
-    [Parameter(Mandatory = $false, ParameterSetName='CsvValidate')]
-    [ValidateScript({
-            if (-not (Test-Path -Path $_ -PathType Leaf)) {
-                throw "Connections CSV file does not exist: $_"
-            }
-            if ($_ -notmatch '\.csv$') {
-                throw "Connections file must have .csv extension: $_"
-            }
-            return $true
-        })]
-    [string]$ConnectionCsvFile,
-
-    # Output format (all parameter sets)
-    [Parameter(Mandatory = $false, ParameterSetName = 'JsonProcess', HelpMessage = "Output format for the port mapping data")]
-    [Parameter(Mandatory = $false, ParameterSetName = 'CsvProcess', HelpMessage = "Output format for the port mapping data")]
-    [ValidateSet("Markdown", "CSV", "JSON", IgnoreCase = $true)]
-    [Alias('Format')]
-    [string]$OutputFormat = "Markdown",
 
     [Parameter(Mandatory = $false, ParameterSetName='JsonProcess')]
     [Parameter(Mandatory = $false, ParameterSetName='CsvProcess')]
