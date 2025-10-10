@@ -7,6 +7,31 @@ import importlib
 from generator import generate_config
 from loader import get_real_path, load_input_json  # Only used for PyInstaller-packed assets
 
+# Configure UTF-8 encoding for Windows console (fixes emoji display issues in executables)
+if sys.platform == "win32":
+    try:
+        # Try to set console to UTF-8 mode
+        import os
+        os.system("chcp 65001 > nul 2>&1")
+        # Reconfigure stdout/stderr with UTF-8 encoding
+        if hasattr(sys.stdout, 'reconfigure'):
+            sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+            sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+    except:
+        pass  # If it fails, we'll use safe_print fallback
+
+def safe_print(text):
+    """
+    Safely print text, handling Unicode characters that might not be supported in console.
+    Falls back to ASCII-safe alternatives if encoding fails.
+    """
+    try:
+        print(text)
+    except UnicodeEncodeError:
+        # Remove or replace problematic Unicode characters
+        safe_text = text.encode('ascii', errors='replace').decode('ascii')
+        print(safe_text)
+
 def load_convertor(convertor_module_path):
     """
     Dynamically load a convertor module and return its convert function.
@@ -56,8 +81,8 @@ def convert_to_standard_format(input_file_path, output_dir, convertor_module_pat
     Convert lab format to standard format JSON files using specified convertor.
     Returns list of generated standard format files.
     """
-    print("🔄 Converting from lab format to standard format...")
-    print(f"📦 Using convertor: {convertor_module_path}")
+    safe_print("🔄 Converting from lab format to standard format...")
+    safe_print(f"📦 Using convertor: {convertor_module_path}")
     
     # Load lab format data
     data = load_input_json(str(input_file_path))
@@ -77,7 +102,7 @@ def convert_to_standard_format(input_file_path, output_dir, convertor_module_pat
     if not generated_files:
         raise RuntimeError("No standard format files were generated during conversion")
     
-    print(f"✅ Generated {len(generated_files)} standard format files:")
+    safe_print(f"✅ Generated {len(generated_files)} standard format files:")
     for file in generated_files:
         print(f"   - {file}")
     
@@ -115,11 +140,11 @@ def main():
     else:
         template_folder = template_folder_arg.resolve()
 
-    print(f"🧾 Input JSON File:     {input_json_path}")
-    print(f"🧩 Template Folder:     {template_folder}")
-    print(f"📁 Output Directory:    {output_folder_path}")
+    safe_print(f"🧾 Input JSON File:     {input_json_path}")
+    safe_print(f"🧩 Template Folder:     {template_folder}")
+    safe_print(f"📁 Output Directory:    {output_folder_path}")
     if args.convertor != parser.get_default('convertor'):
-        print(f"🔄 Custom Convertor:    {args.convertor}")
+        safe_print(f"🔄 Custom Convertor:    {args.convertor}")
 
     # === Validation ===
     if not input_json_path.exists():
@@ -133,7 +158,7 @@ def main():
     output_folder_path.mkdir(parents=True, exist_ok=True)
 
     # === Step 1: Check if input is in standard format ===
-    print("🔍 Checking input format...")
+    safe_print("🔍 Checking input format...")
     data = load_input_json(str(input_json_path))
     if data is None:
         print(f"[ERROR] Failed to load input JSON: {input_json_path}")
@@ -142,10 +167,10 @@ def main():
     standard_format_files = []
 
     if is_standard_format(data):
-        print("✅ Input is already in standard format")
+        safe_print("✅ Input is already in standard format")
         standard_format_files = [input_json_path]
     else:
-        print("⚠️  Input is in lab format - conversion required")
+        safe_print("⚠️  Input is in lab format - conversion required")
         try:
             # Create temporary subdirectory for conversion within output folder
             temp_conversion_subdir = output_folder_path / ".temp_conversion"
@@ -158,22 +183,22 @@ def main():
                 args.convertor
             )
         except Exception as e:
-            print(f"❌ Failed to convert to standard format: {e}")
-            print(f"\n💡 Troubleshooting tips:")
+            safe_print(f"❌ Failed to convert to standard format: {e}")
+            safe_print(f"\n💡 Troubleshooting tips:")
             print(f"   - Ensure your input file is in the correct format for convertor: {args.convertor}")
             print(f"   - Check if the convertor module exists and has 'convert_switch_input_json' function")
             print(f"   - For custom convertors, use: --convertor your.custom.convertor.module")
             sys.exit(1)
 
     # === Step 2: Generate configs for each standard format file ===
-    print(f"\n🏗️  Generating configs for {len(standard_format_files)} switch(es)...")
+    safe_print(f"\n🏗️  Generating configs for {len(standard_format_files)} switch(es)...")
     
     total_success = 0
     total_failed = 0
     conversion_used = not is_standard_format(data)
 
     for std_file in standard_format_files:
-        print(f"\n📝 Processing: {std_file.name}")
+        safe_print(f"\n📝 Processing: {std_file.name}")
         
         try:
             # Create subdirectory for each switch's output
@@ -185,7 +210,7 @@ def main():
                 import shutil
                 std_json_copy = switch_output_dir / f"std_{std_file.name}"
                 shutil.copy2(std_file, std_json_copy)
-                print(f"📄 Standard JSON saved: {std_json_copy.name}")
+                safe_print(f"📄 Standard JSON saved: {std_json_copy.name}")
             
             generate_config(
                 input_std_json=str(std_file),
@@ -193,10 +218,10 @@ def main():
                 output_folder=str(switch_output_dir)
             )
             total_success += 1
-            print(f"✅ Generated configs for {std_file.name} in {switch_output_dir}")
+            safe_print(f"✅ Generated configs for {std_file.name} in {switch_output_dir}")
             
         except Exception as e:
-            print(f"❌ Failed to generate configs for {std_file.name}: {e}")
+            safe_print(f"❌ Failed to generate configs for {std_file.name}: {e}")
             total_failed += 1
 
     # === Cleanup conversion artifacts ===
@@ -204,23 +229,23 @@ def main():
         # Clean up temporary conversion subdirectory
         temp_conversion_subdir = output_folder_path / ".temp_conversion"
         if temp_conversion_subdir.exists():
-            print(f"\n🧹 Cleaning up temporary conversion directory...")
+            safe_print(f"\n🧹 Cleaning up temporary conversion directory...")
             shutil.rmtree(temp_conversion_subdir, ignore_errors=True)
         
         # Keep the original converted JSON files in the root directory for user verification
-        print("� Original converted JSON files kept in output directory for verification")
+        safe_print("📋 Original converted JSON files kept in output directory for verification")
 
     # === Summary ===
-    print(f"\n🎯 Summary:")
-    print(f"   ✅ Successfully processed: {total_success} switch(es)")
+    safe_print(f"\n🎯 Summary:")
+    safe_print(f"   ✅ Successfully processed: {total_success} switch(es)")
     if total_failed > 0:
-        print(f"   ❌ Failed to process: {total_failed} switch(es)")
-    print(f"   📁 Output directory: {output_folder_path}")
+        safe_print(f"   ❌ Failed to process: {total_failed} switch(es)")
+    safe_print(f"   📁 Output directory: {output_folder_path}")
 
     if total_failed > 0:
         sys.exit(1)
     else:
-        print("🎉 All configs generated successfully!")
+        safe_print("🎉 All configs generated successfully!")
 
 if __name__ == "__main__":
     main()

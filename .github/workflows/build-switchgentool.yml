@@ -63,7 +63,7 @@ jobs:
             echo "jinja2>=3.0.0" > requirements.txt
           fi
           pip install -r requirements.txt
-          pip install "pyinstaller==6.10.*"
+          pip install "pyinstaller==6.11.*"
 
       - name: Quick source test (run as script)
         shell: bash
@@ -75,7 +75,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         shell: powershell
         run: |
-          pyinstaller --onefile --clean --noconfirm `
+          pyinstaller --onefile --clean --noconfirm --noupx `
             --name network_config_generator `
             --add-data "input;input" `
             --collect-all jinja2 `
@@ -83,6 +83,9 @@ jobs:
             --hidden-import=convertors.convertors_lab_switch_json `
             --hidden-import=convertors.convertors_bmc_switch_json `
             --collect-submodules=convertors `
+            --exclude-module tkinter `
+            --exclude-module matplotlib `
+            --exclude-module PIL `
             --paths=src `
             src/main.py
           if (!(Test-Path "dist\\${{ matrix.exe_name }}")) { Write-Error "Build failed"; exit 1 }
@@ -99,6 +102,9 @@ jobs:
             --hidden-import=convertors.convertors_lab_switch_json \
             --hidden-import=convertors.convertors_bmc_switch_json \
             --collect-submodules=convertors \
+            --exclude-module tkinter \
+            --exclude-module matplotlib \
+            --exclude-module PIL \
             --paths=src \
             src/main.py
           test -f "dist/${{ matrix.exe_name }}" || (echo "Build failed" && exit 1)
@@ -109,6 +115,20 @@ jobs:
         run: |
           chmod +x "dist/${{ matrix.exe_name }}" || true
           "dist/${{ matrix.exe_name }}" --help || (echo "Executable failed to run" && exit 1)
+      
+      - name: Test BMC converter module inclusion
+        shell: bash
+        run: |
+          python -c "
+          import sys
+          sys.path.insert(0, 'src')
+          try:
+              from convertors.convertors_bmc_switch_json import convert_bmc_switches
+              print('✓ BMC converter module can be imported')
+          except ImportError as e:
+              print('✗ BMC converter module import failed:', e)
+              sys.exit(1)
+          "
 
       - name: Stage artifact
         shell: bash

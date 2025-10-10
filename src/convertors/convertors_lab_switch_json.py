@@ -4,6 +4,12 @@ from pathlib import Path
 from collections import defaultdict
 from loader import get_real_path
 
+# Import BMC converter at module level to help PyInstaller detect it
+try:
+    from . import convertors_bmc_switch_json
+except ImportError:
+    convertors_bmc_switch_json = None
+
 # ── Static config ─────────────────────────────────────────────────────────
 SWITCH_TYPES          = ["TOR1", "TOR2"]
 TOR1, TOR2                   = "TOR1", "TOR2"
@@ -545,8 +551,12 @@ def convert_switch_input_json(input_data: dict, output_dir: str = DEFAULT_OUTPUT
         convert_bmc_switches(input_data, output_dir)
     except ImportError as e:
         print(f"[!] BMC converter not available: {e}")
+        import traceback
+        traceback.print_exc()
     except Exception as e:
         print(f"[!] Error converting BMC switches: {e}")
+        import traceback
+        traceback.print_exc()
 
 
 def convert_all_switches_json(input_data: dict, output_dir: str = DEFAULT_OUTPUT_DIR):
