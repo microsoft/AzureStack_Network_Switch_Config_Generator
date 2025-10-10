@@ -2,13 +2,17 @@ import json
 from copy import deepcopy
 from pathlib import Path
 from collections import defaultdict
+
+# IMPORTANT: Unconditional import for PyInstaller detection
+# PyInstaller's static analysis needs to see this import at module level without any conditionals
+from . import convertors_bmc_switch_json
+
 try:
     from ..loader import get_real_path  # package style
 except ImportError:
     from loader import get_real_path  # fallback script style
 
-# Import BMC converter at module level to help PyInstaller detect it
-# Using explicit import for better PyInstaller compatibility
+# Import BMC converter function with fallback handling
 try:
     from .convertors_bmc_switch_json import convert_bmc_switches
     _bmc_available = True
