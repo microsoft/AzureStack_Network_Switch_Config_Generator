@@ -234,25 +234,31 @@ class BMCSwitchConverter:
         model = switch_data.get("Model", "").upper()
         
         # Load interface template for BMC switch
-        template_relative = Path("input/switch_interface_templates") / make / f"{model}.json"
+        template_relative = Path("input") / "switch_interface_templates" / make / f"{model}.json"
         
         # Try multiple path resolution strategies
         import sys
         if getattr(sys, 'frozen', False):
             # Running as PyInstaller bundle - use _MEIPASS
-            template_path = get_real_path(template_relative)
+            base_path = Path(sys._MEIPASS)
+            template_path = base_path / template_relative
         else:
             # Running as script - try both current directory and parent directory
-            template_path = get_real_path(template_relative)
+            template_path = template_relative.resolve()
             if not template_path.exists():
                 # Try from parent directory (in case we're running from src/)
-                template_path = get_real_path(Path("..") / template_relative)
+                template_path = (Path("..") / template_relative).resolve()
         
         if not template_path.exists():
+            import sys
+            debug_info = f"sys.frozen={getattr(sys, 'frozen', False)}, sys._MEIPASS={getattr(sys, '_MEIPASS', 'N/A')}"
             raise FileNotFoundError(
-                f"[!] BMC interface template not found: {template_path}\n"
+                f"[!] BMC interface template not found!\n"
                 f"    Looking for model: {model} (make: {make})\n"
-                f"    Searched: {template_relative}"
+                f"    Relative path: {template_relative}\n"
+                f"    Resolved path: {template_path}\n"
+                f"    File exists: {template_path.exists()}\n"
+                f"    Debug: {debug_info}"
             )
         
         try:
