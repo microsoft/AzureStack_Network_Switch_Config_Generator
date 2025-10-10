@@ -124,9 +124,9 @@ jobs:
           sys.path.insert(0, 'src')
           try:
               from convertors.convertors_bmc_switch_json import convert_bmc_switches
-              print('✓ BMC converter module can be imported')
+              print('[OK] BMC converter module can be imported')
           except ImportError as e:
-              print('✗ BMC converter module import failed:', e)
+              print('[ERROR] BMC converter module import failed:', e)
               sys.exit(1)
           "
 
