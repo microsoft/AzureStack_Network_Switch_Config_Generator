@@ -3,7 +3,6 @@ from pathlib import Path
 import sys
 import json
 import shutil
-import importlib
 
 # Support both execution styles:
 # 1. python src/main.py           (src not a package on sys.path root)
@@ -41,30 +40,32 @@ def safe_print(text):
         safe_text = text.encode('ascii', errors='replace').decode('ascii')
         print(safe_text)
 
-def load_convertor(convertor_module_path):
+def load_convertor(convertor_name):
     """
-    Dynamically load a convertor module and return its convert function.
+    Load a convertor function from the static registry.
     
     Args:
-        convertor_module_path: String path to convertor module (e.g., "convertors.convertors_lab_switch_json")
+        convertor_name: String name of convertor (e.g., "convertors.convertors_lab_switch_json" or "lab")
     
     Returns:
         Function that can convert input data to standard format
     """
     try:
-        # Import the module
-        module = importlib.import_module(convertor_module_path)
+        from convertors import CONVERTORS
         
-        # Look for the conversion function (assuming it's named convert_switch_input_json)
-        if hasattr(module, 'convert_switch_input_json'):
-            return module.convert_switch_input_json
+        if convertor_name in CONVERTORS:
+            return CONVERTORS[convertor_name]
         else:
-            raise AttributeError(f"Module {convertor_module_path} does not have 'convert_switch_input_json' function")
+            available = ', '.join(CONVERTORS.keys())
+            raise ValueError(
+                f"Unknown convertor '{convertor_name}'.\n"
+                f"Available convertors: {available}"
+            )
             
     except ImportError as e:
-        raise ImportError(f"Failed to import convertor module '{convertor_module_path}': {e}")
+        raise ImportError(f"Failed to import convertors package: {e}")
     except Exception as e:
-        raise RuntimeError(f"Failed to load convertor from '{convertor_module_path}': {e}")
+        raise RuntimeError(f"Failed to load convertor '{convertor_name}': {e}")
 
 def is_standard_format(data):
     """
@@ -119,22 +120,26 @@ def convert_to_standard_format(input_file_path, output_dir, convertor_module_pat
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Network config generator - automatically detects input format and converts if needed, then generates configs.",
-        epilog="Workflow: 1) Check if input is standard format 2) If not, convert using specified convertor 3) Generate config files from standard format"
+        epilog="""
+Examples:
+  %(prog)s --input_json input/standard_input.json --output_folder output/
+  %(prog)s --input_json my_lab_input.json --output_folder configs/ --convertor lab
+        """,
+        formatter_class=argparse.RawDescriptionHelpFormatter
     )
 
     parser.add_argument("--input_json", required=True,
-                        help="Path to input JSON file (can be lab format or standard format)")
+                        help="Path to input JSON file (lab or standard format)")
 
     parser.add_argument("--template_folder", default="input/jinja2_templates",
-                        help="Root folder containing vendor templates (default: input/jinja2_templates)")
+                        help="Folder containing Jinja2 templates (default: input/jinja2_templates)")
 
     parser.add_argument("--output_folder", default=".",
-        help="Directory to save generated config files (default: current directory)"
+        help="Directory to save generated configs (default: current directory)"
     )
 
     parser.add_argument("--convertor", default="convertors.convertors_lab_switch_json",
-        help="Python module path for the convertor to use when input is not in standard format. Only used if conversion is needed. (default: convertors.convertors_lab_switch_json)")
+        help="Convertor to use for non-standard input formats (default: convertors.convertors_lab_switch_json)")
 
     args = parser.parse_args()
 

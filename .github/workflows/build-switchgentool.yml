@@ -77,13 +77,8 @@ jobs:
         run: |
           pyinstaller --onefile --clean --noconfirm --noupx `
             --name network_config_generator `
-            --additional-hooks-dir=. `
             --add-data "input;input" `
             --collect-all jinja2 `
-            --hidden-import=convertors `
-            --hidden-import=convertors.convertors_lab_switch_json `
-            --hidden-import=convertors.convertors_bmc_switch_json `
-            --collect-submodules=convertors `
             --exclude-module tkinter `
             --exclude-module matplotlib `
             --exclude-module PIL `
@@ -97,13 +92,8 @@ jobs:
         run: |
           pyinstaller --onefile --clean --noconfirm \
             --name network_config_generator \
-            --additional-hooks-dir=. \
             --add-data "input:input" \
             --collect-all jinja2 \
-            --hidden-import=convertors \
-            --hidden-import=convertors.convertors_lab_switch_json \
-            --hidden-import=convertors.convertors_bmc_switch_json \
-            --collect-submodules=convertors \
             --exclude-module tkinter \
             --exclude-module matplotlib \
             --exclude-module PIL \
