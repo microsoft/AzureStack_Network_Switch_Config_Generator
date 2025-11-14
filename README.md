@@ -180,11 +180,14 @@ root/
 │       ├── cisco/
 │       └── dellemc/
 ├── src/                            # Source code
+│   ├── __init__.py                 # Package initialization
 │   ├── main.py                     # Entry point for the tool
 │   ├── generator.py                # Main generation logic
 │   ├── loader.py                   # Input file loading and parsing
 │   └── convertors/                 # Input format converters
-│       └── convertors_lab_switch_json.py  # Lab format to standard JSON converter
+│       ├── __init__.py             # Convertor registry
+│       ├── convertors_lab_switch_json.py   # Lab format converter
+│       └── convertors_bmc_switch_json.py   # BMC switch converter
 ├── tests/                          # Test files
 │   ├── test_generator.py           # Unit tests for generator logic
 │   ├── test_convertors.py          # Unit tests for input conversion
@@ -247,21 +250,28 @@ The tool accepts these parameters:
 
 | Parameter         | Required | Description |
 |-------------------|----------|-------------|
-| `--input_json`    | ✅ Yes   | Path to your input JSON file |
-| `--output_folder` | ✅ Yes   | Directory to save generated configs |
-| `--convertor`     | ❌ No    | Custom converter for non-standard formats |
+| `--input_json`    | ✅ Yes   | Path to your input JSON file (lab or standard format) |
+| `--output_folder` | ❌ No    | Directory to save generated configs (default: current directory) |
+| `--template_folder` | ❌ No  | Folder containing Jinja2 templates (default: input/jinja2_templates) |
+| `--convertor`     | ❌ No    | Convertor to use for non-standard formats (default: convertors.convertors_lab_switch_json) |
 
 ### Quick Examples
 
 ```bash
 # Basic usage - auto-detects input format
-python src/main.py --input_json your_input.json --output_folder outputs/
+python src/main.py --input_json input/standard_input.json --output_folder output/
+
+# With custom output directory
+python src/main.py --input_json my_input.json --output_folder configs/
+
+# Using short convertor alias
+python src/main.py --input_json lab_input.json --output_folder output/ --convertor lab
 
 # Using the standalone executable (Windows)
-.\network_config_generator.exe --input_json your_input.json --output_folder outputs\
+network_config_generator.exe --input_json input/standard_input.json --output_folder output/
 
 # Using the standalone executable (Linux)
-./network_config_generator --input_json your_input.json --output_folder outputs/
+./network_config_generator --input_json input/standard_input.json --output_folder output/
 ```
 
 > [!IMPORTANT]
