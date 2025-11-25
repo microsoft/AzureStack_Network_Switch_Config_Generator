@@ -189,19 +189,33 @@ Examples:
             # Create temporary subdirectory for conversion within output folder
             temp_conversion_subdir = output_folder_path / ".temp_conversion"
             temp_conversion_subdir.mkdir(parents=True, exist_ok=True)
-            
+
             # Convert to standard format using temporary subdirectory
             standard_format_files = convert_to_standard_format(
-                input_json_path, 
+                input_json_path,
                 str(temp_conversion_subdir),
                 args.convertor
             )
         except Exception as e:
-            safe_print(f"❌ Failed to convert to standard format: {e}")
-            safe_print(f"\n💡 Troubleshooting tips:")
-            print(f"   - Ensure your input file is in the correct format for convertor: {args.convertor}")
-            print(f"   - Check if the convertor module exists and has 'convert_switch_input_json' function")
-            print(f"   - For custom convertors, use: --convertor your.custom.convertor.module")
+            err_msg = str(e)
+            safe_print(f"❌ Failed to convert to standard format: {err_msg}")
+
+            # Specialized guidance for missing VLAN symbol sets
+            if "Required VLAN set(s) missing" in err_msg:
+                safe_print("\n➡ Action Required:")
+                safe_print("   1. Open the input JSON (the --input_json file).")
+                safe_print("   2. Under 'Supernets', add entries so the following symbolic VLAN sets exist:")
+                safe_print("      - Infrastructure (M): GroupName starting 'Infrastructure' or similar.")
+                safe_print("      - Tenant/Compute (C): GroupName starting 'Tenant', 'L3Forward', or 'HNVPA'.")
+                safe_print("      - (Optional) Storage (S): GroupName starting 'Storage' for storage VLAN placeholders.")
+                safe_print("   3. Re-run the command once these are defined.")
+                safe_print("   4. If you cannot update the file, file a GitHub issue referencing this error message.")
+            else:
+                safe_print("\n💡 Basic Checks:")
+                safe_print(f"   - Confirm the input JSON matches the expected lab schema for convertor '{args.convertor}'.")
+                safe_print("   - Verify 'Supernets' contains all required VLAN groups.")
+                safe_print("   - If still failing, file an issue with the error string above.")
+
             sys.exit(1)
 
     # === Step 2: Generate configs for each standard format file ===

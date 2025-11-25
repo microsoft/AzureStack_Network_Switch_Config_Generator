@@ -56,6 +56,24 @@ interface {% if is_range %}range {% endif %}{{ intf_name }}
   {%- endif %}
 {% endfor %}
 
+{#- -------- MLAG Peer Link Interfaces -------- #}
+{% for iface in interfaces if iface.type == "MLAG" %}
+{%- set intf_range = iface.intf if iface.intf is defined else iface.start_intf ~ (('-' ~ iface.end_intf) if iface.end_intf is defined and iface.end_intf != iface.start_intf else '') %}
+{%- set intf_name = iface.intf_type ~ ' ' ~ intf_range %}
+{%- set is_range = '-' in intf_range | string %}
+interface {% if is_range %}range {% endif %}{{ intf_name }}
+  description {{ iface.name }}
+  no switchport
+  mtu 9216
+  flowcontrol receive off
+  priority-flow-control mode on
+  {%- if iface.shutdown is defined and iface.shutdown %}
+  shutdown
+  {%- else %}
+  no shutdown
+  {%- endif %}
+{% endfor %}
+
 {#- -------- L3 Interfaces (Ethernet only) -------- #}
 {% for iface in interfaces if iface.type == "L3" and iface.intf_type | lower == "ethernet" %}
 {%- set intf_range = iface.intf if iface.intf is defined else iface.start_intf ~ (('-' ~ iface.end_intf) if iface.end_intf is defined and iface.end_intf != iface.start_intf else '') %}

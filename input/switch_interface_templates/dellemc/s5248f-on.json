@@ -22,6 +22,13 @@
         "ipv4": ""
       },
       {
+        "name": "MLAG_Peer_Links",
+        "type": "MLAG",
+        "intf_type": "Ethernet",
+        "start_intf": "1/1/49",
+        "end_intf": "1/1/52"
+      },
+      {
         "name": "P2P_Border1",
         "type": "L3",
         "intf_type": "Ethernet",
@@ -50,7 +57,7 @@
         "type": "Trunk",
         "intf_type": "Ethernet",
         "start_intf": "1/1/1",
-        "end_intf": "1/1/18",
+        "end_intf": "1/1/40",
         "native_vlan": "M",
         "tagged_vlans": "M,C,S",
         "service_policy": {
@@ -99,10 +106,10 @@
       "description": "P2P_IBGP",
       "type": "L3",
       "ipv4": "",
-      "members": ["1/1/39", "1/1/40"]
+      "members": ["1/1/45", "1/1/46"]
     },
     {
-      "id": 101,
+      "id": 102,
       "description": "ToR_Peer_Link",
       "type": "Trunk",
       "native_vlan": "99",
