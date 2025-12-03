@@ -5,8 +5,8 @@ router bgp {{ bgp.asn }}
   router-id {{ bgp.router_id }}
   bestpath as-path multipath-relax
   log-neighbor-changes
-  maximum-paths 8
   maximum-paths ibgp 8
+  maximum-paths ebgp 8
   address-family ipv4 unicast
     {%- for network in bgp.networks %}
     network {{ network }}
@@ -37,7 +37,6 @@ router bgp {{ bgp.asn }}
       {%- endif %}
     address-family ipv4 unicast
       activate
-      sender-side-loop-detection
       {%- if neighbor.af_ipv4_unicast is defined %}
         {%- if neighbor.af_ipv4_unicast.prefix_list_in is defined %}
       prefix-list {{ neighbor.af_ipv4_unicast.prefix_list_in }} in
@@ -46,6 +45,7 @@ router bgp {{ bgp.asn }}
       prefix-list {{ neighbor.af_ipv4_unicast.prefix_list_out }} out
         {%- endif %}
       {%- endif %}
+      next-hop-self
   {%- endif %}
 
 {%- endfor %}

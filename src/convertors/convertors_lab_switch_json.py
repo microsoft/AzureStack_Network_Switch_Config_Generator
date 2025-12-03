@@ -449,27 +449,74 @@ class StandardJSONBuilder:
         """
         Build BGP config with neighbor and network structure.
         IPs are abstracted with placeholders for future parsing.
+        
+        Network advertisement policy:
+        - Advertise P2P subnets (Border1/Border2) using subnet prefixes, not host IPs
+        - Advertise iBGP P2P subnet from the port-channel peer link (/30 derived from peer IP)
+        - Advertise VLAN interface subnets (e.g., BMC Mgmt, Infrastructure) by computing network from interface IP/CIDR
+        - Avoid duplicates and ignore blank entries
+        These rules ensure all necessary routes are announced upstream without missing required subnets.
         """
+        import ipaddress
         switch = self.sections["switch"].get(switch_type)
         if not switch:
             print(f"[!] No switch info for BGP")
             return
 
-        # Build networks list by flattening all network entries
-        networks = [
-            self.ip_map.get(f"P2P_BORDER1_{switch_type.upper()}", [""])[0],
-            self.ip_map.get(f"P2P_BORDER2_{switch_type.upper()}", [""])[0],
-            self.ip_map.get(f"LOOPBACK0_{switch_type.upper()}", [""])[0],
-        ]
-        # Extend with all tenant/compute networks from "C" key
+        # Build networks list using subnet prefixes
+        networks: list[str] = []
+
+        # 1) P2P subnets to Border routers (stored as subnet strings in ip_map)
+        b1_key = f"P2P_BORDER1_{switch_type.upper()}"
+        b2_key = f"P2P_BORDER2_{switch_type.upper()}"
+        b1_subnet = self.ip_map.get(b1_key, [""])[0]
+        b2_subnet = self.ip_map.get(b2_key, [""])[0]
+        if b1_subnet:
+            networks.append(b1_subnet)
+        if b2_subnet:
+            networks.append(b2_subnet)
+
+        # 2) Loopback0 host route (always advertise as /32)
+        loopback = self.ip_map.get(f"LOOPBACK0_{switch_type.upper()}", [""])[0]
+        if loopback:
+            networks.append(loopback)
+
+        # 3) iBGP P2P subnet: derive /30 network from peer IP
+        ibgp_peer_ip = ""
+        if switch_type == TOR1:
+            ibgp_peer_ip = self.ip_map.get("P2P_IBGP_TOR2", [""])[0]
+        elif switch_type == TOR2:
+            ibgp_peer_ip = self.ip_map.get("P2P_IBGP_TOR1", [""])[0]
+        if ibgp_peer_ip:
+            try:
+                ibgp_net = ipaddress.ip_network(f"{ibgp_peer_ip}/30", strict=False)
+                networks.append(ibgp_net.with_prefixlen)
+            except Exception:
+                pass
+
+        # 4) VLAN interface subnets: compute from SVI IP/CIDR (e.g., BMC Mgmt, Infra)
+        for vlan in self.sections.get("vlans", []):
+            iface = vlan.get("interface")
+            if iface and iface.get("ip") and iface.get("cidr"):
+                try:
+                    svi_net = ipaddress.ip_network(f"{iface['ip']}/{iface['cidr']}", strict=False)
+                    networks.append(svi_net.with_prefixlen)
+                except Exception:
+                    continue
+
+        # 5) Include any additional compute/tenant networks from ip_map["C"]
         networks.extend(self.ip_map.get("C", []))
+
+        # De-duplicate while preserving order
+        seen = set()
+        networks = [n for n in networks if n and (n not in seen and not seen.add(n))]
 
         # iBGP Peer IPs
         ibgp_ip = ""
         if switch_type == TOR1:
-            ibgp_ip = self.ip_map.get(f"P2P_IBGP_TOR2", [""])[0]
+            ibgp_ip = self.ip_map.get("P2P_IBGP_TOR2", [""])[0]
         elif switch_type == TOR2:
-            ibgp_ip = self.ip_map.get(f"P2P_IBGP_TOR1", [""])[0]
+            ibgp_ip = self.ip_map.get("P2P_IBGP_TOR1", [""])[0]
 
         neighbors = [
             {
