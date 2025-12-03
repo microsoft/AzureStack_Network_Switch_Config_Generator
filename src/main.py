@@ -134,8 +134,8 @@ Examples:
     parser.add_argument("--template_folder", default="input/jinja2_templates",
                         help="Folder containing Jinja2 templates (default: input/jinja2_templates)")
 
-    parser.add_argument("--output_folder", default=".",
-        help="Directory to save generated configs (default: current directory)"
+    parser.add_argument("--output_folder", default=None,
+        help="Directory to save generated configs (default: same directory as input file)"
     )
 
     parser.add_argument("--convertor", default="convertors.convertors_lab_switch_json",
@@ -145,7 +145,13 @@ Examples:
 
     # Resolve paths
     input_json_path = Path(args.input_json).resolve()
-    output_folder_path = Path(args.output_folder).resolve()
+    
+    # Auto-detect output folder: default to same directory as input file
+    if args.output_folder is None:
+        output_folder_path = input_json_path.parent
+    else:
+        output_folder_path = Path(args.output_folder).resolve()
+    
     template_folder_arg = Path(args.template_folder)
 
     # Only use get_real_path if user did NOT override default

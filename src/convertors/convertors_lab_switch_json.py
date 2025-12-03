@@ -81,7 +81,10 @@ class StandardJSONBuilder:
         self.deployment_pattern = input_data.get("InputData", {}).get("DeploymentPattern", "").lower()
         self.site = input_data.get("InputData", {}).get("MainEnvData", [{}])[0].get("Site", "")
         
-        # Translate hyperconverged to fully_converged for template compatibility
+        # Store original pattern for VLAN-based logic
+        self.original_pattern = self.deployment_pattern
+        
+        # Initial translation for template compatibility
         if self.deployment_pattern == "hyperconverged":
             self.deployment_pattern = "fully_converged"
 
@@ -245,18 +248,31 @@ class StandardJSONBuilder:
     def _build_interfaces_from_template(self, switch_type: str, template_data: dict):
         """
         Build interfaces from template data, processing both Common and deployment pattern specific interfaces.
+        Intelligently selects template variant based on available VLAN sets.
         """
         templates = template_data.get("interface_templates", {})
         common_templates = templates.get("common", [])
-        pattern_templates = templates.get(self.deployment_pattern, [])
+        
+        # Smart template selection for HyperConverged deployments
+        effective_pattern = self.deployment_pattern
+        if self.original_pattern == "hyperconverged" and self.deployment_pattern == "fully_converged":
+            # Check which VLAN sets are available
+            has_m = bool(self.vlan_map.get("M", []))
+            has_c = bool(self.vlan_map.get("C", []))
+            has_s = bool(self.vlan_map.get("S", [])) or bool(self.vlan_map.get("S1", [])) or bool(self.vlan_map.get("S2", []))
+            
+            # If only M exists (no C or S), use fully_converged2 (Access mode)
+            if has_m and not has_c and not has_s:
+                effective_pattern = "fully_converged2"
+                print(f"[INFO] Using fully_converged2 template (Access mode) - only Infrastructure VLANs detected")
+            # Otherwise use fully_converged (Trunk mode with M,C,S)
+            else:
+                effective_pattern = "fully_converged1"
+        
+        pattern_templates = templates.get(effective_pattern, [])
 
         # Build IP mapping for BGP and L3 interfaces
         self._build_ip_mapping()
-
-        # # Debug output
-        # print(f"VLAN Map: {dict(self.vlan_map)}")
-        # print(f"IP Map: {dict(self.ip_map)}")
-        # print(f"Deployment Pattern: {self.deployment_pattern}")
 
         interfaces = []
 
@@ -325,6 +341,11 @@ class StandardJSONBuilder:
         Process a single interface template and return the configured interface.
         """
         interface = deepcopy(template)
+        
+        # Handle VLAN reference resolution for access interfaces
+        if interface.get("type") == "Access":
+            if "access_vlan" in interface:
+                interface["access_vlan"] = self._resolve_interface_vlans(switch_type, interface["access_vlan"])
         
         # Handle VLAN reference resolution for trunk interfaces
         if interface.get("type") == "Trunk":
@@ -562,12 +583,26 @@ def convert_switch_input_json(input_data: dict, output_dir: str = DEFAULT_OUTPUT
         s2_vlans = builder.vlan_map.get("S2", [])
         print(f"[DEBUG] VLAN sets for {sw_type}: M={m_vlans} C={c_vlans} S={s_vlans} S1={s1_vlans} S2={s2_vlans}")
 
-        # Validation: M and C must not be empty; S optional (warn if empty)
+        # Validation: Check VLAN requirements based on deployment pattern
         missing_critical = []
         if not m_vlans:
             missing_critical.append("M")
-        if not c_vlans:
-            missing_critical.append("C")
+        
+        # For HyperConverged: allow M-only (uses fully_converged2/Access mode) or M+C+S (uses fully_converged1/Trunk mode)
+        is_hyperconverged = builder.original_pattern == "hyperconverged"
+        has_c = bool(c_vlans)
+        has_s = bool(s_vlans) or bool(s1_vlans) or bool(s2_vlans)
+        
+        if is_hyperconverged:
+            # HyperConverged: M-only is valid (Access mode), or require full M+C for Trunk mode
+            if m_vlans and not has_c and not has_s:
+                print(f"[INFO] HyperConverged deployment with M-only: using Access mode (fully_converged2)")
+            elif not has_c:
+                missing_critical.append("C")
+        else:
+            # Non-HyperConverged: always require C
+            if not has_c:
+                missing_critical.append("C")
 
         if missing_critical:
             raise ValueError(
