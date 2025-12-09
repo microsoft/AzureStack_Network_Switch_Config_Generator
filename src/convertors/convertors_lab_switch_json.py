@@ -48,7 +48,8 @@ SWITCH_TEMPLATE = {
     "type"    : "",
     "hostname": "",
     "version" : "",
-    "firmware": ""
+    "firmware": "",
+    "site"    : ""
 }
 
 SVI_TEMPLATE = {
@@ -78,8 +79,12 @@ class StandardJSONBuilder:
         self.ip_map = defaultdict(list)
         self.bgp_map = defaultdict(dict)
         self.deployment_pattern = input_data.get("InputData", {}).get("DeploymentPattern", "").lower()
+        self.site = input_data.get("InputData", {}).get("MainEnvData", [{}])[0].get("Site", "")
         
-        # Translate hyperconverged to fully_converged for template compatibility
+        # Store original pattern for VLAN-based logic
+        self.original_pattern = self.deployment_pattern
+        
+        # Initial translation for template compatibility
         if self.deployment_pattern == "hyperconverged":
             self.deployment_pattern = "fully_converged"
 
@@ -119,7 +124,8 @@ class StandardJSONBuilder:
                 type     = sw_type,
                 hostname = sw.get("Hostname", "").lower(),
                 version  = sw.get("Firmware", "").lower(),
-                firmware = firmware
+                firmware = firmware,
+                site     = self.site
             )
 
             self.sections["switch"][sw_type] = sw_entry
@@ -242,18 +248,31 @@ class StandardJSONBuilder:
     def _build_interfaces_from_template(self, switch_type: str, template_data: dict):
         """
         Build interfaces from template data, processing both Common and deployment pattern specific interfaces.
+        Intelligently selects template variant based on available VLAN sets.
         """
         templates = template_data.get("interface_templates", {})
         common_templates = templates.get("common", [])
-        pattern_templates = templates.get(self.deployment_pattern, [])
+        
+        # Smart template selection for HyperConverged deployments
+        effective_pattern = self.deployment_pattern
+        if self.original_pattern == "hyperconverged" and self.deployment_pattern == "fully_converged":
+            # Check which VLAN sets are available
+            has_m = bool(self.vlan_map.get("M", []))
+            has_c = bool(self.vlan_map.get("C", []))
+            has_s = bool(self.vlan_map.get("S", [])) or bool(self.vlan_map.get("S1", [])) or bool(self.vlan_map.get("S2", []))
+            
+            # If only M exists (no C or S), use fully_converged2 (Access mode)
+            if has_m and not has_c and not has_s:
+                effective_pattern = "fully_converged2"
+                print(f"[INFO] Using fully_converged2 template (Access mode) - only Infrastructure VLANs detected")
+            # Otherwise use fully_converged (Trunk mode with M,C,S)
+            else:
+                effective_pattern = "fully_converged1"
+        
+        pattern_templates = templates.get(effective_pattern, [])
 
         # Build IP mapping for BGP and L3 interfaces
         self._build_ip_mapping()
-
-        # # Debug output
-        # print(f"VLAN Map: {dict(self.vlan_map)}")
-        # print(f"IP Map: {dict(self.ip_map)}")
-        # print(f"Deployment Pattern: {self.deployment_pattern}")
 
         interfaces = []
 
@@ -323,6 +342,11 @@ class StandardJSONBuilder:
         """
         interface = deepcopy(template)
         
+        # Handle VLAN reference resolution for access interfaces
+        if interface.get("type") == "Access":
+            if "access_vlan" in interface:
+                interface["access_vlan"] = self._resolve_interface_vlans(switch_type, interface["access_vlan"])
+        
         # Handle VLAN reference resolution for trunk interfaces
         if interface.get("type") == "Trunk":
             if "native_vlan" in interface:
@@ -349,25 +373,46 @@ class StandardJSONBuilder:
         
         for part in vlan_parts:
             part = part.strip()
-            if "S" in part:
-                # if TOR1 then resolve to S1, else S2
+            # Explicit storage handling with fallback
+            if part == "S":
+                # Prefer ToR-specific storage lists if present
+                s_list = []
                 if switch_type == TOR1:
-                    resolved_vlans.extend([str(vid) for vid in self.vlan_map["S1"]])
+                    s_list = self.vlan_map.get("S1", [])
                 elif switch_type == TOR2:
-                    resolved_vlans.extend([str(vid) for vid in self.vlan_map["S2"]])
-            elif part in self.vlan_map and self.vlan_map[part]:
-                # Direct mapping from vlan_map
-                resolved_vlans.extend([str(vid) for vid in self.vlan_map[part]])
-            elif part in self.vlan_map and not self.vlan_map[part]:
-                # Known VLAN symbol but empty list - skip this part
+                    s_list = self.vlan_map.get("S2", [])
+
+                if s_list:
+                    resolved_vlans.extend([str(vid) for vid in s_list])
+                else:
+                    # Fallback to generic storage list if available
+                    resolved_vlans.extend([str(vid) for vid in self.vlan_map.get("S", [])])
                 continue
-            else:
-                # Literal VLAN ID - keep as is (only if it's numeric)
-                if part.isdigit():
-                    resolved_vlans.append(part)
-                # Unknown symbols are skipped (not added)
+
+            # Allow explicit S1/S2 references
+            if part in ("S1", "S2"):
+                resolved_vlans.extend([str(vid) for vid in self.vlan_map.get(part, [])])
+                continue
+
+            # Direct mapping for other symbolic sets (e.g., M, C, UNUSED, NATIVE)
+            if part in self.vlan_map:
+                resolved_vlans.extend([str(vid) for vid in self.vlan_map.get(part, [])])
+                continue
+
+            # Literal VLAN ID - keep as is (only if it's numeric)
+            if part.isdigit():
+                resolved_vlans.append(part)
+            # Unknown symbols are skipped (not added)
         
-        return ",".join(resolved_vlans)
+        # De-duplicate while preserving order
+        seen = set()
+        unique_vlans = []
+        for v in resolved_vlans:
+            if v not in seen:
+                seen.add(v)
+                unique_vlans.append(v)
+
+        return ",".join(unique_vlans)
 
     def _get_l3_ip_for_interface(self, switch_type: str, interface: dict) -> str:
         """
@@ -404,27 +449,74 @@ class StandardJSONBuilder:
         """
         Build BGP config with neighbor and network structure.
         IPs are abstracted with placeholders for future parsing.
+        
+        Network advertisement policy:
+        - Advertise P2P subnets (Border1/Border2) using subnet prefixes, not host IPs
+        - Advertise iBGP P2P subnet from the port-channel peer link (/30 derived from peer IP)
+        - Advertise VLAN interface subnets (e.g., BMC Mgmt, Infrastructure) by computing network from interface IP/CIDR
+        - Avoid duplicates and ignore blank entries
+        These rules ensure all necessary routes are announced upstream without missing required subnets.
         """
+        import ipaddress
         switch = self.sections["switch"].get(switch_type)
         if not switch:
             print(f"[!] No switch info for BGP")
             return
 
-        # Build networks list by flattening all network entries
-        networks = [
-            self.ip_map.get(f"P2P_BORDER1_{switch_type.upper()}", [""])[0],
-            self.ip_map.get(f"P2P_BORDER2_{switch_type.upper()}", [""])[0],
-            self.ip_map.get(f"LOOPBACK0_{switch_type.upper()}", [""])[0],
-        ]
-        # Extend with all tenant/compute networks from "C" key
+        # Build networks list using subnet prefixes
+        networks: list[str] = []
+
+        # 1) P2P subnets to Border routers (stored as subnet strings in ip_map)
+        b1_key = f"P2P_BORDER1_{switch_type.upper()}"
+        b2_key = f"P2P_BORDER2_{switch_type.upper()}"
+        b1_subnet = self.ip_map.get(b1_key, [""])[0]
+        b2_subnet = self.ip_map.get(b2_key, [""])[0]
+        if b1_subnet:
+            networks.append(b1_subnet)
+        if b2_subnet:
+            networks.append(b2_subnet)
+
+        # 2) Loopback0 host route (always advertise as /32)
+        loopback = self.ip_map.get(f"LOOPBACK0_{switch_type.upper()}", [""])[0]
+        if loopback:
+            networks.append(loopback)
+
+        # 3) iBGP P2P subnet: derive /30 network from peer IP
+        ibgp_peer_ip = ""
+        if switch_type == TOR1:
+            ibgp_peer_ip = self.ip_map.get("P2P_IBGP_TOR2", [""])[0]
+        elif switch_type == TOR2:
+            ibgp_peer_ip = self.ip_map.get("P2P_IBGP_TOR1", [""])[0]
+        if ibgp_peer_ip:
+            try:
+                ibgp_net = ipaddress.ip_network(f"{ibgp_peer_ip}/30", strict=False)
+                networks.append(ibgp_net.with_prefixlen)
+            except Exception:
+                pass
+
+        # 4) VLAN interface subnets: compute from SVI IP/CIDR (e.g., BMC Mgmt, Infra)
+        for vlan in self.sections.get("vlans", []):
+            iface = vlan.get("interface")
+            if iface and iface.get("ip") and iface.get("cidr"):
+                try:
+                    svi_net = ipaddress.ip_network(f"{iface['ip']}/{iface['cidr']}", strict=False)
+                    networks.append(svi_net.with_prefixlen)
+                except Exception:
+                    continue
+
+        # 5) Include any additional compute/tenant networks from ip_map["C"]
         networks.extend(self.ip_map.get("C", []))
+
+        # De-duplicate while preserving order
+        seen = set()
+        networks = [n for n in networks if n and (n not in seen and not seen.add(n))]
 
         # iBGP Peer IPs
         ibgp_ip = ""
         if switch_type == TOR1:
-            ibgp_ip = self.ip_map.get(f"P2P_IBGP_TOR2", [""])[0]
+            ibgp_ip = self.ip_map.get("P2P_IBGP_TOR2", [""])[0]
         elif switch_type == TOR2:
-            ibgp_ip = self.ip_map.get(f"P2P_IBGP_TOR1", [""])[0]
+            ibgp_ip = self.ip_map.get("P2P_IBGP_TOR1", [""])[0]
 
         neighbors = [
             {
@@ -529,7 +621,72 @@ def convert_switch_input_json(input_data: dict, output_dir: str = DEFAULT_OUTPUT
         builder.sections = {}               # reset between runs
         builder.build_switch(sw_type)
         builder.build_vlans(sw_type)
+
+        # Debug: Print key VLAN symbol mappings for visibility
+        m_vlans = builder.vlan_map.get("M", [])
+        c_vlans = builder.vlan_map.get("C", [])
+        s_vlans = builder.vlan_map.get("S", [])
+        s1_vlans = builder.vlan_map.get("S1", [])
+        s2_vlans = builder.vlan_map.get("S2", [])
+        print(f"[DEBUG] VLAN sets for {sw_type}: M={m_vlans} C={c_vlans} S={s_vlans} S1={s1_vlans} S2={s2_vlans}")
+
+        # Validation: Check VLAN requirements based on deployment pattern
+        missing_critical = []
+        if not m_vlans:
+            missing_critical.append("M")
+        
+        # For HyperConverged: allow M-only (uses fully_converged2/Access mode) or M+C+S (uses fully_converged1/Trunk mode)
+        is_hyperconverged = builder.original_pattern == "hyperconverged"
+        has_c = bool(c_vlans)
+        has_s = bool(s_vlans) or bool(s1_vlans) or bool(s2_vlans)
+        
+        if is_hyperconverged:
+            # HyperConverged: M-only is valid (Access mode), or require full M+C for Trunk mode
+            if m_vlans and not has_c and not has_s:
+                print(f"[INFO] HyperConverged deployment with M-only: using Access mode (fully_converged2)")
+            elif not has_c:
+                missing_critical.append("C")
+        else:
+            # Non-HyperConverged: always require C
+            if not has_c:
+                missing_critical.append("C")
+
+        if missing_critical:
+            raise ValueError(
+                "Required VLAN set(s) missing for {sw}: {sets}. "
+                "Input Supernets must define Infrastructure (M) and Tenant/Compute (C) VLANs.".format(
+                    sw=sw_type,
+                    sets=", ".join(missing_critical)
+                )
+            )
+
+        if not s_vlans and not s1_vlans and not s2_vlans:
+            print(f"[WARN] Storage VLAN set S is empty for {sw_type}; proceeding without storage tagging.")
+
         builder.build_interfaces(sw_type)
+        # Per-interface VLAN security belt: ensure required VLAN values resolved
+        for iface in builder.sections.get("interfaces", []):
+            itype = iface.get("type", "")
+            name = iface.get("name", "(unnamed)")
+            if itype == "Access":
+                if not str(iface.get("access_vlan", "")).strip():
+                    raise ValueError(f"Access interface '{name}' has empty access_vlan. Define a valid VLAN ID in input template.")
+            elif itype == "Trunk":
+                if not str(iface.get("native_vlan", "")).strip():
+                    raise ValueError(f"Trunk interface '{name}' has empty native_vlan after resolution. Ensure Infrastructure (M) mapping or literal VLAN ID is present.")
+                if not str(iface.get("tagged_vlans", "")).strip():
+                    raise ValueError(f"Trunk interface '{name}' has empty tagged_vlans after resolution. Provide Tenant/Compute (C) / Storage (S) VLANs or explicit IDs.")
+
+        # Port-channel VLAN validation (trunk-type port-channels)
+        for pc in builder.sections.get("port_channels", []):
+            pctype = pc.get("type", "")
+            desc = pc.get("description", f"ID {pc.get('id','?')}")
+            if pctype == "Trunk":
+                if not str(pc.get("native_vlan", "")).strip():
+                    raise ValueError(f"Port-channel '{desc}' missing native_vlan. Define native VLAN or remove trunk type.")
+                # tagged_vlans may be intentionally empty (e.g., only native) so only warn
+                if not str(pc.get("tagged_vlans", "")).strip():
+                    print(f"[WARN] Port-channel '{desc}' has no tagged_vlans; only native VLAN will be carried.")
         builder.build_bgp(sw_type)
         builder.build_prefix_lists()
         builder.build_qos()
@@ -546,7 +703,20 @@ def convert_switch_input_json(input_data: dict, output_dir: str = DEFAULT_OUTPUT
             "port_channels": builder.sections["port_channels"],
             "bgp": builder.sections["bgp"],
             "prefix_lists": builder.sections["prefix_lists"],
-            "qos": builder.sections["qos"]
+            "qos": builder.sections["qos"],
+            "debug": {
+                "vlan_map": dict(builder.vlan_map),
+                "ip_map": dict(builder.ip_map),
+                "resolved_trunks": [
+                    {
+                        "name": iface.get("name", ""),
+                        "native_vlan": iface.get("native_vlan", ""),
+                        "tagged_vlans": iface.get("tagged_vlans", "")
+                    }
+                    for iface in builder.sections.get("interfaces", [])
+                    if iface.get("type") == "Trunk"
+                ]
+            }
         }
 
         out_file = out_path / f"{hostname}{OUTPUT_FILE_EXTENSION}"

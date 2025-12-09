@@ -3,7 +3,6 @@ from pathlib import Path
 import sys
 import json
 import shutil
-import importlib
 
 # Support both execution styles:
 # 1. python src/main.py           (src not a package on sys.path root)
@@ -41,30 +40,32 @@ def safe_print(text):
         safe_text = text.encode('ascii', errors='replace').decode('ascii')
         print(safe_text)
 
-def load_convertor(convertor_module_path):
+def load_convertor(convertor_name):
     """
-    Dynamically load a convertor module and return its convert function.
+    Load a convertor function from the static registry.
     
     Args:
-        convertor_module_path: String path to convertor module (e.g., "convertors.convertors_lab_switch_json")
+        convertor_name: String name of convertor (e.g., "convertors.convertors_lab_switch_json" or "lab")
     
     Returns:
         Function that can convert input data to standard format
     """
     try:
-        # Import the module
-        module = importlib.import_module(convertor_module_path)
+        from convertors import CONVERTORS
         
-        # Look for the conversion function (assuming it's named convert_switch_input_json)
-        if hasattr(module, 'convert_switch_input_json'):
-            return module.convert_switch_input_json
+        if convertor_name in CONVERTORS:
+            return CONVERTORS[convertor_name]
         else:
-            raise AttributeError(f"Module {convertor_module_path} does not have 'convert_switch_input_json' function")
+            available = ', '.join(CONVERTORS.keys())
+            raise ValueError(
+                f"Unknown convertor '{convertor_name}'.\n"
+                f"Available convertors: {available}"
+            )
             
     except ImportError as e:
-        raise ImportError(f"Failed to import convertor module '{convertor_module_path}': {e}")
+        raise ImportError(f"Failed to import convertors package: {e}")
     except Exception as e:
-        raise RuntimeError(f"Failed to load convertor from '{convertor_module_path}': {e}")
+        raise RuntimeError(f"Failed to load convertor '{convertor_name}': {e}")
 
 def is_standard_format(data):
     """
@@ -119,28 +120,38 @@ def convert_to_standard_format(input_file_path, output_dir, convertor_module_pat
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Network config generator - automatically detects input format and converts if needed, then generates configs.",
-        epilog="Workflow: 1) Check if input is standard format 2) If not, convert using specified convertor 3) Generate config files from standard format"
+        epilog="""
+Examples:
+  %(prog)s --input_json input/standard_input.json --output_folder output/
+  %(prog)s --input_json my_lab_input.json --output_folder configs/ --convertor lab
+        """,
+        formatter_class=argparse.RawDescriptionHelpFormatter
     )
 
     parser.add_argument("--input_json", required=True,
-                        help="Path to input JSON file (can be lab format or standard format)")
+                        help="Path to input JSON file (lab or standard format)")
 
     parser.add_argument("--template_folder", default="input/jinja2_templates",
-                        help="Root folder containing vendor templates (default: input/jinja2_templates)")
+                        help="Folder containing Jinja2 templates (default: input/jinja2_templates)")
 
-    parser.add_argument("--output_folder", default=".",
-        help="Directory to save generated config files (default: current directory)"
+    parser.add_argument("--output_folder", default=None,
+        help="Directory to save generated configs (default: same directory as input file)"
     )
 
     parser.add_argument("--convertor", default="convertors.convertors_lab_switch_json",
-        help="Python module path for the convertor to use when input is not in standard format. Only used if conversion is needed. (default: convertors.convertors_lab_switch_json)")
+        help="Convertor to use for non-standard input formats (default: convertors.convertors_lab_switch_json)")
 
     args = parser.parse_args()
 
     # Resolve paths
     input_json_path = Path(args.input_json).resolve()
-    output_folder_path = Path(args.output_folder).resolve()
+    
+    # Auto-detect output folder: default to same directory as input file
+    if args.output_folder is None:
+        output_folder_path = input_json_path.parent
+    else:
+        output_folder_path = Path(args.output_folder).resolve()
+    
     template_folder_arg = Path(args.template_folder)
 
     # Only use get_real_path if user did NOT override default
@@ -184,19 +195,33 @@ def main():
             # Create temporary subdirectory for conversion within output folder
             temp_conversion_subdir = output_folder_path / ".temp_conversion"
             temp_conversion_subdir.mkdir(parents=True, exist_ok=True)
-            
+
             # Convert to standard format using temporary subdirectory
             standard_format_files = convert_to_standard_format(
-                input_json_path, 
+                input_json_path,
                 str(temp_conversion_subdir),
                 args.convertor
             )
         except Exception as e:
-            safe_print(f"❌ Failed to convert to standard format: {e}")
-            safe_print(f"\n💡 Troubleshooting tips:")
-            print(f"   - Ensure your input file is in the correct format for convertor: {args.convertor}")
-            print(f"   - Check if the convertor module exists and has 'convert_switch_input_json' function")
-            print(f"   - For custom convertors, use: --convertor your.custom.convertor.module")
+            err_msg = str(e)
+            safe_print(f"❌ Failed to convert to standard format: {err_msg}")
+
+            # Specialized guidance for missing VLAN symbol sets
+            if "Required VLAN set(s) missing" in err_msg:
+                safe_print("\n➡ Action Required:")
+                safe_print("   1. Open the input JSON (the --input_json file).")
+                safe_print("   2. Under 'Supernets', add entries so the following symbolic VLAN sets exist:")
+                safe_print("      - Infrastructure (M): GroupName starting 'Infrastructure' or similar.")
+                safe_print("      - Tenant/Compute (C): GroupName starting 'Tenant', 'L3Forward', or 'HNVPA'.")
+                safe_print("      - (Optional) Storage (S): GroupName starting 'Storage' for storage VLAN placeholders.")
+                safe_print("   3. Re-run the command once these are defined.")
+                safe_print("   4. If you cannot update the file, file a GitHub issue referencing this error message.")
+            else:
+                safe_print("\n💡 Basic Checks:")
+                safe_print(f"   - Confirm the input JSON matches the expected lab schema for convertor '{args.convertor}'.")
+                safe_print("   - Verify 'Supernets' contains all required VLAN groups.")
+                safe_print("   - If still failing, file an issue with the error string above.")
+
             sys.exit(1)
 
     # === Step 2: Generate configs for each standard format file ===

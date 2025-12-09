@@ -36,34 +36,31 @@ def generate_config(input_std_json, template_folder, output_folder):
     if not template_dir.exists():
         raise FileNotFoundError(f"[ERROR] Template path not found: {template_dir}")
 
-    template_files = list(template_dir.glob("*.j2"))
+    template_files = sorted(template_dir.glob("*.j2"))
     if not template_files:
         raise FileNotFoundError(f"[WARN] No templates found in: {template_dir}")
 
-    print(f"[INFO] Found {len(template_files)} templates to render")
+    print(f"[INFO] Rendering {len(template_files)} templates (compact mode)")
 
-    # ✅ Step 4: Render each template
+    # ✅ Step 4: Render each template (compact single-line logging)
     os.makedirs(output_folder_path, exist_ok=True)
 
     for template_path in template_files:
         template_name = template_path.name
-        print(f"\n[-] Rendering template: {template_name}")
-
+        stem = template_path.stem
         try:
             template = load_template(str(template_dir), template_name)
             rendered = template.render(data)
-            
+
             if not rendered.strip():
-                print(f"[SKIP] Template {template_name} produced empty output — skipping file")
+                print(f"[–] {template_name}: skipped (empty)")
                 continue
 
-            output_file = output_folder_path / f"generated_{template_path.stem}.cfg"
+            output_file = output_folder_path / f"generated_{stem}.cfg"
             with open(output_file, "w", encoding="utf-8") as f:
                 f.write(rendered)
-
-            print(f"[✓] Generated: {output_file.name}")
-
+            print(f"[✓] {template_name} -> {output_file.name}")
         except Exception as e:
-            warnings.warn(f"[WARN] Failed to render {template_name}: {e}", UserWarning)
+            warnings.warn(f"[!] {template_name} failed: {e}", UserWarning)
 
     print(f"\n===  Done generating for: {input_std_json_path.name} ===\n")

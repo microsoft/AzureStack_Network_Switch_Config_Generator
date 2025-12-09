@@ -41,5 +41,22 @@ mac address-table aging-time 1000000
 no ip dhcp-relay information-option
 no ip dhcp snooping
 
+{# -------- VRRP Settings (skip for BMC) -------- #}
+{%- if switch.type | upper != 'BMC' %}
 vrrp version 3
 vrrp delay reload 180
+{%- endif %}
+
+{# -------- SNMP Settings -------- #}
+! system.j2 - snmp_settings
+snmp-server community [SNMP_COMMUNITY_RO] ro
+snmp-server community [SNMP_COMMUNITY_RW] rw
+snmp-server contact "Contact Support"
+snmp-server location {{ switch.site }}
+
+{# -------- Management VRF Configuration -------- #}
+! system.j2 - management_vrf
+ip vrf management
+ interface management
+
+management route 0.0.0.0/0 [MGMT_GATEWAY_IP]

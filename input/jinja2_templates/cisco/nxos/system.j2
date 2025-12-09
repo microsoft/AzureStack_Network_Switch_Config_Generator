@@ -66,3 +66,9 @@ ip load-sharing address source-destination port source-destination
 ip icmp-errors source-interface [MGMT_VLAN]
 
 cli alias name wr copy running-config startup-config
+
+{# -------- SNMP Settings -------- #}
+snmp-server community [PLACEHOLDER] ro
+snmp-server community [PLACEHOLDER] rW
+snmp-server contact "Contact Support"
+snmp-server location {{ switch.site }}

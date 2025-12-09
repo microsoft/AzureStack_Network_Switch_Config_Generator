@@ -21,8 +21,15 @@
         "intf_type": "Ethernet",
         "start_intf": "1/1/1",
         "end_intf": "1/1/40",
-        "access_vlan": "125",
-        "shutdown": false
+        "access_vlan": "125"
+      },
+      {
+        "name": "HLH_BMC",
+        "type": "Access",
+        "description": "HLH BMC Connection",
+        "intf_type": "Ethernet",
+        "intf": "1/1/46",
+        "access_vlan": "125"
       },
       {
         "name": "HLH_OS",
@@ -31,8 +38,7 @@
         "intf_type": "Ethernet",
         "start_intf": "1/1/49",
         "end_intf": "1/1/50",
-        "access_vlan": "7",
-        "shutdown": false
+        "access_vlan": "7"
       },    
       {
         "name": "To_TORs",

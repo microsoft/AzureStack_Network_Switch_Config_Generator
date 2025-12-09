@@ -6,6 +6,11 @@
 {%- set intf_range = iface.intf if iface.intf is defined else iface.start_intf ~ (('-' ~ iface.end_intf) if iface.end_intf is defined and iface.end_intf != iface.start_intf else '') %}
 {%- set intf_name = iface.intf_type ~ ' ' ~ intf_range %}
 {%- set is_range = '-' in intf_range | string %}
+{%- if iface.shutdown is defined and iface.shutdown %}
+! NOTE: This interface configuration initializes ports in shutdown state for security.
+! This is a recommended best practice to prevent unauthorized access on unused ports.
+! User may choose to apply this initial configuration or customize based on deployment requirements.
+{%- endif %}
 interface {% if is_range %}range {% endif %}{{ intf_name }}
   description {{ iface.name }}
   switchport mode access
@@ -49,6 +54,24 @@ interface {% if is_range %}range {% endif %}{{ intf_name }}
   {%- if iface.qos_map is defined %}
   qos-map traffic-class {{ iface.qos_map }}
   {%- endif %}
+  {%- if iface.shutdown is defined and iface.shutdown %}
+  shutdown
+  {%- else %}
+  no shutdown
+  {%- endif %}
+{% endfor %}
+
+{#- -------- MLAG Peer Link Interfaces -------- #}
+{% for iface in interfaces if iface.type == "MLAG" %}
+{%- set intf_range = iface.intf if iface.intf is defined else iface.start_intf ~ (('-' ~ iface.end_intf) if iface.end_intf is defined and iface.end_intf != iface.start_intf else '') %}
+{%- set intf_name = iface.intf_type ~ ' ' ~ intf_range %}
+{%- set is_range = '-' in intf_range | string %}
+interface {% if is_range %}range {% endif %}{{ intf_name }}
+  description {{ iface.name }}
+  no switchport
+  mtu 9216
+  flowcontrol receive off
+  priority-flow-control mode on
   {%- if iface.shutdown is defined and iface.shutdown %}
   shutdown
   {%- else %}

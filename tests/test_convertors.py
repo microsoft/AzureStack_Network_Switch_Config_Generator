@@ -15,7 +15,7 @@ if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
 
 # === Imports from your project ===
-from convertors.convertors_lab_switch_json import convert_switch_input_json
+from convertors import convert_lab_switches
 from loader import load_input_json
 
 # === Helper function for better diff reporting ===
@@ -83,7 +83,7 @@ def run_convert_and_compare(folder_name, input_file):
     old_stdout = sys.stdout
     sys.stdout = io.StringIO()
     try:
-        convert_switch_input_json(input_data, output_dir)
+        convert_lab_switches(input_data, output_dir)
     finally:
         sys.stdout = old_stdout
 

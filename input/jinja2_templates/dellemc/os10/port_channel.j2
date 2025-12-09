@@ -7,15 +7,18 @@ interface port-channel{{ pc.id }}
   description {{ pc.description }}
   
   {%- if pc.type | lower == 'trunk' %}
-  switchport
+  no shutdown
   switchport mode trunk
-  switchport trunk native vlan {{ pc.native_vlan }}
+  switchport access vlan {{ pc.native_vlan }}
     {%- if pc.tagged_vlans is defined %}
   switchport trunk allowed vlan {{ pc.tagged_vlans }}
     {%- endif %}
+    {%- if pc.vlt_port is defined and pc.vlt_port %}
+  vlt-port-channel {{ pc.id }}
+    {%- elif 'peer' in (pc.description | lower) %}
+  vlt-port-channel {{ pc.id }}
+    {%- endif %}
   priority-flow-control mode on
-  spanning-tree port type network
-  logging event port link-status
 
     {%- if pc.vpc_peer_link is defined and pc.vpc_peer_link %}
   vpc peer-link
@@ -25,29 +28,43 @@ interface port-channel{{ pc.id }}
     {%- endif %}
 
   {%- elif pc.type | lower == 'l3' %}
-  no switchport
-  priority-flow-control mode on
-  ip address {{ pc.ipv4 }}
-  {%- endif %}
-  mtu 9216
   no shutdown
+  no switchport
+  mtu 9216
+  ip address {{ pc.ipv4 }}/30
+  {%- endif %}
+  {%- if pc.type | lower == 'trunk' %}
+  mtu 9216
+  {%- endif %}
 
   {# -------- Member Interfaces -------- #}
   {%- for member in pc.members %}
 interface Ethernet {{ member }}
   description {{ pc.description }}
+  no shutdown
+  channel-group {{ pc.id }} mode active
+
+    {%- if pc.type | lower == 'l3' %}
+  no switchport
   mtu 9216
   flowcontrol receive off
-  priority-flow-control mode on
-
-    {%- if pc.type | lower == 'trunk' %}
-  switchport
-  switchport mode trunk
-  switchport trunk native vlan {{ pc.native_vlan }}
-      {%- if pc.tagged_vlans is defined %}
-  switchport trunk allowed vlan {{ pc.tagged_vlans }}
-      {%- endif %}
-  spanning-tree port type network
+    {%- elif pc.type | lower == 'trunk' %}
+    {# For VLT/BMC peer-link members (po102), render as no switchport per reference #}
+    {%- if pc.id == 102 or ('tor_bmc' in (pc.description | lower)) %}
+  no switchport
+  mtu 9216
+  flowcontrol receive off
+    {%- else %}
+    switchport
+    switchport mode trunk
+    switchport trunk native vlan {{ pc.native_vlan }}
+        {%- if pc.tagged_vlans is defined %}
+    switchport trunk allowed vlan {{ pc.tagged_vlans }}
+        {%- endif %}
+    spanning-tree port type network
+    mtu 9216
+    flowcontrol receive off
+    {%- endif %}
     {%- endif %}
 
     {#- -------- QoS Policy -------- #}
@@ -57,9 +74,6 @@ interface Ethernet {{ member }}
   qos-map traffic-class AZS_SERVICES_TrafficClass
   ets mode on
     {%- endif %}
-    
-  channel-group {{ pc.id }} mode active
-  no shutdown
   {% endfor %}
 
 {%- endfor %}

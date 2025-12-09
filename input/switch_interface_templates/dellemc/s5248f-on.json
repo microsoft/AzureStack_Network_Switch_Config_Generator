@@ -22,17 +22,24 @@
         "ipv4": ""
       },
       {
+        "name": "MLAG_Peer_Links",
+        "type": "MLAG",
+        "intf_type": "Ethernet",
+        "start_intf": "1/1/49",
+        "end_intf": "1/1/52"
+      },
+      {
         "name": "P2P_Border1",
         "type": "L3",
         "intf_type": "Ethernet",
-        "intf": "1/1/48",
+        "intf": "1/1/48:1",
         "ipv4": ""
       },
       {
         "name": "P2P_Border2",
         "type": "L3",
         "intf_type": "Ethernet",
-        "intf": "1/1/47",
+        "intf": "1/1/47:1",
         "ipv4": ""
       },
       {
@@ -44,18 +51,28 @@
         "tagged_vlans": "125"
       }
     ],
-    "fully_converged": [
+    "fully_converged1": [
       {
         "name": "HyperConverged_To_Host",
         "type": "Trunk",
         "intf_type": "Ethernet",
         "start_intf": "1/1/1",
-        "end_intf": "1/1/18",
+        "end_intf": "1/1/40",
         "native_vlan": "M",
         "tagged_vlans": "M,C,S",
         "service_policy": {
           "qos_input": "AZLOCAL-QOS-MAP"
         }
+      }
+    ],
+    "fully_converged2": [
+      {
+        "name": "HyperConverged_For_vENV",
+        "type": "Access",
+        "intf_type": "Ethernet",
+        "start_intf": "1/1/1",
+        "end_intf": "1/1/40",
+        "access_vlan": "M"
       }
     ],
     "switched": [
@@ -99,15 +116,15 @@
       "description": "P2P_IBGP",
       "type": "L3",
       "ipv4": "",
-      "members": ["1/1/39", "1/1/40"]
+      "members": ["1/1/45:1", "1/1/46:1"]
     },
     {
-      "id": 101,
+      "id": 102,
       "description": "ToR_Peer_Link",
       "type": "Trunk",
       "native_vlan": "99",
       "tagged_vlans": "",
-      "members": ["1/1/49", "1/1/50", "1/1/51", "1/1/52"]
+      "members": ["1/1/44:1"]
     }
   ]
 }

@@ -1,0 +1,45 @@
+{%- set ns = namespace(ibgp_peer_ip='', mlag_intf_range='') -%}
+
+{#- Find MLAG peer link interface range from interfaces -#}
+{%- if interfaces is defined -%}
+  {%- for iface in interfaces -%}
+    {%- if iface.type == 'MLAG' -%}
+      {%- if iface.start_intf is defined and iface.end_intf is defined -%}
+        {%- set ns.mlag_intf_range = 'ethernet' + iface.start_intf + '-' + iface.end_intf -%}
+      {%- elif iface.intf is defined -%}
+        {%- set ns.mlag_intf_range = 'ethernet' + iface.intf -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{#- Find iBGP peer IP from BGP neighbors -#}
+{%- if bgp is defined and bgp.neighbors is defined -%}
+  {%- for neighbor in bgp.neighbors -%}
+    {%- if neighbor.description == 'iBGP_PEER' -%}
+      {%- set ns.ibgp_peer_ip = neighbor.ip -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{#- Determine priority based on switch type -#}
+{%- if switch.type == 'TOR1' -%}
+  {%- set priority = 1 -%}
+{%- elif switch.type == 'TOR2' -%}
+  {%- set priority = 2 -%}
+{%- else -%}
+  {%- set priority = 1 -%}
+{%- endif -%}
+
+{#- Render VLT configuration if both iBGP peer IP and MLAG interface are found -#}
+{%- if ns.ibgp_peer_ip and ns.mlag_intf_range -%}
+! vlt.j2
+vlt-domain 1
+  backup destination {{ ns.ibgp_peer_ip }}
+  discovery-interface {{ ns.mlag_intf_range }}
+  peer-routing
+  primary-priority {{ priority }}
+  vlt-mac de:ad:00:be:ef:01
+{%- elif ns.ibgp_peer_ip and not ns.mlag_intf_range -%}
+! vlt.j2 - NOTICE: VLT configuration skipped - MLAG peer link interface not found
+{%- endif -%}
