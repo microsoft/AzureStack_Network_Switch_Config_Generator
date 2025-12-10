@@ -3,6 +3,7 @@ import sys
 import pytest
 import warnings
 from collections import defaultdict
+import re
 
 # === Test result tracking ===
 case_results = defaultdict(lambda: {"passed": 0, "skipped": 0, "failed": 0, "files": []})
@@ -35,11 +36,62 @@ def find_text_differences(expected, actual, max_lines=10):
     max_compare = min(len(expected_lines), len(actual_lines))
     for i in range(max_compare):
         if expected_lines[i] != actual_lines[i]:
-            differences.append(f"Line {i+1}: expected '{expected_lines[i]}', got '{actual_lines[i]}'")
+            differences.append(f"Line {i+1}: expected '{expected_lines[i][:50]}...', got '{actual_lines[i][:50]}...'")
             if len(differences) >= max_lines:
                 break
     
     return differences
+
+
+def validate_config_syntax(content, file_type="cfg"):
+    """Validate configuration file syntax."""
+    errors = []
+    lines = content.split('\n')
+    
+    if file_type == "cfg":
+        # Basic validation for Cisco/Dell config files
+        bracket_stack = []
+        for line_num, line in enumerate(lines, 1):
+            stripped = line.strip()
+            
+            # Skip comments and empty lines
+            if not stripped or stripped.startswith('!') or stripped.startswith('#'):
+                continue
+            
+            # Check for unbalanced brackets/braces
+            for char in stripped:
+                if char == '{':
+                    bracket_stack.append('{')
+                elif char == '}':
+                    if not bracket_stack or bracket_stack[-1] != '{':
+                        errors.append(f"Line {line_num}: Unbalanced closing brace")
+                    else:
+                        bracket_stack.pop()
+        
+        if bracket_stack:
+            errors.append(f"Unclosed braces: {len(bracket_stack)} opening brace(s) without closing")
+        
+        # Check for common configuration errors
+        if 'interface' in content.lower():
+            # Basic interface validation
+            interface_lines = [l for l in lines if 'interface' in l.lower()]
+            if interface_lines and len(interface_lines) < 2:
+                warnings.warn(f"Config may be incomplete: found {len(interface_lines)} interface definition(s)", UserWarning)
+    
+    return errors
+
+
+def validate_generated_structure(output_folder):
+    """Validate that required output files were generated."""
+    output_folder = Path(output_folder)
+    expected_file_types = [".cfg"]
+    generated_files = []
+    
+    for file_type in expected_file_types:
+        generated_files.extend(output_folder.glob(f"*{file_type}"))
+    
+    return len(generated_files) > 0, len(generated_files)
+
 
 
 # === Step 1: Find test folders with input ===
@@ -60,7 +112,7 @@ def find_input_cases():
     return input_cases
 
 
-# === Step 2: Generate configs using dynamic template selection ===
+# === Step 4: Render each template (compact single-line logging) ===
 def generate_all_configs(input_case):
     folder_name, input_file = input_case
     folder_path = TEST_CASES_ROOT / folder_name
@@ -96,8 +148,6 @@ def generate_all_configs(input_case):
         for output_file in sorted(output_folder.glob("generated_*.cfg"))
     ]
 
-
-# === Step 3: Discover all test pairs ===
 def discover_test_cases():
     all_cases = []
     input_folders = find_input_cases()
@@ -133,7 +183,19 @@ def test_generated_config_output(folder_name, case_name, generated_path, expecte
         generated = gen.read().strip()
         expected = exp.read().strip()
 
-    # Better comparison with detailed error reporting
+    # Validate syntax before comparison
+    syntax_errors = validate_config_syntax(generated, "cfg")
+    if syntax_errors:
+        case_results[folder_name]["failed"] += 1
+        case_results[folder_name]["files"].append(f"❌ {case_name} (syntax)")
+        error_msg = f"❌ {test_name} - Syntax errors:\n"
+        for err in syntax_errors[:3]:
+            error_msg += f"  • {err}\n"
+        print(error_msg)
+        show_case_summary_if_complete(folder_name)
+        pytest.fail(f"Config syntax validation failed", pytrace=False)
+
+    # Content comparison
     if expected != generated:
         case_results[folder_name]["failed"] += 1
         case_results[folder_name]["files"].append(f"❌ {case_name}")
@@ -175,12 +237,53 @@ def get_expected_file_count(folder_name):
     folder_path = TEST_CASES_ROOT / folder_name
     return len(list(folder_path.glob("generated_*.cfg")))
 
+
+# === Additional validation tests ===
+@pytest.mark.parametrize("input_case", find_input_cases(), ids=lambda val: f"config_syntax_{val[0]}")
+def test_config_syntax_validation(input_case):
+    """Verify that generated configuration files have valid syntax."""
+    folder_name, input_file = input_case
+    folder_path = TEST_CASES_ROOT / folder_name
+    
+    # Generate configs
+    config_files = list(folder_path.glob("generated_*.cfg"))
+    
+    if not config_files:
+        pytest.skip(f"No generated configs for {folder_name}")
+    
+    # Validate syntax of each config
+    for config_file in config_files:
+        with open(config_file, "r", encoding="utf-8") as f:
+            content = f.read()
+        
+        errors = validate_config_syntax(content, "cfg")
+        assert not errors, f"Syntax errors in {config_file.name}:\n" + "\n".join(f"  • {e}" for e in errors)
+
+
+@pytest.mark.parametrize("input_case", find_input_cases(), ids=lambda val: f"output_generation_{val[0]}")
+def test_output_file_generation(input_case):
+    """Verify that output files are generated correctly."""
+    folder_name, input_file = input_case
+    folder_path = TEST_CASES_ROOT / folder_name
+    
+    has_output, file_count = validate_generated_structure(folder_path)
+    assert has_output, f"No output files generated for {folder_name}"
+    assert file_count > 0, f"Expected at least 1 output file, got {file_count}"
+
+
 def pytest_sessionfinish(session, exitstatus):
     """Print final summary"""
     if case_results:
-        print(f"\n📊 Final Summary:")
+        print(f"\n📊 Generator Test Summary:")
         total_passed = sum(r["passed"] for r in case_results.values())
         total_skipped = sum(r["skipped"] for r in case_results.values())
         total_failed = sum(r["failed"] for r in case_results.values())
         total_cases = len(case_results)
         print(f"📈 {total_cases} test cases: {total_passed} passed, {total_skipped} skipped, {total_failed} failed")
+        
+        if total_failed > 0:
+            print("\n❌ Failed tests:")
+            for folder_name, results in sorted(case_results.items()):
+                if results["failed"] > 0:
+                    print(f"   • {folder_name}: {results['failed']} failure(s)")
+

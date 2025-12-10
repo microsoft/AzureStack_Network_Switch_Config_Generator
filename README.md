@@ -13,9 +13,6 @@
     - [Sample Input JSON](#sample-input-json)
     - [Sample Template (Jinja2)](#sample-template-jinja2)
   - [Quick Start](#quick-start)
-    - [Choose Your Path](#choose-your-path)
-    - [Basic Usage](#basic-usage)
-    - [Quick Examples](#quick-examples)
   - [What's Improved in This Version](#whats-improved-in-this-version)
     - [Key Enhancements](#key-enhancements)
 
@@ -27,7 +24,7 @@ This tool generates vendor-specific network switch configurations (e.g., Cisco N
 
 **First time here?** Choose your path:
 
-- **Just want to use it?** → [`docs/EXECUTABLE_USAGE.md`](docs/EXECUTABLE_USAGE.md)
+- **Just want to use it?** → [`docs/QUICK_START.md`](docs/QUICK_START.md)
 - **Need to convert your data format?** → [`docs/CONVERTOR_GUIDE.md`](docs/CONVERTOR_GUIDE.md)  
 - **Want to customize templates?** → [`docs/TEMPLATE_GUIDE.md`](docs/TEMPLATE_GUIDE.md)
 - **Need to create/modify switch templates?** → [`docs/SWITCH_INTERFACE_TEMPLATE.md`](docs/SWITCH_INTERFACE_TEMPLATE.md)
@@ -157,7 +154,7 @@ root/
 ├── build/                          # Build artifacts and executables
 ├── docs/                           # Documentation files
 │   ├── CONVERTOR_GUIDE.md          # Guide for creating custom convertors
-│   ├── EXECUTABLE_USAGE.md         # Standalone executable usage guide
+│   ├── QUICK_START.md              # Quick start and executable usage guide
 │   ├── SWITCH_INTERFACE_TEMPLATE.md # Switch interface template guide
 │   ├── TEMPLATE_GUIDE.md           # Jinja2 template development guide
 │   └── TROUBLESHOOTING.md          # Common issues and solutions
@@ -231,51 +228,7 @@ router bgp {{ bgp.asn }}
 
 ## Quick Start
 
-### Choose Your Path
-
-**New to this tool?** Start here based on what you want to do:
-
-| I want to... | Go to |
-|--------------|--------|
-| **Use the precompiled executable** (no coding needed) | [`docs/EXECUTABLE_USAGE.md`](docs/EXECUTABLE_USAGE.md) |
-| **Convert my custom input format** | [`docs/CONVERTOR_GUIDE.md`](docs/CONVERTOR_GUIDE.md) |
-| **Create or modify configuration templates** | [`docs/TEMPLATE_GUIDE.md`](docs/TEMPLATE_GUIDE.md) |
-| **Create or modify switch interface templates** | [`docs/SWITCH_INTERFACE_TEMPLATE.md`](docs/SWITCH_INTERFACE_TEMPLATE.md) |
-| **Understand the tool's architecture** | [`docs/TOOL_DESIGN.md`](docs/TOOL_DESIGN.md) |
-| **Fix issues or troubleshoot** | [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) |
-
-### Basic Usage
-
-The tool accepts these parameters:
-
-| Parameter         | Required | Description |
-|-------------------|----------|-------------|
-| `--input_json`    | ✅ Yes   | Path to your input JSON file (lab or standard format) |
-| `--output_folder` | ❌ No    | Directory to save generated configs (default: current directory) |
-| `--template_folder` | ❌ No  | Folder containing Jinja2 templates (default: input/jinja2_templates) |
-| `--convertor`     | ❌ No    | Convertor to use for non-standard formats (default: convertors.convertors_lab_switch_json) |
-
-### Quick Examples
-
-```bash
-# Basic usage - auto-detects input format
-python src/main.py --input_json input/standard_input.json --output_folder output/
-
-# With custom output directory
-python src/main.py --input_json my_input.json --output_folder configs/
-
-# Using short convertor alias
-python src/main.py --input_json lab_input.json --output_folder output/ --convertor lab
-
-# Using the standalone executable (Windows)
-network_config_generator.exe --input_json input/standard_input.json --output_folder output/
-
-# Using the standalone executable (Linux)
-./network_config_generator --input_json input/standard_input.json --output_folder output/
-```
-
-> [!IMPORTANT]
-> **Tip:** The tool automatically detects if your input is in standard format or needs conversion!
+For detailed usage instructions, examples, and setup steps, see [`docs/QUICK_START.md`](docs/QUICK_START.md).
 
 ---
 
